@@ -1,3 +1,11 @@
+# v2.0.0
+
+2.0.0 (2026-10-09)
+
+## Feature Release
+
+- New admin panel and events widget with lots of capabilities (e1712d4)
+
 # v1.2.2
 
 1.2.2 (2026-09-30)
