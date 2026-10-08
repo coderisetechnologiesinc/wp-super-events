@@ -1,3 +1,7 @@
+// Legacy control, kept only for the public widget entry points
+// (src/checkout.js, src/view.js). The admin shell uses CheckboxItem instead; do not
+// reach for this one from anything under src/Components/Pages or
+// src/Components/CreateEvent.
 const CheckboxControl = ({
   label = "",
   value = "",

@@ -1,0 +1,197 @@
+// ---------------------------------------------------------------------------
+// WPSE design tokens — single source of truth for the admin UI.
+// Values come from the "Servv Admin Unified v2" design export: a soft-UI
+// (neumorphic) system on a white canvas with a violet brand ramp.
+//
+// Usage from a component module:
+//   @use "../../styles/tokens" as t;
+//   .button { border-radius: t.$radius-lg; color: t.$text-strong; }
+// ---------------------------------------------------------------------------
+
+// --- Brand -----------------------------------------------------------------
+$primary: #6436c9;
+$primary-strong: #4d2aa3;
+$primary-grad-from: #7b4fdb;
+$primary-grad-to: #5730b4;
+$primary-surface: #eae2fb; // tinted chip / icon tile background
+$primary-border: #d7c8f7;
+$primary-border-strong: #c3a8f3; // focus border
+$primary-border-soft: #dfd6f3;
+$primary-ring: rgba(234, 226, 251, 0.85); // focus halo
+
+// --- Text ------------------------------------------------------------------
+$text: #151b2b; // headings, primary copy
+$text-strong: #39415a; // control labels, button faces
+$text-secondary: #414b63; // body copy
+$text-soft: #5b6680; // meta, captions
+$text-placeholder: #8e97ab;
+$text-on-primary: #ffffff;
+
+// --- Surfaces --------------------------------------------------------------
+$surface: #ffffff;
+$canvas: #ffffff;
+$surface-subtle: #fafbfd; // table row hover
+$surface-raised-tint: #fcfdfe;
+
+// --- Borders ---------------------------------------------------------------
+$border: #edf1f7; // cards, dividers
+$border-soft: #eff2f8; // secondary buttons
+$border-field: #e8edf5; // inputs, selects, textareas
+$border-hairline: rgba(21, 27, 43, 0.09); // segmented tracks, inner rules
+
+// --- Neumorphic shadow pigments -------------------------------------------
+$shade: #dce2ec; // dark side
+$shade-strong: #d4dbe8; // dark side, lifted states
+$light: #fbfcfe; // light side
+$light-alt: #fcfdfe;
+
+// --- Status ----------------------------------------------------------------
+$success: #17b26a;
+$success-strong: #079455;
+$success-surface: #ecfdf3;
+$success-border: #abefc6;
+$success-text: #067647;
+
+$warning: #f79009;
+$warning-strong: #dc6803;
+$warning-surface: #fffaeb;
+$warning-border: #fedf89;
+$warning-text: #b54708;
+
+$danger: #f04438;
+$danger-strong: #d92d20;
+$danger-grad-from: #e8554a;
+$danger-grad-to: #c12b1f;
+$danger-surface: #fef3f2;
+$danger-border: #fecdca;
+$danger-border-strong: #fda29b;
+$danger-text: #b42318;
+$danger-shade: #f1dbd9; // inset pigment on an errored field
+$danger-ring: rgba(254, 243, 242, 0.9);
+
+$info: #175cd3;
+$info-surface: #eff8ff;
+$info-border: #b2ddff;
+
+// --- WordPress admin chrome (sidebar / adminbar adjacency) -----------------
+$wp-chrome: #1d2327;
+$wp-chrome-deep: #15191c;
+$wp-chrome-line: #2c3338;
+$wp-chrome-text: #c3c4c7;
+$wp-chrome-muted: #a7aaad;
+
+// --- Typography ------------------------------------------------------------
+$font-sans: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+$text-11: 11px;
+$text-12: 12px;
+$text-13: 13px;
+$text-14: 14px;
+$text-15: 15px;
+$text-16: 16px;
+$text-18: 18px;
+$text-20: 20px;
+$text-24: 24px;
+$text-32: 32px;
+
+$leading-11: 16px;
+$leading-12: 18px;
+$leading-13: 19px;
+$leading-14: 20px;
+$leading-15: 23px;
+$leading-16: 24px;
+$leading-18: 24px;
+$leading-20: 28px;
+$leading-24: 32px;
+$leading-32: 40px;
+
+$weight-regular: 400;
+$weight-medium: 500;
+$weight-semibold: 600;
+$weight-bold: 700;
+$weight-extrabold: 800;
+
+$tracking-tight: -0.03em;
+$tracking-wide: 0.08em;
+$tracking-wider: 0.1em;
+
+// --- Spacing ---------------------------------------------------------------
+$space-1: 2px;
+$space-2: 4px;
+$space-3: 6px;
+$space-4: 8px;
+$space-5: 10px;
+$space-6: 12px;
+$space-7: 14px;
+$space-8: 16px;
+$space-9: 18px;
+$space-10: 20px;
+$space-12: 24px;
+$space-14: 28px;
+$space-16: 32px;
+
+// --- Radii -----------------------------------------------------------------
+$radius-sm: 7px;
+$radius-md: 9px;
+$radius-lg: 12px; // buttons, fields
+$radius-xl: 14px;
+$radius-2xl: 18px; // cards, modals
+$radius-pill: 99px;
+
+// --- Control heights -------------------------------------------------------
+$control-xs: 28px;
+$control-sm: 34px;
+$control-md: 38px;
+$control-lg: 40px;
+$control-xl: 46px;
+
+// --- Segmented control geometry --------------------------------------------
+// A segmented track is a box around chips, so its numbers are derived, not
+// picked: the radius has to clear the inner chip by the gutter (outer = inner
+// + padding) or the chip's corner pokes through, and the chip's height has to
+// leave room for the gutter and the 1px border so the whole track ends up the
+// same $control-lg as the buttons beside it in a toolbar.
+$segment-gutter: 3px; // track padding
+$radius-segment: 10px; // the chip itself
+$radius-segment-track: $radius-segment + $segment-gutter; // 13px
+$control-segment: $control-lg - 2 * $segment-gutter - 2px; // 32px
+
+// --- Elevation (soft-UI pairs) --------------------------------------------
+$shadow-raised-sm: 3px 3px 7px $shade, -2px -2px 5px $light;
+$shadow-raised-chip: 4px 4px 9px $shade, -2px -2px 6px $light; // chips, tabs
+$shadow-chip-pressed: inset 4px 4px 9px $primary-border-soft,
+  inset -2px -2px 6px $light; // a selected (pressed) brand chip
+$shadow-raised: 5px 5px 12px $shade, -2px -2px 8px $light;
+$shadow-raised-hover: 7px 7px 16px $shade, -3px -3px 10px $light;
+$shadow-raised-active: 4px 4px 10px $shade, -2px -2px 7px $light;
+// A filled button sits at exactly the same elevation as a raised white one —
+// only the inner gloss tells them apart — so a toolbar of mixed controls reads
+// as one row. Derived from the raised pair so the two can never drift.
+$shadow-brand: $shadow-raised, inset 0 1px 0 rgba(255, 255, 255, 0.2);
+$shadow-brand-hover: $shadow-raised-hover,
+  inset 0 1px 0 rgba(255, 255, 255, 0.24);
+$shadow-danger: $shadow-raised, inset 0 1px 0 rgba(255, 255, 255, 0.18);
+$shadow-card: 9px 9px 22px $shade, -4px -4px 12px $light;
+$shadow-card-hover: 14px 14px 30px $shade-strong, -6px -6px 16px $light;
+$shadow-modal: 18px 18px 44px $shade-strong, -6px -6px 18px $light;
+$shadow-field: inset 4px 4px 9px $shade, inset -2px -2px 6px $light;
+$shadow-field-focus: inset 4px 4px 10px $shade, inset -2px -2px 7px $light;
+$shadow-well: inset 6px 6px 14px $shade, inset -3px -3px 9px $light;
+$shadow-track: inset 2px 2px 4px $shade, inset -1px -1px 3px $light-alt;
+$shadow-popover: 0 12px 32px rgba(16, 24, 40, 0.14);
+$shadow-row-hover: inset 0 0 0 1px $border;
+
+// --- Motion ----------------------------------------------------------------
+$ease: cubic-bezier(0.22, 1, 0.36, 1);
+$ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+$duration-fast: 0.18s;
+$duration: 0.22s;
+$duration-slow: 0.42s;
+
+// --- Layers ----------------------------------------------------------------
+// The admin chrome WordPress paints around us: #adminmenuback 9990,
+// #adminmenuwrap 9999, the collapse button 10000, #wpadminbar 99999.
+// An overlay has to clear the menu while staying under the admin bar.
+$z-sticky: 20;
+$z-dropdown: 40;
+$z-overlay: 10001;

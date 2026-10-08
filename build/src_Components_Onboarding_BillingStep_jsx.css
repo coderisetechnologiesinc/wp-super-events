@@ -1,0 +1,88 @@
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/@wordpress/scripts/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/Components/Modals/AnimatedModal.module.scss ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************/
+@keyframes sdJAszeOgMWoi0qgaU0P {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes tcaNBH8NwDQZ7BaLPHqS {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes mtjR5dQk0_uqd80N_R4L {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes hvz7KD3CNAqpTeSi2EUv {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+:is(#servv-wrap, .servv-ui) .TGn8m83T0B_NsCHTYCOZ {
+  position: fixed;
+  inset: 0;
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  background: rgba(16, 24, 40, 0.5);
+  animation: sdJAszeOgMWoi0qgaU0P 0.15s ease-out;
+}
+:is(#servv-wrap, .servv-ui) .REGkLoohoWNHGLrB50QN {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-height: 100%;
+  animation: mtjR5dQk0_uqd80N_R4L 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+:is(#servv-wrap, .servv-ui) .G61Zw30dvOfUnKKuQbvn {
+  animation: tcaNBH8NwDQZ7BaLPHqS 0.16s ease-in forwards;
+}
+:is(#servv-wrap, .servv-ui) .REGkLoohoWNHGLrB50QN.G61Zw30dvOfUnKKuQbvn {
+  animation: hvz7KD3CNAqpTeSi2EUv 0.16s ease-in forwards;
+}
+@media (max-width: 735px) {
+  :is(#servv-wrap, .servv-ui) .TGn8m83T0B_NsCHTYCOZ {
+    padding: 12px;
+  }
+}
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/@wordpress/scripts/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/Components/Pages/SpinnerLoader.module.scss ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************************/
+:is(#servv-wrap, .servv-ui) .NvXIBF17sKtsJ5DppGj6 {
+  position: relative;
+}
+:is(#servv-wrap, .servv-ui) .s8xU0aT_Upum9VaMUtFv {
+  filter: blur(4px);
+  pointer-events: none;
+}
+:is(#servv-wrap, .servv-ui) .rwBQn7Ep0HRpuD73wvEE {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/*# sourceMappingURL=src_Components_Onboarding_BillingStep_jsx.css.map*/

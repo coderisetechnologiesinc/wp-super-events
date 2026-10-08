@@ -1,0 +1,42 @@
+.svv-wgt-v2-container {
+  --svv-v2-bg: #e9ff52;
+}
+
+.svv-wgt-v2 {
+  --svv-text: #1b2206;
+  --svv-text-muted: #4a5222;
+  --svv-bg: #f7fbe4;
+  --svv-surface: #ffffff;
+  --svv-border: #d7e3b4;
+  --svv-border-strong: #0b0b0b;
+
+  --svv-primary: #0b0b0b;
+  --svv-primary-hover: #2c2c2c;
+  --svv-primary-text: #e9ff52;
+  --svv-primary-subtle: #e9ff52;
+
+  --svv-accent: #5a6a00;
+  --svv-accent-strong: #44500a;
+  --svv-accent-subtle: #f1ffab;
+
+  --svv-success: #16663f;
+  --svv-warning: #7a4d00;
+  --svv-critical: #a81d12;
+  --svv-info: #1f4fae;
+
+  --svv-card-bg: #ffffff;
+  --svv-card-text: #1b2206;
+
+  --svv-calendar-text: #1b2206;
+  --svv-calendar-marked-bg: #eeffa0;
+  --svv-calendar-selected-bg: #0b0b0b;
+  --svv-calendar-selected-text: #e9ff52;
+  --svv-calendar-today-border: #0b0b0b;
+
+  --svv-drawer-bg: #ffffff;
+  --svv-drawer-backdrop: rgba(14, 18, 0, 0.45);
+
+  .svv-shell {
+    border-color: #0b0b0b;
+  }
+}

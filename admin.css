@@ -1,7 +1,100 @@
-/* Hide unwanted submenu items in WordPress admin */
-.wp-submenu li a[href*="servv-plugin-zoom-confirm-page"],
-.wp-submenu li a[href*="servv-plugin-calendar-confirm-page"],
-.wp-submenu li a[href*="servv-plugin-gmail-confirm-page"],
-.wp-submenu li a[href*="servv-plugin-stripe-confirm-page"] {
-    display: none !important;
+.servv-native-admin-wrap .notice.inline {
+	display: block;
+	margin: 14px 0;
+}
+
+.servv-admin-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	gap: 16px;
+	margin: 16px 0 22px;
+}
+
+.servv-native-card.card {
+	max-width: none;
+	margin-top: 0;
+	padding: 18px 20px;
+	border-radius: 4px;
+}
+
+.servv-native-card h2,
+.servv-native-card h3 {
+	margin-top: 0;
+}
+
+.servv-card-title-row {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 12px;
+}
+
+.servv-card-title-row h3 {
+	margin-bottom: 8px;
+}
+
+.servv-status-badge {
+	display: inline-flex;
+	align-items: center;
+	min-height: 22px;
+	padding: 2px 8px;
+	border: 1px solid #c3c4c7;
+	border-radius: 999px;
+	background: #f6f7f7;
+	color: #3c434a;
+	font-size: 12px;
+	line-height: 1.4;
+	white-space: nowrap;
+}
+
+.servv-status-badge.is-connected {
+	border-color: #00a32a;
+	background: #edfaef;
+	color: #007017;
+}
+
+.servv-status-badge.is-disconnected {
+	border-color: #dcdcde;
+	background: #f6f7f7;
+	color: #50575e;
+}
+
+.servv-status-badge.is-warning {
+	border-color: #dba617;
+	background: #fcf9e8;
+	color: #674e00;
+}
+
+.servv-status-badge.is-neutral {
+	border-color: #72aee6;
+	background: #f0f6fc;
+	color: #135e96;
+}
+
+.servv-native-section {
+	margin-top: 18px;
+}
+
+.servv-native-divider {
+	margin: 24px 0;
+}
+
+.servv-native-table {
+	margin-top: 10px;
+}
+
+.servv-onboarding-actions {
+	margin-top: 18px;
+}
+
+.servv-react-island {
+	margin-top: 0;
+}
+
+.servv-react-island .dashboard-card {
+	max-width: none;
+}
+
+#servv-diagnostics {
+	max-width: 980px;
 }

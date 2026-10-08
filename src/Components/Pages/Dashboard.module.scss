@@ -1,0 +1,233 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+
+@include m.scoped {
+  // Reference: the dashboard screen is a column of 24px-spaced blocks.
+  .page {
+    display: flex;
+    flex-direction: column;
+    gap: t.$space-12;
+  }
+
+  // --- Header --------------------------------------------------------------
+
+  // Reference: <div style="height:3px;border-radius:99px;background:#FFFFFF;
+  // box-shadow:inset 2px 2px 4px #DCE2EC,inset -1px -1px 3px #FCFDFE">
+  // A carved groove, not a hairline border.
+  .divider {
+    height: 3px;
+    border-radius: t.$radius-pill;
+    background: t.$surface;
+    box-shadow: t.$shadow-track;
+  }
+
+  // The signed-in account, shown where the reference puts its header actions.
+  .profile {
+    display: flex;
+    align-items: center;
+    gap: t.$space-6;
+    padding: t.$space-5 t.$space-7 t.$space-5 t.$space-5;
+    border: 1px solid t.$border;
+    border-radius: t.$radius-xl;
+    background: t.$surface;
+    box-shadow: t.$shadow-raised;
+  }
+
+  .avatar {
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+    border-radius: t.$radius-lg;
+    border: 1px solid t.$primary-border;
+    background: t.$primary-surface;
+    object-fit: cover;
+  }
+
+  .profileText {
+    display: flex;
+    flex-direction: column;
+    gap: t.$space-1;
+    min-width: 0;
+  }
+
+  .profileName {
+    @include m.text(14, t.$weight-bold);
+    color: t.$text;
+  }
+
+  .profileEmail {
+    @include m.truncate;
+    @include m.text(12, t.$weight-medium);
+    color: t.$text-soft;
+  }
+
+  .profileLink {
+    @include m.text(12, t.$weight-semibold);
+    color: t.$primary;
+    cursor: pointer;
+
+    &:hover {
+      color: t.$primary-strong;
+      text-decoration: underline;
+    }
+  }
+
+  // --- Events block --------------------------------------------------------
+
+  // Reference: <div style="display:flex;flex-direction:column;gap:16px">
+  .events {
+    display: flex;
+    flex-direction: column;
+    gap: t.$space-8;
+  }
+
+  // Reference: title + count on the left, controls on the right, wrapping.
+  .toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: t.$space-8;
+    flex-wrap: wrap;
+  }
+
+  .toolbarTitle {
+    display: flex;
+    align-items: center;
+    gap: t.$space-5;
+  }
+
+  .heading {
+    margin: 0;
+    @include m.text(18, t.$weight-bold);
+    letter-spacing: -0.01em;
+  }
+
+  .count {
+    display: inline-flex;
+    align-items: center;
+    height: 22px;
+    padding: 0 t.$space-4;
+    border: 1px solid t.$primary-border;
+    border-radius: t.$radius-pill;
+    background: t.$primary-surface;
+    color: t.$primary-strong;
+    @include m.text(12, t.$weight-semibold);
+  }
+
+  // The controls take whatever the title leaves and sit at the far end of it;
+  // without the grow they are sized to max-content and wrap a row early.
+  .controls {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    justify-content: flex-end;
+    gap: t.$space-5;
+    flex-wrap: wrap;
+    min-width: 0;
+  }
+
+  // The field itself is told width:100% — its size is this flex basis, so the
+  // inline width NewInputFieldControl applies never has to be fought.
+  //
+  // The raised controls beside it carry a shadow that falls below their box,
+  // which drags their optical centre down; the recessed field has none, so it
+  // reads as sitting high until it is nudged down to match.
+  .search {
+    position: relative;
+    top: 2px;
+    flex: 0 1 240px;
+  }
+
+  // Reference: repeat(auto-fill, minmax(260px, 1fr)) with a 16px gutter.
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: t.$space-8;
+  }
+
+  // The spinner overlay has nothing to cover while the first page loads, so it
+  // needs a height of its own to centre in.
+  .loader {
+    height: 50vh;
+  }
+
+  // What the delete confirmation is about to remove, named.
+  .confirmList {
+    margin: 0;
+    // WordPress' admin stylesheet drops the markers off a bare <ul>.
+    list-style: disc;
+    padding: 0 0 0 t.$space-8;
+    @include m.text(13, t.$weight-medium);
+    color: t.$text-secondary;
+
+    li {
+      margin: 0 0 t.$space-2;
+    }
+  }
+
+  // --- Empty state ---------------------------------------------------------
+
+  // Reference: a recessed well — #EBEFF6 hairline, inset 6/6/14, 36px padding.
+  .empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 36px;
+    border: 1px solid #ebeff6;
+    border-radius: t.$radius-2xl;
+    background: t.$surface;
+    box-shadow: t.$shadow-well;
+    text-align: center;
+  }
+
+  .emptyMark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    margin: 0 auto t.$space-7;
+    border: 1px solid t.$primary-border;
+    border-radius: t.$radius-xl;
+    background: t.$primary-surface;
+    box-shadow: t.$shadow-raised;
+    color: t.$primary;
+
+    svg {
+      width: 22px;
+      height: 22px;
+    }
+  }
+
+  .emptyTitle {
+    margin: 0;
+    @include m.text(18, t.$weight-bold);
+    letter-spacing: -0.01em;
+  }
+
+  .emptyText {
+    max-width: 420px;
+    margin: t.$space-3 0 0;
+    @include m.text(13, t.$weight-medium);
+    color: t.$text-soft;
+  }
+
+  .emptyAction {
+    margin-top: t.$space-8;
+  }
+
+  @media (max-width: 735px) {
+    .toolbar,
+    .controls {
+      width: 100%;
+    }
+
+    .search {
+      flex: 1 1 100%;
+    }
+
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}

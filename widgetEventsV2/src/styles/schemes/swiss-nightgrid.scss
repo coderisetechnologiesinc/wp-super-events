@@ -1,0 +1,40 @@
+.svv-wgt-v2-container {
+  --svv-v2-skin-bg: #000000;
+}
+
+.svv-wgt-v2 {
+  --svv-swiss-ink: #f5f5f5;
+  --svv-swiss-red: #ffe800;
+  --svv-swiss-paper: #161616;
+  --svv-swiss-fill: #312c00;
+
+  --svv-text-muted: #a3a3a3;
+  --svv-border: #2b2b2b;
+
+  --svv-primary: #ffe800;
+  --svv-primary-hover: #ffd400;
+  --svv-primary-text: #141000;
+  --svv-primary-subtle: #312c00;
+
+  --svv-success: #4fd39b;
+  --svv-warning: #ffd400;
+  --svv-critical: #ff6b6b;
+
+  --svv-calendar-selected-bg: #ffe800;
+  --svv-calendar-selected-text: #141000;
+  --svv-drawer-backdrop: rgba(0, 0, 0, 0.62);
+
+  .svv-card__cta,
+  .svv-drawer__cta,
+  .svv-submit {
+    border-color: var(--svv-primary);
+    background: var(--svv-primary);
+    color: var(--svv-primary-text);
+
+    &:hover:not(:disabled) {
+      border-color: var(--svv-primary-hover);
+      background: var(--svv-primary-hover);
+      color: var(--svv-primary-text);
+    }
+  }
+}

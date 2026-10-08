@@ -1,0 +1,37 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+
+@include m.scoped {
+  .page {
+    display: flex;
+    flex-direction: column;
+    gap: t.$space-10;
+  }
+
+  // The carved groove under the page header.
+  .divider {
+    height: 3px;
+    border-radius: t.$radius-pill;
+    background: t.$surface;
+    box-shadow: t.$shadow-track;
+  }
+
+  // Reference: repeat(auto-fill, minmax(300px, 1fr)) with a 16px gutter.
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: t.$space-8;
+  }
+
+  // An open section takes the whole column to itself.
+  .single {
+    display: block;
+    width: 100%;
+  }
+
+  @media (max-width: 735px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}

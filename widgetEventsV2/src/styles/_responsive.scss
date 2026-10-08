@@ -1,0 +1,192 @@
+@use "unit" as *;
+@use "breakpoints" as *;
+
+.svv-wgt-v2-container {
+  @include mobile {
+    padding: $svv-mobile-inset 0;
+    border-radius: 0;
+  }
+}
+
+.svv-wgt-v2 {
+  @include mobile {
+    overflow-x: clip;
+
+    .svv-shell {
+      border-left: 0;
+      border-right: 0;
+      border-radius: 0;
+    }
+
+    .svv-shell--with-aside,
+    .svv-shell--with-aside.svv-shell--aside-end {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas:
+        "header"
+        "strip"
+        "content";
+    }
+
+    .svv-shell__header {
+      padding: u(0.75) u(1);
+    }
+
+    .svv-shell__header > * {
+      flex: 1 1 100%;
+      min-width: 0;
+      margin-inline-start: 0;
+    }
+
+    .svv-shell__header .svv-search {
+      order: 1;
+    }
+
+    .svv-shell__header .svv-filters__toggle {
+      order: 2;
+    }
+
+    .svv-shell__header .svv-viewmode {
+      order: 3;
+      justify-content: center;
+    }
+
+    .svv-shell__header .svv-select {
+      display: none;
+    }
+
+    .svv-shell__strip {
+      display: flex;
+    }
+
+    .svv-shell__aside,
+    .svv-shell__content > .svv-filters {
+      display: none;
+    }
+
+    .svv-shell__content {
+      padding: u(1.25) u(1) u(1.5);
+    }
+
+    .svv-results {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: u(0.125);
+      margin-bottom: u(0.5);
+    }
+
+    .svv-results__title {
+      font-size: u(1.375);
+    }
+
+    .svv-events__separator {
+      margin-top: u(1.25);
+    }
+
+    .svv-card {
+      grid-template-columns: u(5) minmax(0, 1fr);
+      gap: u(0.875);
+      margin: 0;
+      padding: u(1) 0;
+      border: 0;
+      border-top: 1px solid var(--svv-border);
+      border-radius: 0;
+      box-shadow: none;
+
+      &:not(:has(.svv-card__media)) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      &:hover {
+        background: transparent;
+        box-shadow: none;
+        transform: none;
+      }
+    }
+
+    .svv-events--list .svv-events__items > li:first-child .svv-card,
+    .svv-events--list .svv-events__items > .svv-events__separator-item:first-child + li .svv-card {
+      border-top: 0;
+    }
+
+    .svv-card__media {
+      aspect-ratio: 1;
+      border-radius: var(--svv-radius);
+    }
+
+    .svv-card__description {
+      display: none;
+    }
+
+    .svv-card__action {
+      grid-column: 1 / -1;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      justify-items: start;
+      padding: 0;
+    }
+
+    .svv-card__pricing {
+      text-align: left;
+    }
+
+    .svv-events--grid .svv-events__items {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: u(0.75);
+      padding-top: u(0.25);
+    }
+
+    .svv-events--grid .svv-card {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0;
+      padding: 0;
+      border: 1px solid var(--svv-border);
+      border-radius: var(--svv-radius);
+    }
+
+    .svv-events--grid .svv-card__media {
+      aspect-ratio: var(--svv-image-ratio);
+      border-radius: 0;
+    }
+
+    .svv-events--grid .svv-card__body {
+      padding: 0;
+    }
+
+    .svv-events--grid .svv-card__action {
+      grid-column: auto;
+    }
+
+    .svv-pagination {
+      flex-wrap: wrap;
+    }
+  }
+
+  @include phone {
+    .svv-events--list .svv-card {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .svv-card__media {
+      aspect-ratio: var(--svv-image-ratio);
+    }
+
+    .svv-card__action {
+      grid-template-columns: minmax(0, 1fr);
+      justify-items: stretch;
+      gap: u(0.625);
+    }
+
+    .svv-card__actions {
+      display: grid;
+      grid-template-columns: u(2.375) minmax(0, 1fr);
+    }
+
+    .svv-card__actions:not(:has(.svv-card__share)) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .svv-events--grid .svv-events__items {
+      gap: u(0.625);
+    }
+  }
+}

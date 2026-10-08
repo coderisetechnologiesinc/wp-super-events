@@ -1,8 +1,8 @@
 import React, { Fragment } from "react";
 
 import BlockStack from "../Containers/BlockStack";
-import InputFieldControl from "../Controls/InputFieldControl";
-import CheckboxControl from "../Controls/CheckboxControl";
+import NewInputFieldControl from "../Controls/NewInputFieldControl";
+import CheckboxItem from "../Controls/CheckboxItem";
 
 import StepBlock from "../Shared/StepBlock";
 import ImageUploadField from "../Shared/ImageUploadField";
@@ -43,7 +43,8 @@ const ProfileBrandingModal = ({
             <p className="text-sm font-medium text-gray-800 mb-1">
               Business title
             </p>
-            <InputFieldControl
+            <NewInputFieldControl
+              width="100%"
               placeholder="Enter business title"
               value={title}
               onChange={setTitle}
@@ -60,7 +61,8 @@ const ProfileBrandingModal = ({
             <p className="text-sm font-medium text-gray-800 mb-1">
               Short description
             </p>
-            <InputFieldControl
+            <NewInputFieldControl
+              width="100%"
               placeholder="Tell visitors what you offer"
               value={description}
               onChange={setDescription}
@@ -77,7 +79,8 @@ const ProfileBrandingModal = ({
             <p className="text-sm font-medium text-gray-800 mb-1">
               Business address
             </p>
-            <InputFieldControl
+            <NewInputFieldControl
+              width="100%"
               placeholder="Business address"
               value={address}
               onChange={setAddress}
@@ -94,7 +97,8 @@ const ProfileBrandingModal = ({
             <p className="text-sm font-medium text-gray-800 mb-1">
               Contact email
             </p>
-            <InputFieldControl
+            <NewInputFieldControl
+              width="100%"
               placeholder="example@email.com"
               value={email}
               onChange={setEmail}
@@ -117,12 +121,8 @@ const ProfileBrandingModal = ({
       >
         <BlockStack gap={5} className={responsiveBlock}>
           {/* Hide Toggle */}
-          <CheckboxControl
-            label={
-              <span className="text-sm font-medium text-gray-800">
-                Hide avatar
-              </span>
-            }
+          <CheckboxItem
+            label="Hide avatar"
             checked={hideAvatar}
             onChange={() => setHideAvatar(!hideAvatar)}
           />

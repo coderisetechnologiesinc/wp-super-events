@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import BlockStack from "../Containers/BlockStack";
 import InlineStack from "../Containers/InlineStack";
-import InputFieldControl from "../Controls/InputFieldControl";
+import NewInputFieldControl from "../Controls/NewInputFieldControl";
 
 import { DndContext, closestCenter } from "@dnd-kit/core";
 import {
@@ -81,7 +81,8 @@ const CustomLinksModal = ({ links, setLinks }) => {
       {/* ✅ Add at Bottom */}
       <div className="border-t pt-4">
         <InlineStack gap={2}>
-          <InputFieldControl
+          <NewInputFieldControl
+            width="100%"
             placeholder="Link title"
             value={text}
             onChange={setText}
@@ -89,7 +90,8 @@ const CustomLinksModal = ({ links, setLinks }) => {
             maxLength="23"
           />
 
-          <InputFieldControl
+          <NewInputFieldControl
+            width="100%"
             placeholder="https://example.com"
             value={url}
             onChange={setUrl}

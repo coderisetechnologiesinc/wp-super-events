@@ -1,0 +1,196 @@
+@use "../../../styles/tokens" as t;
+@use "../../../styles/mixins" as m;
+
+@include m.scoped {
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 20px;
+    align-items: start;
+  }
+  .sections {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 0;
+  }
+  .card {
+    min-width: 0;
+    border: 1px solid t.$border;
+    border-radius: t.$radius-2xl;
+    background: t.$surface;
+    box-shadow: t.$shadow-card;
+  }
+  .cardHeader {
+    padding: 16px 20px;
+    border-bottom: 1px solid t.$border-hairline;
+    h2 {
+      margin: 4px 0 0;
+      font-size: 17px;
+      line-height: 24px;
+      font-weight: t.$weight-bold;
+      color: t.$text;
+    }
+    p {
+      margin: 2px 0 0;
+      @include m.text(12, t.$weight-medium);
+      color: t.$text-soft;
+    }
+  }
+  .eyebrow {
+    @include m.eyebrow;
+    color: t.$primary;
+  }
+  .cardBody {
+    padding: 20px;
+  }
+  .fieldGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+    > label {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      @include m.text(13, t.$weight-semibold);
+      color: t.$text-strong;
+    }
+  }
+  .fullWidth {
+    grid-column: 1 / -1;
+  }
+  .required {
+    color: t.$danger-text;
+  }
+  .optional {
+    margin-left: auto;
+    @include m.text(11, t.$weight-semibold);
+    color: t.$text-placeholder;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .hint {
+    margin: 0;
+    @include m.text(12, t.$weight-medium);
+    color: t.$text-soft;
+  }
+  .error {
+    @include m.text(12, t.$weight-semibold);
+    color: t.$danger-text;
+  }
+  .ordering {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .priority {
+    width: 140px;
+  }
+  .hours {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    gap: 18px;
+    :global(.input-container-col) {
+      min-width: 0;
+      gap: 6px;
+    }
+    :global(.input-container-row) {
+      flex-wrap: wrap;
+    }
+    :global(.section-description) {
+      @include m.text(13, t.$weight-semibold);
+      color: t.$text-strong;
+    }
+  }
+  .chips {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .kindChip,
+  .modeChip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 9px;
+    border: 1px solid t.$border;
+    border-radius: t.$radius-pill;
+    @include m.text(11, t.$weight-semibold);
+  }
+  .kindChip {
+    background: t.$primary-surface;
+    color: t.$primary-strong;
+    border-color: t.$primary-border;
+    svg {
+      width: 13px;
+      height: 13px;
+    }
+  }
+  .modeChip {
+    background: t.$surface;
+    color: t.$text-soft;
+  }
+  .preview {
+    position: sticky;
+    top: 48px;
+  }
+  .previewHeader {
+    padding: 14px 18px;
+    border-bottom: 1px solid t.$border-hairline;
+    @include m.eyebrow;
+    color: t.$text-soft;
+  }
+  .preview .cardBody {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 18px;
+  }
+  .existingFilters {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 360px;
+    overflow-y: auto;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    li {
+      padding: 10px 12px;
+      border: 1px solid t.$border;
+      border-radius: t.$radius-lg;
+      overflow-wrap: anywhere;
+      @include m.text(13, t.$weight-semibold);
+      color: t.$text-strong;
+    }
+    .currentFilter {
+      border-color: t.$primary-border;
+      background: t.$primary-surface;
+      color: t.$primary-strong;
+    }
+  }
+  @media (max-width: 1000px) {
+    .layout {
+      grid-template-columns: minmax(0, 1fr) 260px;
+    }
+    .fieldGrid {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 735px) {
+    .layout {
+      grid-template-columns: 1fr;
+    }
+    .preview {
+      position: static;
+    }
+  }
+}

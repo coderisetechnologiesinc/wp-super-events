@@ -1,24 +1,54 @@
 import React from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import styles from "./ModalShell.module.scss";
 
-const ModalShell = ({ title, children, onClose }) => {
+const SIZES = {
+  sm: styles.sm,
+  md: styles.md,
+  lg: styles.lg,
+  xl: styles.xl,
+};
+
+// The centred dialog from the design reference.
+const ModalShell = ({
+  title,
+  eyebrow,
+  description,
+  footer,
+  size = "lg",
+  // Opt-in: the existing call sites close through their own controls only, so
+  // the default keeps their behaviour unchanged.
+  closeOnOverlay = false,
+  children,
+  onClose,
+}) => {
   return (
-    <div className="fixed inset-0 z-50 bg-black/40 flex justify-center items-center px-4">
-      <div className="bg-white w-full max-w-[640px] rounded-2xl shadow-xl p-6 relative">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
+    <div
+      className={styles.overlay}
+      onClick={closeOnOverlay ? onClose : undefined}
+    >
+      <div
+        className={`${styles.dialog} ${SIZES[size] || SIZES.lg}`}
+        role="dialog"
+        aria-modal="true"
+        aria-label={typeof title === "string" ? title : undefined}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className={styles.header}>
+          <div>
+            {eyebrow && <div className={styles.eyebrow}>{eyebrow}</div>}
+            {title && <h2 className={styles.title}>{title}</h2>}
+            {description && <p className={styles.description}>{description}</p>}
+          </div>
 
-          <button
-            onClick={onClose}
-            className="p-2 rounded-lg hover:bg-gray-100 transition"
-          >
-            <XMarkIcon className="w-5 h-5 text-gray-500" />
+          <button type="button" className={styles.close} onClick={onClose}>
+            <XMarkIcon />
           </button>
         </div>
 
-        {/* Content */}
-        <div>{children}</div>
+        <div className={styles.body}>{children}</div>
+
+        {footer && <div className={styles.footer}>{footer}</div>}
       </div>
     </div>
   );

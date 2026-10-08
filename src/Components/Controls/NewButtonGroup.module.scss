@@ -1,0 +1,135 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+
+@include m.scoped {
+  // Segmented control (`tabStyle` in the reference).
+  // Track: <div style="display:inline-flex;padding:3px;background:#FAFBFD;
+  // border:1px solid rgba(21,27,43,.09);gap:2px"> — tinted, with the active
+  // segment as a raised WHITE chip, never a brand fill.
+  // Unlike the reference the track carries the same $shadow-raised and sits at
+  // the same height as every other control in a toolbar row; its radius is
+  // derived from the chip's ($radius-segment + $segment-gutter = 13px).
+  // flex-start keeps the track at its own width inside a stretching column —
+  // a labelled group in the filters drawer, say — instead of letting it run to
+  // the full width with the segments huddled on the left.
+  .wrapper {
+    @include m.field-stack;
+    align-items: flex-start;
+  }
+
+  .wrapperFull {
+    align-items: stretch;
+  }
+
+  .title {
+    @include m.field-label;
+  }
+
+  .track {
+    display: inline-flex;
+    align-items: center;
+    gap: t.$space-1;
+    box-sizing: border-box;
+    max-width: 100%;
+    padding: t.$segment-gutter;
+    border: 1px solid t.$border-soft;
+    border-radius: t.$radius-segment-track;
+    background: t.$surface-subtle;
+    box-shadow: t.$shadow-raised;
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  // $control-segment keeps the track itself at $control-lg — the height of the
+  // date trigger, the Filters trigger and the primary button next to it.
+  .segment {
+    @include m.button-reset;
+    @include m.wp-reset-button;
+    @include m.control-base(t.$control-segment, 0 t.$space-8);
+    flex: 0 0 auto;
+    border: 1px solid transparent;
+    border-radius: t.$radius-segment;
+
+    &:focus-visible {
+      @include m.focus-ring-raised;
+    }
+  }
+
+  .active {
+    background: t.$surface;
+    color: t.$primary-strong;
+    font-weight: t.$weight-bold;
+    box-shadow: t.$shadow-raised-chip;
+  }
+
+  .inactive {
+    color: t.$text-soft;
+    background: transparent;
+
+    &:hover:not(:disabled) {
+      color: t.$primary-strong;
+    }
+  }
+
+  .trackFull {
+    display: flex;
+    width: 100%;
+
+    .segment {
+      flex: 1 1 0;
+    }
+  }
+
+  // A segment carrying only an icon is square, like the icon buttons.
+  .iconOnly {
+    width: t.$control-segment;
+    padding: 0;
+    gap: 0;
+
+    &.compact {
+      width: t.$control-xs;
+    }
+  }
+
+  .icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+
+    svg {
+      display: block;
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  .compact {
+    height: t.$control-xs;
+    padding: 0 t.$space-5;
+    font-size: t.$text-12;
+  }
+
+  .text {
+    @include m.truncate;
+  }
+
+  @media (max-width: 735px) {
+    .track {
+      display: flex;
+      width: 100%;
+    }
+
+    .segment {
+      flex: 1 1 0;
+    }
+
+    .iconOnly {
+      flex: 0 0 auto;
+    }
+  }
+}

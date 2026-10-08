@@ -1,18 +1,18 @@
 import { CalendarIcon } from "../../assets/icons";
+import StepActions from "./StepActions";
 import { useEffect, useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { useParams, useSearchParams, useLocation } from "react-router-dom";
-import CalendarInline from "./CalendarInline";
+import { useSearchParams } from "react-router-dom";
+import CalendarInline from "../Controls/CalendarInline";
 import NewSelectControl from "../Controls/NewSelectControl";
 import NewTimeInputControl from "../Controls/NewTimeInputControl";
 
 import moment from "moment-timezone";
 import { timezonesList } from "../../utilities/timezones";
-import RadioGroup from "../Controls/RecurrenceRadioGroup";
+import RadioGroup from "../Controls/RadioGroup";
 import NewRecurringControl from "../Controls/NewRecurringControl";
 import NewEndDateControl from "./NewEndDateControl";
 import { useNavigate } from "react-router-dom";
-import timezonesWithOffset from "../../utilities/timezones";
 import { toast } from "react-toastify";
 
 const DateStep = ({
@@ -391,35 +391,13 @@ const DateStep = ({
             </div>
           )}
 
-          <div className="servv_actions">
-            {!isNew && (
-              <button
-                type="button"
-                className="servv_button servv_button--secondary"
-                onClick={() => handleFormSubmit(true)}
-              >
-                Save and Exit
-              </button>
-            )}
-            <button
-              type="button"
-              className="servv_button servv_button--secondary"
-              onClick={() => changeStep("branding")}
-            >
-              Previous
-            </button>
-
-            <button
-              type="button"
-              className="servv_button servv_button--primary"
-              onClick={() => {
-                validateStartTime();
-              }}
-              disabled={hasInvalidStartTime}
-            >
-              Continue
-            </button>
-          </div>
+          <StepActions
+            className=""
+            onSaveAndExit={isNew ? undefined : () => handleFormSubmit(true)}
+            onPrevious={() => changeStep("branding")}
+            onPrimary={() => validateStartTime()}
+            primaryDisabled={hasInvalidStartTime}
+          />
         </div>
       </div>
     </div>

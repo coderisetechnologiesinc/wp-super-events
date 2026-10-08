@@ -1,0 +1,568 @@
+@use "../unit" as *;
+@use "../breakpoints" as *;
+
+.svv-wgt-v2-container {
+  --svv-v2-bg-radius: 28px;
+  --svv-glass-tint: var(--svv-v2-skin-bg, var(--svv-v2-bg, #eeeaf6));
+  --svv-glass-blob-1: var(--svv-v2-glass-blob-1, rgba(98, 36, 231, 0.22));
+  --svv-glass-blob-2: var(--svv-v2-glass-blob-2, rgba(56, 170, 255, 0.2));
+  --svv-glass-blob-3: var(--svv-v2-glass-blob-3, rgba(255, 140, 190, 0.18));
+  --svv-glass-blobs:
+    radial-gradient(40vw 40vw at 8% 12%, var(--svv-glass-blob-1), transparent 70%),
+    radial-gradient(36vw 36vw at 92% 8%, var(--svv-glass-blob-2), transparent 70%),
+    radial-gradient(44vw 44vw at 70% 92%, var(--svv-glass-blob-3), transparent 70%);
+
+  // a background image set in the block wins; the blobs are the fallback layer
+  background-color: var(--svv-glass-tint);
+  background-image: var(--svv-v2-bg-image, var(--svv-glass-blobs));
+  background-attachment: fixed;
+}
+
+.svv-wgt-v2 {
+  // glass body: the tint stays faint, the depth comes from the bevel below
+  --svv-glass-material: #ffffff;
+  --svv-glass-light: #ffffff;
+  --svv-glass-dark: #000000;
+  --svv-glass-reflex-light: 1;
+  --svv-glass-reflex-dark: 0.8;
+  --svv-glass-fill: 36%;
+  --svv-glass-control-fill: 40%;
+
+  --svv-glass: color-mix(in srgb, var(--svv-glass-material) var(--svv-glass-fill), transparent);
+  --svv-glass-control: color-mix(
+    in srgb,
+    var(--svv-glass-material) var(--svv-glass-control-fill),
+    transparent
+  );
+  --svv-glass-control-hover: color-mix(in srgb, var(--svv-glass-material) 52%, transparent);
+  --svv-glass-blur: blur(28px) saturate(150%) brightness(1.2);
+
+  // bevel: bright top-left and bottom-right rims over inner shade, then two
+  // ambient drops. Offsets read as a lit edge instead of a flat hairline.
+  --svv-glass-shadow:
+    inset 0 0 0 1px
+      color-mix(in srgb, var(--svv-glass-light) calc(var(--svv-glass-reflex-light) * 10%), transparent),
+    inset 1.8px 3px 0 -2px
+      color-mix(in srgb, var(--svv-glass-light) calc(var(--svv-glass-reflex-light) * 90%), transparent),
+    inset -2px -2px 0 -2px
+      color-mix(in srgb, var(--svv-glass-light) calc(var(--svv-glass-reflex-light) * 80%), transparent),
+    inset -3px -8px 1px -6px
+      color-mix(in srgb, var(--svv-glass-light) calc(var(--svv-glass-reflex-light) * 60%), transparent),
+    inset -0.3px -1px 4px 0
+      color-mix(in srgb, var(--svv-glass-dark) calc(var(--svv-glass-reflex-dark) * 12%), transparent),
+    inset -1.5px 2.5px 0 -2px
+      color-mix(in srgb, var(--svv-glass-dark) calc(var(--svv-glass-reflex-dark) * 20%), transparent),
+    inset 0 3px 4px -2px
+      color-mix(in srgb, var(--svv-glass-dark) calc(var(--svv-glass-reflex-dark) * 20%), transparent),
+    inset 2px -6.5px 1px -4px
+      color-mix(in srgb, var(--svv-glass-dark) calc(var(--svv-glass-reflex-dark) * 10%), transparent),
+    0 1px 5px 0
+      color-mix(in srgb, var(--svv-glass-dark) calc(var(--svv-glass-reflex-dark) * 10%), transparent),
+    0 6px 16px 0
+      color-mix(in srgb, var(--svv-glass-dark) calc(var(--svv-glass-reflex-dark) * 8%), transparent);
+
+  // same idea, shallower, for pills and inputs
+  --svv-glass-control-shadow:
+    inset 0 0 0 1px
+      color-mix(in srgb, var(--svv-glass-light) calc(var(--svv-glass-reflex-light) * 10%), transparent),
+    inset 2px 1px 0 -1px
+      color-mix(in srgb, var(--svv-glass-light) calc(var(--svv-glass-reflex-light) * 90%), transparent),
+    inset -1.5px -1px 0 -1px
+      color-mix(in srgb, var(--svv-glass-light) calc(var(--svv-glass-reflex-light) * 80%), transparent),
+    inset -2px -6px 1px -5px
+      color-mix(in srgb, var(--svv-glass-light) calc(var(--svv-glass-reflex-light) * 60%), transparent),
+    inset -1px 2px 3px -1px
+      color-mix(in srgb, var(--svv-glass-dark) calc(var(--svv-glass-reflex-dark) * 20%), transparent),
+    inset 0 -4px 1px -2px
+      color-mix(in srgb, var(--svv-glass-dark) calc(var(--svv-glass-reflex-dark) * 10%), transparent),
+    0 3px 6px 0
+      color-mix(in srgb, var(--svv-glass-dark) calc(var(--svv-glass-reflex-dark) * 8%), transparent);
+  --svv-glass-sheen: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(255, 255, 255, 0.12) 34%,
+    rgba(255, 255, 255, 0) 58%
+  );
+
+  --svv-text: var(--svv-v2-text, #17132a);
+  --svv-text-muted: var(--svv-v2-text-muted, #7a768a);
+  --svv-border: var(--svv-v2-border, rgba(23, 19, 42, 0.08));
+  --svv-border-strong: var(--svv-v2-border-strong, rgba(23, 19, 42, 0.14));
+  --svv-glass-pane: rgba(255, 255, 255, 0.3);
+  --svv-bg: var(--svv-glass-pane);
+  --svv-surface: var(--svv-glass-pane);
+  --svv-card-bg: var(--svv-glass-card, transparent);
+  --svv-card-text: var(--svv-v2-card-text, #17132a);
+  --svv-primary: var(--svv-v2-primary, #6224e7);
+  --svv-primary-hover: var(--svv-v2-primary-hover, #5019c4);
+  --svv-primary-text: var(--svv-v2-primary-text, #ffffff);
+  --svv-accent: var(--svv-v2-accent, #ff8f5c);
+  --svv-radius: 20px;
+  --svv-card-shadow: none;
+  --svv-card-shadow-hover: none;
+
+  // Shell: the frame dissolves, each panel becomes its own floating pane
+  .svv-shell {
+    gap: u(1);
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    overflow: visible;
+  }
+
+  // Four-layer glass: refraction, tint, specular, content. The first two are
+  // pseudo-elements, the specular is the box-shadow bevel on the element itself.
+  // Never on the <dialog> itself: an open modal is position: fixed in the top
+  // layer, and overriding that drops it into normal flow.
+  .svv-shell__header,
+  .svv-shell__aside,
+  .svv-shell__content,
+  .svv-events--grid .svv-card,
+  .svv-drawer__panel,
+  .svv-modal__panel {
+    position: relative;
+    isolation: isolate;
+    background: transparent;
+    border: 0;
+    box-shadow: var(--svv-glass-shadow);
+
+    // refraction layer
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      border-radius: inherit;
+      -webkit-backdrop-filter: var(--svv-glass-blur);
+      backdrop-filter: var(--svv-glass-blur);
+    }
+
+    // tint + specular sheen, above the refraction and under the content
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      border-radius: inherit;
+      background: var(--svv-glass-sheen), var(--svv-glass);
+    }
+  }
+
+  // cards sit on the content pane, so their tint is lighter than the pane's
+  .svv-events--grid .svv-card::after {
+    background: var(--svv-glass-sheen), rgba(255, 255, 255, 0.24);
+  }
+
+  .svv-shell__header {
+    position: sticky;
+    top: u(0.75);
+    z-index: 5;
+    border-radius: 999px;
+    padding: u(0.5) u(0.5) u(0.5) u(0.625);
+  }
+
+  .svv-shell__aside {
+    align-self: start;
+    border-radius: 28px;
+  }
+
+  @container svv-shell (min-width: 832px) {
+    .svv-shell__aside {
+      position: sticky;
+      top: u(5.25);
+    }
+  }
+
+  .svv-shell__content {
+    border-radius: 28px;
+  }
+
+  .svv-shell--with-aside .svv-shell__aside,
+  .svv-shell--with-aside.svv-shell--aside-end .svv-shell__aside {
+    border: 0;
+  }
+
+  // Controls
+  .svv-search,
+  .svv-select {
+    border: 0;
+    border-radius: 999px;
+    background: var(--svv-glass-control);
+    box-shadow: var(--svv-glass-control-shadow);
+  }
+
+  .svv-search:focus-within,
+  .svv-select:focus-within {
+    border-color: rgba(98, 36, 231, 0.5);
+    background: var(--svv-glass-control-hover);
+  }
+
+  .svv-viewmode {
+    border: 0;
+    border-radius: 999px;
+    padding: 3px;
+    background: rgba(23, 19, 42, 0.06);
+    box-shadow: inset 0 1px 2px rgba(23, 19, 42, 0.14);
+
+    button {
+      border-radius: 999px;
+      padding: 0 u(0.875);
+
+      &:hover {
+        background: var(--svv-glass-control);
+        color: var(--svv-text);
+      }
+
+      &.is-active {
+        background: var(--svv-glass-control-hover);
+        color: var(--svv-text);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.9),
+          0 1px 3px rgba(23, 19, 42, 0.18),
+          0 4px 12px rgba(23, 19, 42, 0.12);
+      }
+    }
+  }
+
+  .svv-quick button,
+  .svv-filters__toggle,
+  .svv-filters select,
+  .svv-pagination select {
+    background: var(--svv-glass-control);
+    border: 0;
+    border-radius: 999px;
+    box-shadow: var(--svv-glass-control-shadow);
+  }
+
+  .svv-quick button:hover,
+  .svv-filters__toggle:hover,
+  .svv-filters select:hover {
+    background: var(--svv-glass-control-hover);
+    border-color: #fff;
+  }
+
+  .svv-summary__card {
+    border: 0;
+    border-radius: 22px;
+    background: var(--svv-glass-control);
+    box-shadow: var(--svv-glass-shadow);
+  }
+
+  // Buttons
+  .svv-card__cta,
+  .svv-drawer__cta,
+  .svv-submit {
+    border-radius: 999px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0) 55%),
+      var(--svv-primary);
+    border-color: rgba(255, 255, 255, 0.25);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.35),
+      0 6px 18px rgba(98, 36, 231, 0.3);
+
+    &:hover:not(:disabled) {
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0) 55%),
+        var(--svv-primary-hover);
+    }
+  }
+
+  .svv-pill,
+  .svv-card__share,
+  .svv-drawer__icon,
+  .svv-pagination button,
+  .svv-calendar__clear,
+  .svv-calendar__nav button,
+  .svv-monthview__nav button {
+    border-radius: 999px;
+    background: var(--svv-glass-control);
+    border: 0;
+    box-shadow: var(--svv-glass-control-shadow);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+
+    &:hover {
+      background: var(--svv-glass-control-hover);
+      border-color: #fff;
+    }
+  }
+
+  // Calendar
+  .svv-calendar__day.is-marked:hover {
+    background: rgba(255, 255, 255, 0.7);
+  }
+
+  .svv-calendar__day.is-selected {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0) 60%),
+      var(--svv-primary);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.4),
+      0 4px 12px rgba(98, 36, 231, 0.35);
+  }
+
+  .svv-monthview__grid,
+  .svv-monthview__cell {
+    border-color: rgba(255, 255, 255, 0.8);
+  }
+
+  .svv-monthview__cell.is-outside {
+    background: rgba(255, 255, 255, 0.4);
+  }
+
+  .svv-monthview__today {
+    border-color: rgba(255, 255, 255, 0.85);
+    border-radius: 999px;
+    background: var(--svv-glass-control);
+  }
+
+  .svv-monthview__more {
+    border-top-color: rgba(255, 255, 255, 0.8);
+  }
+
+  // Event rows and cards
+  .svv-events__items {
+    gap: 0;
+  }
+
+  .svv-card {
+    border: 0;
+    border-top: 1px solid var(--svv-border);
+    border-radius: 22px;
+    background: transparent;
+    box-shadow: none;
+
+    &:hover {
+      border-color: var(--svv-border);
+      transform: none;
+      background: rgba(255, 255, 255, 0.4);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.9),
+        0 6px 24px rgba(23, 19, 42, 0.1);
+    }
+  }
+
+  .svv-card__media {
+    border: 0;
+    border-radius: 16px;
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.6),
+      0 4px 14px rgba(23, 19, 42, 0.1);
+  }
+
+  .svv-events--grid .svv-events__items {
+    gap: u(1);
+  }
+
+  .svv-events--grid .svv-card {
+    padding: 6px;
+    border: 0;
+    border-radius: 22px;
+    background: var(--svv-glass-control);
+    box-shadow: var(--svv-glass-shadow);
+
+    &:hover {
+      background: var(--svv-glass-control-hover);
+    }
+
+  }
+
+  .svv-events--grid .svv-card__media {
+    width: 100%;
+    min-height: 0;
+    border: 0;
+    border-radius: 16px;
+  }
+
+  .svv-events__state {
+    border-color: rgba(23, 19, 42, 0.14);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.35);
+  }
+
+  // Overlays
+  .svv-drawer,
+  .svv-modal {
+    // the dialog is only the frame; the panel inside carries the glass layers
+    border-radius: 28px;
+    overflow: hidden;
+    background: transparent;
+    border: 0;
+    box-shadow: 0 30px 80px rgba(40, 20, 90, 0.25);
+  }
+
+  .svv-drawer__panel,
+  .svv-modal__panel {
+    border-radius: inherit;
+
+    // a reading surface: denser fill than the floating panes
+    &::after {
+      background: var(--svv-glass-sheen), color-mix(in srgb, var(--svv-glass-material) 62%, transparent);
+    }
+  }
+
+  .svv-drawer {
+    --svv-drawer-inset: #{u(0.75)};
+
+    height: calc(100dvh - u(1.5));
+    max-height: calc(100dvh - u(1.5));
+    margin-block: var(--svv-drawer-inset);
+  }
+
+  .svv-drawer--right {
+    margin-right: var(--svv-drawer-inset);
+  }
+
+  .svv-drawer--left {
+    margin-left: var(--svv-drawer-inset);
+  }
+
+  .svv-drawer::backdrop,
+  .svv-modal::backdrop {
+    background: rgba(40, 20, 90, 0.18);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+
+  .svv-drawer__head,
+  .svv-drawer__foot {
+    background: rgba(255, 255, 255, 0.4);
+    border-color: var(--svv-border);
+  }
+
+  .svv-drawer__hero {
+    border-radius: 20px;
+  }
+
+  .svv-drawer__section,
+  .svv-members__row,
+  .svv-related li {
+    border-color: var(--svv-border);
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.34);
+  }
+
+  .svv-field__input {
+    border-radius: 14px;
+    background-color: var(--svv-glass-control);
+    border-color: rgba(23, 19, 42, 0.14);
+    box-shadow: var(--svv-glass-control-shadow);
+  }
+
+  .svv-stepper {
+    border: 0;
+    border-radius: 999px;
+    background: var(--svv-glass-control);
+    box-shadow: var(--svv-glass-control-shadow);
+
+    button {
+      background: transparent;
+    }
+  }
+
+  .svv-share__icon {
+    border-radius: 999px;
+    background: var(--svv-glass-control);
+    box-shadow: var(--svv-glass-control-shadow);
+  }
+
+  .svv-share__link {
+    border-radius: var(--svv-radius);
+    background: var(--svv-glass-control);
+    border: 0;
+    box-shadow: var(--svv-glass-control-shadow);
+  }
+
+  @media (min-width: 864px) {
+    .svv-share__link {
+      border-radius: 999px;
+    }
+  }
+
+  @include mobile {
+    .svv-shell__header {
+      position: static;
+      margin: 0 12px 12px;
+      padding: 10px;
+      border-radius: 24px;
+    }
+
+    .svv-shell__content {
+      margin: 0 12px;
+      border-radius: 24px;
+    }
+
+    .svv-shell__strip {
+      padding: 0 12px 12px;
+      border-bottom: 0;
+    }
+
+    .svv-datestrip__chip {
+      border-radius: 16px;
+      border-color: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.55);
+
+      &.is-selected {
+        border-color: var(--svv-text);
+        background: var(--svv-text);
+      }
+    }
+
+    .svv-card__share {
+      color: var(--svv-text-muted);
+    }
+
+    .svv-events--list .svv-card {
+      border-radius: 0;
+    }
+
+    .svv-events--grid .svv-card {
+      padding: 4px;
+      border-radius: 18px;
+    }
+
+    .svv-events--grid .svv-card__media {
+      border-radius: 14px;
+    }
+
+    .svv-events--grid .svv-card__body {
+      padding: 10px 10px 0;
+    }
+
+    .svv-events--grid .svv-card__action {
+      padding: 10px;
+    }
+  }
+
+  @container svv-shell (max-width: 544px) {
+    .svv-shell__header {
+      position: relative;
+      top: auto;
+      border-radius: 24px;
+    }
+
+    .svv-events--grid .svv-card {
+      padding: 4px;
+      border-radius: 18px;
+    }
+  }
+}
+
+// Chromium is the only engine that bends a captured backdrop through an SVG
+// filter; elsewhere the panes stay flat glass.
+@supports (backdrop-filter: url(#svv-glass-dist)) {
+  .svv-wgt-v2 {
+    .svv-shell__header::before,
+    .svv-shell__aside::before,
+    .svv-shell__content::before,
+    .svv-events--grid .svv-card::before,
+    .svv-drawer__panel::before,
+    .svv-modal__panel::before {
+      filter: url(#svv-glass-dist);
+    }
+  }
+}

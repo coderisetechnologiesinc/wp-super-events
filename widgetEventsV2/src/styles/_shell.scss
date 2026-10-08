@@ -1,0 +1,351 @@
+@use "unit" as *;
+
+.svv-wgt-v2 {
+  .svv-shell {
+    display: grid;
+    grid-template-areas:
+      "header"
+      "strip"
+      "aside"
+      "content";
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    border: 1px solid var(--svv-border);
+    border-radius: 12px;
+    background: var(--svv-bg);
+    box-shadow: 0 14px 42px rgba(20, 16, 38, 0.08);
+    overflow: hidden;
+  }
+
+  .svv-shell__header {
+    grid-area: header;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: u(0.75);
+    padding: u(1.125) u(1.25);
+    border-bottom: 1px solid var(--svv-border);
+
+    .svv-viewmode {
+      margin-inline-start: auto;
+    }
+  }
+
+  .svv-shell__strip {
+    grid-area: strip;
+    display: none;
+    gap: u(0.375);
+    min-width: 0;
+    padding: u(0.75) u(1.25);
+    border-bottom: 1px solid var(--svv-border);
+  }
+
+  .svv-datestrip {
+    display: flex;
+    align-items: center;
+    gap: u(0.375);
+    min-width: 0;
+    width: 100%;
+  }
+
+  .svv-datestrip__days {
+    display: flex;
+    flex: 1 1 auto;
+    gap: u(0.375);
+    min-width: 0;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    scroll-snap-type: x mandatory;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .svv-datestrip__nav {
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    width: u(2);
+    height: u(2);
+    border: 1px solid var(--svv-border);
+    border-radius: var(--svv-pill);
+    background: var(--svv-bg);
+    color: var(--svv-text-muted);
+
+    svg {
+      display: block;
+      width: 1.5em;
+      height: 1.5em;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transform: translateX(-0.02em);
+    }
+
+    &:hover:not(:disabled) {
+      border-color: var(--svv-primary);
+      color: var(--svv-primary);
+    }
+
+    &:disabled {
+      opacity: 0.45;
+      cursor: default;
+    }
+  }
+
+  .svv-datestrip__nav--next svg {
+    transform: scaleX(-1) translateX(-0.02em);
+  }
+
+  .svv-datestrip__empty {
+    align-self: center;
+    color: var(--svv-text-muted);
+    font-size: u(0.8125);
+  }
+
+  .svv-datestrip__chip {
+    flex: 0 0 auto;
+    display: grid;
+    align-content: center;
+    gap: u(0.125);
+    min-width: u(4.25);
+    min-height: u(3.375);
+    padding: u(0.375) u(0.625);
+    border: 1px solid var(--svv-border);
+    border-radius: var(--svv-radius);
+    background: var(--svv-bg);
+    color: var(--svv-text);
+    font-size: u(0.8125);
+    font-weight: 750;
+    scroll-snap-align: start;
+
+    span {
+      color: var(--svv-text-muted);
+      font-size: u(0.6875);
+      font-weight: 600;
+    }
+
+    &:hover {
+      border-color: var(--svv-primary);
+    }
+
+    &.is-selected {
+      border-color: var(--svv-primary);
+      background: var(--svv-primary);
+      color: var(--svv-primary-text);
+
+      span {
+        color: color-mix(in srgb, var(--svv-primary-text) 72%, transparent);
+      }
+    }
+  }
+
+  .svv-shell__aside {
+    grid-area: aside;
+    min-width: 0;
+    padding: u(1.375) u(1.125);
+    background: color-mix(in srgb, var(--svv-surface) 60%, var(--svv-bg));
+    border-bottom: 1px solid var(--svv-border);
+  }
+
+  .svv-shell__content {
+    grid-area: content;
+    min-width: 0;
+    padding: u(1.375) u(1.5) u(1.625);
+  }
+
+  .svv-shell__aside > .svv-filters,
+  .svv-shell__aside > .svv-filters__toggle {
+    margin: u(1.375) 0 0;
+  }
+
+  @container svv-shell (min-width: 832px) {
+    .svv-shell--with-aside {
+      grid-template-areas:
+        "header header"
+        "strip strip"
+        "aside content";
+      grid-template-columns: u(18.375) minmax(0, 1fr);
+    }
+
+    .svv-shell--with-aside .svv-shell__aside {
+      border-bottom: 0;
+      border-right: 1px solid var(--svv-border);
+    }
+
+    .svv-shell--with-aside.svv-shell--aside-end {
+      grid-template-areas:
+        "header header"
+        "strip strip"
+        "content aside";
+      grid-template-columns: minmax(0, 1fr) u(18.375);
+    }
+
+    .svv-shell--with-aside.svv-shell--aside-end .svv-shell__aside {
+      border-right: 0;
+      border-left: 1px solid var(--svv-border);
+    }
+
+    .svv-shell__aside .svv-filters {
+      grid-template-columns: minmax(0, 1fr);
+      align-items: stretch;
+    }
+
+    .svv-shell__aside .svv-filters__clear {
+      justify-self: start;
+      padding-inline: 0;
+    }
+  }
+
+  .svv-results {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: u(1);
+    margin-bottom: u(0.5);
+  }
+
+  .svv-results__title {
+    margin: 0;
+    font-size: u(1.375);
+    font-weight: 600;
+  }
+
+  .svv-results__meta {
+    color: var(--svv-text-muted);
+    font-size: u(0.875);
+  }
+
+  .svv-quick {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: u(0.5);
+    margin-top: u(1.375);
+
+    button {
+      min-height: u(2.375);
+      padding: 0 u(0.75);
+      border: 1px solid var(--svv-border);
+      border-radius: var(--svv-pill);
+      background: var(--svv-bg);
+      color: var(--svv-text);
+      font-weight: 750;
+
+      &:hover {
+        border-color: var(--svv-primary);
+        color: var(--svv-primary);
+      }
+
+      &.is-active {
+        border-color: var(--svv-primary);
+        background: var(--svv-primary);
+        color: var(--svv-primary-text);
+      }
+    }
+  }
+
+  .svv-summary {
+    display: grid;
+    gap: u(0.75);
+    margin-top: u(1.375);
+  }
+
+  .svv-summary__card {
+    padding: u(0.875);
+    border: 1px solid var(--svv-border);
+    border-radius: var(--svv-radius);
+    background: var(--svv-card-bg);
+
+    strong {
+      display: block;
+      margin-bottom: u(0.25);
+      font-size: u(1.375);
+      font-weight: 700;
+    }
+
+    span {
+      color: var(--svv-text-muted);
+      font-size: u(0.8125);
+    }
+  }
+
+  .svv-events__items {
+    display: grid;
+    gap: u(0.875);
+  }
+
+  .svv-events--grid .svv-events__items {
+    --svv-events-col-min: #{u(18)};
+
+    gap: u(1);
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(
+        min(
+          max(
+            var(--svv-events-col-min),
+            (100% - (var(--svv-grid-columns) - 1) * u(1)) / var(--svv-grid-columns)
+          ),
+          (100% - u(1)) / 2
+        ),
+        1fr
+      )
+    );
+  }
+
+  @container svv-shell (max-width: 544px) {
+    .svv-events--grid .svv-events__items {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .svv-events__items > li {
+    container-type: inline-size;
+    container-name: svv-card;
+    min-width: 0;
+  }
+
+  .svv-events__separator {
+    display: flex;
+    align-items: center;
+    gap: u(0.75);
+    margin: u(1.125) 0 u(0.75);
+    font-size: u(0.875);
+    font-weight: 850;
+    color: var(--svv-text-muted);
+
+    &::before,
+    &::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--svv-border);
+    }
+  }
+
+  .svv-events__separator-item {
+    grid-column: 1 / -1;
+    container-type: normal;
+  }
+
+  .svv-events__items > li:first-child .svv-events__separator {
+    margin-top: 0;
+  }
+
+  .svv-events__state {
+    display: grid;
+    place-items: center;
+    min-height: u(17.5);
+    padding: u(1.75);
+    border: 1px dashed var(--svv-border-strong);
+    border-radius: var(--svv-radius);
+    background: color-mix(in srgb, var(--svv-surface) 60%, var(--svv-bg));
+    color: var(--svv-text-muted);
+    text-align: center;
+  }
+}

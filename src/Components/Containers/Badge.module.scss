@@ -1,0 +1,162 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+
+@include m.scoped {
+  .badge {
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    flex-grow: 0;
+    align-items: center;
+    justify-content: center;
+    gap: t.$space-2;
+    border: 1px solid transparent;
+    white-space: nowrap;
+  }
+
+  // --- Shapes ----------------------------------------------------------------
+
+  .pill,
+  .pillOutline {
+    border-radius: t.$radius-pill;
+  }
+
+  .pillOutline {
+    background: t.$surface;
+  }
+
+  .square {
+    border-radius: t.$radius-md;
+  }
+
+  .modern {
+    border-radius: t.$radius-md;
+    background: t.$surface;
+    box-shadow: t.$shadow-raised-sm;
+  }
+
+  // --- Sizes -----------------------------------------------------------------
+
+  .small {
+    height: 18px;
+    padding: 0 t.$space-3;
+    @include m.text(11, t.$weight-bold);
+  }
+
+  .medium {
+    height: 22px;
+    padding: 0 t.$space-4;
+    @include m.text(12, t.$weight-semibold);
+  }
+
+  .large {
+    height: 26px;
+    padding: 0 t.$space-5;
+    @include m.text(13, t.$weight-semibold);
+  }
+
+  // --- Colours ---------------------------------------------------------------
+
+  .gray {
+    background: t.$surface-subtle;
+    border-color: t.$border;
+    color: t.$text-strong;
+  }
+
+  .brand {
+    background: t.$primary-surface;
+    border-color: t.$primary-border;
+    color: t.$primary-strong;
+  }
+
+  .success {
+    background: t.$success-surface;
+    border-color: t.$success-border;
+    color: t.$success-text;
+  }
+
+  .warning {
+    background: t.$warning-surface;
+    border-color: t.$warning-border;
+    color: t.$warning-text;
+  }
+
+  .error {
+    background: t.$danger-surface;
+    border-color: t.$danger-border;
+    color: t.$danger-text;
+  }
+
+  .info,
+  .blueLight,
+  .zoom {
+    background: t.$info-surface;
+    border-color: t.$info-border;
+    color: t.$info;
+  }
+
+  .purple {
+    background: #f4f3ff;
+    border-color: #d9d6fe;
+    color: #5925dc;
+  }
+
+  // `color="neutral"` keeps the shape but inherits its own colours.
+  .neutral {
+    background: transparent;
+    border-color: transparent;
+    color: inherit;
+  }
+
+  // --- Alignment -------------------------------------------------------------
+
+  .alignCenter {
+    align-items: center;
+  }
+
+  .alignEnd {
+    align-items: flex-end;
+  }
+
+  .justifyStart {
+    justify-content: flex-start;
+  }
+
+  .justifyCenter {
+    justify-content: center;
+  }
+
+  .justifyEnd {
+    justify-content: flex-end;
+  }
+
+  // --- Modifiers -------------------------------------------------------------
+
+  .fitContent {
+    width: max-content;
+  }
+
+  // Table cells that need the badge boxed to a narrow column.
+  .short {
+    max-width: 80px;
+    width: auto;
+    margin: 0 auto;
+  }
+
+  .clickable {
+    cursor: pointer;
+    transition: box-shadow t.$duration-fast t.$ease;
+  }
+
+  .icon {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+
+    svg {
+      display: block;
+      width: 14px;
+      height: 14px;
+    }
+  }
+}

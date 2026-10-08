@@ -1,0 +1,32 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+
+@include m.scoped {
+  // Native-admin shell: WordPress draws the navigation, we only fill the column.
+  .main {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  // Plugin-drawn shell: our own sidebar beside the content column.
+  .shell {
+    display: flex;
+  }
+
+  .shellMain {
+    display: flex;
+    flex: 1 1 0%;
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    min-height: 0;
+    padding: 0;
+    overflow: visible;
+  }
+}

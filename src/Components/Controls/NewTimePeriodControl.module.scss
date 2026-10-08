@@ -1,0 +1,40 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+
+@include m.scoped {
+  .period {
+    @include m.button-reset;
+    @include m.wp-reset-button;
+    @include m.field-surface;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 64px;
+    width: 64px;
+    height: t.$control-lg;
+    padding: 0 t.$space-6;
+    @include m.text(14, t.$weight-semibold);
+    color: t.$text-strong;
+    text-transform: uppercase;
+    transition:
+      background t.$duration-fast t.$ease,
+      color t.$duration-fast t.$ease;
+    &:hover:not(:disabled) {
+      border-color: t.$primary-border;
+    }
+    &:focus-visible {
+      @include m.focus-ring;
+    }
+    &:disabled {
+      color: t.$text-soft;
+      background: t.$surface-subtle;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+  }
+  .night:not(:disabled) {
+    background: t.$primary-surface;
+    border-color: t.$primary-border;
+    color: t.$primary-strong;
+  }
+}

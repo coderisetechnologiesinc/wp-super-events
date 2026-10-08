@@ -1,0 +1,17 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+
+@include m.scoped {
+  .wrapper {
+    @include m.field-stack;
+    width: 100%;
+  }
+
+  .label {
+    @include m.field-label;
+  }
+
+  .errorText {
+    @include m.field-error-text;
+  }
+}

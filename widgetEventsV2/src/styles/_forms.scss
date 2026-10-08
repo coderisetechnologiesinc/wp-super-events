@@ -1,0 +1,322 @@
+@use "unit" as *;
+
+.svv-wgt-v2 {
+  .svv-form {
+    display: grid;
+    gap: u(0.625);
+    margin-top: u(1);
+  }
+
+  .svv-form__title {
+    margin: 0;
+    font-size: u(0.9375);
+    font-weight: 700;
+  }
+
+  .svv-form__text,
+  .svv-form__terms {
+    color: var(--svv-card-text-muted);
+    font-size: u(0.8125);
+    line-height: 1.35;
+  }
+
+  .svv-form__terms a {
+    color: var(--svv-primary);
+    text-decoration: underline;
+  }
+
+  .svv-form__question-text {
+    color: var(--svv-card-text-muted);
+    font-size: u(0.75);
+    font-weight: 850;
+  }
+
+  .svv-field {
+    display: grid;
+    gap: u(0.3125);
+  }
+
+  .svv-field__label {
+    color: var(--svv-card-text-muted);
+    font-size: u(0.75);
+    font-weight: 850;
+  }
+
+  .svv-field__required {
+    margin-left: u(0.125);
+    color: var(--svv-primary);
+  }
+
+  .svv-field__input {
+    width: 100%;
+    min-height: u(2.625);
+    padding: u(0.5625) u(0.625);
+    border: 1px solid var(--svv-border-strong);
+    border-radius: var(--svv-radius);
+    background: var(--svv-card-bg);
+    color: var(--svv-card-text);
+
+    &:focus-visible {
+      border-color: var(--svv-primary);
+    }
+
+    &.is-invalid {
+      border-color: var(--svv-critical);
+    }
+  }
+
+  .svv-field__error {
+    color: var(--svv-critical);
+    font-size: u(0.8125);
+  }
+
+  .svv-choices {
+    display: grid;
+    gap: u(0.375);
+  }
+
+  .svv-choice {
+    display: flex;
+    align-items: flex-start;
+    gap: u(0.5);
+    color: var(--svv-card-text-muted);
+    font-size: u(0.8125);
+    line-height: 1.35;
+
+    input {
+      margin-top: u(0.125);
+      accent-color: var(--svv-primary);
+    }
+  }
+
+  .svv-members__row {
+    display: grid;
+    gap: u(0.625);
+    padding: u(0.875);
+    border: 1px solid var(--svv-border);
+    border-radius: var(--svv-radius);
+    background: var(--svv-card-bg);
+  }
+
+  .svv-members__legend {
+    display: flex;
+    align-items: center;
+    gap: u(0.5);
+    padding: 0 u(0.25);
+    font-size: u(0.8125);
+    font-weight: 850;
+  }
+
+  .svv-members__names {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: u(0.625);
+  }
+
+  .svv-error {
+    padding: u(0.5) u(0.75);
+    border-radius: var(--svv-radius);
+    background: var(--svv-critical-subtle);
+    color: var(--svv-critical);
+    font-size: u(0.875);
+  }
+
+  .svv-captcha {
+    display: grid;
+    gap: u(0.5);
+  }
+
+  .svv-confirmation {
+    padding: u(0.5) 0 u(0.25);
+    text-align: center;
+  }
+
+  .svv-confirmation__mark {
+    position: relative;
+    display: inline-block;
+    width: u(3.5);
+    height: u(3.5);
+    margin-bottom: u(0.875);
+    border: 1px solid color-mix(in srgb, var(--svv-success) 30%, var(--svv-card-bg));
+    border-radius: var(--svv-pill);
+    background: var(--svv-success-subtle);
+
+    &::after {
+      content: "";
+      position: absolute;
+      left: u(1.3125);
+      top: u(0.9375);
+      width: u(0.75);
+      height: u(1.375);
+      border: solid var(--svv-success);
+      border-width: 0 3px 3px 0;
+      transform: rotate(45deg);
+    }
+  }
+
+  .svv-confirmation__title {
+    margin: 0 0 u(0.5);
+    font-size: u(1.0625);
+    font-weight: 700;
+  }
+
+  .svv-confirmation__text {
+    color: var(--svv-card-text-muted);
+    font-size: u(0.9375);
+  }
+
+  .svv-modal {
+    width: min(u(47.5), calc(100vw - u(2)));
+    max-width: none;
+    max-height: calc(100dvh - u(2));
+    padding: 0;
+    border: 0;
+    border-radius: 12px;
+    background: var(--svv-card-bg);
+    color: var(--svv-card-text);
+    font-family: var(--svv-font);
+    font-size: var(--svv-font-size);
+    box-shadow: 0 20px 60px rgba(23, 17, 45, 0.14);
+    overscroll-behavior: contain;
+  }
+
+  .svv-modal::backdrop {
+    background: color-mix(in srgb, var(--svv-bg) 88%, transparent);
+  }
+
+  .svv-modal__panel {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    max-height: calc(100dvh - u(2));
+  }
+
+  .svv-modal__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: u(0.75);
+    padding: u(1.25) u(1.5) u(0.75);
+  }
+
+  .svv-modal__title {
+    margin: 0;
+    color: var(--svv-info);
+    font-size: u(1.5);
+    font-weight: 700;
+  }
+
+  .svv-modal__close {
+    display: grid;
+    place-items: center;
+    width: u(2.375);
+    height: u(2.375);
+    border: 0;
+    border-radius: var(--svv-pill);
+    background: transparent;
+    color: var(--svv-info);
+    font-size: u(1.5);
+    line-height: 1;
+
+    &:hover {
+      background: var(--svv-info-subtle);
+    }
+  }
+
+  .svv-modal__body {
+    padding: 0 u(1.5) u(1.75);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .svv-share {
+    display: grid;
+    gap: u(1.5);
+    text-align: center;
+  }
+
+  .svv-share__targets {
+    container-type: inline-size;
+
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: u(0.75);
+
+    li {
+      min-width: 0;
+    }
+  }
+
+  .svv-share__target {
+    display: grid;
+    place-items: center;
+    gap: u(0.5);
+    min-width: 0;
+    color: var(--svv-info);
+    font-size: min(u(0.875), 3.6cqw);
+    font-weight: 900;
+    text-align: center;
+  }
+
+  .svv-share__icon {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    max-width: u(5.875);
+    aspect-ratio: 1;
+    border: 2px solid var(--svv-info);
+    border-radius: var(--svv-pill);
+    background: var(--svv-card-bg);
+    color: var(--svv-info);
+    font-size: min(u(2.75), 9cqw);
+    font-weight: 950;
+    line-height: 1;
+  }
+
+  .svv-share__target:hover .svv-share__icon {
+    background: var(--svv-info-subtle);
+  }
+
+  .svv-share__link {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: u(0.5);
+    align-items: center;
+    padding: u(0.4375);
+    border: 1px solid var(--svv-border);
+    border-radius: var(--svv-radius);
+    background: var(--svv-surface);
+    color: var(--svv-text-muted);
+    font-size: u(0.875);
+
+    .svv-field__input {
+      min-height: u(2.25);
+      border: 0;
+      background: transparent;
+      text-align: left;
+    }
+  }
+
+  @container svv-drawer (min-width: 26em) {
+    .svv-members__names {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 864px) {
+    .svv-share__targets {
+      gap: u(1.5);
+    }
+
+    .svv-share__icon {
+      max-width: u(7.25);
+      font-size: min(u(3.375), 9cqw);
+    }
+
+    .svv-share__link {
+      grid-template-columns: minmax(0, 1fr) auto;
+      padding: u(0.4375) u(0.4375) u(0.4375) u(1);
+      border-radius: var(--svv-pill);
+    }
+  }
+}

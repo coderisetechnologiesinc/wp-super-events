@@ -1,0 +1,124 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+
+// The "Display settings" popover from events-views.html: a raised trigger and
+// a 290px card of radio rows.
+@include m.scoped {
+  // inline-block, not inline-flex: an absolutely positioned child of a flex
+  // container takes its static position from the container's content box, so
+  // the popover would open over the button instead of under it.
+  .root {
+    position: relative;
+    display: inline-block;
+  }
+
+  .pop {
+    width: 290px;
+    max-width: calc(100vw - #{t.$space-16});
+    padding: t.$space-7;
+    border: 1px solid t.$border;
+    border-radius: t.$radius-xl;
+    background: t.$surface;
+    box-shadow: 12px 12px 28px t.$shade-strong, -5px -5px 16px t.$light;
+  }
+
+  .group + .group {
+    margin-top: t.$space-7;
+    padding-top: t.$space-7;
+    border-top: 1px solid t.$border;
+  }
+
+  .title {
+    margin: 0 0 2px;
+    @include m.text(14, t.$weight-bold);
+    color: t.$text;
+  }
+
+  .note {
+    margin: 0 0 t.$space-6;
+    @include m.text(12, t.$weight-medium);
+    color: t.$text-soft;
+  }
+
+  .checks {
+    display: flex;
+    flex-direction: column;
+    gap: t.$space-5;
+  }
+
+  // Reference `.opt`: a raised slab that presses in when it is the one chosen.
+  .opt {
+    @include m.button-reset;
+    @include m.wp-reset-button;
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    width: 100%;
+    padding: t.$space-6;
+    border: 1px solid t.$border;
+    border-radius: t.$radius-lg;
+    background: t.$surface;
+    box-shadow: t.$shadow-raised-sm;
+    color: t.$text;
+    text-align: left;
+    transition: box-shadow t.$duration t.$ease, transform t.$duration-fast t.$ease,
+      background t.$duration t.$ease;
+
+    & + .opt {
+      margin-top: t.$space-4;
+    }
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: t.$shadow-raised-hover;
+    }
+
+    &:focus-visible {
+      @include m.focus-ring-raised;
+    }
+  }
+
+  .optActive {
+    border-color: t.$primary-border;
+    background: t.$primary-surface;
+    box-shadow: t.$shadow-chip-pressed;
+    transform: none;
+
+    &:hover {
+      transform: none;
+      box-shadow: t.$shadow-chip-pressed;
+    }
+  }
+
+  // A radio drawn as a ring: 5px of surface inside the border, so the dot
+  // appears when the border takes the brand colour.
+  .mark {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+    margin-top: 2px;
+    border: 5px solid t.$surface;
+    border-radius: t.$radius-pill;
+    background: t.$surface;
+    box-shadow: t.$shadow-field;
+    transition: border-color t.$duration-fast t.$ease,
+      box-shadow t.$duration t.$ease;
+  }
+
+  .optActive .mark {
+    border-color: t.$primary;
+    box-shadow: 0 0 0 1px t.$primary, t.$shadow-raised-sm;
+  }
+
+  .label {
+    display: block;
+    @include m.text(13, t.$weight-bold);
+  }
+
+  .hint {
+    display: block;
+    margin-top: 2px;
+    @include m.text(12, t.$weight-medium);
+    color: t.$text-soft;
+  }
+}

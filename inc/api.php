@@ -214,6 +214,9 @@ function servvCreateEventSendRequest($postId, $postTitle, $event, $product, $typ
         ],
         'shop_post_object_id'   => (int)$postId
     ];
+    if (array_key_exists('is_hidden', $event)) {
+        $requestBody['meeting']['is_hidden'] = (bool)$event['is_hidden'];
+    }
     if(!empty($event['recurrence'] ?? [])){
         $recurrence = [];
         if(!empty($event['recurrence']['weekly_days'])) {

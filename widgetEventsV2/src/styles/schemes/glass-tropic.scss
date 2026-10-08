@@ -1,0 +1,64 @@
+.svv-wgt-v2-container {
+  --svv-v2-bg: #0fb3a1;
+  --svv-v2-glass-blob-1: rgba(255, 46, 147, 0.55);
+  --svv-v2-glass-blob-2: rgba(255, 183, 3, 0.55);
+  --svv-v2-glass-blob-3: rgba(0, 90, 220, 0.45);
+}
+
+.svv-wgt-v2 {
+  --svv-glass-fill: 42%;
+  --svv-glass-control-fill: 46%;
+
+  --svv-text: #04231f;
+  --svv-text-muted: #2f5c54;
+  --svv-border: rgba(4, 35, 31, 0.12);
+  --svv-border-strong: rgba(4, 35, 31, 0.2);
+  --svv-card-text: #04231f;
+
+  --svv-primary: #d1006f;
+  --svv-primary-hover: #a80058;
+  --svv-primary-text: #ffffff;
+  --svv-primary-subtle: #ffe1f0;
+
+  --svv-accent: #a85f00;
+  --svv-accent-strong: #8a4f00;
+  --svv-accent-subtle: #fff0cc;
+
+  --svv-success: #0f7a56;
+  --svv-warning: #8a4f00;
+  --svv-critical: #b3261e;
+  --svv-info: #0b5aa8;
+
+  --svv-calendar-text: #04231f;
+  --svv-calendar-selected-text: #ffffff;
+  --svv-calendar-today-border: rgba(4, 35, 31, 0.3);
+
+  .svv-search:focus-within,
+  .svv-select:focus-within {
+    border-color: rgba(209, 0, 111, 0.5);
+  }
+
+  .svv-card__cta,
+  .svv-drawer__cta,
+  .svv-submit {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.35),
+      0 6px 18px rgba(209, 0, 111, 0.3);
+  }
+
+  .svv-calendar__day.is-selected {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.4),
+      0 4px 12px rgba(209, 0, 111, 0.35);
+  }
+
+  .svv-drawer,
+  .svv-modal {
+    box-shadow: 0 30px 80px rgba(4, 35, 31, 0.3);
+  }
+
+  .svv-drawer::backdrop,
+  .svv-modal::backdrop {
+    background: rgba(4, 35, 31, 0.22);
+  }
+}

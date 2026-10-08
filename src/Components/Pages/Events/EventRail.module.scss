@@ -1,0 +1,278 @@
+@use "../../../styles/tokens" as t;
+@use "../../../styles/mixins" as m;
+
+// "Option B · Date rail": grouped by month and hung off a date tile. Time is
+// the structure, so the rows carry no columns and no chrome of their own —
+// only the tile is raised.
+@include m.scoped {
+  .rail {
+    display: flex;
+    flex-direction: column;
+    gap: t.$space-14;
+  }
+
+  .group {
+    display: flex;
+    flex-direction: column;
+    gap: t.$space-7;
+  }
+
+  .groupHead {
+    display: flex;
+    align-items: center;
+    gap: t.$space-7;
+  }
+
+  .groupLabel {
+    margin: 0;
+    @include m.text(13, t.$weight-extrabold);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: t.$text-strong;
+  }
+
+  .groupCount {
+    display: inline-flex;
+    align-items: center;
+    height: 22px;
+    padding: 0 9px;
+    border: 1px solid t.$border;
+    border-radius: t.$radius-pill;
+    background: t.$surface;
+    color: t.$text-soft;
+    box-shadow: t.$shadow-raised-sm;
+    @include m.text(12, t.$weight-bold);
+  }
+
+  // A carved groove running out to the end of the row.
+  .groupRule {
+    flex: 1;
+    height: 2px;
+    border-radius: t.$radius-pill;
+    background: t.$surface;
+    box-shadow: inset 1px 1px 3px t.$shade, inset -1px -1px 3px t.$light-alt;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 18px 78px minmax(0, 1fr) auto;
+
+    &.noPick {
+      grid-template-columns: 78px minmax(0, 1fr) auto;
+    }
+    gap: t.$space-10;
+    align-items: flex-start;
+    width: 100%;
+    padding: t.$space-8 t.$space-9;
+    border: 0;
+    border-radius: t.$radius-xl;
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+    transition: background t.$duration-fast t.$ease;
+
+    &:hover {
+      background: t.$surface-subtle;
+    }
+
+    &:focus-visible {
+      outline: none;
+      background: t.$surface-subtle;
+      box-shadow: 0 0 0 3px t.$primary-ring;
+    }
+  }
+
+  .muted {
+    opacity: 0.68;
+  }
+
+  .picked {
+    background: rgba(100, 54, 201, 0.06);
+  }
+
+  // Reference: `.b-row .cb{margin-top:22px}` — level with the date tile's face
+  // rather than with the top of a row that is aligned to its start.
+  .pick {
+    display: flex;
+    margin-top: 22px;
+  }
+
+  .date {
+    width: 78px;
+    padding: t.$space-5 0;
+    border: 1px solid t.$border;
+    border-radius: t.$radius-xl;
+    background: t.$surface;
+    box-shadow: 5px 5px 13px t.$shade, -2px -2px 8px t.$light;
+    text-align: center;
+  }
+
+  .dateOffline {
+    color: t.$primary;
+  }
+
+  .dateOnline {
+    color: t.$info;
+  }
+
+  .day {
+    @include m.text(24, t.$weight-extrabold);
+    line-height: 26px;
+    letter-spacing: t.$tracking-tight;
+  }
+
+  .weekday {
+    margin-top: 3px;
+    @include m.text(11, t.$weight-bold);
+    letter-spacing: t.$tracking-wide;
+    text-transform: uppercase;
+    color: t.$text-soft;
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 0;
+  }
+
+  .heading {
+    display: flex;
+    align-items: center;
+    gap: t.$space-5;
+    flex-wrap: wrap;
+  }
+
+  // The reference says 17px — a size the type scale does not carry. 16 is the
+  // scale's neighbour and matches the row view's title.
+  .title {
+    @include m.text(16, t.$weight-bold);
+    letter-spacing: -0.01em;
+  }
+
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: t.$space-3;
+    height: 24px;
+    padding: 0 t.$space-5;
+    border: 1px solid t.$border;
+    border-radius: t.$radius-pill;
+    background: t.$surface;
+    color: t.$text-strong;
+    @include m.text(12, t.$weight-bold);
+  }
+
+  .statusLive {
+    border-color: t.$success-border;
+    background: t.$success-surface;
+    color: t.$success-text;
+  }
+
+  .dot {
+    width: 7px;
+    height: 7px;
+    flex: 0 0 7px;
+    border-radius: t.$radius-pill;
+    background: t.$text-placeholder;
+    box-shadow: 0 0 0 3px rgba(142, 151, 171, 0.15);
+  }
+
+  .dotLive {
+    background: t.$success;
+    box-shadow: 0 0 0 3px rgba(23, 178, 106, 0.15);
+  }
+
+  .meta {
+    display: flex;
+    align-items: center;
+    gap: t.$space-8;
+    flex-wrap: wrap;
+    @include m.text(13, t.$weight-medium);
+    color: t.$text-secondary;
+  }
+
+  .metaItem {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    svg {
+      width: 14px;
+      height: 14px;
+      color: t.$text-placeholder;
+    }
+  }
+
+  .metaType {
+    font-weight: t.$weight-semibold;
+
+    svg {
+      color: currentColor;
+    }
+  }
+
+  .typeOffline {
+    color: t.$primary;
+  }
+
+  .typeOnline {
+    color: t.$info;
+  }
+
+  .metaSoft {
+    color: t.$text-placeholder;
+  }
+
+  .actions {
+    display: flex;
+    align-self: center;
+    gap: t.$space-2;
+  }
+
+  .action {
+    @include m.button-reset;
+    @include m.wp-reset-button;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 11px;
+    color: t.$text-soft;
+    transition: background t.$duration t.$ease, box-shadow t.$duration t.$ease;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    &:hover {
+      background: t.$surface;
+      box-shadow: 4px 4px 10px t.$shade, -2px -2px 7px t.$light;
+      color: t.$primary;
+    }
+  }
+
+  .actionDanger:hover {
+    color: t.$danger-text;
+    background: t.$danger-surface;
+  }
+
+  @media (max-width: 735px) {
+    .row {
+      grid-template-columns: 18px 58px minmax(0, 1fr);
+      gap: t.$space-6;
+      padding: t.$space-6 t.$space-4;
+    }
+
+    .date {
+      width: 58px;
+    }
+
+    .actions {
+      grid-column: 3;
+      align-self: start;
+    }
+  }
+}

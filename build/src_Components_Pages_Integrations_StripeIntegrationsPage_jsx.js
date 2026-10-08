@@ -1,208 +1,6 @@
 "use strict";
 (self["webpackChunkservv_plugin"] = self["webpackChunkservv_plugin"] || []).push([["src_Components_Pages_Integrations_StripeIntegrationsPage_jsx"],{
 
-/***/ "./src/Components/Containers/Badge.jsx":
-/*!*********************************************!*\
-  !*** ./src/Components/Containers/Badge.jsx ***!
-  \*********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _BadgeImage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./BadgeImage */ "./src/Components/Containers/BadgeImage.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
-
-// size : small | medium | large
-
-// type : pill-colour | pill-outline | badge | badge-modern
-
-// color : gray | brand | error | warning | success | gray-blue | blue-light | blue | indigo | purple | pink | orange
-
-const Badge = ({
-  text,
-  icon = null,
-  iconAfter = null,
-  image = null,
-  color,
-  type,
-  size,
-  align,
-  additionalType = null,
-  fullWidth = false,
-  justify = null,
-  onAction = () => {}
-}) => {
-  const getColor = () => {
-    if (color === "gray") {
-      return "badge-gray";
-    } else if (color === "brand") {
-      return "badge-brand";
-    } else if (color === "error") {
-      return "badge-error";
-    } else if (color === "warning") {
-      return "badge-warning";
-    } else if (color === "success") {
-      return "badge-success";
-    } else if (color === "info") {
-      return "badge-infor";
-    } else if (color === "purple") {
-      return "badge-purple";
-    } else if (color === "blue-light") {
-      return "badge-blue-light";
-    } else if (color === "zoom") {
-      return "badge-zoom";
-    } else if (color === "neutral") {
-      return "";
-    }
-    return "badge-gray";
-  };
-  const getType = () => {
-    if (type === "pill-colour") {
-      return "badge-pill-colour";
-    } else if (type === "pill-outline") {
-      return "badge-pill-outline";
-    } else if (type === "badge") {
-      return "badge-colour";
-    } else if (type === "badge-modern") {
-      return "badge-modern";
-    }
-    return "badge-modern";
-  };
-  const getSize = () => {
-    if (size === "small") {
-      return "badge-small";
-    } else if (size === "medium") {
-      return "badge-medium";
-    } else if (size === "large") {
-      return "badge-large";
-    }
-    return "badge-small";
-  };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-    className: `badge ${fullWidth ? "w-max" : ""} ${getSize()} ${getType()} ${getColor()} ${align === "center" ? "items-center" : "items-end"} ${justify && justify === "start" ? "justify-start" : justify} ${additionalType ? additionalType : ""} cursor-pointer
-`,
-    onClick: onAction,
-    children: [icon && icon, image && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_BadgeImage__WEBPACK_IMPORTED_MODULE_0__["default"], {
-      image: image
-    }), text && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-      children: text
-    }), iconAfter && iconAfter]
-  });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Badge);
-
-/***/ }),
-
-/***/ "./src/Components/Containers/BadgeImage.jsx":
-/*!**************************************************!*\
-  !*** ./src/Components/Containers/BadgeImage.jsx ***!
-  \**************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
-
-const BadgeImage = ({
-  image
-}) => {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-    className: "badge-image",
-    style: {
-      background: `url('${image}')`
-    }
-  });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (BadgeImage);
-
-/***/ }),
-
-/***/ "./src/Components/Containers/BlockStack.jsx":
-/*!**************************************************!*\
-  !*** ./src/Components/Containers/BlockStack.jsx ***!
-  \**************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
-
-
-const BlockStack = ({
-  gap = 4,
-  cardsLayout,
-  action,
-  disabled,
-  onAction,
-  className = "",
-  children,
-  ...rest
-}) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-  ...rest,
-  onClick: onAction ? () => onAction() : undefined,
-  className: `${className} flex flex-col ${gap ? `space-y-${gap}` : ""} ${cardsLayout ? "flex-[1_1_0]" : ""} ${action ? "cursor-pointer" : ""} ${disabled ? "filter grayscale" : ""}`,
-  children: children
-});
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (BlockStack);
-
-/***/ }),
-
-/***/ "./src/Components/Containers/Card.jsx":
-/*!********************************************!*\
-  !*** ./src/Components/Containers/Card.jsx ***!
-  \********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
-
-
-const Card = ({
-  className = "",
-  padding = "p-0",
-  align,
-  background = "bg-white",
-  maxWidth,
-  children,
-  ...rest
-}) => {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-    ...rest,
-    className: `
-        servv-card
-        ${padding}
-        ${background}
-        w-full
-        ${align === "center" ? "mx-auto" : ""}
-        ${className}
-      `,
-    style: {
-      maxWidth: maxWidth ? maxWidth : "100%"
-    },
-    children: children
-  });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Card);
-
-/***/ }),
-
 /***/ "./src/Components/Containers/PageContent.jsx":
 /*!***************************************************!*\
   !*** ./src/Components/Containers/PageContent.jsx ***!
@@ -215,22 +13,33 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _PageContent_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PageContent.module.scss */ "./src/Components/Containers/PageContent.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
 
 
-const PageContent = props => {
-  const {
-    className = "",
-    children,
-    ...rest
-  } = props;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+
+// The page shell from the design reference: a padded frame around a centred
+// 1180px column whose children are spaced 24px apart.
+// `className` lands on the column, where the call sites have always put it.
+
+const PageContent = ({
+  className = "",
+  maxWidth,
+  flush = false,
+  children,
+  ...rest
+}) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+  className: `${_PageContent_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].shell} ${flush ? _PageContent_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].flush : ""}`.trim(),
+  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
     ...rest,
-    className: `page-content ${className}`,
+    className: `${_PageContent_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].container} ${className}`.trim(),
+    style: maxWidth ? {
+      maxWidth
+    } : undefined,
     children: children
-  });
-};
+  })
+});
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PageContent);
 
 /***/ }),
@@ -247,24 +56,296 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _PageHeader_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PageHeader.module.scss */ "./src/Components/Containers/PageHeader.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
 
 
-const PageHeader = props => {
-  const {
-    className = "",
-    bottomLine,
-    children,
-    ...rest
-  } = props;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+
+// The page header from the design reference: eyebrow, title, description on the
+// left, actions on the right.
+//
+// Passing `title` renders that structure. Without it the children are laid out
+// in the same row, which is how the existing call sites use the component.
+
+const PageHeader = ({
+  className = "",
+  bottomLine,
+  eyebrow,
+  title,
+  description,
+  actions,
+  children,
+  ...rest
+}) => {
+  const classes = [_PageHeader_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].header, bottomLine ? _PageHeader_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].bottomLine : "", className].filter(Boolean).join(" ");
+  if (!title) {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+      ...rest,
+      className: classes,
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+        className: _PageHeader_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].row,
+        children: children
+      })
+    });
+  }
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("header", {
     ...rest,
-    className: `page-header ${bottomLine ? "border-b pb-4" : ""} ${className}`,
-    children: children
+    className: classes,
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      className: _PageHeader_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].row,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        className: _PageHeader_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].text,
+        children: [eyebrow && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+          className: _PageHeader_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].eyebrow,
+          children: eyebrow
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h1", {
+          className: _PageHeader_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].title,
+          children: title
+        }), description && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+          className: _PageHeader_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].description,
+          children: description
+        })]
+      }), actions && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+        className: _PageHeader_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].actions,
+        children: actions
+      })]
+    }), children]
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PageHeader);
+
+/***/ }),
+
+/***/ "./src/Components/Controls/NewSelectControl.jsx":
+/*!******************************************************!*\
+  !*** ./src/Components/Controls/NewSelectControl.jsx ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_select__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-select */ "./node_modules/react-select/dist/index-641ee5b8.esm.js");
+/* harmony import */ var react_select__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-select */ "./node_modules/react-select/dist/react-select.esm.js");
+/* harmony import */ var _NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./NewSelectControl.module.scss */ "./src/Components/Controls/NewSelectControl.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+
+const Caret = () => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("svg", {
+  xmlns: "http://www.w3.org/2000/svg",
+  fill: "none",
+  viewBox: "0 0 24 24",
+  strokeWidth: 1.8,
+  stroke: "currentColor",
+  width: 18,
+  height: 18,
+  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("path", {
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    d: "m19.5 8.25-7.5 7.5-7.5-7.5"
+  })
+});
+const DropdownIndicator = props => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_select__WEBPACK_IMPORTED_MODULE_3__.c.DropdownIndicator, {
+  ...props,
+  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(Caret, {})
+});
+
+// react-select renders its own DOM, so it is styled through the same tokens
+// exposed as custom properties on #servv-wrap (see src/styles/base.scss).
+const reactSelectStyles = style => ({
+  container: base => ({
+    ...base,
+    width: "100%",
+    ...style
+  }),
+  control: (base, state) => ({
+    ...base,
+    minHeight: "40px",
+    border: `1px solid ${state.isFocused ? "var(--sv-primary-border)" : "var(--sv-border-field)"}`,
+    borderRadius: "var(--sv-radius-lg)",
+    backgroundColor: "var(--sv-surface)",
+    // No halo on focus: the border colour already says which select is
+    // active, and the ring sat heavily on a control this wide.
+    boxShadow: "var(--sv-shadow-field)",
+    paddingLeft: "6px",
+    paddingRight: "4px",
+    fontSize: "14px",
+    fontWeight: 500,
+    "&:hover": {
+      borderColor: "var(--sv-primary-border)"
+    }
+  }),
+  valueContainer: base => ({
+    ...base,
+    padding: "0 6px"
+  }),
+  placeholder: base => ({
+    ...base,
+    color: "var(--sv-text-placeholder)"
+  }),
+  singleValue: base => ({
+    ...base,
+    color: "var(--sv-text)"
+  }),
+  input: base => ({
+    ...base,
+    color: "var(--sv-text)"
+  }),
+  multiValue: base => ({
+    ...base,
+    borderRadius: "99px",
+    backgroundColor: "var(--sv-primary-surface)",
+    border: "1px solid var(--sv-primary-border)"
+  }),
+  multiValueLabel: base => ({
+    ...base,
+    color: "var(--sv-primary-strong)",
+    fontSize: "12px",
+    fontWeight: 600
+  }),
+  multiValueRemove: base => ({
+    ...base,
+    color: "var(--sv-primary-strong)",
+    borderRadius: "0 99px 99px 0",
+    ":hover": {
+      backgroundColor: "var(--sv-primary-border)",
+      color: "var(--sv-primary-strong)"
+    }
+  }),
+  dropdownIndicator: base => ({
+    ...base,
+    padding: "0 6px",
+    color: "var(--sv-text-soft)",
+    ":hover": {
+      color: "var(--sv-primary)"
+    }
+  }),
+  menu: base => ({
+    ...base,
+    overflow: "hidden",
+    marginTop: "6px",
+    borderRadius: "var(--sv-radius-2xl)",
+    border: "1px solid var(--sv-border)",
+    boxShadow: "0 12px 32px rgba(16, 24, 40, 0.14)",
+    zIndex: 40
+  }),
+  menuList: base => ({
+    ...base,
+    padding: "6px"
+  }),
+  option: (base, state) => ({
+    ...base,
+    borderRadius: "7px",
+    padding: "8px 10px",
+    fontSize: "13px",
+    fontWeight: 500,
+    color: state.isSelected ? "var(--sv-primary-strong)" : "var(--sv-text-strong)",
+    backgroundColor: state.isSelected ? "var(--sv-primary-surface)" : state.isFocused ? "var(--sv-primary-surface)" : "transparent",
+    cursor: "pointer",
+    ":active": {
+      backgroundColor: "var(--sv-primary-surface)"
+    }
+  })
+});
+const NewSelectControl = ({
+  label = "",
+  options = [],
+  helpText = "",
+  value = "",
+  disabled = false,
+  multiple = false,
+  onChange = () => {},
+  iconRight = null,
+  style = {}
+}) => {
+  // A native <select> can only render text, so options carrying JSX labels
+  // (badges, icons) go through react-select as well.
+  const hasRichLabels = options.some(option => option && typeof option.label !== "string");
+  if (multiple) {
+    const selected = Array.isArray(value) ? value.map(String) : [];
+    const selectedOptions = options.filter(o => selected.includes(o.value));
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      className: _NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].wrapper,
+      children: [label && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+        className: _NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].label,
+        children: label
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_select__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        isMulti: true,
+        options: options,
+        value: selectedOptions,
+        onChange: picked => onChange((picked || []).map(o => o.value)),
+        isDisabled: disabled,
+        placeholder: helpText || "Select...",
+        components: {
+          IndicatorSeparator: null,
+          DropdownIndicator
+        },
+        styles: reactSelectStyles(style)
+      })]
+    });
+  }
+  if (hasRichLabels) {
+    var _options$find;
+    const selectedOption = (_options$find = options.find(o => String(o.value) === String(value))) !== null && _options$find !== void 0 ? _options$find : null;
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      className: _NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].wrapper,
+      children: [label && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+        className: _NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].label,
+        children: label
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_select__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        options: options,
+        value: selectedOption,
+        onChange: picked => onChange(picked ? picked.value : ""),
+        isDisabled: disabled,
+        isSearchable: false,
+        placeholder: helpText || "Select...",
+        components: {
+          IndicatorSeparator: null,
+          DropdownIndicator
+        },
+        styles: reactSelectStyles(style)
+      })]
+    });
+  }
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+    className: _NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].wrapper,
+    children: [label && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+      className: _NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].label,
+      children: label
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      className: `${_NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].control} ${disabled ? _NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].disabled : ""}`,
+      style: style,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("select", {
+        className: _NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].native,
+        value: value !== null && value !== void 0 ? value : "",
+        onChange: e => onChange(e.target.value),
+        disabled: disabled,
+        children: [helpText && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+          value: "",
+          disabled: true,
+          children: helpText
+        }), options.map(option => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+          value: option.value,
+          children: option.label
+        }, option.value))]
+      }), iconRight ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+        className: _NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].icon,
+        children: iconRight
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+        className: _NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].caret,
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(Caret, {})
+      })]
+    })]
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (NewSelectControl);
 
 /***/ }),
 
@@ -280,226 +361,63 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PageActionButton.module.scss */ "./src/Components/Controls/PageActionButton.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
 
 
+
+// The one button primitive for the admin shell. Styling lives in the SCSS
+// module next door; `className` stays a pass-through for layout-only tweaks
+// from the call site (width, flex, alignment).
+
+const VARIANTS = {
+  primary: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].primary,
+  secondary: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].secondary,
+  danger: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].danger,
+  "danger-secondary": _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].dangerSecondary,
+  ghost: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].ghost,
+  "danger-ghost": _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].dangerGhost
+};
+const SIZES = {
+  md: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].md,
+  sm: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].sm,
+  xs: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].xs
+};
 const PageActionButton = ({
   text,
   icon,
   type = "primary",
-  // primary | secondary | danger
+  // primary | secondary | danger | danger-secondary | ghost | danger-ghost
   size = "md",
-  // md | sm
+  // md | sm | xs
   onAction,
   disabled = false,
+  fullWidth = false,
+  iconOnly = false,
+  ariaLabel,
   className = "",
   style = {},
   hidden
 }) => {
-  const baseClass = "servv_button";
-  const typeClass = `servv_button--${type}`;
-  const sizeClass = size === "sm" ? "servv_button--sm" : "servv_button--md";
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("button", {
+  const classes = [_PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].button, VARIANTS[type] || VARIANTS.primary, SIZES[size] || SIZES.md, fullWidth ? _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].fullWidth : "", iconOnly ? _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].iconOnly : "", className].filter(Boolean).join(" ");
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("button", {
     type: "button",
     onClick: onAction,
     disabled: disabled,
-    className: `${baseClass} ${typeClass} ${sizeClass} ${className} ${disabled ? "opacity-50 cursor-not-allowed" : ""}`,
+    "aria-label": ariaLabel,
+    className: classes,
     style: style,
-    children: [icon && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-      className: "mr-2 flex items-center",
+    children: [icon && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+      className: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].icon,
       children: icon
-    }), text]
-  });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PageActionButton);
-
-/***/ }),
-
-/***/ "./src/Components/Controls/SelectControl.jsx":
-/*!***************************************************!*\
-  !*** ./src/Components/Controls/SelectControl.jsx ***!
-  \***************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
-
-
-const SelectControl = ({
-  label = "",
-  options = [],
-  helpText = "",
-  selected = null,
-  value = null,
-  disabled = false,
-  onSelectChange = () => {},
-  onChange = () => {},
-  iconRight = null,
-  iconLeft = null,
-  style = {}
-}) => {
-  const [isOpen, setIsOpen] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const containerRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  const currentValue = value !== null ? value : selected;
-  const handleChange = val => {
-    onSelectChange(val);
-    onChange(val);
-  };
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (!isOpen) return;
-    const handleClickOutside = e => {
-      if (containerRef.current && !containerRef.current.contains(e.target)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isOpen]);
-
-  // Rich options: { key, label } where label may be JSX
-  const isRichOptions = options.length > 0 && options[0] !== null && typeof options[0] === "object" && "key" in options[0];
-  if (isRichOptions) {
-    const selectedOption = options.find(o => o.key === currentValue);
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-      className: "input-container-col",
-      ref: containerRef,
-      style: {
-        width: "100%",
-        position: "relative"
-      },
-      children: [label && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("label", {
-        className: "section-description",
-        children: label
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-        className: "select-control-with-icon-container",
-        style: {
-          width: "100%"
-        },
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("button", {
-          type: "button",
-          className: "select-control select-control-with-icon text-sm p-4",
-          style: {
-            width: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            cursor: disabled ? "not-allowed" : "pointer",
-            opacity: disabled ? 0.5 : 1,
-            background: "white",
-            border: "none",
-            textAlign: "left",
-            color: "#000000",
-            borderRadius: "5px",
-            padding: "5px",
-            ...style
-          },
-          disabled: disabled,
-          onClick: () => setIsOpen(o => !o),
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-            style: {
-              flex: 1,
-              color: "black"
-            },
-            children: selectedOption ? selectedOption.label : helpText
-          }), iconRight && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-            style: {
-              marginLeft: 8,
-              flexShrink: 0,
-              color: "black"
-            },
-            children: iconRight
-          })]
-        })
-      }), isOpen && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-        style: {
-          position: "absolute",
-          top: "100%",
-          left: 0,
-          right: 0,
-          zIndex: 200,
-          background: "white",
-          border: "1px solid #d5d7da",
-          borderRadius: "8px",
-          boxShadow: "0 4px 12px rgba(0,0,0,0.12)",
-          overflow: "hidden"
-        },
-        children: options.map(option => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-          style: {
-            padding: "12px 16px",
-            cursor: "pointer",
-            color: "#000000",
-            backgroundColor: option.key === currentValue ? "#f9fafb" : "white"
-          },
-          onMouseEnter: e => e.currentTarget.style.backgroundColor = "#f3f4f6",
-          onMouseLeave: e => e.currentTarget.style.backgroundColor = option.key === currentValue ? "#f9fafb" : "white",
-          onClick: () => {
-            handleChange(option.key);
-            setIsOpen(false);
-          },
-          children: option.label
-        }, option.key))
-      })]
-    });
-  }
-
-  // Legacy: plain string options
-  const renderOptions = () => {
-    if (options.length > 0) {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-        children: [helpText.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("option", {
-          value: "",
-          disabled: true,
-          selected: !currentValue,
-          children: helpText
-        }, ""), options.map(option => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("option", {
-          value: option,
-          selected: currentValue === option,
-          children: option
-        }, option))]
-      });
-    }
-  };
-  const responsiveStyle = {
-    maxWidth: "100%",
-    width: "100%",
-    boxSizing: "border-box",
-    ...style
-  };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-    className: "input-container-col",
-    style: {
-      width: "100%"
-    },
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("label", {
-      htmlFor: "timezone",
-      className: "section-description",
-      children: label
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-      className: "select-control-with-icon-container",
-      style: {
-        width: "100%"
-      },
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("select", {
-        name: "timezone",
-        id: "timezone-select",
-        className: "select-control select-control-with-icon text-sm p-4",
-        value: currentValue,
-        onChange: e => handleChange(e.target.value),
-        disabled: disabled,
-        style: responsiveStyle,
-        children: renderOptions()
-      }), iconRight !== null && iconRight]
+    }), !iconOnly && text && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+      className: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].label,
+      children: text
     })]
   });
 };
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (SelectControl);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PageActionButton);
 
 /***/ }),
 
@@ -513,37 +431,93 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _heroicons_react_16_solid__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @heroicons/react/16/solid */ "./node_modules/@heroicons/react/16/solid/esm/ChevronRightIcon.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-4WY6JWTD.mjs");
+/* harmony import */ var _utilities_textResolver__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utilities/textResolver */ "./src/utilities/textResolver.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
 
 
+
+
+const BackChevron = () => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("svg", {
+  width: "16",
+  height: "16",
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: "2.2",
+  strokeLinecap: "round",
+  strokeLinejoin: "round",
+  "aria-hidden": "true",
+  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("path", {
+    d: "m14 6-6 6 6 6"
+  })
+});
+const Separator = () => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("svg", {
+  className: "sv-crumbs__sep",
+  width: "12",
+  height: "12",
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "#B4BCCE",
+  strokeWidth: "2.4",
+  strokeLinecap: "round",
+  strokeLinejoin: "round",
+  "aria-hidden": "true",
+  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("path", {
+    d: "m9 6 6 6-6 6"
+  })
+});
 const BreadCrumbs = ({
   breadcrumbs = [],
   onBreadCrumbClick = () => {}
 }) => {
-  const handleNavigate = (e, item) => {
-    e.preventDefault();
-    item.action();
-    onBreadCrumbClick(item.label);
-  };
-  const renderBreadCrumbs = () => {
-    return breadcrumbs.map((item, index) => {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-        className: "flex flex-row gap-4 items-center",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("a", {
-          href: "",
-          onClick: e => handleNavigate(e, item),
-          children: item.label
-        }), index < breadcrumbs.length - 1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_heroicons_react_16_solid__WEBPACK_IMPORTED_MODULE_1__["default"], {
-          className: "breadcrumbs-icon"
-        })]
+  const items = breadcrumbs.filter(Boolean);
+  const trail = items.slice(0, -1);
+  const current = items[items.length - 1];
+  const parent = trail[trail.length - 1];
+  const announce = item => onBreadCrumbClick(item.label);
+  const crumb = (item, className, children, extra = {}) => {
+    const shared = {
+      className,
+      ...extra
+    };
+    if (item.to) {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_3__.Link, {
+        to: item.to,
+        ...shared,
+        onClick: () => announce(item),
+        children: children
       });
+    }
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+      type: "button",
+      ...shared,
+      onClick: () => {
+        item.action?.();
+        announce(item);
+      },
+      children: children
     });
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-    className: `breadcrumbs flex flex-row items-center gap-4 ${breadcrumbs.length > 1 ? "opacity-100" : "opacity-0"}`,
-    children: renderBreadCrumbs()
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("nav", {
+    className: `sv-crumbs${items.length > 1 ? "" : " sv-crumbs--idle"}`,
+    "aria-label": (0,_utilities_textResolver__WEBPACK_IMPORTED_MODULE_1__.t)("Breadcrumb"),
+    children: [parent && crumb(parent, "sv-crumbs__back", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(BackChevron, {}), {
+      title: `${(0,_utilities_textResolver__WEBPACK_IMPORTED_MODULE_1__.t)("Back to")} ${parent.label}`,
+      "aria-label": `${(0,_utilities_textResolver__WEBPACK_IMPORTED_MODULE_1__.t)("Back to")} ${parent.label}`
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      className: "sv-crumbs__track",
+      children: [trail.map(item => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+        children: [crumb(item, "sv-crumbs__link", item.label), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(Separator, {})]
+      }, item.label)), current && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+        className: "sv-crumbs__current",
+        "aria-current": "page",
+        children: current.label
+      })]
+    })]
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (BreadCrumbs);
@@ -590,6 +564,112 @@ const Spinner = ({
 
 /***/ }),
 
+/***/ "./src/Components/Pages/Integrations/IntegrationLayout.jsx":
+/*!*****************************************************************!*\
+  !*** ./src/Components/Pages/Integrations/IntegrationLayout.jsx ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   IntegrationAccount: () => (/* binding */ IntegrationAccount),
+/* harmony export */   IntegrationSection: () => (/* binding */ IntegrationSection),
+/* harmony export */   "default": () => (/* binding */ IntegrationLayout)
+/* harmony export */ });
+/* harmony import */ var _Menu_BreadCrumbs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../Menu/BreadCrumbs */ "./src/Components/Menu/BreadCrumbs.jsx");
+/* harmony import */ var _PageWrapper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../PageWrapper */ "./src/Components/Pages/PageWrapper.jsx");
+/* harmony import */ var _Containers_PageContent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Containers/PageContent */ "./src/Components/Containers/PageContent.jsx");
+/* harmony import */ var _Containers_PageHeader__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../Containers/PageHeader */ "./src/Components/Containers/PageHeader.jsx");
+/* harmony import */ var _IntegrationLayout_module_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./IntegrationLayout.module.scss */ "./src/Components/Pages/Integrations/IntegrationLayout.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__);
+
+
+
+
+
+
+function IntegrationSection({
+  title,
+  description,
+  children
+}) {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("section", {
+    className: _IntegrationLayout_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].card,
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("header", {
+      className: _IntegrationLayout_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].cardHeader,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h2", {
+        children: title
+      }), description && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
+        children: description
+      })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+      className: _IntegrationLayout_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].cardBody,
+      children: children
+    })]
+  });
+}
+function IntegrationAccount({
+  label,
+  status = "Connected"
+}) {
+  return label ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+    className: _IntegrationLayout_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].account,
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+      className: _IntegrationLayout_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].avatar,
+      "aria-hidden": "true",
+      children: String(label).slice(0, 2).toUpperCase()
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+        className: _IntegrationLayout_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].eyebrow,
+        children: "Account"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("strong", {
+        children: label
+      })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+      className: `${_IntegrationLayout_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].status} ${status === "Connected" ? _IntegrationLayout_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].connected : ""}`,
+      children: status
+    })]
+  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
+    className: _IntegrationLayout_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].hint,
+    children: "Please connect your account."
+  });
+}
+function IntegrationLayout({
+  title,
+  description,
+  loading = false,
+  actions,
+  children
+}) {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_PageWrapper__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    flush: true,
+    loading: loading,
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(_Containers_PageContent__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_Menu_BreadCrumbs__WEBPACK_IMPORTED_MODULE_0__["default"], {
+        breadcrumbs: [{
+          label: "Integrations",
+          to: "/integrations"
+        }, {
+          label: title
+        }]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_Containers_PageHeader__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        className: _IntegrationLayout_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].header,
+        title: title,
+        description: description,
+        actions: actions
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+        className: _IntegrationLayout_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].divider
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+        className: _IntegrationLayout_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].sections,
+        children: children
+      })]
+    })
+  });
+}
+
+/***/ }),
+
 /***/ "./src/Components/Pages/Integrations/StripeIntegrationsPage.jsx":
 /*!**********************************************************************!*\
   !*** ./src/Components/Pages/Integrations/StripeIntegrationsPage.jsx ***!
@@ -600,35 +680,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Containers_PageHeader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../Containers/PageHeader */ "./src/Components/Containers/PageHeader.jsx");
-/* harmony import */ var _Containers_PageContent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Containers/PageContent */ "./src/Components/Containers/PageContent.jsx");
-/* harmony import */ var _Containers_BlockStack__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../Containers/BlockStack */ "./src/Components/Containers/BlockStack.jsx");
-/* harmony import */ var _Containers_InlineStack__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../Containers/InlineStack */ "./src/Components/Containers/InlineStack.jsx");
-/* harmony import */ var _Containers_Badge__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../Containers/Badge */ "./src/Components/Containers/Badge.jsx");
-/* harmony import */ var _Containers_Card__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../Containers/Card */ "./src/Components/Containers/Card.jsx");
-/* harmony import */ var _Menu_BreadCrumbs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../Menu/BreadCrumbs */ "./src/Components/Menu/BreadCrumbs.jsx");
-/* harmony import */ var _utilities_stripe__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../utilities/stripe */ "./src/utilities/stripe.js");
-/* harmony import */ var _Controls_SelectControl__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../Controls/SelectControl */ "./src/Components/Controls/SelectControl.jsx");
-/* harmony import */ var _utilities_currencies__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../utilities/currencies */ "./src/utilities/currencies.js");
-/* harmony import */ var _Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../Controls/PageActionButton */ "./src/Components/Controls/PageActionButton.jsx");
-/* harmony import */ var he__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! he */ "./node_modules/he/he.js");
-/* harmony import */ var he__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(he__WEBPACK_IMPORTED_MODULE_12__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-4WY6JWTD.mjs");
-/* harmony import */ var _PageWrapper__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../PageWrapper */ "./src/Components/Pages/PageWrapper.jsx");
-/* harmony import */ var _store_useServvStore__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../../../store/useServvStore */ "./src/store/useServvStore.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__);
-
-
-
-
-
-
-
-
-
+/* harmony import */ var _IntegrationLayout__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./IntegrationLayout */ "./src/Components/Pages/Integrations/IntegrationLayout.jsx");
+/* harmony import */ var _IntegrationLayout_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./IntegrationLayout.module.scss */ "./src/Components/Pages/Integrations/IntegrationLayout.module.scss");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _utilities_stripe__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../utilities/stripe */ "./src/utilities/stripe.js");
+/* harmony import */ var _Controls_NewSelectControl__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../Controls/NewSelectControl */ "./src/Components/Controls/NewSelectControl.jsx");
+/* harmony import */ var _utilities_currencies__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../utilities/currencies */ "./src/utilities/currencies.js");
+/* harmony import */ var _Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../Controls/PageActionButton */ "./src/Components/Controls/PageActionButton.jsx");
+/* harmony import */ var he__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! he */ "./node_modules/he/he.js");
+/* harmony import */ var he__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(he__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__);
 
 
 
@@ -639,28 +702,25 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const StripeIntegrationsPage = props => {
-  const navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_16__.useNavigate)();
-  const [account, setAccount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
-  const [loading, setLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [isAccountFetched, setAccountFetched] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [connectedAccounts, setConnectedAccounts] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [connectedAccountsFetched, setConnectedAccountsFetched] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [connectUrl, setConnectUrl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
-  const [selectedCurrency, setSelectedCurrency] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
-  const storeSettings = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_14__.useServvStore)(s => s.settings);
+  const [account, setAccount] = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)(null);
+  const [loading, setLoading] = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)(false);
+  const [isAccountFetched, setAccountFetched] = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)(false);
+  const [connectedAccounts, setConnectedAccounts] = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)([]);
+  const [connectedAccountsFetched, setConnectedAccountsFetched] = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)(false);
+  const [selectedCurrency, setSelectedCurrency] = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)(null);
   const fetchAccount = async () => {
-    const account = await (0,_utilities_stripe__WEBPACK_IMPORTED_MODULE_8__.getStripeAccount)(servvData.nonce);
+    const account = await (0,_utilities_stripe__WEBPACK_IMPORTED_MODULE_3__.getStripeAccount)(servvData.nonce);
     if (account && account.id) {
       setAccount(account);
     }
     setAccountFetched(true);
-    const settings = await (0,_utilities_stripe__WEBPACK_IMPORTED_MODULE_8__.getStripeSettings)(servvData.nonce);
+    const settings = await (0,_utilities_stripe__WEBPACK_IMPORTED_MODULE_3__.getStripeSettings)(servvData.nonce);
     if (settings) {
       setSelectedCurrency(settings.currency);
     }
   };
   const handleConnectExistingAccount = async account_id => {
-    const url = await (0,_utilities_stripe__WEBPACK_IMPORTED_MODULE_8__.getStripeConnectURL)(servvData.nonce, account_id);
+    const url = await (0,_utilities_stripe__WEBPACK_IMPORTED_MODULE_3__.getStripeConnectURL)(servvData.nonce, account_id);
     if (url) {
       const returnURL = encodeURIComponent(window.location.origin);
       const connectURL = encodeURIComponent(url.auth_url);
@@ -669,202 +729,117 @@ const StripeIntegrationsPage = props => {
     }
   };
   const connectNewAccount = async () => {
-    const connectUrl = await (0,_utilities_stripe__WEBPACK_IMPORTED_MODULE_8__.getStripeConnectURL)(servvData.nonce);
+    const connectUrl = await (0,_utilities_stripe__WEBPACK_IMPORTED_MODULE_3__.getStripeConnectURL)(servvData.nonce);
     const returnURL = encodeURIComponent(window.location.origin);
     const connectURL = encodeURIComponent(connectUrl.auth_url);
     open(`${servvData.shopify_app}/payments/stripe/connect?wordpress_url=${encodeURIComponent(connectURL)}&wordpress_return_url=${returnURL}`, "_top");
   };
-  const renderExistingAccounts = () => {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
-      className: "flex flex-col gap-1",
-      children: connectedAccounts.map(account => {
-        const accountText = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-          className: "flex flex-row justify-start items-center gap-2",
-          children: [account.account_id && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Containers_Badge__WEBPACK_IMPORTED_MODULE_5__["default"], {
-            text: account.account_id,
-            align: "start",
-            color: "success"
-          }), account.email && account.email.trim().length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Containers_Badge__WEBPACK_IMPORTED_MODULE_5__["default"], {
-            text: account.email,
-            align: "start",
-            color: "success"
-          }), account.name && account.name.trim.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Containers_Badge__WEBPACK_IMPORTED_MODULE_5__["default"], {
-            text: account.name,
-            align: "start",
-            color: "brand"
-          })]
-        });
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
-          className: "w-full flex flex-row gap-2 border border-gray-25 shadow-sm rounded-lg p-2",
-          onClick: () => {
-            handleConnectExistingAccount(account.account_id);
-          },
-          children: accountText
-        });
-      })
-    });
-  };
+  const renderExistingAccounts = () => connectedAccounts.map(existing => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
+    type: "button",
+    className: _IntegrationLayout_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].existingAccount,
+    onClick: () => handleConnectExistingAccount(existing.account_id),
+    children: [existing.name, existing.email, existing.account_id].filter(Boolean).join(" · ")
+  }, existing.account_id));
   const handleGetConnectURL = async () => {
     setLoading(true);
-    const existingAccounts = await (0,_utilities_stripe__WEBPACK_IMPORTED_MODULE_8__.getDisconnectedStripeAccounts)(servvData.nonce);
+    const existingAccounts = await (0,_utilities_stripe__WEBPACK_IMPORTED_MODULE_3__.getDisconnectedStripeAccounts)(servvData.nonce);
     // const url = await getStripeConnectURL(servvData.nonce);
     // setConnectUrl(url.auth_url);
     setLoading(false);
-    if (existingAccounts.length > 0) {
+    if (existingAccounts?.length > 0) {
       setConnectedAccounts(existingAccounts);
       setConnectedAccountsFetched(true);
     } else {
       setLoading(true);
-      const url = await (0,_utilities_stripe__WEBPACK_IMPORTED_MODULE_8__.getStripeConnectURL)(servvData.nonce);
+      const url = await (0,_utilities_stripe__WEBPACK_IMPORTED_MODULE_3__.getStripeConnectURL)(servvData.nonce);
       setConnectUrl(url.auth_url);
       if (url) open(`${servvData.shopify_app}/stripe/connect?wordpress_url=${encodeURIComponent(url.auth_url)}&wordpress_return_url=${encodeURIComponent(window.location.origin)}`, "_top");
     }
   };
   const handleRemoveAccount = async () => {
     setLoading(true);
-    const res = await (0,_utilities_stripe__WEBPACK_IMPORTED_MODULE_8__.disconnectStripeAccount)(servvData.nonce);
+    const res = await (0,_utilities_stripe__WEBPACK_IMPORTED_MODULE_3__.disconnectStripeAccount)(servvData.nonce);
     if (res === 200) {
       setAccount(null);
     }
     setLoading(false);
   };
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+  (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
     fetchAccount();
   }, []);
-  const badge = () => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-    className: "flex flex-row gap-2 items-center",
-    children: [account.charges_enabled && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Containers_Badge__WEBPACK_IMPORTED_MODULE_5__["default"], {
-      background: "gray",
-      text: account ? "Connected" : "Not connected",
-      icon: ""
-    }), account && !account.charges_enabled && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Containers_Badge__WEBPACK_IMPORTED_MODULE_5__["default"], {
-      background: "gray",
-      text: "Connection is not completed",
-      icon: ""
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
-      children: account ? account.email : "Please connect your account"
-    })]
-  });
   const handleSelectChange = currency => {
     const newCurrency = currency.split(" - ")[0];
     setSelectedCurrency(newCurrency);
   };
   const currencySelect = () => {
     let currencies = [];
-    if (_utilities_currencies__WEBPACK_IMPORTED_MODULE_10__.currenciesList) {
-      currencies = _utilities_currencies__WEBPACK_IMPORTED_MODULE_10__.currenciesList.map(currency => {
+    if (_utilities_currencies__WEBPACK_IMPORTED_MODULE_5__.currenciesList) {
+      currencies = _utilities_currencies__WEBPACK_IMPORTED_MODULE_5__.currenciesList.map(currency => {
         let sequence = currency.symbol;
-        return currency.abbreviation + " - " + he__WEBPACK_IMPORTED_MODULE_12___default().decode(sequence);
+        return currency.abbreviation + " - " + he__WEBPACK_IMPORTED_MODULE_7___default().decode(sequence);
       });
     }
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Controls_SelectControl__WEBPACK_IMPORTED_MODULE_9__["default"], {
-      options: currencies,
-      selected: currencies.filter(currency => currency.indexOf(selectedCurrency) >= 0)[0],
-      onSelectChange: handleSelectChange
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Controls_NewSelectControl__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      options: currencies.map(currency => ({
+        value: currency,
+        label: currency
+      })),
+      value: currencies.filter(currency => currency.indexOf(selectedCurrency) >= 0)[0],
+      onChange: handleSelectChange
     });
   };
   const handleCurrencySave = async () => {
     if (selectedCurrency) {
       setLoading(true);
-      await (0,_utilities_stripe__WEBPACK_IMPORTED_MODULE_8__.updateStripeSettings)(servvData.nonce, selectedCurrency);
+      await (0,_utilities_stripe__WEBPACK_IMPORTED_MODULE_3__.updateStripeSettings)(servvData.nonce, selectedCurrency);
       setLoading(false);
     }
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_PageWrapper__WEBPACK_IMPORTED_MODULE_13__["default"], {
+  const incomplete = account && !account.charges_enabled;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(_IntegrationLayout__WEBPACK_IMPORTED_MODULE_0__["default"], {
+    title: "Stripe",
+    glyph: "S",
+    description: "Accept paid registrations and manage payout settings.",
+    connected: Boolean(account),
+    status: !isAccountFetched ? "Loading…" : incomplete ? "Connection incomplete" : undefined,
+    accountLabel: account?.email,
     loading: loading,
-    withBackground: true,
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-      className: "dashboard-card",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
-        className: "servv-dashboard-header",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-          className: "dashboard-heading",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("h1", {
-            className: "dashboard-title",
-            children: "Stripe"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
-            className: "dashboard-description",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Menu_BreadCrumbs__WEBPACK_IMPORTED_MODULE_7__["default"], {
-              breadcrumbs: [{
-                label: "Integrations",
-                action: () => navigate("../integrations")
-              }, {
-                label: "Stripe",
-                action: () => {}
-              }],
-              onBreadCrumbClick: () => {}
-            })
-          })]
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Containers_PageContent__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Containers_InlineStack__WEBPACK_IMPORTED_MODULE_4__["default"], {
-          gap: 8,
-          cardsLayout: true,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(_Containers_Card__WEBPACK_IMPORTED_MODULE_6__["default"], {
-            padding: 0,
-            maxWidth: "85%",
-            align: "center",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
-              className: "servv-service-image",
-              style: {
-                background: `linear-gradient(to bottom, transparent, #ECE4F6)`
-              },
-              children: account && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-                className: "connected-account bg-gradient-to-b from-transparent to-black/40",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
-                  children: t("Account")
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Containers_Badge__WEBPACK_IMPORTED_MODULE_5__["default"], {
-                  text: badge(),
-                  color: "gray",
-                  justify: "start"
-                })]
-              })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-              className: "card-content",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("h2", {
-                className: "card-section-heading",
-                children: t("Stripe")
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("p", {
-                className: "section-description",
-                children: storeSettings?.is_wp_marketplace ? "Accept payments seamlessly through WP Super Events, with payouts sent to your connected Stripe account." : " Accept secure payments for your events with Stripe, ensuring a seamless checkout experience for attendees"
-              }), account && account.charges_enabled && currencySelect(), connectedAccountsFetched && connectedAccounts.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("p", {
-                  className: "servv-button-link text-gray-700",
-                  children: t("Connect existing account")
-                }), renderExistingAccounts()]
-              }), isAccountFetched && !account && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("a", {
-                href: "#",
-                className: "servv-button-link",
-                onClick: connectedAccountsFetched && connectedAccounts.length > 0 ? e => {
-                  e.preventDefault();
-                  connectNewAccount();
-                } : e => {
-                  e.preventDefault();
-                  handleGetConnectURL();
-                },
-                children: connectedAccountsFetched && connectedAccounts.length > 0 ? "Connect new account" : "Connect"
-              }), isAccountFetched && account && !account.charges_enabled && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("a", {
-                href: "#",
-                className: "servv-button-link",
-                onClick: e => {
-                  e.preventDefault();
-                  handleConnectExistingAccount(account.account_id);
-                },
-                children: t("Resume integration")
-              }), isAccountFetched && account && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("a", {
-                href: "#",
-                className: "servv-button-link",
-                onClick: e => {
-                  e.preventDefault();
-                  handleRemoveAccount();
-                },
-                children: t("Disconnect")
-              })]
-            })]
-          })
-        })
+    actions: isAccountFetched && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {
+      children: [!account && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        text: connectedAccountsFetched && connectedAccounts.length > 0 ? "Connect new account" : "Connect",
+        onAction: connectedAccountsFetched && connectedAccounts.length > 0 ? connectNewAccount : handleGetConnectURL
+      }), incomplete && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        text: "Resume integration",
+        onAction: () => handleConnectExistingAccount(account.account_id)
+      }), account && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        text: "Disconnect",
+        type: "danger-secondary",
+        onAction: handleRemoveAccount
       })]
-    })
+    }),
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_IntegrationLayout__WEBPACK_IMPORTED_MODULE_0__.IntegrationSection, {
+      title: "Account",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_IntegrationLayout__WEBPACK_IMPORTED_MODULE_0__.IntegrationAccount, {
+        label: account?.email,
+        status: incomplete ? "Connection incomplete" : "Connected"
+      })
+    }), connectedAccountsFetched && connectedAccounts.length > 0 && !account && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_IntegrationLayout__WEBPACK_IMPORTED_MODULE_0__.IntegrationSection, {
+      title: "Connect existing account",
+      children: renderExistingAccounts()
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_IntegrationLayout__WEBPACK_IMPORTED_MODULE_0__.IntegrationSection, {
+      title: "Currency",
+      description: "The currency used for paid registrations.",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+        className: _IntegrationLayout_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].row,
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+          children: currencySelect()
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_6__["default"], {
+          text: "Save",
+          disabled: !selectedCurrency || loading,
+          onAction: handleCurrencySave
+        })]
+      })
+    })]
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (StripeIntegrationsPage);
@@ -885,42 +860,41 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Menu_Spinner__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Menu/Spinner */ "./src/Components/Menu/Spinner.jsx");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-4WY6JWTD.mjs");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _PageWrapper_module_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./PageWrapper.module.scss */ "./src/Components/Pages/PageWrapper.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__);
 
 
 
 
+
+// `flush` drops the wrapper's own side padding for pages that already frame
+// themselves with <PageContent>, so the reference's 32px gutter is not doubled.
 
 const PageWrapper = props => {
-  const location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_4__.useLocation)();
+  const useNativeNavigation = Boolean(window.servvData?.nativeAdmin);
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
     if (window.Intercom) {
-      if (location !== "/support") {
-        window.Intercom("update", {
-          hide_default_launcher: true
-        });
-      } else {
-        window.Intercom("update", {
-          hide_default_launcher: true
-        });
-      }
+      window.Intercom("update", {
+        hide_default_launcher: true
+      });
     }
   }, []);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, {
-    children: [props.withBackground && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-      className: "fixed inset-0 bg-[#F5F5F5]"
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-      className: "w-full relative pl-4 flex flex-col min-h-0",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        className: "absolute inset-0 flex items-center justify-center pointer-events-none",
-        children: props.loading && !props.withoutSpinner && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_Menu_Spinner__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, {
+    children: [props.withBackground && !useNativeNavigation && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+      className: _PageWrapper_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].backdrop
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      className: [_PageWrapper_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].root, props.flush ? "" : _PageWrapper_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].gutterLeft].filter(Boolean).join(" "),
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+        className: _PageWrapper_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].spinner,
+        children: props.loading && !props.withoutSpinner && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_Menu_Spinner__WEBPACK_IMPORTED_MODULE_2__["default"], {
           loading: true
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-        className: `flex flex-col flex-1 w-full pr-4 max-w-full min-w-0 min-h-0 overflow-visible ${props.loading ? "loading" : ""}`,
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_toastify__WEBPACK_IMPORTED_MODULE_0__.ToastContainer, {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        className: [_PageWrapper_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].content, props.flush ? "" : _PageWrapper_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].gutterRight,
+        // `loading` is a legacy global (input.css) blur, not a module class.
+        props.loading ? "loading" : ""].filter(Boolean).join(" "),
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_toastify__WEBPACK_IMPORTED_MODULE_0__.ToastContainer, {
           position: "bottom-right"
         }), props.children]
       })]
@@ -1443,11 +1417,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   getStripeSettings: () => (/* binding */ getStripeSettings),
 /* harmony export */   updateStripeSettings: () => (/* binding */ updateStripeSettings)
 /* harmony export */ });
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
+/* harmony import */ var _adminApi__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./adminApi */ "./src/utilities/adminApi.js");
 
 const getStripeSettings = async authToken => {
   try {
-    const response = await (0,axios__WEBPACK_IMPORTED_MODULE_0__["default"])({
+    const response = await (0,_adminApi__WEBPACK_IMPORTED_MODULE_0__["default"])({
       method: "GET",
       url: "/wp-json/servv-plugin/v1/stripe/settings",
       headers: {
@@ -1462,7 +1436,7 @@ const getStripeSettings = async authToken => {
 };
 const getStripeAccount = async authToken => {
   try {
-    const response = await (0,axios__WEBPACK_IMPORTED_MODULE_0__["default"])({
+    const response = await (0,_adminApi__WEBPACK_IMPORTED_MODULE_0__["default"])({
       method: "GET",
       url: "/wp-json/servv-plugin/v1/stripe/account",
       headers: {
@@ -1481,7 +1455,7 @@ const getStripeConnectURL = async (authToken, accountId = null) => {
     if (accountId) {
       url += `?account_id=${accountId}`;
     }
-    const response = await (0,axios__WEBPACK_IMPORTED_MODULE_0__["default"])({
+    const response = await (0,_adminApi__WEBPACK_IMPORTED_MODULE_0__["default"])({
       method: "GET",
       url: url,
       headers: {
@@ -1496,7 +1470,7 @@ const getStripeConnectURL = async (authToken, accountId = null) => {
 };
 const confirmStripe = async authToken => {
   try {
-    const response = await (0,axios__WEBPACK_IMPORTED_MODULE_0__["default"])({
+    const response = await (0,_adminApi__WEBPACK_IMPORTED_MODULE_0__["default"])({
       method: "GET",
       url: "/wp-json/servv-plugin/v1/stripe/confirm",
       headers: {
@@ -1511,7 +1485,7 @@ const confirmStripe = async authToken => {
 };
 const disconnectStripeAccount = async authToken => {
   try {
-    const response = await (0,axios__WEBPACK_IMPORTED_MODULE_0__["default"])({
+    const response = await (0,_adminApi__WEBPACK_IMPORTED_MODULE_0__["default"])({
       method: "DELETE",
       url: "/wp-json/servv-plugin/v1/stripe/account",
       headers: {
@@ -1526,7 +1500,7 @@ const disconnectStripeAccount = async authToken => {
 };
 const getDisconnectedStripeAccounts = async authToken => {
   try {
-    const response = await (0,axios__WEBPACK_IMPORTED_MODULE_0__["default"])({
+    const response = await (0,_adminApi__WEBPACK_IMPORTED_MODULE_0__["default"])({
       method: "GET",
       url: "/wp-json/servv-plugin/v1/stripe/account/disconnected",
       headers: {
@@ -1541,7 +1515,7 @@ const getDisconnectedStripeAccounts = async authToken => {
 };
 const updateStripeSettings = async (authToken, currency) => {
   try {
-    const response = await (0,axios__WEBPACK_IMPORTED_MODULE_0__["default"])({
+    const response = await (0,_adminApi__WEBPACK_IMPORTED_MODULE_0__["default"])({
       method: "POST",
       url: "/wp-json/servv-plugin/v1/stripe/settings",
       headers: {
@@ -1560,43 +1534,95 @@ const updateStripeSettings = async (authToken, currency) => {
 
 /***/ }),
 
-/***/ "./node_modules/@heroicons/react/16/solid/esm/ChevronRightIcon.js":
-/*!************************************************************************!*\
-  !*** ./node_modules/@heroicons/react/16/solid/esm/ChevronRightIcon.js ***!
-  \************************************************************************/
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+/***/ "./src/Components/Containers/PageContent.module.scss":
+/*!***********************************************************!*\
+  !*** ./src/Components/Containers/PageContent.module.scss ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"shell":"hYf27RiwlyFWwm5KClLO","flush":"a6Ch_fJZ7nWrwzrktMXT","container":"t_beMJmTHY9tOuVGYINQ","svRise":"hEL4_Hi3yhmLC95m6Gv9"});
 
-function ChevronRightIcon({
-  title,
-  titleId,
-  ...props
-}, svgRef) {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("svg", Object.assign({
-    xmlns: "http://www.w3.org/2000/svg",
-    viewBox: "0 0 16 16",
-    fill: "currentColor",
-    "aria-hidden": "true",
-    "data-slot": "icon",
-    ref: svgRef,
-    "aria-labelledby": titleId
-  }, props), title ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("title", {
-    id: titleId
-  }, title) : null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("path", {
-    fillRule: "evenodd",
-    d: "M6.22 4.22a.75.75 0 0 1 1.06 0l3.25 3.25a.75.75 0 0 1 0 1.06l-3.25 3.25a.75.75 0 0 1-1.06-1.06L8.94 8 6.22 5.28a.75.75 0 0 1 0-1.06Z",
-    clipRule: "evenodd"
-  }));
-}
-const ForwardRef = /*#__PURE__*/ react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(ChevronRightIcon);
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ForwardRef);
+/***/ }),
+
+/***/ "./src/Components/Containers/PageHeader.module.scss":
+/*!**********************************************************!*\
+  !*** ./src/Components/Containers/PageHeader.module.scss ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"header":"UJKBfoKQX0ArollQPz1S","bottomLine":"EPa4Qs8Sg0DGkgQqTqgN","row":"OUo7N4uA10rjSEMICOeL","text":"sgJsCMx9FF0yFMt2kZ3Z","eyebrow":"ktHdDumXPTPovEbmrc1M","title":"yq9VS55_ovalh9J5Nb6w","description":"sj2HMNvNWGjuE5qbOg9r","actions":"PUXWCGzj1cI1x1_j3IoJ"});
+
+/***/ }),
+
+/***/ "./src/Components/Controls/NewSelectControl.module.scss":
+/*!**************************************************************!*\
+  !*** ./src/Components/Controls/NewSelectControl.module.scss ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"wrapper":"Rn5YIp3pNNjfTZfs0Hun","label":"tILluilS7Kg08Ty_wuDz","control":"i0ovci9B8ZljxNo0kHsG","disabled":"PWKaKx8kbAa85Q7B8UNO","native":"_cngarf9_pEgPKjdzZgR","caret":"YeLk6FzAtgYmHZ3hiWy5","icon":"WIeIIcBBdl2AgJCO8Yws"});
+
+/***/ }),
+
+/***/ "./src/Components/Controls/PageActionButton.module.scss":
+/*!**************************************************************!*\
+  !*** ./src/Components/Controls/PageActionButton.module.scss ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"button":"KdySr5oFULfrhKhic35V","primary":"NU3RVqc5Fk7DJ5c4GHf_","secondary":"B48RwPm9xmg1M2dE2g6Q","danger":"q2iOAa3m1ACyQeXOmJaO","dangerSecondary":"YQXykqk_8YtO85727teT","ghost":"fxXHJtT4abc9Wa4LMvVL","dangerGhost":"pY19HOSltbDU49q6SaED","md":"t0fnm1wSsZTfyQQHuzNt","sm":"_Da3u_DsP7V7Jd4Z4lzg","xs":"pEHFbNwftcp4Oei9RRxp","fullWidth":"UyW29jrRG901Y4cS7AHm","iconOnly":"DmgZjtNgpAg3vfeKCEZw","icon":"M_1pjyLi4tiOcq2_oiwe","label":"lcGbrWicMbKyunggF77J"});
+
+/***/ }),
+
+/***/ "./src/Components/Pages/Integrations/IntegrationLayout.module.scss":
+/*!*************************************************************************!*\
+  !*** ./src/Components/Pages/Integrations/IntegrationLayout.module.scss ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"header":"qb79uKhie25HkfUpo3DC","status":"ntsU_UguRp6Mn_NoXIwy","connected":"zZPodN9LlqOvUyCwV2JR","divider":"SrWlvIprhCqDY9FFCVuK","sections":"txJTFKMQqbqNpjPBJWcQ","card":"kE6cXIAAp5LVNptyBHro","cardHeader":"jHxAjmVpzXBmjaEwfwYN","cardBody":"QL3gSSIkdefj776VMokN","account":"FG6OQOcbeJLmDZkKbo0i","avatar":"ADri5CQc7MkNuP3NKAYp","eyebrow":"D8nXYCb8WScQ_62ZiIoj","hint":"zuiO_eMKFMqBMRtZ2QgN","row":"guiFHrf6aQ_OHU7WdEzb","field":"jcVQvgNAOZHcmpmrbuhB","fieldGrid":"dZAn8YRpvUJoU3UXZs8o","error":"G8EGf1wmTkUljyoWyLdJ","actions":"HJljyvSx_7f48wi9un25","existingAccount":"f8TWulrz4e1IjTZysYZw"});
+
+/***/ }),
+
+/***/ "./src/Components/Pages/PageWrapper.module.scss":
+/*!******************************************************!*\
+  !*** ./src/Components/Pages/PageWrapper.module.scss ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"backdrop":"GwbBdwO7UxUbci6wtyds","root":"whZeFIc454jkDbuWw6zj","gutterLeft":"nH2l6oxNCJ28ihBOUf7w","gutterRight":"KKg_qLS4gdJXh4u6HnvG","spinner":"Al4EqMTkXH8MiW77lCyS","content":"DhHmGpnbQlurQkapo8Ei"});
 
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_Integrations_StripeIntegrationsPage_jsx.js.map?ver=eb775f63a1480aebd4b6
+//# sourceMappingURL=src_Components_Pages_Integrations_StripeIntegrationsPage_jsx.js.map?ver=d7f2b981586c4260858e

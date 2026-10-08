@@ -1,0 +1,39 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+
+@include m.scoped {
+  .root {
+    position: relative;
+    display: inline-block;
+  }
+
+  // Reference: the toolbar Filters trigger — same soft 38px button as the date
+  // control, with the applied-count pill after the label.
+  .button {
+    @include m.toolbar-trigger;
+  }
+
+  .icon {
+    @include m.toolbar-trigger-icon;
+  }
+
+  // <span style="height:18px;padding:0 6px;border-radius:99px;background:#EAE2FB;
+  // color:#4D2AA3;font-size:11px;font-weight:700">
+  .count {
+    display: inline-flex;
+    align-items: center;
+    height: 18px;
+    padding: 0 t.$space-3;
+    border-radius: t.$radius-pill;
+    background: t.$primary-surface;
+    color: t.$primary-strong;
+    @include m.text(11, t.$weight-bold);
+  }
+
+  @media (max-width: 480px) {
+    .root,
+    .button {
+      width: 100%;
+    }
+  }
+}

@@ -1,0 +1,224 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+@use "../../styles/motion" as motion;
+
+@include motion.fade;
+@include motion.slide;
+
+@include m.scoped {
+  // Reference: position:fixed;inset:0;display:flex;justify-content:flex-end;
+  // background:rgba(16,24,40,.45);animation:svFade .15s ease-out
+  .overlay {
+    position: fixed;
+    inset: 0;
+    // The drawer runs the full height of the admin canvas, so it has to start
+    // below the WordPress admin bar (32px, 46px on narrow screens).
+    top: var(--wp-admin--admin-bar--height, 0px);
+    z-index: t.$z-overlay;
+    display: flex;
+    justify-content: flex-end;
+    background: rgba(16, 24, 40, 0.45);
+    animation: svFade 0.15s ease-out;
+  }
+
+  // Reference: width:400px;max-width:92vw;height:100%;border-left:1px solid
+  // #EDF1F7;box-shadow:-18px 0 44px #D4DBE8,inset 8px 0 20px #FBFCFE
+  .panel {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    max-width: 92vw;
+    height: 100%;
+    border-left: 1px solid t.$border;
+    background: t.$surface;
+    box-shadow: -18px 0 44px t.$shade-strong, inset 8px 0 20px t.$light;
+    animation: svSlide t.$duration t.$ease;
+  }
+
+  @include m.reduced-motion {
+    .overlay,
+    .panel {
+      animation: none;
+    }
+  }
+
+  // --- Header ---------------------------------------------------------------
+
+  .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: t.$space-6;
+    padding: t.$space-10;
+    border-bottom: 1px solid t.$border-hairline;
+  }
+
+  .title {
+    margin: 0;
+    @include m.text(18, t.$weight-bold);
+    letter-spacing: -0.01em;
+  }
+
+  .subtitle {
+    margin: t.$space-2 0 0;
+    @include m.text(13, t.$weight-medium);
+    color: t.$text-soft;
+  }
+
+  // Reference: a 32px square raised button carrying the dismiss glyph.
+  .close {
+    @include m.button-reset;
+    @include m.wp-reset-button;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 32px;
+    height: 32px;
+    border: 1px solid t.$border-soft;
+    border-radius: t.$radius-sm;
+    background: t.$surface;
+    color: t.$text-soft;
+    box-shadow: t.$shadow-raised-chip;
+    transition: box-shadow t.$duration t.$ease, color t.$duration-fast t.$ease;
+
+    &:hover {
+      color: t.$text-strong;
+      box-shadow: t.$shadow-raised;
+    }
+
+    &:focus-visible {
+      @include m.focus-ring-raised;
+    }
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  // --- Body -----------------------------------------------------------------
+
+  // Reference: flex:1;overflow:auto;padding:20px;gap:24px
+  .body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: t.$space-12;
+    padding: t.$space-10;
+    overflow: auto;
+  }
+
+  .section {
+    display: flex;
+    flex-direction: column;
+    gap: t.$space-8;
+  }
+
+  .sectionTitle {
+    @include m.eyebrow;
+    color: t.$text-soft;
+  }
+
+  // The carved groove the reference uses between drawer sections.
+  .divider {
+    height: 3px;
+    border-radius: t.$radius-pill;
+    background: t.$surface;
+    box-shadow: t.$shadow-track;
+  }
+
+  // --- Format chips ---------------------------------------------------------
+
+  .chips {
+    display: flex;
+    gap: t.$space-4;
+    flex-wrap: wrap;
+  }
+
+  // Reference: `chipStyle` — a 34px pill that sits pressed when selected.
+  .chip {
+    @include m.button-reset;
+    @include m.wp-reset-button;
+    @include m.control-base(t.$control-sm, 0 t.$space-7);
+    gap: 7px;
+    border: 1px solid t.$border;
+    border-radius: t.$radius-pill;
+    background: t.$surface;
+    color: t.$text-strong;
+    box-shadow: t.$shadow-raised-chip;
+    font-size: t.$text-13;
+
+    &:hover:not(:disabled) {
+      box-shadow: t.$shadow-raised-hover;
+      transform: translateY(-1px);
+    }
+
+    &:focus-visible {
+      @include m.focus-ring-raised;
+    }
+  }
+
+  .chipActive {
+    border-color: t.$primary-border-strong;
+    background: t.$primary-surface;
+    color: t.$primary-strong;
+    box-shadow: t.$shadow-chip-pressed;
+
+    &:hover:not(:disabled) {
+      box-shadow: t.$shadow-chip-pressed;
+      transform: none;
+    }
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    flex: 0 0 8px;
+    border-radius: t.$radius-pill;
+    background: currentcolor;
+  }
+
+  // Reference: the type colours — In-person violet, Online blue.
+  .dotOffline {
+    background: t.$primary;
+  }
+
+  .dotZoom {
+    background: t.$info;
+  }
+
+  // --- Attributes -----------------------------------------------------------
+
+  .fields {
+    display: flex;
+    flex-direction: column;
+    gap: t.$space-8;
+  }
+
+  // The date picker is not a labelled control of its own, so the drawer gives
+  // it the same label treatment the selects get.
+  .fieldLabel {
+    @include m.field-label;
+    margin-bottom: t.$space-3;
+  }
+
+  .emptyGroups {
+    @include m.text(13, t.$weight-medium);
+    color: t.$text-soft;
+  }
+
+  // --- Footer ---------------------------------------------------------------
+
+  // Reference: padding:16px 20px;border-top;gap:10px; both buttons flex:1
+  .footer {
+    display: flex;
+    gap: t.$space-5;
+    padding: t.$space-8 t.$space-10;
+    border-top: 1px solid t.$border-hairline;
+
+    > * {
+      flex: 1 1 0;
+    }
+  }
+}

@@ -1,5 +1,6 @@
 import React from "react";
 import moment from "moment";
+import styles from "./NewTimePeriodControl.module.scss";
 
 const NewTimePeriodControl = ({
   time,
@@ -15,7 +16,10 @@ const NewTimePeriodControl = ({
   return (
     <button
       type="button"
-      className="servv-time-period"
+      className={`${styles.period} ${period === "pm" ? styles.night : ""}`}
+      aria-label={`Time period: ${period.toUpperCase()}. Switch to ${
+        period === "am" ? "PM" : "AM"
+      }`}
       onClick={handleToggle}
       disabled={disabled}
     >

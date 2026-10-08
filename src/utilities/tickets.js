@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "./adminApi";
 export const createTicket = async ({
   postId,
   occurrenceId = null,
@@ -23,31 +23,27 @@ export const createTicket = async ({
   }
 };
 
-export const updateTicket = async ({
-  postId,
-  occurrenceId = null,
-  token,
-  ticket,
-}) => {
+// The editable fields of a ticket; the API ignores anything else on the object.
+const ticketPayload = (ticket) => ({
+  name: ticket.name,
+  quantity: ticket.quantity,
+  price: ticket.price,
+  is_donation: ticket.is_donation,
+  start_datetime: ticket.start_datetime,
+  end_datetime: ticket.end_datetime,
+});
+
+const patchTicket = async ({ postId, token, ticket }) =>
+  axios({
+    method: "PATCH",
+    url: `/wp-json/servv-plugin/v1/event/${postId}/tickets/${ticket.id}`,
+    headers: { "X-WP-Nonce": token },
+    data: ticketPayload(ticket),
+  });
+
+export const updateTicket = async ({ postId, token, ticket }) => {
   try {
-    let requestURL = `/wp-json/servv-plugin/v1/event/${postId}/tickets/${ticket.id}`;
-    // if (occurrenceId) {
-    //   requestURL += `?occurrence_id=${occurrenceId}`;
-    // }
-    const response = await axios({
-      method: "PATCH",
-      url: requestURL,
-      headers: { "X-WP-Nonce": token },
-      data: {
-        name: ticket.name,
-        quantity: ticket.quantity,
-        price: ticket.price,
-        is_donation: ticket.is_donation,
-        start_datetime: ticket.start_datetime,
-        end_datetime: ticket.end_datetime,
-      },
-    });
-    return response;
+    return await patchTicket({ postId, token, ticket });
   } catch (error) {
     console.error("Error on ticket update:", error);
     return null;
@@ -101,36 +97,12 @@ export const multipleTicketsCreate = async ({
   }
 };
 
-export const multipleTicketsUpdate = async ({
-  postId,
-  occurrenceId = null,
-  token,
-  tickets,
-}) => {
+export const multipleTicketsUpdate = async ({ postId, token, tickets }) => {
   const responses = [];
 
   try {
     for (const ticket of tickets) {
-      let requestURL = `/wp-json/servv-plugin/v1/event/${postId}/tickets/${ticket.id}`;
-      // if (occurrenceId) {
-      //   requestURL += `?occurrence_id=${occurrenceId}`;
-      // }
-
-      const response = await axios({
-        method: "PATCH",
-        url: requestURL,
-        headers: { "X-WP-Nonce": token },
-        data: {
-          name: ticket.name,
-          quantity: ticket.quantity,
-          price: ticket.price,
-          is_donation: ticket.is_donation,
-          start_datetime: ticket.start_datetime,
-          end_datetime: ticket.end_datetime,
-        },
-      });
-
-      responses.push(response);
+      responses.push(await patchTicket({ postId, token, ticket }));
     }
 
     return responses;

@@ -1,181 +1,6 @@
 "use strict";
 (self["webpackChunkservv_plugin"] = self["webpackChunkservv_plugin"] || []).push([["src_Components_Pages_EmailTemplates_jsx"],{
 
-/***/ "./src/Components/Containers/AnnotatedSection.jsx":
-/*!********************************************************!*\
-  !*** ./src/Components/Containers/AnnotatedSection.jsx ***!
-  \********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
-
-
-const AnnotatedSection = ({
-  title,
-  description,
-  children,
-  className = "",
-  titleClassName = "",
-  contentClassName = ""
-}) => {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-    className: `annotated-section flex flex-col md:flex-row gap-4 md:gap-8 items-start ${className}`,
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-      className: "annotated-section-header flex-shrink-0 w-full md:w-32 lg:w-64",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("h3", {
-        className: `text-sm font-semibold text-gray-900 mb-1 ${titleClassName}`,
-        style: {
-          fontFamily: "'Inter', sans-serif"
-        },
-        children: title
-      }), description && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("p", {
-        className: "text-sm text-gray-600 hidden md:block leading-relaxed",
-        style: {
-          fontFamily: "'Inter', sans-serif"
-        },
-        children: description
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-      className: `annotated-section-content flex-1 w-full min-w-0 ${contentClassName}`,
-      children: children
-    })]
-  });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AnnotatedSection);
-
-/***/ }),
-
-/***/ "./src/Components/Containers/BlockStack.jsx":
-/*!**************************************************!*\
-  !*** ./src/Components/Containers/BlockStack.jsx ***!
-  \**************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
-
-
-const BlockStack = ({
-  gap = 4,
-  cardsLayout,
-  action,
-  disabled,
-  onAction,
-  className = "",
-  children,
-  ...rest
-}) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-  ...rest,
-  onClick: onAction ? () => onAction() : undefined,
-  className: `${className} flex flex-col ${gap ? `space-y-${gap}` : ""} ${cardsLayout ? "flex-[1_1_0]" : ""} ${action ? "cursor-pointer" : ""} ${disabled ? "filter grayscale" : ""}`,
-  children: children
-});
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (BlockStack);
-
-/***/ }),
-
-/***/ "./src/Components/Containers/Card.jsx":
-/*!********************************************!*\
-  !*** ./src/Components/Containers/Card.jsx ***!
-  \********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
-
-
-const Card = ({
-  className = "",
-  padding = "p-0",
-  align,
-  background = "bg-white",
-  maxWidth,
-  children,
-  ...rest
-}) => {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-    ...rest,
-    className: `
-        servv-card
-        ${padding}
-        ${background}
-        w-full
-        ${align === "center" ? "mx-auto" : ""}
-        ${className}
-      `,
-    style: {
-      maxWidth: maxWidth ? maxWidth : "100%"
-    },
-    children: children
-  });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Card);
-
-/***/ }),
-
-/***/ "./src/Components/Containers/CollapsibleSection.jsx":
-/*!**********************************************************!*\
-  !*** ./src/Components/Containers/CollapsibleSection.jsx ***!
-  \**********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _heroicons_react_16_solid__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @heroicons/react/16/solid */ "./node_modules/@heroicons/react/16/solid/esm/ChevronDownIcon.js");
-/* harmony import */ var _heroicons_react_16_solid__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @heroicons/react/16/solid */ "./node_modules/@heroicons/react/16/solid/esm/ChevronUpIcon.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
-
-
-
-const CollapsibleSection = props => {
-  const [visible, setVisible] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-    className: "collapsible-section",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-      className: "collapsible-header",
-      onClick: () => setVisible(!visible),
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-        className: "collapsible-section-heading",
-        children: props.sectionHeading
-      }), !visible ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_heroicons_react_16_solid__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        className: "button-icon"
-      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_heroicons_react_16_solid__WEBPACK_IMPORTED_MODULE_3__["default"], {
-        className: "button-icon"
-      })]
-    }), visible && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-      className: "collapsible-content",
-      children: props.children
-    })]
-  });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (CollapsibleSection);
-
-/***/ }),
-
 /***/ "./src/Components/Containers/PageContent.jsx":
 /*!***************************************************!*\
   !*** ./src/Components/Containers/PageContent.jsx ***!
@@ -188,22 +13,33 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _PageContent_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PageContent.module.scss */ "./src/Components/Containers/PageContent.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
 
 
-const PageContent = props => {
-  const {
-    className = "",
-    children,
-    ...rest
-  } = props;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+
+// The page shell from the design reference: a padded frame around a centred
+// 1180px column whose children are spaced 24px apart.
+// `className` lands on the column, where the call sites have always put it.
+
+const PageContent = ({
+  className = "",
+  maxWidth,
+  flush = false,
+  children,
+  ...rest
+}) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+  className: `${_PageContent_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].shell} ${flush ? _PageContent_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].flush : ""}`.trim(),
+  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
     ...rest,
-    className: `page-content ${className}`,
+    className: `${_PageContent_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].container} ${className}`.trim(),
+    style: maxWidth ? {
+      maxWidth
+    } : undefined,
     children: children
-  });
-};
+  })
+});
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PageContent);
 
 /***/ }),
@@ -220,407 +56,64 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
-
-
-const PageHeader = props => {
-  const {
-    className = "",
-    bottomLine,
-    children,
-    ...rest
-  } = props;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-    ...rest,
-    className: `page-header ${bottomLine ? "border-b pb-4" : ""} ${className}`,
-    children: children
-  });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PageHeader);
-
-/***/ }),
-
-/***/ "./src/Components/Controls/ButtonGroup.jsx":
-/*!*************************************************!*\
-  !*** ./src/Components/Controls/ButtonGroup.jsx ***!
-  \*************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
-
-
-const ButtonGroup = ({
-  title = "",
-  buttons = [],
-  active = null,
-  onChange = () => {},
-  disabled = false
-}) => {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-    className: "input-container-row justify-between",
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-      className: "input-container-col grow",
-      children: [title.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-        className: "section-description",
-        children: title
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-        className: "button-group-container",
-        children: buttons.map(button => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
-          className: `${active == button ? "button-group-button-active" : "button-group-button"} section-description`,
-          "data-value": button,
-          disabled: disabled,
-          onClick: e => {
-            onChange(e.target.dataset.value);
-          },
-          children: button
-        }, button))
-      })]
-    })
-  });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ButtonGroup);
-
-/***/ }),
-
-/***/ "./src/Components/Controls/Editor.jsx":
-/*!********************************************!*\
-  !*** ./src/Components/Controls/Editor.jsx ***!
-  \********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var quill_dist_quill_snow_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! quill/dist/quill.snow.css */ "./node_modules/quill/dist/quill.snow.css");
-/* harmony import */ var quill__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! quill */ "./node_modules/quill/quill.js");
-/* harmony import */ var quill_modules_toolbar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! quill/modules/toolbar */ "./node_modules/quill/modules/toolbar.js");
-/* harmony import */ var quill_themes_snow__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! quill/themes/snow */ "./node_modules/quill/themes/snow.js");
-/* harmony import */ var quill_formats_bold__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! quill/formats/bold */ "./node_modules/quill/formats/bold.js");
-/* harmony import */ var quill_formats_italic__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! quill/formats/italic */ "./node_modules/quill/formats/italic.js");
-/* harmony import */ var quill_formats_header__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! quill/formats/header */ "./node_modules/quill/formats/header.js");
-/* harmony import */ var quill_modules_clipboard__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! quill/modules/clipboard */ "./node_modules/quill/modules/clipboard.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__);
-
-
-
-
-
-
-
-
-
-
-const Editor = (0,react__WEBPACK_IMPORTED_MODULE_0__.forwardRef)(({
-  readOnly,
-  defaultValue,
-  onTextChange,
-  onSelectionChange,
-  onChange,
-  disabled
-}, ref) => {
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    ref.current?.enable(!readOnly);
-  }, [ref, readOnly]);
-  const getDecoratedTplText = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(text => {
-    if (!text) return "";
-    const replaceRegex = new RegExp(/\n\s*|\n+/gm);
-    return text.replace(replaceRegex, "").replace(/<b>/gi, "<strong>").replace(/<\/b>/gi, "</strong>").replace(/<p>\s*<\/p>/gi, "<p> </p>").replace(/>\s+</g, "><").replace(/<p>\s+/g, "<p>").replace(/\s+<\/p>/g, "</p>").replace(/(<br\s*\/?>\s*){2}/gi, "</p><p></p><p>");
-  }, []);
-  const containerRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  const onTextChangeRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(onTextChange);
-  const onSelectionChangeRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(onSelectionChange);
-  const onChangeRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(onChange);
-  const [initailValue, setInitialValue] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(getDecoratedTplText(defaultValue) || "");
-  quill__WEBPACK_IMPORTED_MODULE_2__["default"].register({
-    "modules/toolbar": quill_modules_toolbar__WEBPACK_IMPORTED_MODULE_3__["default"],
-    "modules/clipboard": quill_modules_clipboard__WEBPACK_IMPORTED_MODULE_8__["default"],
-    "themes/snow": quill_themes_snow__WEBPACK_IMPORTED_MODULE_4__["default"],
-    "formats/bold": quill_formats_bold__WEBPACK_IMPORTED_MODULE_5__["default"],
-    "formats/italic": quill_formats_italic__WEBPACK_IMPORTED_MODULE_6__["default"],
-    "formats/header": quill_formats_header__WEBPACK_IMPORTED_MODULE_7__["default"]
-  });
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useLayoutEffect)(() => {
-    onTextChangeRef.current = onTextChange;
-    onChangeRef.current = onChange;
-    onSelectionChangeRef.current = onSelectionChange;
-  });
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (ref.current?.clipboard) {
-      ref.current?.clipboard.dangerouslyPasteHTML(defaultValue, "api");
-    }
-  }, [defaultValue]);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    ref.current?.enable(!readOnly);
-  }, [ref, readOnly]);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    const container = containerRef.current;
-    const editorContainer = container.appendChild(container.ownerDocument.createElement("div"));
-    const options = {
-      debug: "error",
-      theme: "snow"
-    };
-    const quill = new quill__WEBPACK_IMPORTED_MODULE_2__["default"](editorContainer, options);
-    ref.current = quill;
-    quill.enable(!disabled);
-    if (defaultValue) {
-      quill.clipboard.dangerouslyPasteHTML(defaultValue, "api");
-    }
-    quill.on(quill__WEBPACK_IMPORTED_MODULE_2__["default"].events.TEXT_CHANGE, (...args) => {
-      onTextChangeRef.current?.(...args);
-      const newText = getDecoratedTplText(quill.getSemanticHTML());
-      if (args[2] === "api") {
-        setInitialValue(newText);
-      }
-      if (args[2] === "user") {
-        onChange(newText, newText.localeCompare(initailValue));
-      }
-    });
-    quill.on(quill__WEBPACK_IMPORTED_MODULE_2__["default"].events.SELECTION_CHANGE, (...args) => {
-      onSelectionChangeRef.current?.(...args);
-    });
-    return () => {
-      ref.current = null;
-      container.innerHTML = "";
-    };
-  }, [ref, initailValue]);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
-    ref: containerRef
-  });
-});
-Editor.displayName = "Editor";
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Editor);
-
-/***/ }),
-
-/***/ "./src/Components/Controls/HTMLEditor.jsx":
-/*!************************************************!*\
-  !*** ./src/Components/Controls/HTMLEditor.jsx ***!
-  \************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _Containers_Card__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Containers/Card */ "./src/Components/Containers/Card.jsx");
-/* harmony import */ var _TextAreaControl__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TextAreaControl */ "./src/Components/Controls/TextAreaControl.jsx");
+/* harmony import */ var _PageHeader_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PageHeader.module.scss */ "./src/Components/Containers/PageHeader.module.scss");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
 
 
 
-const HTMLEditor = ({
-  value,
-  onChange
-}) => {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_Containers_Card__WEBPACK_IMPORTED_MODULE_0__["default"], {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_TextAreaControl__WEBPACK_IMPORTED_MODULE_1__["default"], {
-      value: value,
-      onChange: onChange
-    })
-  });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (HTMLEditor);
+// The page header from the design reference: eyebrow, title, description on the
+// left, actions on the right.
+//
+// Passing `title` renders that structure. Without it the children are laid out
+// in the same row, which is how the existing call sites use the component.
 
-/***/ }),
-
-/***/ "./src/Components/Controls/InputFieldControl.jsx":
-/*!*******************************************************!*\
-  !*** ./src/Components/Controls/InputFieldControl.jsx ***!
-  \*******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
-
-
-const InputFieldControl = ({
-  placeholder = "",
-  value = "",
-  type = "text",
-  disabled = false,
-  onChange = () => {},
-  handleKeyPress = () => {},
-  maxLength = "",
-  minValue = "",
-  maxValue = "",
-  fullWidth = false,
-  align = "center",
-  image = null,
-  suffix = "",
-  width = null,
-  prefix = "",
-  prefixWidth = "w-12",
-  step = null,
+const PageHeader = ({
   className = "",
-  style = {}
+  bottomLine,
+  eyebrow,
+  title,
+  description,
+  actions,
+  children,
+  ...rest
 }) => {
-  // Alignment helper
-  const getAlignmentClass = () => {
-    switch (align) {
-      case "center":
-        return "text-center";
-      case "right":
-        return "text-right";
-      default:
-        return "text-left";
-    }
-  };
-  const handleChange = e => {
-    const value = e.target.value;
-    if (type === "number" && maxValue && value > maxValue) {
-      onChange(maxValue);
-    } else if (type === "number" && minValue && value < minValue) {
-      onChange(minValue);
-    } else {
-      onChange(value);
-    }
-  };
-
-  // Responsive style for mobile
-  const responsiveStyle = {
-    // maxWidth: "100%",
-    // width: "100%",
-    boxSizing: "border-box",
-    ...style
-  };
-
-  // Input classes
-  const inputClasses = `
-    w-full min-w-[4rem]
-    input-control
-    px-3 py-2
-    pl-6
-    border border-gray-300 rounded-lg
-    text-sm font-medium
-    focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-purple-500
-    disabled:bg-gray-100 disabled:cursor-not-allowed
-    transition-colors duration-200
-    section-description
-    ${getAlignmentClass()}
-    ${fullWidth ? "w-full" : ""}
-    ${width ? "w-full" : ""}
-    ${align === "right" ? "pr-1" : ""}
-    ${className}
-  `.trim();
-  const inputStyle = {
-    width: fullWidth ? "100%" : width || undefined,
-    fontFamily: "'Inter', sans-serif",
-    ...responsiveStyle
-  };
-
-  // Main input (no image, no prefix)
-  if (!image && prefix === "") {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-      className: "flex relative group justify-center items-center w-full",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
-        type: type,
-        className: inputClasses,
-        style: inputStyle,
-        placeholder: placeholder,
-        value: value,
-        disabled: disabled,
-        maxLength: maxLength,
-        min: minValue,
-        max: maxValue,
-        onChange: e => handleChange(e),
-        onKeyDown: handleKeyPress,
-        step: step,
-        autoComplete: "off"
-      }), suffix && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-        className: "absolute text-gray-500 right-0 pr-8",
-        style: {
-          fontFamily: "'Inter', sans-serif"
-        },
-        children: suffix
-      })]
-    });
-  }
-
-  // Input with prefix (e.g. currency)
-  if (!image && prefix !== "") {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-      className: "flex w-full rounded-lg border border-gray-300 overflow-hidden text-md shadow-sm h-9",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-        className: `flex items-center justify-center bg-gray-50 text-gray-600 text-md ${prefixWidth} border-r border-gray-300`,
-        children: prefix
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
-        type: "text",
-        inputMode: "decimal",
-        pattern: "^\\d+(\\.\\d{0,2})?$",
-        className: "w-full px-4 text-gray-800 placeholder-gray-400 text-md focus:outline-none bg-white [appearance:textfield]",
-        placeholder: "0.00",
-        value: value,
-        onChange: e => {
-          let val = e.target.value.replace(/[^\d.]/g, "");
-          if (val.includes(".")) {
-            const [int, dec] = val.split(".");
-            val = `${int}.${dec.slice(0, 2)}`;
-          }
-          if (val.startsWith("00")) val = "0";else if (val.startsWith("0") && val[1] !== ".") val = val.slice(1);
-          onChange(val);
-        },
-        style: responsiveStyle
-      })]
-    });
-  }
-
-  // Input with image
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-    className: "flex relative group justify-center items-center w-full",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-      className: "flex absolute left-0 bg-transparent rounded text-base text-gray-600 p-2",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-        className: "size-6",
-        style: {
-          backgroundImage: `url(${image})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          width: "1.7rem",
-          height: "1.7rem"
-        }
+  const classes = [_PageHeader_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].header, bottomLine ? _PageHeader_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].bottomLine : "", className].filter(Boolean).join(" ");
+  if (!title) {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+      ...rest,
+      className: classes,
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+        className: _PageHeader_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].row,
+        children: children
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
-      type: type,
-      className: `
-          input-control section-description description-image
-          ${getAlignmentClass()}
-          ${align === "right" ? "pr-1 pl-8" : ""}
-          ${fullWidth ? "w-full" : ""}
-          ${className}
-        `,
-      style: inputStyle,
-      placeholder: placeholder,
-      value: value,
-      disabled: disabled,
-      maxLength: maxLength,
-      min: minValue,
-      max: maxValue,
-      onChange: e => onChange(e.target.value),
-      autoComplete: "off"
-    })]
+    });
+  }
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("header", {
+    ...rest,
+    className: classes,
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      className: _PageHeader_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].row,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        className: _PageHeader_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].text,
+        children: [eyebrow && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+          className: _PageHeader_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].eyebrow,
+          children: eyebrow
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h1", {
+          className: _PageHeader_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].title,
+          children: title
+        }), description && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+          className: _PageHeader_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].description,
+          children: description
+        })]
+      }), actions && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+        className: _PageHeader_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].actions,
+        children: actions
+      })]
+    }), children]
   });
 };
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (InputFieldControl);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PageHeader);
 
 /***/ }),
 
@@ -636,46 +129,70 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PageActionButton.module.scss */ "./src/Components/Controls/PageActionButton.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
 
 
+
+// The one button primitive for the admin shell. Styling lives in the SCSS
+// module next door; `className` stays a pass-through for layout-only tweaks
+// from the call site (width, flex, alignment).
+
+const VARIANTS = {
+  primary: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].primary,
+  secondary: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].secondary,
+  danger: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].danger,
+  "danger-secondary": _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].dangerSecondary,
+  ghost: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].ghost,
+  "danger-ghost": _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].dangerGhost
+};
+const SIZES = {
+  md: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].md,
+  sm: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].sm,
+  xs: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].xs
+};
 const PageActionButton = ({
   text,
   icon,
   type = "primary",
-  // primary | secondary | danger
+  // primary | secondary | danger | danger-secondary | ghost | danger-ghost
   size = "md",
-  // md | sm
+  // md | sm | xs
   onAction,
   disabled = false,
+  fullWidth = false,
+  iconOnly = false,
+  ariaLabel,
   className = "",
   style = {},
   hidden
 }) => {
-  const baseClass = "servv_button";
-  const typeClass = `servv_button--${type}`;
-  const sizeClass = size === "sm" ? "servv_button--sm" : "servv_button--md";
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("button", {
+  const classes = [_PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].button, VARIANTS[type] || VARIANTS.primary, SIZES[size] || SIZES.md, fullWidth ? _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].fullWidth : "", iconOnly ? _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].iconOnly : "", className].filter(Boolean).join(" ");
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("button", {
     type: "button",
     onClick: onAction,
     disabled: disabled,
-    className: `${baseClass} ${typeClass} ${sizeClass} ${className} ${disabled ? "opacity-50 cursor-not-allowed" : ""}`,
+    "aria-label": ariaLabel,
+    className: classes,
     style: style,
-    children: [icon && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-      className: "mr-2 flex items-center",
+    children: [icon && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+      className: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].icon,
       children: icon
-    }), text]
+    }), !iconOnly && text && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+      className: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].label,
+      children: text
+    })]
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PageActionButton);
 
 /***/ }),
 
-/***/ "./src/Components/Controls/SelectControl.jsx":
-/*!***************************************************!*\
-  !*** ./src/Components/Controls/SelectControl.jsx ***!
-  \***************************************************/
+/***/ "./src/Components/Menu/BreadCrumbs.jsx":
+/*!*********************************************!*\
+  !*** ./src/Components/Menu/BreadCrumbs.jsx ***!
+  \*********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -684,214 +201,94 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-4WY6JWTD.mjs");
+/* harmony import */ var _utilities_textResolver__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utilities/textResolver */ "./src/utilities/textResolver.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
 
 
-const SelectControl = ({
-  label = "",
-  options = [],
-  helpText = "",
-  selected = null,
-  value = null,
-  disabled = false,
-  onSelectChange = () => {},
-  onChange = () => {},
-  iconRight = null,
-  iconLeft = null,
-  style = {}
+
+
+const BackChevron = () => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("svg", {
+  width: "16",
+  height: "16",
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: "2.2",
+  strokeLinecap: "round",
+  strokeLinejoin: "round",
+  "aria-hidden": "true",
+  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("path", {
+    d: "m14 6-6 6 6 6"
+  })
+});
+const Separator = () => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("svg", {
+  className: "sv-crumbs__sep",
+  width: "12",
+  height: "12",
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "#B4BCCE",
+  strokeWidth: "2.4",
+  strokeLinecap: "round",
+  strokeLinejoin: "round",
+  "aria-hidden": "true",
+  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("path", {
+    d: "m9 6 6 6-6 6"
+  })
+});
+const BreadCrumbs = ({
+  breadcrumbs = [],
+  onBreadCrumbClick = () => {}
 }) => {
-  const [isOpen, setIsOpen] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const containerRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  const currentValue = value !== null ? value : selected;
-  const handleChange = val => {
-    onSelectChange(val);
-    onChange(val);
-  };
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (!isOpen) return;
-    const handleClickOutside = e => {
-      if (containerRef.current && !containerRef.current.contains(e.target)) {
-        setIsOpen(false);
-      }
+  const items = breadcrumbs.filter(Boolean);
+  const trail = items.slice(0, -1);
+  const current = items[items.length - 1];
+  const parent = trail[trail.length - 1];
+  const announce = item => onBreadCrumbClick(item.label);
+  const crumb = (item, className, children, extra = {}) => {
+    const shared = {
+      className,
+      ...extra
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isOpen]);
-
-  // Rich options: { key, label } where label may be JSX
-  const isRichOptions = options.length > 0 && options[0] !== null && typeof options[0] === "object" && "key" in options[0];
-  if (isRichOptions) {
-    const selectedOption = options.find(o => o.key === currentValue);
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-      className: "input-container-col",
-      ref: containerRef,
-      style: {
-        width: "100%",
-        position: "relative"
-      },
-      children: [label && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("label", {
-        className: "section-description",
-        children: label
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-        className: "select-control-with-icon-container",
-        style: {
-          width: "100%"
-        },
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("button", {
-          type: "button",
-          className: "select-control select-control-with-icon text-sm p-4",
-          style: {
-            width: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            cursor: disabled ? "not-allowed" : "pointer",
-            opacity: disabled ? 0.5 : 1,
-            background: "white",
-            border: "none",
-            textAlign: "left",
-            color: "#000000",
-            borderRadius: "5px",
-            padding: "5px",
-            ...style
-          },
-          disabled: disabled,
-          onClick: () => setIsOpen(o => !o),
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-            style: {
-              flex: 1,
-              color: "black"
-            },
-            children: selectedOption ? selectedOption.label : helpText
-          }), iconRight && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-            style: {
-              marginLeft: 8,
-              flexShrink: 0,
-              color: "black"
-            },
-            children: iconRight
-          })]
-        })
-      }), isOpen && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-        style: {
-          position: "absolute",
-          top: "100%",
-          left: 0,
-          right: 0,
-          zIndex: 200,
-          background: "white",
-          border: "1px solid #d5d7da",
-          borderRadius: "8px",
-          boxShadow: "0 4px 12px rgba(0,0,0,0.12)",
-          overflow: "hidden"
-        },
-        children: options.map(option => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-          style: {
-            padding: "12px 16px",
-            cursor: "pointer",
-            color: "#000000",
-            backgroundColor: option.key === currentValue ? "#f9fafb" : "white"
-          },
-          onMouseEnter: e => e.currentTarget.style.backgroundColor = "#f3f4f6",
-          onMouseLeave: e => e.currentTarget.style.backgroundColor = option.key === currentValue ? "#f9fafb" : "white",
-          onClick: () => {
-            handleChange(option.key);
-            setIsOpen(false);
-          },
-          children: option.label
-        }, option.key))
-      })]
-    });
-  }
-
-  // Legacy: plain string options
-  const renderOptions = () => {
-    if (options.length > 0) {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-        children: [helpText.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("option", {
-          value: "",
-          disabled: true,
-          selected: !currentValue,
-          children: helpText
-        }, ""), options.map(option => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("option", {
-          value: option,
-          selected: currentValue === option,
-          children: option
-        }, option))]
+    if (item.to) {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_3__.Link, {
+        to: item.to,
+        ...shared,
+        onClick: () => announce(item),
+        children: children
       });
     }
-  };
-  const responsiveStyle = {
-    maxWidth: "100%",
-    width: "100%",
-    boxSizing: "border-box",
-    ...style
-  };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-    className: "input-container-col",
-    style: {
-      width: "100%"
-    },
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("label", {
-      htmlFor: "timezone",
-      className: "section-description",
-      children: label
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-      className: "select-control-with-icon-container",
-      style: {
-        width: "100%"
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+      type: "button",
+      ...shared,
+      onClick: () => {
+        item.action?.();
+        announce(item);
       },
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("select", {
-        name: "timezone",
-        id: "timezone-select",
-        className: "select-control select-control-with-icon text-sm p-4",
-        value: currentValue,
-        onChange: e => handleChange(e.target.value),
-        disabled: disabled,
-        style: responsiveStyle,
-        children: renderOptions()
-      }), iconRight !== null && iconRight]
+      children: children
+    });
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("nav", {
+    className: `sv-crumbs${items.length > 1 ? "" : " sv-crumbs--idle"}`,
+    "aria-label": (0,_utilities_textResolver__WEBPACK_IMPORTED_MODULE_1__.t)("Breadcrumb"),
+    children: [parent && crumb(parent, "sv-crumbs__back", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(BackChevron, {}), {
+      title: `${(0,_utilities_textResolver__WEBPACK_IMPORTED_MODULE_1__.t)("Back to")} ${parent.label}`,
+      "aria-label": `${(0,_utilities_textResolver__WEBPACK_IMPORTED_MODULE_1__.t)("Back to")} ${parent.label}`
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      className: "sv-crumbs__track",
+      children: [trail.map(item => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+        children: [crumb(item, "sv-crumbs__link", item.label), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(Separator, {})]
+      }, item.label)), current && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+        className: "sv-crumbs__current",
+        "aria-current": "page",
+        children: current.label
+      })]
     })]
   });
 };
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (SelectControl);
-
-/***/ }),
-
-/***/ "./src/Components/Controls/TextAreaControl.jsx":
-/*!*****************************************************!*\
-  !*** ./src/Components/Controls/TextAreaControl.jsx ***!
-  \*****************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
-
-
-const TextAreaControl = ({
-  value,
-  onChange
-}) => {
-  const getDecoratedTplText = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(rawTplText => {
-    if (!rawTplText || rawTplText.length === 0) return rawTplText;
-    const replaceRegex = new RegExp(/\n\s*|\n+/gm);
-    return rawTplText.replace(replaceRegex, "").replace(/<p><br\/><\/p>/g, "<br/>").replace(/<p><br><\/p>/g, "<br/>").replace(/<br>/g, "<br/>");
-  }, []);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("textarea", {
-    rows: "8",
-    resize: false,
-    value: getDecoratedTplText(value),
-    onChange: e => onChange(e.target.value)
-  });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (TextAreaControl);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (BreadCrumbs);
 
 /***/ }),
 
@@ -943,37 +340,26 @@ const Spinner = ({
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */   "default": () => (/* binding */ EmailTemplates)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Containers_PageHeader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Containers/PageHeader */ "./src/Components/Containers/PageHeader.jsx");
-/* harmony import */ var _Containers_PageContent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Containers/PageContent */ "./src/Components/Containers/PageContent.jsx");
-/* harmony import */ var _Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Controls/PageActionButton */ "./src/Components/Controls/PageActionButton.jsx");
-/* harmony import */ var _Containers_BlockStack__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Containers/BlockStack */ "./src/Components/Containers/BlockStack.jsx");
-/* harmony import */ var _Containers_InlineStack__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Containers/InlineStack */ "./src/Components/Containers/InlineStack.jsx");
-/* harmony import */ var _Controls_SelectControl__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Controls/SelectControl */ "./src/Components/Controls/SelectControl.jsx");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
-/* harmony import */ var _Controls_Editor__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Controls/Editor */ "./src/Components/Controls/Editor.jsx");
-/* harmony import */ var _Controls_InputFieldControl__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Controls/InputFieldControl */ "./src/Components/Controls/InputFieldControl.jsx");
-/* harmony import */ var _Containers_AnnotatedSection__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../Containers/AnnotatedSection */ "./src/Components/Containers/AnnotatedSection.jsx");
-/* harmony import */ var _Controls_ButtonGroup__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../Controls/ButtonGroup */ "./src/Components/Controls/ButtonGroup.jsx");
-/* harmony import */ var _Controls_HTMLEditor__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../Controls/HTMLEditor */ "./src/Components/Controls/HTMLEditor.jsx");
-/* harmony import */ var _Containers_Card__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../Containers/Card */ "./src/Components/Containers/Card.jsx");
-/* harmony import */ var _PageWrapper__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./PageWrapper */ "./src/Components/Pages/PageWrapper.jsx");
-/* harmony import */ var _Containers_CollapsibleSection__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../Containers/CollapsibleSection */ "./src/Components/Containers/CollapsibleSection.jsx");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-4WY6JWTD.mjs");
-/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/index.mjs");
-/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/DocumentTextIcon.js");
-/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/InformationCircleIcon.js");
-/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/ChevronUpIcon.js");
-/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/ChevronDownIcon.js");
-/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/CodeBracketIcon.js");
-/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/EyeIcon.js");
-/* harmony import */ var _store_useServvStore__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../../store/useServvStore */ "./src/store/useServvStore.js");
-/* harmony import */ var _SpinnerLoader__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./SpinnerLoader */ "./src/Components/Pages/SpinnerLoader.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-4WY6JWTD.mjs");
+/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/DocumentTextIcon.js");
+/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/ChevronRightIcon.js");
+/* harmony import */ var _Menu_BreadCrumbs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Menu/BreadCrumbs */ "./src/Components/Menu/BreadCrumbs.jsx");
+/* harmony import */ var quill__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! quill */ "./node_modules/quill/quill.js");
+/* harmony import */ var quill_dist_quill_snow_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! quill/dist/quill.snow.css */ "./node_modules/quill/dist/quill.snow.css");
+/* harmony import */ var _utilities_adminApi__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../utilities/adminApi */ "./src/utilities/adminApi.js");
+/* harmony import */ var _store_useServvStore__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../store/useServvStore */ "./src/store/useServvStore.js");
+/* harmony import */ var _PageWrapper__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./PageWrapper */ "./src/Components/Pages/PageWrapper.jsx");
+/* harmony import */ var _Containers_PageContent__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Containers/PageContent */ "./src/Components/Containers/PageContent.jsx");
+/* harmony import */ var _Containers_PageHeader__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Containers/PageHeader */ "./src/Components/Containers/PageHeader.jsx");
+/* harmony import */ var _Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../Controls/PageActionButton */ "./src/Components/Controls/PageActionButton.jsx");
+/* harmony import */ var _EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./EmailTemplates.module.scss */ "./src/Components/Pages/EmailTemplates.module.scss");
+/* harmony import */ var _emailTemplates_groups_mjs__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./emailTemplates/groups.mjs */ "./src/Components/Pages/emailTemplates/groups.mjs");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__);
 
 
 
@@ -989,624 +375,349 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
-
-
-
-
-
-const EmailTemplates = () => {
-  const [templates, setTemplates] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const [selectedTemplate, setSelectedTemplate] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
-  const [loading, setLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [isMobile, setIsMobile] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(window.innerWidth < 768);
-  const [showParameters, setShowParameters] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const quillRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)();
-  const settings = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_16__.useServvStore)(s => s.settings);
-  const navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_19__.useNavigate)();
-  const disabled = templates.length === 0 || !settings || settings && settings.current_plan.id === 1;
-
-  // Store form values to persist across view changes
-  const [formValues, setFormValues] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
-    subject: "",
-    text: "",
-    editMode: "Rich Text"
-  });
-  const [defaultText, setDefaultText] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("");
-
-  // Track if we're currently updating from template selection
-  const [isTemplateUpdate, setIsTemplateUpdate] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+function RichEditor({
+  value,
+  disabled,
+  onChange
+}) {
+  const container = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const callback = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(onChange);
+  callback.current = onChange;
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  // Fetch templates
-  const getEmailTemplates = async () => {
-    setLoading(true);
-    try {
-      const resp = await axios__WEBPACK_IMPORTED_MODULE_20__["default"].get("/wp-json/servv-plugin/v1/wordpress/templates", {
-        headers: {
-          "X-WP-Nonce": servvData.nonce
-        }
-      });
-      if (resp.status === 200 && resp.data.templates.length) {
-        let templates = resp.data.templates.sort((a, b) => a.description.localeCompare(b.description));
-        setTemplates(templates);
-        const firstTemplate = templates[0];
-        setSelectedTemplate(firstTemplate);
-
-        // Initialize form values with first template
-        setIsTemplateUpdate(true);
-        setFormValues({
-          subject: firstTemplate.subject || "",
-          text: firstTemplate.text || "",
-          editMode: "Rich Text"
-        });
-        setDefaultText(firstTemplate.text || "");
-        setIsTemplateUpdate(false);
-      } else {
-        (0,react_toastify__WEBPACK_IMPORTED_MODULE_15__.toast)("No Email Templates Available");
+    const element = document.createElement("div");
+    container.current.appendChild(element);
+    const editor = new quill__WEBPACK_IMPORTED_MODULE_2__["default"](element, {
+      theme: "snow",
+      modules: {
+        toolbar: [[{
+          header: [1, 2, false]
+        }], ["bold", "italic", "underline"], [{
+          list: "ordered"
+        }, {
+          list: "bullet"
+        }], ["link", "clean"]]
       }
-    } catch (e) {
-      console.error(e);
-      react_toastify__WEBPACK_IMPORTED_MODULE_15__.toast.error("Failed To Load Email Templates");
-    }
-    setLoading(false);
-  };
-
-  // Save handler
-  const handleTemplateSave = async () => {
-    if (!selectedTemplate) return;
-    setLoading(true);
-    try {
-      const resp = await axios__WEBPACK_IMPORTED_MODULE_20__["default"].patch(`/wp-json/servv-plugin/v1/wordpress/templates/${selectedTemplate.id}`, {
-        subject: formValues.subject,
-        text: formValues.text
-      }, {
-        headers: {
-          "X-WP-Nonce": servvData.nonce
-        }
-      });
-      if (resp.status === 200) {
-        react_toastify__WEBPACK_IMPORTED_MODULE_15__.toast.success("Template Saved Successfully");
-        getEmailTemplates();
-      }
-    } catch (e) {
-      console.error(e);
-      react_toastify__WEBPACK_IMPORTED_MODULE_15__.toast.error("Failed To Save Template");
-    }
-    setLoading(false);
-  };
-
-  // Change handlers
-  const handleSelectTemplate = desc => {
-    const tmpl = templates.find(t => t.description === desc);
-    setSelectedTemplate(tmpl);
-
-    // Update form values when template changes
-    setIsTemplateUpdate(true);
-    setFormValues({
-      subject: tmpl.subject || "",
-      text: tmpl.text || "",
-      editMode: formValues.editMode // Keep current edit mode
     });
-    setDefaultText(tmpl.text || "");
-    setIsTemplateUpdate(false);
-  };
-  const handleTemplateTextChange = text => {
-    if (isTemplateUpdate) return; // Prevent updates during template switching
-
-    setFormValues(prev => ({
-      ...prev,
-      text
-    }));
-    if (selectedTemplate) {
-      setSelectedTemplate({
-        ...selectedTemplate,
-        text
-      });
-    }
-  };
-  const handleCancel = () => {
-    if (selectedTemplate) {
-      const resetText = templates[0].text || "";
-      setFormValues({
-        subject: templates[0].subject || "",
-        text: resetText,
-        editMode: formValues.editMode
-      });
-      setDefaultText(templates[0].text);
-      if (quillRef.current?.clipboard) {
-        quillRef.current.clipboard.dangerouslyPasteHTML(resetText, "api");
-      }
-    }
-  };
-  const handleTemplateSubjectChange = subject => {
-    if (isTemplateUpdate) return; // Prevent updates during template switching
-
-    setFormValues(prev => ({
-      ...prev,
-      subject
-    }));
-    if (selectedTemplate) {
-      setSelectedTemplate({
-        ...selectedTemplate,
-        subject
-      });
-    }
-  };
-  const handleEditModeChange = mode => {
-    setFormValues(prev => ({
-      ...prev,
-      editMode: mode
-    }));
-  };
-
-  // Function to process content for preview with enhanced overflow prevention
-  const processContentForPreview = content => {
-    if (!content) return "";
-
-    // Create a temporary div to process the content
-    const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = content;
-
-    // Find all text nodes and break long continuous strings
-    const processTextNodes = node => {
-      if (node.nodeType === Node.TEXT_NODE) {
-        const text = node.textContent;
-        // Break long continuous strings (more than 50 characters without spaces)
-        const processedText = text.replace(/(\S{50,})/g, match => {
-          // Insert zero-width spaces every 30 characters to allow breaking
-          return match.replace(/(.{30})/g, "$1\u200B");
-        });
-        node.textContent = processedText;
-      } else if (node.nodeType === Node.ELEMENT_NODE) {
-        // Process child nodes
-        Array.from(node.childNodes).forEach(processTextNodes);
-
-        // Special handling for links and other elements
-        if (node.tagName === "A") {
-          const href = node.getAttribute("href");
-          if (href && href.length > 50) {
-            // Break long URLs
-            node.textContent = href.replace(/(.{30})/g, "$1\u200B");
-          }
-        }
-      }
+    editor.clipboard.dangerouslyPasteHTML(value || "", "silent");
+    editor.enable(!disabled);
+    editor.on("text-change", (_delta, _old, source) => {
+      if (source === "user") callback.current(editor.getSemanticHTML());
+    });
+    const host = container.current;
+    return () => {
+      host.innerHTML = "";
     };
-    Array.from(tempDiv.childNodes).forEach(processTextNodes);
-    return tempDiv.innerHTML;
+  }, [disabled]);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
+    ref: container
+  });
+}
+const contentOf = template => ({
+  subject: template?.subject || "",
+  text: template?.text || ""
+});
+const differs = (draft, template) => draft && (draft.subject !== (template.subject || "") || draft.text !== (template.text || ""));
+function EmailTemplates() {
+  const navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_13__.useNavigate)();
+  const settings = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_5__.useServvStore)(state => state.settings);
+  const [templates, setTemplates] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  const [selectedId, setSelectedId] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const [drafts, setDrafts] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({});
+  const [mode, setMode] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("Rich Text");
+  const [revision, setRevision] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0);
+  const [loading, setLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true);
+  const [saving, setSaving] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [error, setError] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("");
+  const [notice, setNotice] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("");
+  const selected = templates.find(template => template.id === selectedId);
+  const groups = (0,_emailTemplates_groups_mjs__WEBPACK_IMPORTED_MODULE_11__.groupEmailTemplates)(templates);
+  const draft = drafts[selectedId] || contentOf(selected);
+  const dirty = selected && differs(draft, selected);
+  const restricted = !settings || Number(settings.current_plan?.id) === 1;
+  const disabled = restricted || saving;
+  const headers = {
+    "X-WP-Nonce": window.servvData.nonce
   };
-
-  // Render parameters table
-  const renderParametersTable = () => {
-    if (!selectedTemplate || !selectedTemplate.params) return null;
-    const paramEntries = Object.entries(selectedTemplate.params);
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
-      className: "bg-white border border-gray-200 rounded-xl overflow-hidden",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("table", {
-        className: "w-full",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("thead", {
-          className: "bg-gray-50",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("tr", {
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("th", {
-              className: "px-4 py-3 text-left text-sm font-semibold text-gray-900 border-b border-gray-200",
-              children: t("Parameter")
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("th", {
-              className: "px-4 py-3 text-left text-sm font-semibold text-gray-900 border-b border-gray-200",
-              children: t("Description")
-            })]
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("tbody", {
-          className: "divide-y divide-gray-200",
-          children: paramEntries.map(([key, desc], index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("tr", {
-            className: index % 2 === 0 ? "bg-white" : "bg-gray-50",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("td", {
-              className: "px-4 py-3 text-left align-top",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("code", {
-                className: "text-sm font-mono font-bold text-purple-700 bg-purple-50 px-2 py-1 rounded",
-                children: key
-              })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("td", {
-              className: "px-4 py-3 text-left align-top",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("span", {
-                className: "text-sm text-gray-600",
-                children: desc
-              })
-            })]
-          }, key))
-        })]
-      })
-    });
-  };
+  async function load() {
+    setLoading(true);
+    setError("");
+    try {
+      var _groupEmailTemplates$;
+      const response = await _utilities_adminApi__WEBPACK_IMPORTED_MODULE_4__["default"].get("/wp-json/servv-plugin/v1/wordpress/templates", {
+        headers
+      });
+      const items = response.data?.templates;
+      if (!Array.isArray(items)) throw new Error("Invalid templates response");
+      const sorted = [...items].sort((a, b) => (a.description || "").localeCompare(b.description || ""));
+      setTemplates(sorted);
+      setSelectedId((_groupEmailTemplates$ = (0,_emailTemplates_groups_mjs__WEBPACK_IMPORTED_MODULE_11__.groupEmailTemplates)(sorted)[0]?.templates[0]?.id) !== null && _groupEmailTemplates$ !== void 0 ? _groupEmailTemplates$ : null);
+      setDrafts({});
+    } catch {
+      setError("Unable to load email templates. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  }
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    getEmailTemplates();
-    // eslint-disable-next-line
+    load();
   }, []);
-  const handleOpenEmails = () => {
-    navigate("/notifications");
-  };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_PageWrapper__WEBPACK_IMPORTED_MODULE_13__["default"], {
-    loading: false,
-    withBackground: true,
-    children: isMobile ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-      className: "w-full mx-auto bg-white min-h-screen",
-      style: {
-        fontFamily: "'Inter', sans-serif"
-      },
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
-        className: "sticky top-0 bg-white z-20 border-b border-gray-200 px-4 py-4",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
-          className: "flex items-center justify-between mb-4",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-            className: "flex-1",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("h1", {
-              className: "text-2xl text-gray-900",
-              children: "Email Notifications"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("p", {
-              className: "text-sm text-gray-600 mt-1",
-              children: "Customize the emails your attendees receive for bookings, reminders, and updates"
-            })]
-          })
+  function change(field, value) {
+    setDrafts(current => ({
+      ...current,
+      [selectedId]: {
+        ...(current[selectedId] || contentOf(selected)),
+        [field]: value
+      }
+    }));
+    setNotice("");
+  }
+  async function save() {
+    if (!selected || disabled || !dirty) return;
+    if (!draft.subject.trim()) {
+      setError("Enter an email subject before saving.");
+      return;
+    }
+    const id = selectedId;
+    const payload = {
+      ...draft
+    };
+    setSaving(true);
+    setError("");
+    setNotice("");
+    try {
+      await _utilities_adminApi__WEBPACK_IMPORTED_MODULE_4__["default"].patch(`/wp-json/servv-plugin/v1/wordpress/templates/${id}`, payload, {
+        headers
+      });
+      setTemplates(current => current.map(template => template.id === id ? {
+        ...template,
+        ...payload
+      } : template));
+      setNotice("Email template saved.");
+    } catch {
+      setError("Unable to save this template. Your changes are still available.");
+    } finally {
+      setSaving(false);
+    }
+  }
+  function reset() {
+    setDrafts(current => ({
+      ...current,
+      [selectedId]: contentOf(selected)
+    }));
+    setRevision(current => current + 1);
+    setError("");
+    setNotice("");
+  }
+  const preview = `<!doctype html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><style>body{margin:0;padding:24px;font:14px/1.6 system-ui,sans-serif;color:#17112d;overflow-wrap:anywhere}img,table{max-width:100%}img{height:auto}a{color:#6224e7}</style></head><body>${draft.text}</body></html>`;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_PageWrapper__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    flush: true,
+    loading: loading,
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(_Containers_PageContent__WEBPACK_IMPORTED_MODULE_7__["default"], {
+      className: _EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].page,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Menu_BreadCrumbs__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        breadcrumbs: [{
+          label: t("Settings"),
+          to: "/settings"
+        }, {
+          label: t("Email templates")
+        }]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Containers_PageHeader__WEBPACK_IMPORTED_MODULE_8__["default"], {
+        eyebrow: "WP Super Events by ServvAI",
+        title: "Email templates",
+        description: "Customize the emails attendees receive for bookings, reminders, and event updates.",
+        actions: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
+          className: _EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].actions,
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_9__["default"], {
+            text: "View emails",
+            type: "secondary",
+            onAction: () => navigate("/notifications")
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_9__["default"], {
+            text: saving ? "Saving…" : "Save template",
+            onAction: save,
+            disabled: loading || disabled || !dirty
+          })]
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-        className: "p-4 space-y-8 pb-32",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-          className: "space-y-5",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-            className: "flex items-center space-x-2",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_21__["default"], {
-              className: "w-5 h-5 text-purple-600"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("label", {
-              className: "text-base font-semibold text-gray-900",
-              children: t("Template Name")
-            })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_Controls_SelectControl__WEBPACK_IMPORTED_MODULE_6__["default"], {
-            options: templates.map(t => t.description),
-            selected: selectedTemplate?.description || "",
-            onSelectChange: handleSelectTemplate
-            // disabled={disabled}
-            ,
-            className: "w-full"
-          })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-          className: "space-y-5",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("label", {
-            className: "text-base font-semibold text-gray-900 mt-6",
-            children: t("Email Subject")
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_Controls_InputFieldControl__WEBPACK_IMPORTED_MODULE_8__["default"], {
-              value: formValues.subject,
-              onChange: handleTemplateSubjectChange,
-              placeholder: "Enter Email Subject",
-              disabled: disabled,
-              width: "100%",
-              className: "w-full px-4 py-3 border border-gray-300 rounded-xl text-base bg-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-            })
-          })]
-        }), selectedTemplate && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-          className: "space-y-5",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("button", {
-            onClick: () => setShowParameters(!showParameters),
-            className: "flex items-center justify-between w-full p-4 bg-gray-50 rounded-xl border border-gray-200 hover:bg-gray-100 transition-colors",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-              className: "flex items-center space-x-2",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_22__["default"], {
-                className: "w-5 h-5 text-purple-600"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("span", {
-                className: "text-base font-semibold text-gray-900",
-                children: "Parameters"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
+        className: _EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].divider
+      }), error && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
+        className: _EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].message,
+        role: "alert",
+        children: [error, !selected && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_9__["default"], {
+          text: "Try again",
+          size: "sm",
+          type: "secondary",
+          onAction: load,
+          disabled: loading
+        })]
+      }), notice && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("p", {
+        className: _EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].message,
+        role: "status",
+        children: notice
+      }), restricted && !loading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("p", {
+        className: _EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].message,
+        children: "Email template editing is available on a paid plan."
+      }), !loading && !error && !templates.length && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("section", {
+        className: _EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].card,
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("h2", {
+          children: "No email templates available"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("p", {
+          children: "Your notification templates will appear here when available."
+        })]
+      }), !!templates.length && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
+        className: _EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].layout,
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("nav", {
+          className: _EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].templateList,
+          "aria-label": "Email templates",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
+            className: _EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].eyebrow,
+            children: "Templates"
+          }), groups.map((group, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("section", {
+            className: _EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].templateGroup,
+            "aria-labelledby": `email-template-group-${index}`,
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("h2", {
+              id: `email-template-group-${index}`,
+              className: _EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].groupHeading,
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
+                children: group.label
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("small", {
+                className: _EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].groupCount,
+                children: group.templates.length
               })]
-            }), showParameters ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_23__["default"], {
-              className: "w-5 h-5 text-gray-500"
-            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_24__["default"], {
-              className: "w-5 h-5 text-gray-500"
-            })]
-          }), showParameters && renderParametersTable()]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-          className: "space-y-5",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("label", {
-            className: "text-base font-semibold text-gray-900",
-            children: t("Edit Mode")
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-            className: "flex bg-gray-100 rounded-xl p-1",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("button", {
-              onClick: () => handleEditModeChange("Rich Text"),
-              className: `
-                    flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-lg font-medium text-sm transition-all duration-200
-                    ${formValues.editMode === "Rich Text" ? "bg-white text-purple-700 shadow-sm" : "text-gray-600 hover:text-gray-900"}
-                  `,
-              disabled: disabled,
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_21__["default"], {
-                className: "w-4 h-4"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("span", {
-                children: t("Rich Text")
+            }), group.templates.map(template => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("button", {
+              type: "button",
+              disabled: saving,
+              "aria-pressed": selectedId === template.id,
+              className: `${_EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].templateItem} ${selectedId === template.id ? _EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].active : ""}`,
+              onClick: () => {
+                setSelectedId(template.id);
+                setError("");
+                setNotice("");
+              },
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_14__["default"], {
+                className: _EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].templateIcon,
+                "aria-hidden": "true"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
+                className: _EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].templateName,
+                children: template.description || `Template ${template.id}`
+              }), differs(drafts[template.id], template) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("small", {
+                className: _EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].unsavedBadge,
+                children: "Unsaved"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_15__["default"], {
+                className: _EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].templateArrow,
+                "aria-hidden": "true"
               })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("button", {
-              onClick: () => handleEditModeChange("HTML"),
-              className: `
-                    flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-lg font-medium text-sm transition-all duration-200
-                    ${formValues.editMode === "HTML" ? "bg-white text-purple-700 shadow-sm" : "text-gray-600 hover:text-gray-900"}
-                  `,
-              disabled: disabled,
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_25__["default"], {
-                className: "w-4 h-4"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("span", {
-                children: t("HTML")
+            }, template.id))]
+          }, group.label))]
+        }), selected && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
+          className: _EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].workspace,
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("section", {
+            className: _EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].card,
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
+              className: _EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].cardHeader,
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("h2", {
+                children: selected.description
+              }), dirty && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
+                className: _EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].eyebrow,
+                children: "Unsaved changes"
               })]
-            })]
-          })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-          className: "space-y-5",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("label", {
-            className: "text-base font-semibold text-gray-900",
-            children: t("Email Content")
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_SpinnerLoader__WEBPACK_IMPORTED_MODULE_17__["default"], {
-            isLoading: loading,
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
-              className: "border border-gray-200 rounded-xl overflow-hidden bg-white email-editor-container",
-              children: formValues.editMode === "Rich Text" ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_Controls_Editor__WEBPACK_IMPORTED_MODULE_7__["default"], {
-                ref: quillRef,
-                defaultValue: defaultText,
-                onChange: handleTemplateTextChange,
-                mobileToolbar: [["bold", "italic", "underline"], [{
-                  list: "bullet"
-                }], ["link"]],
-                disabled: disabled
-              }, `${selectedTemplate?.id}-${defaultText}`) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_Controls_HTMLEditor__WEBPACK_IMPORTED_MODULE_11__["default"], {
-                value: formValues.text,
-                onChange: handleTemplateTextChange
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("label", {
+              className: _EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].field,
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
+                children: "Email subject"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("input", {
+                value: draft.subject,
+                disabled: disabled,
+                onChange: event => change("subject", event.target.value),
+                placeholder: "Enter email subject"
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
+              className: _EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].cardHeader,
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("h3", {
+                children: "Email content"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
+                className: _EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].modes,
+                "aria-label": "Editor mode",
+                children: ["Rich Text", "HTML"].map(item => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("button", {
+                  type: "button",
+                  "aria-pressed": mode === item,
+                  disabled: saving,
+                  className: mode === item ? _EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].active : "",
+                  onClick: () => setMode(item),
+                  children: item
+                }, item))
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
+              className: _EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].editor,
+              children: mode === "Rich Text" ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(RichEditor, {
+                value: draft.text,
+                disabled: disabled,
+                onChange: value => change("text", value)
+              }, `${selectedId}-${revision}`) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("textarea", {
+                "aria-label": "Email HTML",
+                value: draft.text,
+                disabled: disabled,
+                onChange: event => change("text", event.target.value),
+                spellCheck: false,
+                rows: 16
               })
-            })
-          })]
-        }), selectedTemplate && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-          className: "space-y-5",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-            className: "flex items-center space-x-2",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_26__["default"], {
-              className: "w-5 h-5 text-purple-600"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("label", {
-              className: "text-base font-semibold text-gray-900",
-              children: t("Email Preview")
-            })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
-            className: "bg-gray-50 border border-gray-200 rounded-xl p-4 email-template-preview",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-              className: "bg-white rounded-lg p-4 shadow-sm email-template-preview-content",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
-                className: "border-b border-gray-200 pb-3 mb-4",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("h4", {
-                  className: "text-sm font-semibold text-gray-900",
-                  children: [t("Subject:"), formValues.subject]
-                })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
-                className: "prose prose-sm max-w-none text-gray-700 email-preview-content",
-                dangerouslySetInnerHTML: {
-                  __html: processContentForPreview(formValues.text) || ""
-                }
+            }), Object.keys(selected.params || {}).length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("details", {
+              className: _EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].parameters,
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("summary", {
+                children: "Template parameters"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("p", {
+                children: "Use these placeholders to include event and attendee details in your email."
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("dl", {
+                children: Object.entries(selected.params).map(([key, description]) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("dt", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("code", {
+                      children: key
+                    })
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("dd", {
+                    children: String(description)
+                  })]
+                }, key))
               })]
-            })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
+              className: _EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].footer,
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_9__["default"], {
+                text: "Discard changes",
+                type: "secondary",
+                size: "sm",
+                onAction: reset,
+                disabled: disabled || !dirty
+              })
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("aside", {
+            className: `${_EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].card} ${_EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].preview}`,
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
+              className: _EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].cardHeader,
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("h2", {
+                children: "Email preview"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
+                className: _EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].eyebrow,
+                children: "Live preview"
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("p", {
+              children: "Placeholders are replaced with actual details when the email is sent."
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
+              className: _EmailTemplates_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].subject,
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
+                children: "Subject"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("strong", {
+                children: draft.subject || "No subject"
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("iframe", {
+              title: "Email template preview",
+              sandbox: "",
+              srcDoc: preview,
+              referrerPolicy: "no-referrer"
+            })]
           })]
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
-        className: "fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-30",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
-          className: "max-w-md mx-auto",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-            className: "flex justify-end space-x-4",
-            style: {
-              marginRight: "24px"
-            },
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
-              text: "View emails",
-              type: "secondary",
-              onAction: handleOpenEmails,
-              disabled: loading,
-              className: "min-w-[120px] h-[40px] px-6 py-2 text-base font-semibold border border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
-              text: "Save Template",
-              type: "primary",
-              onAction: handleTemplateSave,
-              disabled: disabled || loading,
-              className: "min-w-[120px] h-[40px] px-6 py-2 text-base font-semibold bg-purple-600 text-white hover:bg-purple-700"
-            })]
-          })
-        })
-      })]
-    }) :
-    /*#__PURE__*/
-    /* Desktop Layout */
-    (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-      className: "dashboard-card",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
-        className: "servv-dashboard-header",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-          className: "dashboard-heading",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-            className: "flex flex-row items-center justify-between w-full",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("h1", {
-              className: "dashboard-title",
-              children: t("Email Notifications")
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-              className: "dashboard-actions flex gap-2",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
-                text: "View emails",
-                type: "secondary",
-                onAction: handleOpenEmails,
-                disabled: loading,
-                className: "min-w-[120px] h-[40px] px-6 py-2 text-base font-semibold border border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
-                text: t("Save"),
-                type: "primary",
-                disabled: disabled,
-                onAction: handleTemplateSave
-              })]
-            })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("p", {
-            className: "dashboard-description",
-            children: t("Customize the emails your attendees receive for bookings, reminders, and updates")
-          })]
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
-        className: "header-line"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_Containers_PageContent__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        className: "py-0 my-0",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
-          className: "w-full",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-            className: "space-y-4 w-full",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-              className: "space-y-5 w-full",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-                className: "flex items-center space-x-2 w-full",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_21__["default"], {
-                  className: "w-5 h-5 text-purple-600"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("label", {
-                  className: "text-lg font-semibold text-gray-900 w-full",
-                  children: t("Template Name")
-                })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
-                className: "w-full",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_Controls_SelectControl__WEBPACK_IMPORTED_MODULE_6__["default"], {
-                  options: templates.map(t => t.description),
-                  selected: selectedTemplate?.description || "",
-                  onSelectChange: handleSelectTemplate
-                  // disabled={disabled}
-                  ,
-                  className: "w-full"
-                })
-              })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-              className: "space-y-5 w-full",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("label", {
-                className: "text-lg font-semibold text-gray-900 w-full",
-                children: t("Email Subject")
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
-                className: "w-full",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_Controls_InputFieldControl__WEBPACK_IMPORTED_MODULE_8__["default"], {
-                  value: formValues.subject,
-                  onChange: handleTemplateSubjectChange,
-                  placeholder: "Enter Email Subject",
-                  disabled: disabled,
-                  width: "100%",
-                  align: "left",
-                  className: "w-full px-4 py-3 border border-gray-300 rounded-xl text-base bg-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                })
-              })]
-            }), selectedTemplate && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-              className: "space-y-5",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("button", {
-                onClick: () => setShowParameters(!showParameters),
-                className: "flex items-center justify-between w-full max-w-full p-4 bg-gray-50 rounded-xl border border-gray-200 hover:bg-gray-100 transition-colors",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-                  className: "flex items-center space-x-2",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_22__["default"], {
-                    className: "w-5 h-5 text-purple-600"
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("span", {
-                    className: "text-lg font-semibold text-gray-900",
-                    children: "Parameters"
-                  })]
-                }), showParameters ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_23__["default"], {
-                  className: "w-5 h-5 text-gray-500"
-                }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_24__["default"], {
-                  className: "w-5 h-5 text-gray-500"
-                })]
-              }), showParameters && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
-                className: "max-w-full",
-                children: renderParametersTable()
-              })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-              className: "space-y-5",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("label", {
-                className: "text-lg font-semibold text-gray-900",
-                children: t("Edit Mode")
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-                className: "flex bg-gray-100 rounded-xl p-1 max-w-md",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("button", {
-                  onClick: () => handleEditModeChange("Rich Text"),
-                  className: `
-                        flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-lg font-medium text-sm transition-all duration-200
-                        ${formValues.editMode === "Rich Text" ? "bg-white text-purple-700 shadow-sm" : "text-gray-600 hover:text-gray-900"}
-                      `,
-                  disabled: disabled,
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_21__["default"], {
-                    className: "w-4 h-4"
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("span", {
-                    children: t("Rich Text")
-                  })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("button", {
-                  onClick: () => handleEditModeChange("HTML"),
-                  className: `
-                        flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-lg font-medium text-sm transition-all duration-200
-                        ${formValues.editMode === "HTML" ? "bg-white text-purple-700 shadow-sm" : "text-gray-600 hover:text-gray-900"}
-                      `,
-                  disabled: disabled,
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_25__["default"], {
-                    className: "w-4 h-4"
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("span", {
-                    children: t("HTML")
-                  })]
-                })]
-              })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-              className: "space-y-5",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("label", {
-                className: "text-lg font-semibold text-gray-900",
-                children: t("Email Content")
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_SpinnerLoader__WEBPACK_IMPORTED_MODULE_17__["default"], {
-                isLoading: loading,
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
-                  className: "border border-gray-200 rounded-xl overflow-hidden bg-white max-w-full email-editor-container",
-                  children: formValues.editMode === "Rich Text" ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_Controls_Editor__WEBPACK_IMPORTED_MODULE_7__["default"], {
-                    ref: quillRef,
-                    defaultValue: defaultText,
-                    onChange: handleTemplateTextChange,
-                    disabled: disabled
-                  }, `${selectedTemplate?.id}-${defaultText}`) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_Controls_HTMLEditor__WEBPACK_IMPORTED_MODULE_11__["default"], {
-                    value: formValues.text,
-                    onChange: handleTemplateTextChange
-                  })
-                })
-              })]
-            }), selectedTemplate && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-              className: "space-y-5",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-                className: "flex items-center space-x-2",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_26__["default"], {
-                  className: "w-5 h-5 text-purple-600"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("label", {
-                  className: "text-lg font-semibold text-gray-900",
-                  children: t("Preview")
-                })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
-                className: "bg-gray-50 border border-gray-200 rounded-xl p-4 max-w-full email-template-preview",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-                  className: "bg-white rounded-lg p-4 shadow-sm email-template-preview-content",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
-                    className: "border-b border-gray-200 pb-3 mb-4",
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("h4", {
-                      className: "text-sm font-semibold text-gray-900",
-                      children: [t("Subject:"), formValues.subject]
-                    })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
-                    className: "prose prose-sm max-w-none text-gray-700 email-preview-content",
-                    dangerouslySetInnerHTML: {
-                      __html: processContentForPreview(formValues.text) || ""
-                    }
-                  })]
-                })
-              })]
-            })]
-          })
-        })
       })]
     })
   });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (EmailTemplates);
+}
 
 /***/ }),
 
@@ -1624,42 +735,41 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Menu_Spinner__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Menu/Spinner */ "./src/Components/Menu/Spinner.jsx");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-4WY6JWTD.mjs");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _PageWrapper_module_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./PageWrapper.module.scss */ "./src/Components/Pages/PageWrapper.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__);
 
 
 
 
+
+// `flush` drops the wrapper's own side padding for pages that already frame
+// themselves with <PageContent>, so the reference's 32px gutter is not doubled.
 
 const PageWrapper = props => {
-  const location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_4__.useLocation)();
+  const useNativeNavigation = Boolean(window.servvData?.nativeAdmin);
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
     if (window.Intercom) {
-      if (location !== "/support") {
-        window.Intercom("update", {
-          hide_default_launcher: true
-        });
-      } else {
-        window.Intercom("update", {
-          hide_default_launcher: true
-        });
-      }
+      window.Intercom("update", {
+        hide_default_launcher: true
+      });
     }
   }, []);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, {
-    children: [props.withBackground && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-      className: "fixed inset-0 bg-[#F5F5F5]"
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-      className: "w-full relative pl-4 flex flex-col min-h-0",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        className: "absolute inset-0 flex items-center justify-center pointer-events-none",
-        children: props.loading && !props.withoutSpinner && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_Menu_Spinner__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, {
+    children: [props.withBackground && !useNativeNavigation && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+      className: _PageWrapper_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].backdrop
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      className: [_PageWrapper_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].root, props.flush ? "" : _PageWrapper_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].gutterLeft].filter(Boolean).join(" "),
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+        className: _PageWrapper_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].spinner,
+        children: props.loading && !props.withoutSpinner && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_Menu_Spinner__WEBPACK_IMPORTED_MODULE_2__["default"], {
           loading: true
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-        className: `flex flex-col flex-1 w-full pr-4 max-w-full min-w-0 min-h-0 overflow-visible ${props.loading ? "loading" : ""}`,
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_toastify__WEBPACK_IMPORTED_MODULE_0__.ToastContainer, {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        className: [_PageWrapper_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].content, props.flush ? "" : _PageWrapper_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].gutterRight,
+        // `loading` is a legacy global (input.css) blur, not a module class.
+        props.loading ? "loading" : ""].filter(Boolean).join(" "),
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_toastify__WEBPACK_IMPORTED_MODULE_0__.ToastContainer, {
           position: "bottom-right"
         }), props.children]
       })]
@@ -1670,45 +780,132 @@ const PageWrapper = props => {
 
 /***/ }),
 
-/***/ "./src/Components/Pages/SpinnerLoader.jsx":
-/*!************************************************!*\
-  !*** ./src/Components/Pages/SpinnerLoader.jsx ***!
-  \************************************************/
+/***/ "./src/Components/Containers/PageContent.module.scss":
+/*!***********************************************************!*\
+  !*** ./src/Components/Containers/PageContent.module.scss ***!
+  \***********************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Menu_Spinner__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Menu/Spinner */ "./src/Components/Menu/Spinner.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"shell":"hYf27RiwlyFWwm5KClLO","flush":"a6Ch_fJZ7nWrwzrktMXT","container":"t_beMJmTHY9tOuVGYINQ","svRise":"hEL4_Hi3yhmLC95m6Gv9"});
 
+/***/ }),
 
+/***/ "./src/Components/Containers/PageHeader.module.scss":
+/*!**********************************************************!*\
+  !*** ./src/Components/Containers/PageHeader.module.scss ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-const SpinnerLoader = ({
-  isLoading,
-  children,
-  customStyling
-}) => {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-    className: "relative",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-      className: isLoading ? "blur-sm pointer-events-none" : "",
-      children: children
-    }), isLoading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-      className: `absolute inset-0 flex items-center justify-center ${customStyling}`,
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_Menu_Spinner__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        loading: true
-      })
-    })]
-  });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (SpinnerLoader);
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"header":"UJKBfoKQX0ArollQPz1S","bottomLine":"EPa4Qs8Sg0DGkgQqTqgN","row":"OUo7N4uA10rjSEMICOeL","text":"sgJsCMx9FF0yFMt2kZ3Z","eyebrow":"ktHdDumXPTPovEbmrc1M","title":"yq9VS55_ovalh9J5Nb6w","description":"sj2HMNvNWGjuE5qbOg9r","actions":"PUXWCGzj1cI1x1_j3IoJ"});
+
+/***/ }),
+
+/***/ "./src/Components/Controls/PageActionButton.module.scss":
+/*!**************************************************************!*\
+  !*** ./src/Components/Controls/PageActionButton.module.scss ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"button":"KdySr5oFULfrhKhic35V","primary":"NU3RVqc5Fk7DJ5c4GHf_","secondary":"B48RwPm9xmg1M2dE2g6Q","danger":"q2iOAa3m1ACyQeXOmJaO","dangerSecondary":"YQXykqk_8YtO85727teT","ghost":"fxXHJtT4abc9Wa4LMvVL","dangerGhost":"pY19HOSltbDU49q6SaED","md":"t0fnm1wSsZTfyQQHuzNt","sm":"_Da3u_DsP7V7Jd4Z4lzg","xs":"pEHFbNwftcp4Oei9RRxp","fullWidth":"UyW29jrRG901Y4cS7AHm","iconOnly":"DmgZjtNgpAg3vfeKCEZw","icon":"M_1pjyLi4tiOcq2_oiwe","label":"lcGbrWicMbKyunggF77J"});
+
+/***/ }),
+
+/***/ "./src/Components/Pages/EmailTemplates.module.scss":
+/*!*********************************************************!*\
+  !*** ./src/Components/Pages/EmailTemplates.module.scss ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"page":"TjVgI6NB1gM96OewHVCK","actions":"GskUXxQPBznqW2OHXexA","cardHeader":"_dx73j3gqmTY2U6K1rvs","footer":"sjwTCQz4FbS4xNTgJPEA","divider":"wII9lnAyOpKaTeTWdrRN","layout":"hOvgcV0ITw1cSF3H4WSy","workspace":"NrVdTdNrhQgJrH2yGDAO","card":"sID3YS9JtBZzT95FsOTt","eyebrow":"EDBiXkxbuAlr7RyFPEft","templateList":"bsxFecfM72S0K93jExPm","templateGroup":"Z5hPbH2gRhYQR_j446_9","groupHeading":"uJ3NijnzpgdOP26xbYGV","groupCount":"m6bCSv2bH_HK3XUdQmm0","templateItem":"dHTWKyYjFgUEN3KI9eRt","active":"BY5p3__Sz1gvNKNjAdQD","templateIcon":"WE4fw8hyCafS28K_H1B5","templateName":"uFuEmUMprt12LjcKlGOa","templateArrow":"WowZj9Ev8ELfqRozCHWy","unsavedBadge":"DOSOarSWMGBKfCTt3Plr","modes":"dky6JQY21ldnrr3_pP4A","field":"Sz6D142J0aPWyJSRK54L","editor":"XjjhHZ8ElsMGxYiZRQ8N","parameters":"dXZf0rrzlItEF_R583zl","subject":"oNdzwFdMx17wPVZSnxwy","preview":"zd_xW6Tp7VJ3T4SP8S0Q","message":"ZcArbhkZEGHBUiOybxSM"});
+
+/***/ }),
+
+/***/ "./src/Components/Pages/PageWrapper.module.scss":
+/*!******************************************************!*\
+  !*** ./src/Components/Pages/PageWrapper.module.scss ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"backdrop":"GwbBdwO7UxUbci6wtyds","root":"whZeFIc454jkDbuWw6zj","gutterLeft":"nH2l6oxNCJ28ihBOUf7w","gutterRight":"KKg_qLS4gdJXh4u6HnvG","spinner":"Al4EqMTkXH8MiW77lCyS","content":"DhHmGpnbQlurQkapo8Ei"});
+
+/***/ }),
+
+/***/ "./src/Components/Pages/emailTemplates/groups.mjs":
+/*!********************************************************!*\
+  !*** ./src/Components/Pages/emailTemplates/groups.mjs ***!
+  \********************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   emailTemplateCategory: () => (/* binding */ emailTemplateCategory),
+/* harmony export */   groupEmailTemplates: () => (/* binding */ groupEmailTemplates)
+/* harmony export */ });
+const categories = [{
+  label: "Waiting list",
+  pattern: /wait[\s_-]*(?:ing[\s_-]*)?list/i
+}, {
+  label: "Payments",
+  pattern: /payment|refund|invoice|receipt|billing/i
+}, {
+  label: "Reminders",
+  pattern: /remind/i
+}, {
+  label: "Event updates",
+  pattern: /cancel|reschedul|updat|chang|postpon|recording|follow[\s_-]*up|finished|completed/i
+}, {
+  label: "Bookings",
+  pattern: /book|registr|confirm|ticket|reservation/i
+}];
+const order = ["Bookings", "Reminders", "Event updates", "Payments", "Waiting list", "Other"];
+function emailTemplateCategory(template) {
+  const category = typeof template.category === "string" ? template.category : template.category?.name;
+  if (typeof category === "string" && category.trim()) return category.trim();
+  const name = [template.description, template.name, template.type].filter(value => typeof value === "string").join(" ");
+  return categories.find(({
+    pattern
+  }) => pattern.test(name))?.label || "Other";
+}
+function groupEmailTemplates(templates) {
+  const groups = new Map();
+  for (const template of templates) {
+    const label = emailTemplateCategory(template);
+    if (!groups.has(label)) groups.set(label, []);
+    groups.get(label).push(template);
+  }
+  const rank = label => label === "Other" ? Number.MAX_SAFE_INTEGER : order.includes(label) ? order.indexOf(label) : order.length;
+  return [...groups].sort(([a], [b]) => rank(a) - rank(b) || a.localeCompare(b)).map(([label, items]) => ({
+    label,
+    templates: [...items].sort((a, b) => (a.description || a.name || "").localeCompare(b.description || b.name || ""))
+  }));
+}
 
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_EmailTemplates_jsx.js.map?ver=3089295679a21560f121
+//# sourceMappingURL=src_Components_Pages_EmailTemplates_jsx.js.map?ver=255bfa5ac09db7652303

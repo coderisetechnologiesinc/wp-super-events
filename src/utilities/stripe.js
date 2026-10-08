@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "./adminApi";
 
 export const getStripeSettings = async (authToken) => {
   try {

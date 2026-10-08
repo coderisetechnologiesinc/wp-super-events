@@ -1,4 +1,5 @@
-import axios from "axios";
+import { resourceVersion } from "./requestCache";
+import axios from "./adminApi";
 
 export const getFilterType = async (type) => {
   try {
@@ -26,6 +27,7 @@ export const createLocation = async (name) => {
 };
 
 export const getFilters = async (current_plan) => {
+  const version = resourceVersion("filters");
   const filterTypes = ["locations", "languages", "categories"];
   if (current_plan !== 1) {
     filterTypes.push("members");
@@ -45,6 +47,7 @@ export const getFilters = async (current_plan) => {
     results.push(...parallelResults);
   }
 
+  if (version !== resourceVersion("filters")) return getFilters(current_plan);
   const filters = {};
   for (const result of results) {
     if (result?.data) {
@@ -53,4 +56,19 @@ export const getFilters = async (current_plan) => {
   }
 
   return filters;
+};
+
+// Creates or updates one filter value. The four filter forms differ only in the
+// collection they write to and the shape of `data`; priority is always numeric.
+export const saveFilter = async (type, data, existingId) => {
+  const base = `/wp-json/servv-plugin/v1/filters/${type}`;
+
+  const response = await axios({
+    method: existingId ? "PATCH" : "POST",
+    url: existingId ? `${base}/${existingId}` : base,
+    headers: { "X-WP-Nonce": servvData.nonce },
+    data: { ...data, priority: Number.parseInt(data.priority) || 0 },
+  });
+
+  return response.data;
 };

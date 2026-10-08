@@ -1,10 +1,15 @@
 import React, { useRef, useEffect, useState } from "react";
+import styles from "./Dropdown.module.scss";
 
+// `surface` draws the white card around the menu. Pass false when the child is
+// already a surface of its own (CalendarInline) so it isn't framed twice.
 const Dropdown = ({
   activator,
   status,
   children,
   onClose,
+  align = "right",
+  surface = true,
   className = "",
   dropdownClassName = "",
   ...rest
@@ -46,15 +51,28 @@ const Dropdown = ({
   }, [status, children]);
 
   return (
-    <div ref={dropdownRef} className={`relative ${className}`} {...rest}>
+    <div
+      ref={dropdownRef}
+      className={[styles.root, className].filter(Boolean).join(" ")}
+      {...rest}
+    >
       {activator}
       {status && (
         <div
-          className={`absolute z-50 mt-2 ${dropdownClassName}`}
-          style={{ minWidth: 240, right: 0, left: "auto" }}
+          className={[styles.menu, dropdownClassName].filter(Boolean).join(" ")}
+          style={
+            align === "left"
+              ? { minWidth: 240, left: 0, right: "auto" }
+              : { minWidth: 240, right: 0, left: "auto" }
+          }
         >
           <div
-            className="bg-white border border-gray-200 rounded-xl shadow-lg p-4 dropdown-content-fix"
+            className={[
+              "dropdown-content-fix",
+              surface ? styles.surface : "",
+            ]
+              .filter(Boolean)
+              .join(" ")}
             style={dropdownStyle}
           >
             {children}

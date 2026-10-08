@@ -13,10 +13,31 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./BlockStack.module.scss */ "./src/Components/Containers/BlockStack.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
 
 
+
+// Vertical layout primitive. `gap` keeps the historic numeric scale
+// (4 → 16px); the token names are accepted too for new code.
+
+const GAPS = {
+  0: _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].gap0,
+  1: _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].gap1,
+  2: _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].gap2,
+  3: _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].gap3,
+  4: _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].gap4,
+  5: _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].gap5,
+  6: _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].gap6,
+  8: _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].gap8,
+  none: _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].gap0,
+  xs: _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].gap1,
+  sm: _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].gap2,
+  md: _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].gap4,
+  lg: _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].gap6,
+  xl: _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].gap8
+};
 const BlockStack = ({
   gap = 4,
   cardsLayout,
@@ -26,13 +47,112 @@ const BlockStack = ({
   className = "",
   children,
   ...rest
-}) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-  ...rest,
-  onClick: onAction ? () => onAction() : undefined,
-  className: `${className} flex flex-col ${gap ? `space-y-${gap}` : ""} ${cardsLayout ? "flex-[1_1_0]" : ""} ${action ? "cursor-pointer" : ""} ${disabled ? "filter grayscale" : ""}`,
-  children: children
-});
+}) => {
+  var _GAPS$gap;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+    ...rest,
+    onClick: onAction ? () => onAction() : undefined,
+    className: [_BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].stack, (_GAPS$gap = GAPS[gap]) !== null && _GAPS$gap !== void 0 ? _GAPS$gap : GAPS[4], cardsLayout ? _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].cards : "", action || onAction ? _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].clickable : "", disabled ? _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].disabled : "", className].filter(Boolean).join(" "),
+    children: children
+  });
+};
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (BlockStack);
+
+/***/ }),
+
+/***/ "./src/Components/Containers/Dropdown.jsx":
+/*!************************************************!*\
+  !*** ./src/Components/Containers/Dropdown.jsx ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Dropdown_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Dropdown.module.scss */ "./src/Components/Containers/Dropdown.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+// `surface` draws the white card around the menu. Pass false when the child is
+// already a surface of its own (CalendarInline) so it isn't framed twice.
+
+const Dropdown = ({
+  activator,
+  status,
+  children,
+  onClose,
+  align = "right",
+  surface = true,
+  className = "",
+  dropdownClassName = "",
+  ...rest
+}) => {
+  const dropdownRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const [dropdownStyle, setDropdownStyle] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
+    minWidth: 240
+  });
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (!status) return;
+    const handleClickOutside = event => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        if (onClose) onClose();
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [status, onClose]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (status && dropdownRef.current) {
+      const dropdown = dropdownRef.current.querySelector(".dropdown-content-fix");
+      if (dropdown) {
+        const rect = dropdown.getBoundingClientRect();
+        const viewportWidth = window.innerWidth;
+        let newStyle = {
+          minWidth: 240
+        };
+        if (rect.right > viewportWidth) {
+          newStyle.right = 0;
+          newStyle.left = "auto";
+        }
+        if (rect.left < 0) {
+          newStyle.left = 0;
+          newStyle.right = "auto";
+        }
+        setDropdownStyle({
+          ...newStyle
+        });
+      }
+    }
+  }, [status, children]);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+    ref: dropdownRef,
+    className: [_Dropdown_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].root, className].filter(Boolean).join(" "),
+    ...rest,
+    children: [activator, status && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+      className: [_Dropdown_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].menu, dropdownClassName].filter(Boolean).join(" "),
+      style: align === "left" ? {
+        minWidth: 240,
+        left: 0,
+        right: "auto"
+      } : {
+        minWidth: 240,
+        right: 0,
+        left: "auto"
+      },
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+        className: ["dropdown-content-fix", surface ? _Dropdown_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].surface : ""].filter(Boolean).join(" "),
+        style: dropdownStyle,
+        children: children
+      })
+    })]
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Dropdown);
 
 /***/ }),
 
@@ -48,56 +168,34 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _PageContent_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PageContent.module.scss */ "./src/Components/Containers/PageContent.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
 
 
-const PageContent = props => {
-  const {
-    className = "",
-    children,
-    ...rest
-  } = props;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+
+// The page shell from the design reference: a padded frame around a centred
+// 1180px column whose children are spaced 24px apart.
+// `className` lands on the column, where the call sites have always put it.
+
+const PageContent = ({
+  className = "",
+  maxWidth,
+  flush = false,
+  children,
+  ...rest
+}) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+  className: `${_PageContent_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].shell} ${flush ? _PageContent_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].flush : ""}`.trim(),
+  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
     ...rest,
-    className: `page-content ${className}`,
+    className: `${_PageContent_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].container} ${className}`.trim(),
+    style: maxWidth ? {
+      maxWidth
+    } : undefined,
     children: children
-  });
-};
+  })
+});
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PageContent);
-
-/***/ }),
-
-/***/ "./src/Components/Containers/PageHeader.jsx":
-/*!**************************************************!*\
-  !*** ./src/Components/Containers/PageHeader.jsx ***!
-  \**************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
-
-
-const PageHeader = props => {
-  const {
-    className = "",
-    bottomLine,
-    children,
-    ...rest
-  } = props;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-    ...rest,
-    className: `page-header ${bottomLine ? "border-b pb-4" : ""} ${className}`,
-    children: children
-  });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PageHeader);
 
 /***/ }),
 
@@ -164,6 +262,446 @@ const TabsComponent = ({
 
 /***/ }),
 
+/***/ "./src/Components/Controls/CalendarInline.jsx":
+/*!****************************************************!*\
+  !*** ./src/Components/Controls/CalendarInline.jsx ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react_day_picker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-day-picker */ "./node_modules/react-day-picker/dist/esm/DayPicker.js");
+/* harmony import */ var _CalendarInline_module_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CalendarInline.module.scss */ "./src/Components/Controls/CalendarInline.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+
+
+
+// The calendar surface shared by every date control: a DayPicker in servv
+// chrome. Render it directly when the surrounding markup is already a panel
+// (a modal, a form block); wrap it in NewDatePickerControl for a popover.
+//
+// react-day-picker speaks { from, to } for ranges while the admin pages store
+// { startDate, endDate }; the translation lives here so no call site has to
+// know about either shape.
+
+const CalendarInline = ({
+  mode = "single",
+  value,
+  onChange = () => {},
+  disabled,
+  defaultMonth
+}) => {
+  var _value$startDate, _value$endDate;
+  const isRange = mode === "range";
+  const selected = isRange ? value?.startDate || value?.endDate ? {
+    from: (_value$startDate = value.startDate) !== null && _value$startDate !== void 0 ? _value$startDate : undefined,
+    to: (_value$endDate = value.endDate) !== null && _value$endDate !== void 0 ? _value$endDate : undefined
+  } : undefined : value !== null && value !== void 0 ? value : undefined;
+  const handleSelect = next => {
+    var _next$from, _ref, _next$to;
+    if (!isRange) {
+      onChange(next);
+      return;
+    }
+    onChange({
+      startDate: (_next$from = next?.from) !== null && _next$from !== void 0 ? _next$from : null,
+      endDate: (_ref = (_next$to = next?.to) !== null && _next$to !== void 0 ? _next$to : next?.from) !== null && _ref !== void 0 ? _ref : null
+    });
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+    className: `date-picker-menu ${_CalendarInline_module_scss__WEBPACK_IMPORTED_MODULE_0__["default"].surface}`,
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(react_day_picker__WEBPACK_IMPORTED_MODULE_2__.DayPicker, {
+      mode: mode,
+      selected: selected,
+      defaultMonth: defaultMonth !== null && defaultMonth !== void 0 ? defaultMonth : isRange ? selected?.from : selected,
+      onSelect: handleSelect,
+      disabled: disabled,
+      weekStartsOn: 1 // Mo → Su
+      ,
+      showOutsideDays: true
+    })
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (CalendarInline);
+
+/***/ }),
+
+/***/ "./src/Components/Controls/NewDatePickerControl.jsx":
+/*!**********************************************************!*\
+  !*** ./src/Components/Controls/NewDatePickerControl.jsx ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment */ "moment");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _Containers_Dropdown__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Containers/Dropdown */ "./src/Components/Containers/Dropdown.jsx");
+/* harmony import */ var _CalendarInline__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./CalendarInline */ "./src/Components/Controls/CalendarInline.jsx");
+/* harmony import */ var _NewDatePickerControl_module_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./NewDatePickerControl.module.scss */ "./src/Components/Controls/NewDatePickerControl.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__);
+
+
+
+
+
+
+const DEFAULT_FORMAT = "MMM DD, YYYY";
+const toDate = value => {
+  if (!value) return null;
+  const parsed = moment__WEBPACK_IMPORTED_MODULE_1___default().isMoment(value) ? value : moment__WEBPACK_IMPORTED_MODULE_1___default()(value);
+  return parsed.isValid() ? parsed.startOf("day").toDate() : null;
+};
+
+// A calendar icon button that opens CalendarInline in a popover.
+//
+// mode="range" takes and emits { startDate, endDate } as Dates — the shape the
+// filter pages already keep in state. mode="single" takes anything
+// moment-parsable and emits a moment, matching the event form's handlers.
+const NewDatePickerControl = ({
+  mode = "range",
+  value,
+  onChange = () => {},
+  label = "Select dates",
+  displayFormat = DEFAULT_FORMAT,
+  minDate,
+  maxDate,
+  disabled = false,
+  fullWidth = false,
+  className = "",
+  variant = "toolbar",
+  ariaLabel
+}) => {
+  const [open, setOpen] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const isRange = mode === "range";
+  const selected = isRange ? {
+    startDate: toDate(value?.startDate),
+    endDate: toDate(value?.endDate)
+  } : toDate(value);
+  const before = toDate(minDate);
+  const after = toDate(maxDate);
+  const disabledDays = before || after ? {
+    ...(before ? {
+      before
+    } : {}),
+    ...(after ? {
+      after
+    } : {})
+  } : undefined;
+  const triggerLabel = () => {
+    if (!isRange) {
+      return selected ? moment__WEBPACK_IMPORTED_MODULE_1___default()(selected).format(displayFormat) : label;
+    }
+    if (!selected.startDate) return label;
+    const from = moment__WEBPACK_IMPORTED_MODULE_1___default()(selected.startDate).format(displayFormat);
+    if (!selected.endDate || selected.endDate.valueOf() === selected.startDate.valueOf()) {
+      return from;
+    }
+    return `${from} – ${moment__WEBPACK_IMPORTED_MODULE_1___default()(selected.endDate).format(displayFormat)}`;
+  };
+  const handleSelect = next => {
+    if (!isRange) {
+      if (!next) return;
+      onChange(moment__WEBPACK_IMPORTED_MODULE_1___default()(next));
+      setOpen(false);
+      return;
+    }
+    onChange(next);
+    // Hold the popover open until both ends of the range are picked.
+    if (next?.startDate && next?.endDate) setOpen(false);
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_Containers_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    className: [_NewDatePickerControl_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].root, fullWidth ? _NewDatePickerControl_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].block : "", className].filter(Boolean).join(" "),
+    align: "left",
+    surface: false,
+    status: open && !disabled,
+    onClose: () => setOpen(false),
+    onKeyDown: event => {
+      if (event.key === "Escape") setOpen(false);
+    },
+    activator: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("button", {
+      type: "button",
+      className: `${_NewDatePickerControl_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].button} ${variant === "field" ? _NewDatePickerControl_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].field : ""}`,
+      disabled: disabled,
+      "aria-label": ariaLabel,
+      "aria-expanded": open && !disabled,
+      onClick: () => setOpen(prev => !prev),
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("svg", {
+        className: _NewDatePickerControl_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].icon,
+        xmlns: "http://www.w3.org/2000/svg",
+        viewBox: "0 0 24 24",
+        fill: "none",
+        "aria-hidden": "true",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("rect", {
+          x: "3",
+          y: "5",
+          width: "18",
+          height: "16",
+          rx: "3",
+          stroke: "currentColor",
+          strokeWidth: "1.9"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
+          d: "M8 3v4M16 3v4M3 11h18",
+          stroke: "currentColor",
+          strokeWidth: "1.9"
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+        className: _NewDatePickerControl_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].label,
+        children: triggerLabel()
+      })]
+    }),
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_CalendarInline__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      mode: mode,
+      value: selected,
+      onChange: handleSelect,
+      disabled: disabledDays
+    })
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (NewDatePickerControl);
+
+/***/ }),
+
+/***/ "./src/Components/Controls/NewSelectControl.jsx":
+/*!******************************************************!*\
+  !*** ./src/Components/Controls/NewSelectControl.jsx ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_select__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-select */ "./node_modules/react-select/dist/index-641ee5b8.esm.js");
+/* harmony import */ var react_select__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-select */ "./node_modules/react-select/dist/react-select.esm.js");
+/* harmony import */ var _NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./NewSelectControl.module.scss */ "./src/Components/Controls/NewSelectControl.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+
+const Caret = () => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("svg", {
+  xmlns: "http://www.w3.org/2000/svg",
+  fill: "none",
+  viewBox: "0 0 24 24",
+  strokeWidth: 1.8,
+  stroke: "currentColor",
+  width: 18,
+  height: 18,
+  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("path", {
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    d: "m19.5 8.25-7.5 7.5-7.5-7.5"
+  })
+});
+const DropdownIndicator = props => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_select__WEBPACK_IMPORTED_MODULE_3__.c.DropdownIndicator, {
+  ...props,
+  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(Caret, {})
+});
+
+// react-select renders its own DOM, so it is styled through the same tokens
+// exposed as custom properties on #servv-wrap (see src/styles/base.scss).
+const reactSelectStyles = style => ({
+  container: base => ({
+    ...base,
+    width: "100%",
+    ...style
+  }),
+  control: (base, state) => ({
+    ...base,
+    minHeight: "40px",
+    border: `1px solid ${state.isFocused ? "var(--sv-primary-border)" : "var(--sv-border-field)"}`,
+    borderRadius: "var(--sv-radius-lg)",
+    backgroundColor: "var(--sv-surface)",
+    // No halo on focus: the border colour already says which select is
+    // active, and the ring sat heavily on a control this wide.
+    boxShadow: "var(--sv-shadow-field)",
+    paddingLeft: "6px",
+    paddingRight: "4px",
+    fontSize: "14px",
+    fontWeight: 500,
+    "&:hover": {
+      borderColor: "var(--sv-primary-border)"
+    }
+  }),
+  valueContainer: base => ({
+    ...base,
+    padding: "0 6px"
+  }),
+  placeholder: base => ({
+    ...base,
+    color: "var(--sv-text-placeholder)"
+  }),
+  singleValue: base => ({
+    ...base,
+    color: "var(--sv-text)"
+  }),
+  input: base => ({
+    ...base,
+    color: "var(--sv-text)"
+  }),
+  multiValue: base => ({
+    ...base,
+    borderRadius: "99px",
+    backgroundColor: "var(--sv-primary-surface)",
+    border: "1px solid var(--sv-primary-border)"
+  }),
+  multiValueLabel: base => ({
+    ...base,
+    color: "var(--sv-primary-strong)",
+    fontSize: "12px",
+    fontWeight: 600
+  }),
+  multiValueRemove: base => ({
+    ...base,
+    color: "var(--sv-primary-strong)",
+    borderRadius: "0 99px 99px 0",
+    ":hover": {
+      backgroundColor: "var(--sv-primary-border)",
+      color: "var(--sv-primary-strong)"
+    }
+  }),
+  dropdownIndicator: base => ({
+    ...base,
+    padding: "0 6px",
+    color: "var(--sv-text-soft)",
+    ":hover": {
+      color: "var(--sv-primary)"
+    }
+  }),
+  menu: base => ({
+    ...base,
+    overflow: "hidden",
+    marginTop: "6px",
+    borderRadius: "var(--sv-radius-2xl)",
+    border: "1px solid var(--sv-border)",
+    boxShadow: "0 12px 32px rgba(16, 24, 40, 0.14)",
+    zIndex: 40
+  }),
+  menuList: base => ({
+    ...base,
+    padding: "6px"
+  }),
+  option: (base, state) => ({
+    ...base,
+    borderRadius: "7px",
+    padding: "8px 10px",
+    fontSize: "13px",
+    fontWeight: 500,
+    color: state.isSelected ? "var(--sv-primary-strong)" : "var(--sv-text-strong)",
+    backgroundColor: state.isSelected ? "var(--sv-primary-surface)" : state.isFocused ? "var(--sv-primary-surface)" : "transparent",
+    cursor: "pointer",
+    ":active": {
+      backgroundColor: "var(--sv-primary-surface)"
+    }
+  })
+});
+const NewSelectControl = ({
+  label = "",
+  options = [],
+  helpText = "",
+  value = "",
+  disabled = false,
+  multiple = false,
+  onChange = () => {},
+  iconRight = null,
+  style = {}
+}) => {
+  // A native <select> can only render text, so options carrying JSX labels
+  // (badges, icons) go through react-select as well.
+  const hasRichLabels = options.some(option => option && typeof option.label !== "string");
+  if (multiple) {
+    const selected = Array.isArray(value) ? value.map(String) : [];
+    const selectedOptions = options.filter(o => selected.includes(o.value));
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      className: _NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].wrapper,
+      children: [label && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+        className: _NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].label,
+        children: label
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_select__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        isMulti: true,
+        options: options,
+        value: selectedOptions,
+        onChange: picked => onChange((picked || []).map(o => o.value)),
+        isDisabled: disabled,
+        placeholder: helpText || "Select...",
+        components: {
+          IndicatorSeparator: null,
+          DropdownIndicator
+        },
+        styles: reactSelectStyles(style)
+      })]
+    });
+  }
+  if (hasRichLabels) {
+    var _options$find;
+    const selectedOption = (_options$find = options.find(o => String(o.value) === String(value))) !== null && _options$find !== void 0 ? _options$find : null;
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      className: _NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].wrapper,
+      children: [label && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+        className: _NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].label,
+        children: label
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_select__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        options: options,
+        value: selectedOption,
+        onChange: picked => onChange(picked ? picked.value : ""),
+        isDisabled: disabled,
+        isSearchable: false,
+        placeholder: helpText || "Select...",
+        components: {
+          IndicatorSeparator: null,
+          DropdownIndicator
+        },
+        styles: reactSelectStyles(style)
+      })]
+    });
+  }
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+    className: _NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].wrapper,
+    children: [label && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+      className: _NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].label,
+      children: label
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      className: `${_NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].control} ${disabled ? _NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].disabled : ""}`,
+      style: style,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("select", {
+        className: _NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].native,
+        value: value !== null && value !== void 0 ? value : "",
+        onChange: e => onChange(e.target.value),
+        disabled: disabled,
+        children: [helpText && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+          value: "",
+          disabled: true,
+          children: helpText
+        }), options.map(option => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+          value: option.value,
+          children: option.label
+        }, option.value))]
+      }), iconRight ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+        className: _NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].icon,
+        children: iconRight
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+        className: _NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].caret,
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(Caret, {})
+      })]
+    })]
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (NewSelectControl);
+
+/***/ }),
+
 /***/ "./src/Components/Controls/PageActionButton.jsx":
 /*!******************************************************!*\
   !*** ./src/Components/Controls/PageActionButton.jsx ***!
@@ -176,226 +714,63 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PageActionButton.module.scss */ "./src/Components/Controls/PageActionButton.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
 
 
+
+// The one button primitive for the admin shell. Styling lives in the SCSS
+// module next door; `className` stays a pass-through for layout-only tweaks
+// from the call site (width, flex, alignment).
+
+const VARIANTS = {
+  primary: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].primary,
+  secondary: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].secondary,
+  danger: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].danger,
+  "danger-secondary": _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].dangerSecondary,
+  ghost: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].ghost,
+  "danger-ghost": _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].dangerGhost
+};
+const SIZES = {
+  md: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].md,
+  sm: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].sm,
+  xs: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].xs
+};
 const PageActionButton = ({
   text,
   icon,
   type = "primary",
-  // primary | secondary | danger
+  // primary | secondary | danger | danger-secondary | ghost | danger-ghost
   size = "md",
-  // md | sm
+  // md | sm | xs
   onAction,
   disabled = false,
+  fullWidth = false,
+  iconOnly = false,
+  ariaLabel,
   className = "",
   style = {},
   hidden
 }) => {
-  const baseClass = "servv_button";
-  const typeClass = `servv_button--${type}`;
-  const sizeClass = size === "sm" ? "servv_button--sm" : "servv_button--md";
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("button", {
+  const classes = [_PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].button, VARIANTS[type] || VARIANTS.primary, SIZES[size] || SIZES.md, fullWidth ? _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].fullWidth : "", iconOnly ? _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].iconOnly : "", className].filter(Boolean).join(" ");
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("button", {
     type: "button",
     onClick: onAction,
     disabled: disabled,
-    className: `${baseClass} ${typeClass} ${sizeClass} ${className} ${disabled ? "opacity-50 cursor-not-allowed" : ""}`,
+    "aria-label": ariaLabel,
+    className: classes,
     style: style,
-    children: [icon && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-      className: "mr-2 flex items-center",
+    children: [icon && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+      className: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].icon,
       children: icon
-    }), text]
-  });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PageActionButton);
-
-/***/ }),
-
-/***/ "./src/Components/Controls/SelectControl.jsx":
-/*!***************************************************!*\
-  !*** ./src/Components/Controls/SelectControl.jsx ***!
-  \***************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
-
-
-const SelectControl = ({
-  label = "",
-  options = [],
-  helpText = "",
-  selected = null,
-  value = null,
-  disabled = false,
-  onSelectChange = () => {},
-  onChange = () => {},
-  iconRight = null,
-  iconLeft = null,
-  style = {}
-}) => {
-  const [isOpen, setIsOpen] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const containerRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  const currentValue = value !== null ? value : selected;
-  const handleChange = val => {
-    onSelectChange(val);
-    onChange(val);
-  };
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (!isOpen) return;
-    const handleClickOutside = e => {
-      if (containerRef.current && !containerRef.current.contains(e.target)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isOpen]);
-
-  // Rich options: { key, label } where label may be JSX
-  const isRichOptions = options.length > 0 && options[0] !== null && typeof options[0] === "object" && "key" in options[0];
-  if (isRichOptions) {
-    const selectedOption = options.find(o => o.key === currentValue);
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-      className: "input-container-col",
-      ref: containerRef,
-      style: {
-        width: "100%",
-        position: "relative"
-      },
-      children: [label && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("label", {
-        className: "section-description",
-        children: label
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-        className: "select-control-with-icon-container",
-        style: {
-          width: "100%"
-        },
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("button", {
-          type: "button",
-          className: "select-control select-control-with-icon text-sm p-4",
-          style: {
-            width: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            cursor: disabled ? "not-allowed" : "pointer",
-            opacity: disabled ? 0.5 : 1,
-            background: "white",
-            border: "none",
-            textAlign: "left",
-            color: "#000000",
-            borderRadius: "5px",
-            padding: "5px",
-            ...style
-          },
-          disabled: disabled,
-          onClick: () => setIsOpen(o => !o),
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-            style: {
-              flex: 1,
-              color: "black"
-            },
-            children: selectedOption ? selectedOption.label : helpText
-          }), iconRight && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-            style: {
-              marginLeft: 8,
-              flexShrink: 0,
-              color: "black"
-            },
-            children: iconRight
-          })]
-        })
-      }), isOpen && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-        style: {
-          position: "absolute",
-          top: "100%",
-          left: 0,
-          right: 0,
-          zIndex: 200,
-          background: "white",
-          border: "1px solid #d5d7da",
-          borderRadius: "8px",
-          boxShadow: "0 4px 12px rgba(0,0,0,0.12)",
-          overflow: "hidden"
-        },
-        children: options.map(option => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-          style: {
-            padding: "12px 16px",
-            cursor: "pointer",
-            color: "#000000",
-            backgroundColor: option.key === currentValue ? "#f9fafb" : "white"
-          },
-          onMouseEnter: e => e.currentTarget.style.backgroundColor = "#f3f4f6",
-          onMouseLeave: e => e.currentTarget.style.backgroundColor = option.key === currentValue ? "#f9fafb" : "white",
-          onClick: () => {
-            handleChange(option.key);
-            setIsOpen(false);
-          },
-          children: option.label
-        }, option.key))
-      })]
-    });
-  }
-
-  // Legacy: plain string options
-  const renderOptions = () => {
-    if (options.length > 0) {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-        children: [helpText.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("option", {
-          value: "",
-          disabled: true,
-          selected: !currentValue,
-          children: helpText
-        }, ""), options.map(option => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("option", {
-          value: option,
-          selected: currentValue === option,
-          children: option
-        }, option))]
-      });
-    }
-  };
-  const responsiveStyle = {
-    maxWidth: "100%",
-    width: "100%",
-    boxSizing: "border-box",
-    ...style
-  };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-    className: "input-container-col",
-    style: {
-      width: "100%"
-    },
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("label", {
-      htmlFor: "timezone",
-      className: "section-description",
-      children: label
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-      className: "select-control-with-icon-container",
-      style: {
-        width: "100%"
-      },
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("select", {
-        name: "timezone",
-        id: "timezone-select",
-        className: "select-control select-control-with-icon text-sm p-4",
-        value: currentValue,
-        onChange: e => handleChange(e.target.value),
-        disabled: disabled,
-        style: responsiveStyle,
-        children: renderOptions()
-      }), iconRight !== null && iconRight]
+    }), !iconOnly && text && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+      className: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].label,
+      children: text
     })]
   });
 };
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (SelectControl);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PageActionButton);
 
 /***/ }),
 
@@ -449,30 +824,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utilities/settings */ "./src/utilities/settings.js");
-/* harmony import */ var _utilities_analytics__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utilities/analytics */ "./src/utilities/analytics.js");
-/* harmony import */ var _PageWrapper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./PageWrapper */ "./src/Components/Pages/PageWrapper.jsx");
-/* harmony import */ var _Containers_PageContent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Containers/PageContent */ "./src/Components/Containers/PageContent.jsx");
-/* harmony import */ var _Containers_PageHeader__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Containers/PageHeader */ "./src/Components/Containers/PageHeader.jsx");
+/* harmony import */ var _hooks_useCacheRefresh__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../hooks/useCacheRefresh */ "./src/hooks/useCacheRefresh.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utilities/settings */ "./src/utilities/settings.js");
+/* harmony import */ var _utilities_analytics__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utilities/analytics */ "./src/utilities/analytics.js");
+/* harmony import */ var _PageWrapper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./PageWrapper */ "./src/Components/Pages/PageWrapper.jsx");
+/* harmony import */ var _Containers_PageContent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Containers/PageContent */ "./src/Components/Containers/PageContent.jsx");
 /* harmony import */ var _Containers_TabsComponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Containers/TabsComponent */ "./src/Components/Containers/TabsComponent.jsx");
 /* harmony import */ var _Containers_BlockStack__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Containers/BlockStack */ "./src/Components/Containers/BlockStack.jsx");
 /* harmony import */ var _Containers_InlineStack__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Containers/InlineStack */ "./src/Components/Containers/InlineStack.jsx");
-/* harmony import */ var _Controls_SelectControl__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../Controls/SelectControl */ "./src/Components/Controls/SelectControl.jsx");
+/* harmony import */ var _Controls_NewSelectControl__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../Controls/NewSelectControl */ "./src/Components/Controls/NewSelectControl.jsx");
 /* harmony import */ var _Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../Controls/PageActionButton */ "./src/Components/Controls/PageActionButton.jsx");
 /* harmony import */ var reaviz__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! reaviz */ "./node_modules/reaviz/dist/index.js");
-/* harmony import */ var react_tailwindcss_datepicker__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react-tailwindcss-datepicker */ "./node_modules/react-tailwindcss-datepicker/dist/index.esm.js");
-/* harmony import */ var he__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! he */ "./node_modules/he/he.js");
-/* harmony import */ var he__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(he__WEBPACK_IMPORTED_MODULE_13__);
-/* harmony import */ var _widget_servicesShared_currencies__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../../../widget/servicesShared/currencies */ "./widget/servicesShared/currencies.js");
-/* harmony import */ var moment_timezone__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! moment-timezone */ "./node_modules/moment-timezone/index.js");
-/* harmony import */ var moment_timezone__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(moment_timezone__WEBPACK_IMPORTED_MODULE_15__);
-/* harmony import */ var _SpinnerLoader__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./SpinnerLoader */ "./src/Components/Pages/SpinnerLoader.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__);
-
-
+/* harmony import */ var _Controls_NewDatePickerControl__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../Controls/NewDatePickerControl */ "./src/Components/Controls/NewDatePickerControl.jsx");
+/* harmony import */ var moment_timezone__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! moment-timezone */ "./node_modules/moment-timezone/index.js");
+/* harmony import */ var moment_timezone__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(moment_timezone__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var _SpinnerLoader__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./SpinnerLoader */ "./src/Components/Pages/SpinnerLoader.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__);
 
 
 
@@ -490,12 +860,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const AnalyticsPage = () => {
-  const [loading, setLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [totalRevenue, setTotalRevenue] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0);
-  const [filteredByDateRevenue, setFilteredByDateRevenue] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
-  const [settings, setSettings] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({});
-  const [registrants, setRegistrants] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
-  const [registrantsTotal, setTotalRegistrants] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const [loading, setLoading] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
+  const [totalRevenue, setTotalRevenue] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(0);
+  const [filteredByDateRevenue, setFilteredByDateRevenue] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
+  const [settings, setSettings] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)({});
+  const [registrants, setRegistrants] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
+  const [registrantsTotal, setTotalRegistrants] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
   const tabsList = [{
     label: "Revenue",
     value: 0
@@ -509,14 +879,14 @@ const AnalyticsPage = () => {
     label: "Filters",
     value: 3
   }];
-  const [selectedTab, setSelectedTab] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0);
-  const [selectedMonth, setSelectedMonth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("");
-  const [selectedYear, setSelectedYear] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("");
-  const [isMonthSelected, setIsMonthSelected] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const [eventsStatistic, setEventsStatistic] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
-  const [filtersStatistic, setFiltersStatistic] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
-  const [filtersStatisticFilteredByDate, setFiltersStatisticFilteredByDate] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
-  const [revenueDates, setRevenueDates] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
+  const [selectedTab, setSelectedTab] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(0);
+  const [selectedMonth, setSelectedMonth] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)("");
+  const [selectedYear, setSelectedYear] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)("");
+  const [isMonthSelected, setIsMonthSelected] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
+  const [eventsStatistic, setEventsStatistic] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
+  const [filtersStatistic, setFiltersStatistic] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
+  const [filtersStatisticFilteredByDate, setFiltersStatisticFilteredByDate] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
+  const [revenueDates, setRevenueDates] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)({
     startDate: null,
     endDate: null
   });
@@ -545,7 +915,7 @@ const AnalyticsPage = () => {
   const loadSettings = async () => {
     setLoading(true);
     try {
-      const data = await (0,_utilities_settings__WEBPACK_IMPORTED_MODULE_1__.getSettings)();
+      const data = await (0,_utilities_settings__WEBPACK_IMPORTED_MODULE_2__.getSettings)();
       if (data) {
         setSettings(data);
       }
@@ -559,7 +929,7 @@ const AnalyticsPage = () => {
   const fetchTotalRevenue = async (from = null, to = null) => {
     setLoading(true);
     try {
-      const data = await (0,_utilities_analytics__WEBPACK_IMPORTED_MODULE_2__.getAnalyticsRevenue)(from, to);
+      const data = await (0,_utilities_analytics__WEBPACK_IMPORTED_MODULE_3__.getAnalyticsRevenue)(from, to);
       if (data) {
         if (!from && !to) {
           setTotalRevenue(data.total || 0);
@@ -574,14 +944,15 @@ const AnalyticsPage = () => {
   };
 
   // Registrants fetch
-  const fetchTotalRegistrants = async (month = null) => {
+  const fetchTotalRegistrants = async (month = null, forceTotal = false) => {
     setLoading(true);
     try {
-      const year = isMonthSelected || month ? selectedYear : null;
-      const monthIndex = isMonthSelected || month ? monthOptions.indexOf(selectedMonth) : null;
-      const data = await (0,_utilities_analytics__WEBPACK_IMPORTED_MODULE_2__.getAnalyticsRegistrants)(year, monthIndex);
+      const useMonth = !forceTotal && (isMonthSelected || month);
+      const year = useMonth ? selectedYear : null;
+      const monthIndex = useMonth ? monthOptions.indexOf(selectedMonth) : null;
+      const data = await (0,_utilities_analytics__WEBPACK_IMPORTED_MODULE_3__.getAnalyticsRegistrants)(year, monthIndex);
       if (data) {
-        if (!isMonthSelected && !month) {
+        if (!useMonth) {
           setTotalRegistrants(data);
         } else {
           setRegistrants(data);
@@ -594,7 +965,7 @@ const AnalyticsPage = () => {
   };
 
   // Month/year toggle for registrants/filters
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
     if (isMonthSelected) {
       if (selectedTab === 1) fetchTotalRegistrants(true);
       if (selectedTab === 3) fetchFiltersStatistic(true);
@@ -650,13 +1021,14 @@ const AnalyticsPage = () => {
   };
 
   // Filters analytics fetch (from your provided code)
-  const fetchFiltersStatistic = async month => {
+  const fetchFiltersStatistic = async (month = null, forceTotal = false) => {
     setLoading(true);
-    const year = isMonthSelected || month ? selectedYear : null;
-    const monthIndex = isMonthSelected || month ? monthOptions.indexOf(selectedMonth) : null;
-    const data = await (0,_utilities_analytics__WEBPACK_IMPORTED_MODULE_2__.getAnalyticsTypes)(year, monthIndex).catch(error => console.log(error));
+    const useMonth = !forceTotal && (isMonthSelected || month);
+    const year = useMonth ? selectedYear : null;
+    const monthIndex = useMonth ? monthOptions.indexOf(selectedMonth) : null;
+    const data = await (0,_utilities_analytics__WEBPACK_IMPORTED_MODULE_3__.getAnalyticsTypes)(year, monthIndex).catch(error => console.log(error));
     if (data) {
-      if (!isMonthSelected && !month) setFiltersStatistic(data);else setFiltersStatisticFilteredByDate(data);
+      if (!useMonth) setFiltersStatistic(data);else setFiltersStatisticFilteredByDate(data);
       setLoading(false);
       return data;
     }
@@ -675,7 +1047,7 @@ const AnalyticsPage = () => {
         happened,
         cancelled,
         active
-      } = await (0,_utilities_analytics__WEBPACK_IMPORTED_MODULE_2__.getAnalyticsEvents)();
+      } = await (0,_utilities_analytics__WEBPACK_IMPORTED_MODULE_3__.getAnalyticsEvents)();
       if (happened) statistic = {
         ...statistic,
         happened
@@ -782,21 +1154,21 @@ const AnalyticsPage = () => {
 
   // Pie chart block
   const renderPieBlock = (title, data) => {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
       className: "w-full md:w-1/2 lg:w-1/3 flex flex-col gap-4 min-w-0",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("h2", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("h2", {
         className: "font-semibold text-gray-700 text-lg border-b pb-2",
         children: title
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
         className: "w-full h-64 md:h-80 lg:h-96 min-w-0",
-        children: data ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(reaviz__WEBPACK_IMPORTED_MODULE_11__.PieChart, {
+        children: data ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(reaviz__WEBPACK_IMPORTED_MODULE_11__.PieChart, {
           id: title.toLowerCase(),
           height: "100%",
           data: data,
-          series: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(reaviz__WEBPACK_IMPORTED_MODULE_11__.PieArcSeries, {
+          series: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(reaviz__WEBPACK_IMPORTED_MODULE_11__.PieArcSeries, {
             colorScheme: ["#B692F6", "#7319C6", "#8217E5", "#9D49EC"]
           })
-        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("p", {
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("p", {
           className: "text-gray-500",
           children: [t("No data available for"), title.toLowerCase(), t(".")]
         })
@@ -810,15 +1182,15 @@ const AnalyticsPage = () => {
     const locationsData = getLocationsData();
     const languagesData = getLanguagesData();
     const categoriesData = getCategoriesData();
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
         className: "flex flex-col md:flex-row flex-wrap gap-8 w-full min-w-0",
         children: [categoriesData && renderPieBlock(t("Categories"), categoriesData), locationsData && renderPieBlock(t("Locations"), locationsData), languagesData && renderPieBlock(t("Languages"), languagesData), membersData && renderPieBlock(t("Members"), membersData)]
-      }), !membersData && !locationsData && !languagesData && !categoriesData && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+      }), !membersData && !locationsData && !languagesData && !categoriesData && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
         className: "w-full h-64 bg-gradient-to-b from-transparent to-[#ECE4F6] rounded-lg flex flex-col items-center justify-center",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
           className: "flex flex-col items-center justify-start",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("p", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("p", {
             children: t("You don’t have Filter Statistics yet.")
           })
         })
@@ -827,18 +1199,33 @@ const AnalyticsPage = () => {
   };
 
   // Revenue datepicker effect
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
     if (revenueDates.startDate && revenueDates.endDate) {
-      fetchTotalRevenue(moment_timezone__WEBPACK_IMPORTED_MODULE_15___default()(revenueDates.startDate).format("YYYY-MM-DD"), moment_timezone__WEBPACK_IMPORTED_MODULE_15___default()(revenueDates.endDate).format("YYYY-MM-DD"));
+      fetchTotalRevenue(moment_timezone__WEBPACK_IMPORTED_MODULE_13___default()(revenueDates.startDate).format("YYYY-MM-DD"), moment_timezone__WEBPACK_IMPORTED_MODULE_13___default()(revenueDates.endDate).format("YYYY-MM-DD"));
     }
   }, [revenueDates]);
+  (0,_hooks_useCacheRefresh__WEBPACK_IMPORTED_MODULE_0__["default"])(["analytics"], async () => {
+    await fetchTotalRevenue();
+    if (revenueDates.startDate && revenueDates.endDate) {
+      await fetchTotalRevenue(moment_timezone__WEBPACK_IMPORTED_MODULE_13___default()(revenueDates.startDate).format("YYYY-MM-DD"), moment_timezone__WEBPACK_IMPORTED_MODULE_13___default()(revenueDates.endDate).format("YYYY-MM-DD"));
+    }
+    if (registrantsTotal || selectedTab === 1) {
+      await fetchTotalRegistrants(null, true);
+      if (isMonthSelected) await fetchTotalRegistrants(true);
+    }
+    if (eventsStatistic || selectedTab === 2) await fetchEventsAnalytics();
+    if (filtersStatistic || selectedTab === 3) {
+      await fetchFiltersStatistic(null, true);
+      if (isMonthSelected) await fetchFiltersStatistic(true);
+    }
+  });
 
   // Initial load
   const getData = async () => {
     await fetchTotalRevenue();
     await loadSettings();
   };
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
     getData();
   }, []);
   const monthOptions = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -847,196 +1234,169 @@ const AnalyticsPage = () => {
     unique,
     total
   } = getRegistrantsTotal();
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_PageWrapper__WEBPACK_IMPORTED_MODULE_3__["default"], {
+
+  // Month + year selects with a Reset, shown above both the registrants and the
+  // filters charts. The two differ only in how the Reset aligns in the row.
+  const renderPeriodFilters = (resetAlign, rowAlign = "") => {
+    const periodOptions = values => values.map(option => ({
+      value: option,
+      label: String(option)
+    }));
+    const markSelected = handler => val => {
+      handler(val);
+      setIsMonthSelected(true);
+    };
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(_Containers_InlineStack__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      gap: 4,
+      className: `flex-col sm:flex-row w-full ${rowAlign} min-w-0`,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+        className: "w-full sm:w-48",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Controls_NewSelectControl__WEBPACK_IMPORTED_MODULE_9__["default"], {
+          options: periodOptions(monthOptions),
+          value: selectedMonth,
+          onChange: markSelected(handleMonthSelect)
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+        className: "w-full sm:w-48",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Controls_NewSelectControl__WEBPACK_IMPORTED_MODULE_9__["default"], {
+          options: periodOptions(yearOptions),
+          value: selectedYear,
+          onChange: markSelected(handleYearSelect)
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_10__["default"], {
+        text: "Reset",
+        icon: null,
+        type: "primary",
+        className: `p-3 ${resetAlign} w-full sm:w-auto`,
+        onAction: () => {
+          setIsMonthSelected(false);
+          setSelectedMonth("");
+          setSelectedYear("");
+        }
+      })]
+    });
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_PageWrapper__WEBPACK_IMPORTED_MODULE_4__["default"], {
     loading: false,
     withBackground: true,
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
       className: "dashboard-card",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
         className: "servv-dashboard-header",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
           className: "dashboard-heading",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("h1", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("h1", {
             className: "dashboard-title",
             children: `Analytics`
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("p", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("p", {
             className: "dashboard-description mt-4",
             children: "Access analytics for your revenue, registrants, events, and filters"
           })]
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_Containers_PageContent__WEBPACK_IMPORTED_MODULE_4__["default"], {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)(_Containers_BlockStack__WEBPACK_IMPORTED_MODULE_7__["default"], {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Containers_PageContent__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(_Containers_BlockStack__WEBPACK_IMPORTED_MODULE_7__["default"], {
           gap: 8,
           cardsLayout: true,
           className: "w-full min-w-0",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
             className: "w-full min-w-0 overflow-x-auto",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_Containers_TabsComponent__WEBPACK_IMPORTED_MODULE_6__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Containers_TabsComponent__WEBPACK_IMPORTED_MODULE_6__["default"], {
               tabsList: tabsList,
-              selected: selectedTab,
+              value: selectedTab,
               handleSelectChange: handleSelectTabChange,
               fullWidth: true
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)(_SpinnerLoader__WEBPACK_IMPORTED_MODULE_16__["default"], {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(_SpinnerLoader__WEBPACK_IMPORTED_MODULE_14__["default"], {
             isLoading: loading,
-            children: [selectedTab === 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)(_Containers_BlockStack__WEBPACK_IMPORTED_MODULE_7__["default"], {
+            children: [selectedTab === 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(_Containers_BlockStack__WEBPACK_IMPORTED_MODULE_7__["default"], {
               gap: 8,
               className: "w-full min-w-0",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
                 className: "flex flex-col md:flex-row justify-end items-end min-w-0 w-full",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
                   className: "w-full md:w-72",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(react_tailwindcss_datepicker__WEBPACK_IMPORTED_MODULE_12__["default"], {
-                    displayFormat: "MMM DD, YYYY",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Controls_NewDatePickerControl__WEBPACK_IMPORTED_MODULE_12__["default"], {
                     value: revenueDates,
-                    placeholder: "Select Dates",
-                    inputClassName: "input-control section-description text-left w-full shadow-sm border-solid border border-gray-300 bg-white",
-                    onChange: newValue => setRevenueDates(newValue)
+                    label: "Select Dates",
+                    fullWidth: true,
+                    onChange: setRevenueDates
                   })
                 })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
                 className: "w-full h-64 md:h-80 bg-gradient-to-b from-transparent to-[#ECE4F6] rounded-lg flex flex-col items-center justify-center min-w-0",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
                   className: "flex flex-col items-center justify-start",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("h2", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("h2", {
                     className: "font-semibold text-brand-700 text-display-md",
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(reaviz__WEBPACK_IMPORTED_MODULE_11__.Count, {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(reaviz__WEBPACK_IMPORTED_MODULE_11__.Count, {
                       from: 0,
                       to: !revenueDates.startDate ? totalRevenue || 0 : filteredByDateRevenue || 0,
                       className: "font-semibold text-brand-700 text-display-md"
                     })
-                  }), totalRevenue === 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("p", {
+                  }), totalRevenue === 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("p", {
                     children: t("You haven’t made any Sales yet.")
                   })]
                 })
               })]
-            }), selectedTab === 1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)(_Containers_BlockStack__WEBPACK_IMPORTED_MODULE_7__["default"], {
+            }), selectedTab === 1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(_Containers_BlockStack__WEBPACK_IMPORTED_MODULE_7__["default"], {
               gap: 8,
               className: "w-full min-w-0",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)(_Containers_InlineStack__WEBPACK_IMPORTED_MODULE_8__["default"], {
-                gap: 4,
-                className: "flex-col sm:flex-row w-full items-start min-w-0",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
-                  className: "w-full sm:w-48",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_Controls_SelectControl__WEBPACK_IMPORTED_MODULE_9__["default"], {
-                    options: monthOptions,
-                    selected: selectedMonth,
-                    onSelectChange: val => {
-                      handleMonthSelect(val);
-                      setIsMonthSelected(true);
-                    }
-                  })
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
-                  className: "w-full sm:w-48",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_Controls_SelectControl__WEBPACK_IMPORTED_MODULE_9__["default"], {
-                    options: yearOptions,
-                    selected: selectedYear,
-                    onSelectChange: val => {
-                      handleYearSelect(val);
-                      setIsMonthSelected(true);
-                    }
-                  })
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_10__["default"], {
-                  text: "Reset",
-                  icon: null,
-                  type: "primary",
-                  className: "p-3 self-center w-full sm:w-auto",
-                  onAction: () => {
-                    setIsMonthSelected(false);
-                    setSelectedMonth("");
-                    setSelectedYear("");
-                  }
-                })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+              children: [renderPeriodFilters("self-center", "items-start"), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
                 className: "w-full h-64 md:h-80 bg-gradient-to-b from-transparent to-[#ECE4F6] rounded-lg flex flex-col items-center justify-center min-w-0",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("h2", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("h2", {
                   className: "font-semibold text-brand-700 text-3xl",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(reaviz__WEBPACK_IMPORTED_MODULE_11__.Count, {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(reaviz__WEBPACK_IMPORTED_MODULE_11__.Count, {
                     from: 0,
                     to: unique + total,
                     className: "font-semibold"
                   }), ` Registrants`]
-                }), unique + total === 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("p", {
+                }), unique + total === 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("p", {
                   className: "text-gray-500 mt-2",
                   children: t("You don’t have any Registrants yet.")
                 })]
               })]
-            }), selectedTab === 2 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.Fragment, {
-              children: eventsStatistic ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+            }), selectedTab === 2 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.Fragment, {
+              children: eventsStatistic ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
                 className: "w-full h-64 bg-gradient-to-b from-transparent to-[#ECE4F6] rounded-lg flex flex-col md:flex-row items-center justify-between p-4 md:p-8 gap-4 min-w-0",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
                   className: "w-full md:w-1/3 flex flex-col items-center gap-2 min-w-0",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("h2", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("h2", {
                     className: "font-semibold text-brand-700 text-lg",
                     children: t("Active Events")
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(reaviz__WEBPACK_IMPORTED_MODULE_11__.Count, {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(reaviz__WEBPACK_IMPORTED_MODULE_11__.Count, {
                     from: 0,
                     to: getActiveEvents(),
                     className: "font-semibold text-brand-700 text-3xl"
                   })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
                   className: "w-full md:w-1/3 flex flex-col items-center gap-2 min-w-0",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("h2", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("h2", {
                     className: "font-semibold text-brand-700 text-lg",
                     children: t("Events Happened")
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(reaviz__WEBPACK_IMPORTED_MODULE_11__.Count, {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(reaviz__WEBPACK_IMPORTED_MODULE_11__.Count, {
                     from: 0,
                     to: getHappenedEvents(),
                     className: "font-semibold text-brand-700 text-3xl"
                   })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
                   className: "w-full md:w-1/3 flex flex-col items-center gap-2 min-w-0",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("h2", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("h2", {
                     className: "font-semibold text-brand-700 text-lg",
                     children: t("Events Cancelled")
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(reaviz__WEBPACK_IMPORTED_MODULE_11__.Count, {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(reaviz__WEBPACK_IMPORTED_MODULE_11__.Count, {
                     from: 0,
                     to: getCanceledEvents(),
                     className: "font-semibold text-brand-700 text-3xl"
                   })]
                 })]
-              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
                 className: "w-full h-64 flex items-center justify-center text-gray-500 min-w-0",
                 children: t("No event analytics to display.")
               })
-            }), selectedTab === 3 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)(_Containers_BlockStack__WEBPACK_IMPORTED_MODULE_7__["default"], {
+            }), selectedTab === 3 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(_Containers_BlockStack__WEBPACK_IMPORTED_MODULE_7__["default"], {
               gap: 8,
               className: "w-full min-w-0",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)(_Containers_InlineStack__WEBPACK_IMPORTED_MODULE_8__["default"], {
-                gap: 4,
-                className: "flex-col sm:flex-row w-full min-w-0",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
-                  className: "w-full sm:w-48",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_Controls_SelectControl__WEBPACK_IMPORTED_MODULE_9__["default"], {
-                    options: monthOptions,
-                    selected: selectedMonth,
-                    onSelectChange: val => {
-                      handleMonthSelect(val);
-                      setIsMonthSelected(true);
-                    }
-                  })
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
-                  className: "w-full sm:w-48",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_Controls_SelectControl__WEBPACK_IMPORTED_MODULE_9__["default"], {
-                    options: yearOptions,
-                    selected: selectedYear,
-                    onSelectChange: val => {
-                      handleYearSelect(val);
-                      setIsMonthSelected(true);
-                    }
-                  })
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_10__["default"], {
-                  text: "Reset",
-                  icon: null,
-                  type: "primary",
-                  className: "p-[0.75rem] self-end w-full sm:w-auto",
-                  onAction: () => {
-                    setIsMonthSelected(false);
-                    setSelectedMonth("");
-                    setSelectedYear("");
-                  }
-                })]
-              }), filtersStatistic && renderFiltersStatistic()]
+              children: [renderPeriodFilters("self-end"), filtersStatistic && renderFiltersStatistic()]
             })]
           })]
         })
@@ -1062,42 +1422,41 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Menu_Spinner__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Menu/Spinner */ "./src/Components/Menu/Spinner.jsx");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-4WY6JWTD.mjs");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _PageWrapper_module_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./PageWrapper.module.scss */ "./src/Components/Pages/PageWrapper.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__);
 
 
 
 
+
+// `flush` drops the wrapper's own side padding for pages that already frame
+// themselves with <PageContent>, so the reference's 32px gutter is not doubled.
 
 const PageWrapper = props => {
-  const location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_4__.useLocation)();
+  const useNativeNavigation = Boolean(window.servvData?.nativeAdmin);
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
     if (window.Intercom) {
-      if (location !== "/support") {
-        window.Intercom("update", {
-          hide_default_launcher: true
-        });
-      } else {
-        window.Intercom("update", {
-          hide_default_launcher: true
-        });
-      }
+      window.Intercom("update", {
+        hide_default_launcher: true
+      });
     }
   }, []);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, {
-    children: [props.withBackground && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-      className: "fixed inset-0 bg-[#F5F5F5]"
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-      className: "w-full relative pl-4 flex flex-col min-h-0",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        className: "absolute inset-0 flex items-center justify-center pointer-events-none",
-        children: props.loading && !props.withoutSpinner && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_Menu_Spinner__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, {
+    children: [props.withBackground && !useNativeNavigation && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+      className: _PageWrapper_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].backdrop
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      className: [_PageWrapper_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].root, props.flush ? "" : _PageWrapper_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].gutterLeft].filter(Boolean).join(" "),
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+        className: _PageWrapper_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].spinner,
+        children: props.loading && !props.withoutSpinner && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_Menu_Spinner__WEBPACK_IMPORTED_MODULE_2__["default"], {
           loading: true
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-        className: `flex flex-col flex-1 w-full pr-4 max-w-full min-w-0 min-h-0 overflow-visible ${props.loading ? "loading" : ""}`,
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_toastify__WEBPACK_IMPORTED_MODULE_0__.ToastContainer, {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        className: [_PageWrapper_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].content, props.flush ? "" : _PageWrapper_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].gutterRight,
+        // `loading` is a legacy global (input.css) blur, not a module class.
+        props.loading ? "loading" : ""].filter(Boolean).join(" "),
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_toastify__WEBPACK_IMPORTED_MODULE_0__.ToastContainer, {
           position: "bottom-right"
         }), props.children]
       })]
@@ -1121,24 +1480,29 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Menu_Spinner__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Menu/Spinner */ "./src/Components/Menu/Spinner.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _SpinnerLoader_module_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SpinnerLoader.module.scss */ "./src/Components/Pages/SpinnerLoader.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__);
 
 
+
+
+// `customStyling` is a pass-through for the overlay's box — call sites use it
+// to give the spinner a height when there are no children to cover.
 
 const SpinnerLoader = ({
   isLoading,
   children,
-  customStyling
+  customStyling = ""
 }) => {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-    className: "relative",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-      className: isLoading ? "blur-sm pointer-events-none" : "",
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+    className: _SpinnerLoader_module_scss__WEBPACK_IMPORTED_MODULE_2__["default"].root,
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+      className: isLoading ? _SpinnerLoader_module_scss__WEBPACK_IMPORTED_MODULE_2__["default"].blurred : "",
       children: children
-    }), isLoading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-      className: `absolute inset-0 flex items-center justify-center ${customStyling}`,
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_Menu_Spinner__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    }), isLoading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+      className: [_SpinnerLoader_module_scss__WEBPACK_IMPORTED_MODULE_2__["default"].overlay, customStyling].filter(Boolean).join(" "),
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_Menu_Spinner__WEBPACK_IMPORTED_MODULE_1__["default"], {
         loading: true
       })
     })]
@@ -1161,7 +1525,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   getAnalyticsRevenue: () => (/* binding */ getAnalyticsRevenue),
 /* harmony export */   getAnalyticsTypes: () => (/* binding */ getAnalyticsTypes)
 /* harmony export */ });
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
+/* harmony import */ var _requestCache__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./requestCache */ "./src/utilities/requestCache.js");
+/* harmony import */ var _adminApi__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./adminApi */ "./src/utilities/adminApi.js");
+
 
 const headers = () => ({
   "X-WP-Nonce": servvData.nonce
@@ -1169,7 +1535,7 @@ const headers = () => ({
 const getAnalyticsRevenue = async (from = null, to = null) => {
   let url = "/wp-json/servv-plugin/v1/analytics/revenue";
   if (from && to) url += `?from=${from}&to=${to}`;
-  const response = await axios__WEBPACK_IMPORTED_MODULE_0__["default"].get(url, {
+  const response = await _adminApi__WEBPACK_IMPORTED_MODULE_1__["default"].get(url, {
     headers: headers()
   });
   return response.data;
@@ -1177,7 +1543,7 @@ const getAnalyticsRevenue = async (from = null, to = null) => {
 const getAnalyticsRegistrants = async (year = null, month = null) => {
   let url = "/wp-json/servv-plugin/v1/analytics/registrants";
   if (year != null && month != null) url += `?date_year=${year}&date_month=${month}`;
-  const response = await axios__WEBPACK_IMPORTED_MODULE_0__["default"].get(url, {
+  const response = await _adminApi__WEBPACK_IMPORTED_MODULE_1__["default"].get(url, {
     headers: headers()
   });
   return response.data;
@@ -1185,19 +1551,21 @@ const getAnalyticsRegistrants = async (year = null, month = null) => {
 const getAnalyticsTypes = async (year = null, month = null) => {
   let url = "/wp-json/servv-plugin/v1/analytics/types";
   if (year != null && month != null) url += `?date_year=${year}&date_month=${month}`;
-  const response = await axios__WEBPACK_IMPORTED_MODULE_0__["default"].get(url, {
+  const response = await _adminApi__WEBPACK_IMPORTED_MODULE_1__["default"].get(url, {
     headers: headers()
   });
   return response.data;
 };
 const getAnalyticsEvents = async () => {
-  const [happened, cancelled, active] = await Promise.all([axios__WEBPACK_IMPORTED_MODULE_0__["default"].get("/wp-json/servv-plugin/v1/analytics/happened", {
+  const version = (0,_requestCache__WEBPACK_IMPORTED_MODULE_0__.resourceVersion)("analytics");
+  const [happened, cancelled, active] = await Promise.all([_adminApi__WEBPACK_IMPORTED_MODULE_1__["default"].get("/wp-json/servv-plugin/v1/analytics/happened", {
     headers: headers()
-  }), axios__WEBPACK_IMPORTED_MODULE_0__["default"].get("/wp-json/servv-plugin/v1/analytics/cancelled", {
+  }), _adminApi__WEBPACK_IMPORTED_MODULE_1__["default"].get("/wp-json/servv-plugin/v1/analytics/cancelled", {
     headers: headers()
-  }), axios__WEBPACK_IMPORTED_MODULE_0__["default"].get("/wp-json/servv-plugin/v1/analytics/active", {
+  }), _adminApi__WEBPACK_IMPORTED_MODULE_1__["default"].get("/wp-json/servv-plugin/v1/analytics/active", {
     headers: headers()
   })]);
+  if (version !== (0,_requestCache__WEBPACK_IMPORTED_MODULE_0__.resourceVersion)("analytics")) return getAnalyticsEvents();
   return {
     happened: happened.data,
     cancelled: cancelled.data,
@@ -1207,494 +1575,140 @@ const getAnalyticsEvents = async () => {
 
 /***/ }),
 
-/***/ "./widget/servicesShared/currencies.js":
-/*!*********************************************!*\
-  !*** ./widget/servicesShared/currencies.js ***!
-  \*********************************************/
+/***/ "./src/Components/Containers/BlockStack.module.scss":
+/*!**********************************************************!*\
+  !*** ./src/Components/Containers/BlockStack.module.scss ***!
+  \**********************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   currenciesList: () => (/* binding */ currenciesList),
-/* harmony export */   getCurrencySymbol: () => (/* binding */ getCurrencySymbol)
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-const currenciesList = [{
-  currency: 'Albania Lek',
-  abbreviation: 'ALL',
-  symbol: '&#76;&#101;&#107;'
-}, {
-  currency: 'Afghanistan Afghani',
-  abbreviation: 'AFN',
-  symbol: '&#1547;'
-}, {
-  currency: 'Argentina Peso',
-  abbreviation: 'ARS',
-  symbol: '&#36;'
-}, {
-  currency: 'Aruba Guilder',
-  abbreviation: 'AWG',
-  symbol: '&#402;'
-}, {
-  currency: 'Australia Dollar',
-  abbreviation: 'AUD',
-  symbol: '&#36;'
-}, {
-  currency: 'Azerbaijan New Manat',
-  abbreviation: 'AZN',
-  symbol: '&#1084;&#1072;&#1085;'
-}, {
-  currency: 'Bahamas Dollar',
-  abbreviation: 'BSD',
-  symbol: '&#36;'
-}, {
-  currency: 'Barbados Dollar',
-  abbreviation: 'BBD',
-  symbol: '&#36;'
-}, {
-  currency: 'Belarus Ruble',
-  abbreviation: 'BYR',
-  symbol: '&#112;&#46;'
-}, {
-  currency: 'Belize Dollar',
-  abbreviation: 'BZD',
-  symbol: '&#66;&#90;&#36;'
-}, {
-  currency: 'Bermuda Dollar',
-  abbreviation: 'BMD',
-  symbol: '&#36;'
-}, {
-  currency: 'Bolivia Boliviano',
-  abbreviation: 'BOB',
-  symbol: '&#36;&#98;'
-}, {
-  currency: 'Bosnia and Herzegovina Convertible Marka',
-  abbreviation: 'BAM',
-  symbol: '&#75;&#77;'
-}, {
-  currency: 'Botswana Pula',
-  abbreviation: 'BWP',
-  symbol: '&#80;'
-}, {
-  currency: 'Bulgaria Lev',
-  abbreviation: 'BGN',
-  symbol: '&#1083;&#1074;'
-}, {
-  currency: 'Brazil Real',
-  abbreviation: 'BRL',
-  symbol: '&#82;&#36;'
-}, {
-  currency: 'Brunei Darussalam Dollar',
-  abbreviation: 'BND',
-  symbol: '&#36;'
-}, {
-  currency: 'Cambodia Riel',
-  abbreviation: 'KHR',
-  symbol: '&#6107;'
-}, {
-  currency: 'Canada Dollar',
-  abbreviation: 'CAD',
-  symbol: '&#36;'
-}, {
-  currency: 'Cayman Islands Dollar',
-  abbreviation: 'KYD',
-  symbol: '&#36;'
-}, {
-  currency: 'Chile Peso',
-  abbreviation: 'CLP',
-  symbol: '&#36;'
-}, {
-  currency: 'China Yuan Renminbi',
-  abbreviation: 'CNY',
-  symbol: '&#165;'
-}, {
-  currency: 'Colombia Peso',
-  abbreviation: 'COP',
-  symbol: '&#36;'
-}, {
-  currency: 'Costa Rica Colon',
-  abbreviation: 'CRC',
-  symbol: '&#8353;'
-}, {
-  currency: 'Croatia Kuna',
-  abbreviation: 'HRK',
-  symbol: '&#107;&#110;'
-}, {
-  currency: 'Cuba Peso',
-  abbreviation: 'CUP',
-  symbol: '&#8369;'
-}, {
-  currency: 'Czech Republic Koruna',
-  abbreviation: 'CZK',
-  symbol: '&#75;&#269;'
-}, {
-  currency: 'Denmark Krone',
-  abbreviation: 'DKK',
-  symbol: '&#107;&#114;'
-}, {
-  currency: 'Dominican Republic Peso',
-  abbreviation: 'DOP',
-  symbol: '&#82;&#68;&#36;'
-}, {
-  currency: 'East Caribbean Dollar',
-  abbreviation: 'XCD',
-  symbol: '&#36;'
-}, {
-  currency: 'Egypt Pound',
-  abbreviation: 'EGP',
-  symbol: '&#163;'
-}, {
-  currency: 'El Salvador Colon',
-  abbreviation: 'SVC',
-  symbol: '&#36;'
-}, {
-  currency: 'Estonia Kroon',
-  abbreviation: 'EEK',
-  symbol: '&#107;&#114;'
-}, {
-  currency: 'Euro Member Countries',
-  abbreviation: 'EUR',
-  symbol: '&#8364;'
-}, {
-  currency: 'Falkland Islands (Malvinas) Pound',
-  abbreviation: 'FKP',
-  symbol: '&#163;'
-}, {
-  currency: 'Fiji Dollar',
-  abbreviation: 'FJD',
-  symbol: '&#36;'
-}, {
-  currency: 'Ghana Cedis',
-  abbreviation: 'GHC',
-  symbol: '&#162;'
-}, {
-  currency: 'Gibraltar Pound',
-  abbreviation: 'GIP',
-  symbol: '&#163;'
-}, {
-  currency: 'Guatemala Quetzal',
-  abbreviation: 'GTQ',
-  symbol: '&#81;'
-}, {
-  currency: 'Guernsey Pound',
-  abbreviation: 'GGP',
-  symbol: '&#163;'
-}, {
-  currency: 'Guyana Dollar',
-  abbreviation: 'GYD',
-  symbol: '&#36;'
-}, {
-  currency: 'Honduras Lempira',
-  abbreviation: 'HNL',
-  symbol: '&#76;'
-}, {
-  currency: 'Hong Kong Dollar',
-  abbreviation: 'HKD',
-  symbol: '&#36;'
-}, {
-  currency: 'Hungary Forint',
-  abbreviation: 'HUF',
-  symbol: '&#70;&#116;'
-}, {
-  currency: 'Iceland Krona',
-  abbreviation: 'ISK',
-  symbol: '&#107;&#114;'
-}, {
-  currency: 'India Rupee',
-  abbreviation: 'INR',
-  symbol: '₹'
-}, {
-  currency: 'Indonesia Rupiah',
-  abbreviation: 'IDR',
-  symbol: '&#82;&#112;'
-}, {
-  currency: 'Iran Rial',
-  abbreviation: 'IRR',
-  symbol: '&#65020;'
-}, {
-  currency: 'Isle of Man Pound',
-  abbreviation: 'IMP',
-  symbol: '&#163;'
-}, {
-  currency: 'Israel Shekel',
-  abbreviation: 'ILS',
-  symbol: '&#8362;'
-}, {
-  currency: 'Jamaica Dollar',
-  abbreviation: 'JMD',
-  symbol: '&#74;&#36;'
-}, {
-  currency: 'Japan Yen',
-  abbreviation: 'JPY',
-  symbol: '&#165;'
-}, {
-  currency: 'Jersey Pound',
-  abbreviation: 'JEP',
-  symbol: '&#163;'
-}, {
-  currency: 'Kazakhstan Tenge',
-  abbreviation: 'KZT',
-  symbol: '&#1083;&#1074;'
-}, {
-  currency: 'Korea (North) Won',
-  abbreviation: 'KPW',
-  symbol: '&#8361;'
-}, {
-  currency: 'Korea (South) Won',
-  abbreviation: 'KRW',
-  symbol: '&#8361;'
-}, {
-  currency: 'Kyrgyzstan Som',
-  abbreviation: 'KGS',
-  symbol: '&#1083;&#1074;'
-}, {
-  currency: 'Laos Kip',
-  abbreviation: 'LAK',
-  symbol: '&#8365;'
-}, {
-  currency: 'Latvia Lat',
-  abbreviation: 'LVL',
-  symbol: '&#76;&#115;'
-}, {
-  currency: 'Lebanon Pound',
-  abbreviation: 'LBP',
-  symbol: '&#163;'
-}, {
-  currency: 'Liberia Dollar',
-  abbreviation: 'LRD',
-  symbol: '&#36;'
-}, {
-  currency: 'Lithuania Litas',
-  abbreviation: 'LTL',
-  symbol: '&#76;&#116;'
-}, {
-  currency: 'Macedonia Denar',
-  abbreviation: 'MKD',
-  symbol: '&#1076;&#1077;&#1085;'
-}, {
-  currency: 'Malaysia Ringgit',
-  abbreviation: 'MYR',
-  symbol: '&#82;&#77;'
-}, {
-  currency: 'Mauritius Rupee',
-  abbreviation: 'MUR',
-  symbol: '&#8360;'
-}, {
-  currency: 'Mexico Peso',
-  abbreviation: 'MXN',
-  symbol: '&#36;'
-}, {
-  currency: 'Mongolia Tughrik',
-  abbreviation: 'MNT',
-  symbol: '&#8366;'
-}, {
-  currency: 'Mozambique Metical',
-  abbreviation: 'MZN',
-  symbol: '&#77;&#84;'
-}, {
-  currency: 'Namibia Dollar',
-  abbreviation: 'NAD',
-  symbol: '&#36;'
-}, {
-  currency: 'Nepal Rupee',
-  abbreviation: 'NPR',
-  symbol: '&#8360;'
-}, {
-  currency: 'Netherlands Antilles Guilder',
-  abbreviation: 'ANG',
-  symbol: '&#402;'
-}, {
-  currency: 'New Zealand Dollar',
-  abbreviation: 'NZD',
-  symbol: '&#36;'
-}, {
-  currency: 'Nicaragua Cordoba',
-  abbreviation: 'NIO',
-  symbol: '&#67;&#36;'
-}, {
-  currency: 'Nigeria Naira',
-  abbreviation: 'NGN',
-  symbol: '&#8358;'
-}, {
-  currency: 'Korea (North) Won',
-  abbreviation: 'KPW',
-  symbol: '&#8361;'
-}, {
-  currency: 'Norway Krone',
-  abbreviation: 'NOK',
-  symbol: '&#107;&#114;'
-}, {
-  currency: 'Oman Rial',
-  abbreviation: 'OMR',
-  symbol: '&#65020;'
-}, {
-  currency: 'Pakistan Rupee',
-  abbreviation: 'PKR',
-  symbol: '&#8360;'
-}, {
-  currency: 'Panama Balboa',
-  abbreviation: 'PAB',
-  symbol: '&#66;&#47;&#46;'
-}, {
-  currency: 'Paraguay Guarani',
-  abbreviation: 'PYG',
-  symbol: '&#71;&#115;'
-}, {
-  currency: 'Peru Nuevo Sol',
-  abbreviation: 'PEN',
-  symbol: '&#83;&#47;&#46;'
-}, {
-  currency: 'Philippines Peso',
-  abbreviation: 'PHP',
-  symbol: '&#8369;'
-}, {
-  currency: 'Poland Zloty',
-  abbreviation: 'PLN',
-  symbol: '&#122;&#322;'
-}, {
-  currency: 'Qatar Riyal',
-  abbreviation: 'QAR',
-  symbol: '&#65020;'
-}, {
-  currency: 'Romania New Leu',
-  abbreviation: 'RON',
-  symbol: '&#108;&#101;&#105;'
-}, {
-  currency: 'Russia Ruble',
-  abbreviation: 'RUB',
-  symbol: '&#1088;&#1091;&#1073;'
-}, {
-  currency: 'Saint Helena Pound',
-  abbreviation: 'SHP',
-  symbol: '&#163;'
-}, {
-  currency: 'Saudi Arabia Riyal',
-  abbreviation: 'SAR',
-  symbol: '&#65020;'
-}, {
-  currency: 'Serbia Dinar',
-  abbreviation: 'RSD',
-  symbol: '&#1044;&#1080;&#1085;&#46;'
-}, {
-  currency: 'Seychelles Rupee',
-  abbreviation: 'SCR',
-  symbol: '&#8360;'
-}, {
-  currency: 'Singapore Dollar',
-  abbreviation: 'SGD',
-  symbol: '&#36;'
-}, {
-  currency: 'Solomon Islands Dollar',
-  abbreviation: 'SBD',
-  symbol: '&#36;'
-}, {
-  currency: 'Somalia Shilling',
-  abbreviation: 'SOS',
-  symbol: '&#83;'
-}, {
-  currency: 'South Africa Rand',
-  abbreviation: 'ZAR',
-  symbol: '&#82;'
-}, {
-  currency: 'Korea (South) Won',
-  abbreviation: 'KRW',
-  symbol: '&#8361;'
-}, {
-  currency: 'Sri Lanka Rupee',
-  abbreviation: 'LKR',
-  symbol: '&#8360;'
-}, {
-  currency: 'Sweden Krona',
-  abbreviation: 'SEK',
-  symbol: '&#107;&#114;'
-}, {
-  currency: 'Switzerland Franc',
-  abbreviation: 'CHF',
-  symbol: '&#67;&#72;&#70;'
-}, {
-  currency: 'Suriname Dollar',
-  abbreviation: 'SRD',
-  symbol: '&#36;'
-}, {
-  currency: 'Syria Pound',
-  abbreviation: 'SYP',
-  symbol: '&#163;'
-}, {
-  currency: 'Taiwan New Dollar',
-  abbreviation: 'TWD',
-  symbol: '&#78;&#84;&#36;'
-}, {
-  currency: 'Thailand Baht',
-  abbreviation: 'THB',
-  symbol: '&#3647;'
-}, {
-  currency: 'Trinidad and Tobago Dollar',
-  abbreviation: 'TTD',
-  symbol: '&#84;&#84;&#36;'
-}, {
-  currency: 'Turkey Lira',
-  abbreviation: 'TRY',
-  symbol: '₺'
-}, {
-  currency: 'Turkey Lira',
-  abbreviation: 'TRL',
-  symbol: '&#8356;'
-}, {
-  currency: 'Tuvalu Dollar',
-  abbreviation: 'TVD',
-  symbol: '&#36;'
-}, {
-  currency: 'Ukraine Hryvna',
-  abbreviation: 'UAH',
-  symbol: '&#8372;'
-}, {
-  currency: 'United Kingdom Pound',
-  abbreviation: 'GBP',
-  symbol: '&#163;'
-}, {
-  currency: 'United States Dollar',
-  abbreviation: 'USD',
-  symbol: '&#36;'
-}, {
-  currency: 'Uruguay Peso',
-  abbreviation: 'UYU',
-  symbol: '&#36;&#85;'
-}, {
-  currency: 'Uzbekistan Som',
-  abbreviation: 'UZS',
-  symbol: '&#1083;&#1074;'
-}, {
-  currency: 'Venezuela Bolivar',
-  abbreviation: 'VEF',
-  symbol: '&#66;&#115;'
-}, {
-  currency: 'Viet Nam Dong',
-  abbreviation: 'VND',
-  symbol: '&#8363;'
-}, {
-  currency: 'Yemen Rial',
-  abbreviation: 'YER',
-  symbol: '&#65020;'
-}, {
-  currency: 'Zimbabwe Dollar',
-  abbreviation: 'ZWD',
-  symbol: '&#90;&#36;'
-}];
-const getCurrencySymbol = currencyCode => {
-  const name = currencyCode.toLowerCase().trim();
-  let currencySymbol = name;
-  currenciesList.map(country => {
-    const countryArray = country.currency.split(' ');
-    const currencyName = countryArray.pop().toLowerCase().trim();
-    const currencyAbbr = country.abbreviation.toLowerCase();
-    const countryName = countryArray.join(' ').toLowerCase().trim();
-    if (name === currencyName || name === countryName || name === currencyAbbr) {
-      currencySymbol = country.symbol;
-    }
-  });
-  return currencySymbol;
-};
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"stack":"BPxl7EaYWsRh7ulfBRlP","gap0":"iHAu1B_JyfMfzopelk7G","gap1":"MPGwAetEBvL5qxks8LEG","gap2":"KC6IjJkKRI0difjD0oeO","gap3":"jnK0kdrHyrYJj1z7GueZ","gap4":"u9lpBKp4FKgoAkLNt4AQ","gap5":"BEAfcY241WK8Iyzh0jk5","gap6":"Lp7N990cJKUntJoSsx2x","gap8":"w6Wo8QgbUcpEo0UgT0TH","cards":"v9VWwyQPOnpoDYvndXeA","clickable":"JFAMNDkfsbkA7c8w_VNu","disabled":"synf7uPQnXFYnDRxibS3"});
+
+/***/ }),
+
+/***/ "./src/Components/Containers/Dropdown.module.scss":
+/*!********************************************************!*\
+  !*** ./src/Components/Containers/Dropdown.module.scss ***!
+  \********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"root":"Q6YwFze7pNwAmhdBzAGO","menu":"lY9gKiKMaPORXMiAcGOK","surface":"seqzcz7VZqZZnhfbs0wM"});
+
+/***/ }),
+
+/***/ "./src/Components/Containers/PageContent.module.scss":
+/*!***********************************************************!*\
+  !*** ./src/Components/Containers/PageContent.module.scss ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"shell":"hYf27RiwlyFWwm5KClLO","flush":"a6Ch_fJZ7nWrwzrktMXT","container":"t_beMJmTHY9tOuVGYINQ","svRise":"hEL4_Hi3yhmLC95m6Gv9"});
+
+/***/ }),
+
+/***/ "./src/Components/Controls/CalendarInline.module.scss":
+/*!************************************************************!*\
+  !*** ./src/Components/Controls/CalendarInline.module.scss ***!
+  \************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"surface":"auHDDkDXjHxTPLfjeqp2"});
+
+/***/ }),
+
+/***/ "./src/Components/Controls/NewDatePickerControl.module.scss":
+/*!******************************************************************!*\
+  !*** ./src/Components/Controls/NewDatePickerControl.module.scss ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"root":"HwtSSogopbnUP9_7iCDB","button":"F2l5K1tOxIJTh0jK3Kpp","field":"_m3eRE8MaRxi1n_fwL05","icon":"x9Ei7o54rk9kgx3hWQh3","label":"GHYx3uCSPULDwTUL_kND","block":"due974qaf_ShRcdQYcxi"});
+
+/***/ }),
+
+/***/ "./src/Components/Controls/NewSelectControl.module.scss":
+/*!**************************************************************!*\
+  !*** ./src/Components/Controls/NewSelectControl.module.scss ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"wrapper":"Rn5YIp3pNNjfTZfs0Hun","label":"tILluilS7Kg08Ty_wuDz","control":"i0ovci9B8ZljxNo0kHsG","disabled":"PWKaKx8kbAa85Q7B8UNO","native":"_cngarf9_pEgPKjdzZgR","caret":"YeLk6FzAtgYmHZ3hiWy5","icon":"WIeIIcBBdl2AgJCO8Yws"});
+
+/***/ }),
+
+/***/ "./src/Components/Controls/PageActionButton.module.scss":
+/*!**************************************************************!*\
+  !*** ./src/Components/Controls/PageActionButton.module.scss ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"button":"KdySr5oFULfrhKhic35V","primary":"NU3RVqc5Fk7DJ5c4GHf_","secondary":"B48RwPm9xmg1M2dE2g6Q","danger":"q2iOAa3m1ACyQeXOmJaO","dangerSecondary":"YQXykqk_8YtO85727teT","ghost":"fxXHJtT4abc9Wa4LMvVL","dangerGhost":"pY19HOSltbDU49q6SaED","md":"t0fnm1wSsZTfyQQHuzNt","sm":"_Da3u_DsP7V7Jd4Z4lzg","xs":"pEHFbNwftcp4Oei9RRxp","fullWidth":"UyW29jrRG901Y4cS7AHm","iconOnly":"DmgZjtNgpAg3vfeKCEZw","icon":"M_1pjyLi4tiOcq2_oiwe","label":"lcGbrWicMbKyunggF77J"});
+
+/***/ }),
+
+/***/ "./src/Components/Pages/PageWrapper.module.scss":
+/*!******************************************************!*\
+  !*** ./src/Components/Pages/PageWrapper.module.scss ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"backdrop":"GwbBdwO7UxUbci6wtyds","root":"whZeFIc454jkDbuWw6zj","gutterLeft":"nH2l6oxNCJ28ihBOUf7w","gutterRight":"KKg_qLS4gdJXh4u6HnvG","spinner":"Al4EqMTkXH8MiW77lCyS","content":"DhHmGpnbQlurQkapo8Ei"});
+
+/***/ }),
+
+/***/ "./src/Components/Pages/SpinnerLoader.module.scss":
+/*!********************************************************!*\
+  !*** ./src/Components/Pages/SpinnerLoader.module.scss ***!
+  \********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"root":"NvXIBF17sKtsJ5DppGj6","blurred":"s8xU0aT_Upum9VaMUtFv","overlay":"rwBQn7Ep0HRpuD73wvEE"});
 
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_AnalyticsPage_jsx.js.map?ver=2aba0905f88cdeb83f79
+//# sourceMappingURL=src_Components_Pages_AnalyticsPage_jsx.js.map?ver=8117a584b5f3e1371ffe

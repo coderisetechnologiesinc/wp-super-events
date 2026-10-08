@@ -1,0 +1,167 @@
+@use "../../../styles/tokens" as t;
+@use "../../../styles/mixins" as m;
+@include m.scoped {
+  .header {
+    margin-top: 4px;
+    p {
+      white-space: normal;
+      overflow: visible;
+      max-width: 620px;
+    }
+  }
+  .status {
+    display: inline-flex;
+    flex-shrink: 0;
+    margin-left: auto;
+    padding: 3px 9px;
+    border: 1px solid t.$border;
+    border-radius: t.$radius-pill;
+    background: t.$surface-subtle;
+    color: t.$text-soft;
+    @include m.text(12, t.$weight-semibold);
+  }
+  .connected {
+    border-color: t.$success-border;
+    background: t.$success-surface;
+    color: t.$success-text;
+  }
+  .divider {
+    height: 3px;
+    border-radius: t.$radius-pill;
+    background: t.$surface;
+    box-shadow: t.$shadow-track;
+  }
+
+  .sections {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 0;
+  }
+  .card {
+    min-width: 0;
+    border: 1px solid t.$border;
+    border-radius: t.$radius-2xl;
+    background: t.$surface;
+    box-shadow: t.$shadow-card;
+  }
+  .cardHeader {
+    padding: 16px 20px;
+    border-bottom: 1px solid t.$border-hairline;
+    h2 {
+      margin: 0;
+      font-size: 17px;
+      line-height: 24px;
+      font-weight: t.$weight-bold;
+    }
+    p {
+      margin: 2px 0 0;
+      @include m.text(13, t.$weight-medium);
+      color: t.$text-soft;
+    }
+  }
+  .cardBody {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .account {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 12px;
+    border: 1px solid t.$border;
+    border-radius: t.$radius-lg;
+    box-shadow: t.$shadow-field;
+    > div {
+      min-width: 0;
+      flex: 1;
+    }
+    strong {
+      display: block;
+      @include m.text(14, t.$weight-semibold);
+      overflow-wrap: anywhere;
+    }
+  }
+  .avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: t.$primary-surface;
+    color: t.$primary-strong;
+    @include m.text(12, t.$weight-bold);
+  }
+  .eyebrow {
+    @include m.eyebrow;
+    color: t.$text-placeholder;
+  }
+  .hint {
+    margin: 0;
+    @include m.text(13, t.$weight-medium);
+    color: t.$text-soft;
+  }
+  .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    > div {
+      flex: 1;
+      min-width: min(100%, 220px);
+    }
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+    label {
+      @include m.text(13, t.$weight-semibold);
+    }
+  }
+  .fieldGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+  .error {
+    @include m.text(12, t.$weight-medium);
+    color: t.$danger-text;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .existingAccount {
+    @include m.button-reset;
+    @include m.wp-reset-button;
+    text-align: left;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid t.$border;
+    border-radius: t.$radius-lg;
+    box-shadow: t.$shadow-field;
+    color: t.$text;
+    @include m.text(13, t.$weight-semibold);
+    overflow-wrap: anywhere;
+    &:focus-visible {
+      @include m.focus-ring;
+    }
+  }
+  @media (max-width: 735px) {
+    .fieldGrid {
+      grid-template-columns: 1fr;
+    }
+  }
+}

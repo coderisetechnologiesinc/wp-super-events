@@ -1,0 +1,127 @@
+@use "unit" as *;
+@use "reset";
+@use "shell";
+@use "controls";
+@use "card";
+@use "categories";
+@use "calendar";
+@use "drawer";
+@use "forms";
+@use "responsive";
+
+// A block setting with no saved value prints an *empty* custom property, and
+// var() fallbacks do not apply to a property that is set-but-empty: the calc()
+// in the grid template then dies and every card drops to its own row.
+// Registering the properties makes an unparsable value fall back to the initial.
+@property --svv-v2-grid-columns {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 3;
+}
+
+.svv-wgt-v2 {
+  container-type: inline-size;
+  container-name: svv-shell;
+
+  --svv-text: var(--svv-v2-text, #17112d);
+  --svv-text-muted: var(--svv-v2-text-muted, #6b6878);
+  --svv-bg: var(--svv-v2-bg, #ffffff);
+  --svv-surface: var(--svv-v2-surface, #f7f6fb);
+  --svv-border: var(--svv-v2-border, #ddd9e9);
+  // no longer its own setting: a step from the border towards the text
+  --svv-border-strong: var(
+    --svv-v2-border-strong,
+    color-mix(in srgb, var(--svv-border) 88%, var(--svv-text))
+  );
+
+  --svv-primary: var(--svv-v2-primary, #6224e7);
+  --svv-primary-hover: var(--svv-v2-primary-hover, #4a18b4);
+  --svv-primary-text: var(--svv-v2-primary-text, #ffffff);
+  --svv-primary-subtle: color-mix(in srgb, var(--svv-primary) 12%, var(--svv-bg));
+
+  --svv-accent: var(--svv-v2-accent, #ff8f5c);
+  --svv-accent-strong: var(--svv-v2-accent-strong, #a8481b);
+  --svv-accent-subtle: color-mix(in srgb, var(--svv-accent) 14%, var(--svv-bg));
+
+  --svv-success: var(--svv-v2-success, #147a52);
+  --svv-success-subtle: color-mix(in srgb, var(--svv-success) 12%, var(--svv-bg));
+  --svv-warning: var(--svv-v2-warning, #9a6500);
+  --svv-warning-subtle: color-mix(in srgb, var(--svv-warning) 12%, var(--svv-bg));
+  --svv-critical: var(--svv-v2-critical, #b42318);
+  --svv-critical-subtle: color-mix(in srgb, var(--svv-critical) 10%, var(--svv-bg));
+  --svv-info: var(--svv-v2-info, #1d5fd0);
+  --svv-info-subtle: color-mix(in srgb, var(--svv-info) 10%, var(--svv-bg));
+
+  --svv-card-bg: var(--svv-v2-card-bg, #ffffff);
+  --svv-card-text: var(--svv-v2-card-text, #17112d);
+  --svv-card-text-muted: color-mix(in srgb, var(--svv-card-text) 62%, var(--svv-card-bg));
+  --svv-card-shadow: var(--svv-v2-card-shadow, 0 1px 2px rgba(23, 17, 45, 0.06));
+  --svv-card-shadow-hover: 0 16px 40px rgba(23, 17, 45, 0.1);
+  --svv-radius: var(--svv-v2-radius, 8px);
+  --svv-pill: 999px;
+  --svv-image-ratio: var(--svv-v2-image-ratio, 16 / 9);
+  --svv-grid-columns: var(--svv-v2-grid-columns, 3);
+
+  --svv-calendar-text: var(--svv-v2-calendar-text, var(--svv-text));
+  --svv-calendar-marked-bg: var(--svv-v2-calendar-marked-bg, var(--svv-primary-subtle));
+  --svv-calendar-selected-bg: var(--svv-v2-calendar-selected-bg, var(--svv-primary));
+  --svv-calendar-selected-text: var(--svv-v2-calendar-selected-text, #ffffff);
+  --svv-calendar-today-border: var(--svv-v2-calendar-today-border, var(--svv-border-strong));
+
+  --svv-drawer-bg: var(--svv-v2-drawer-bg, #ffffff);
+  --svv-drawer-width: var(--svv-v2-drawer-width, 640px);
+  --svv-drawer-backdrop: var(--svv-v2-drawer-backdrop, rgba(23, 17, 45, 0.45));
+
+  --svv-font: var(
+    --svv-v2-font,
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif
+  );
+  --svv-heading-font: var(--svv-v2-heading-font, var(--svv-font));
+  --svv-font-size: var(--svv-v2-font-size, 16px);
+  --svv-u: var(--svv-v2-scale, max(16px, var(--svv-font-size)));
+
+  font-family: var(--svv-font);
+  font-size: var(--svv-font-size);
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.5;
+  color: var(--svv-text);
+  text-align: start;
+  text-transform: none;
+  letter-spacing: normal;
+  word-spacing: normal;
+  white-space: normal;
+
+  .svv-visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+.svv-wgt-v2.svv-wgt-v2 {
+  :where(h1, h2, h3, h4) {
+    font-family: var(--svv-heading-font);
+    line-height: 1.2;
+  }
+
+  :where(button) {
+    cursor: pointer;
+  }
+
+  :where(:focus-visible) {
+    outline: 2px solid var(--svv-primary);
+    outline-offset: 2px;
+  }
+}

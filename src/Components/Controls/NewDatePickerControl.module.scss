@@ -1,0 +1,43 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+
+@include m.scoped {
+  .root {
+    position: relative;
+    display: inline-block;
+  }
+
+  // Reference: the toolbar date trigger next to the segmented control.
+  .button {
+    @include m.toolbar-trigger;
+  }
+  .button.field {
+    height: 40px;
+    border-color: t.$border-field;
+    border-radius: 12px;
+    box-shadow: t.$shadow-field;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+  }
+
+  .icon {
+    @include m.toolbar-trigger-icon;
+  }
+
+  .label {
+    @include m.truncate;
+  }
+
+  // Fills its column instead of sitting at its own width.
+  .block,
+  .block .button {
+    width: 100%;
+  }
+
+  @media (max-width: 480px) {
+    .root,
+    .button {
+      width: 100%;
+    }
+  }
+}

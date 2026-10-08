@@ -1,0 +1,49 @@
+.svv-wgt-v2-container {
+  --svv-v2-skin-bg: #15161c;
+}
+
+.svv-wgt-v2 {
+  --svv-text: #eaf7f3;
+  --svv-text-muted: #94a5a0;
+  --svv-border: rgba(255, 255, 255, 0.08);
+  --svv-border-strong: rgba(255, 255, 255, 0.16);
+  --svv-surface: #1a1c23;
+  --svv-card-bg: #1a1c23;
+  --svv-card-text: #eaf7f3;
+  --svv-card-text-muted: #94a5a0;
+
+  --svv-primary: #00e0b8;
+  --svv-primary-hover: #19ecc6;
+  --svv-primary-text: #052420;
+  --svv-primary-subtle: rgba(0, 224, 184, 0.16);
+
+  --svv-accent: #7df0dd;
+  --svv-accent-strong: #00e0b8;
+  --svv-accent-subtle: rgba(0, 224, 184, 0.14);
+
+  --svv-success: #4fd39b;
+  --svv-warning: #ffc256;
+  --svv-critical: #ff7a6e;
+  --svv-info: #6cc5ff;
+
+  --svv-nm-dark: #0b0c10;
+  --svv-nm-dark-deep: #07080b;
+  --svv-nm-light: #262a34;
+  --svv-nm-rim: 1px solid rgba(255, 255, 255, 0.06);
+  --svv-nm-sheen: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+  --svv-calendar-text: #eaf7f3;
+  --svv-calendar-marked-bg: rgba(0, 224, 184, 0.16);
+  --svv-calendar-selected-bg: #00e0b8;
+  --svv-calendar-selected-text: #052420;
+  --svv-calendar-today-border: rgba(255, 255, 255, 0.24);
+
+  --svv-drawer-bg: #1a1c23;
+  --svv-drawer-backdrop: rgba(0, 0, 0, 0.62);
+
+  .svv-search:focus-within,
+  .svv-field__input:focus,
+  .svv-field__input:focus-visible {
+    border-color: rgba(255, 255, 255, 0.18);
+  }
+}

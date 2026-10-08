@@ -20,7 +20,7 @@ const BillingSettings = ({
           <div
             className={
               isMarketplace
-                ? "flex flex-row min-w-[430px] mx-auto max-w-[480px] flex-1 justify-center"
+                ? "flex flex-row min-w-0 w-full mx-auto max-w-[480px] flex-1 justify-center"
                 : `grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6`
             }
           >

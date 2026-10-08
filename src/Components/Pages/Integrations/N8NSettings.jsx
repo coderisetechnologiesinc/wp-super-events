@@ -1,20 +1,48 @@
-import { useState, useEffect, Fragment } from "react";
+import { Fragment } from "react";
 import AnnotatedSection from "../../Containers/AnnotatedSection";
-import SelectControl from "../../Controls/SelectControl";
-import InputFieldControl from "../../Controls/InputFieldControl";
-import CheckboxControl from "../../Controls/CheckboxControl";
+import NewSelectControl from "../../Controls/NewSelectControl";
+import NewInputFieldControl from "../../Controls/NewInputFieldControl";
+import CheckboxItem from "../../Controls/CheckboxItem";
 import BlockStack from "../../Containers/BlockStack";
-import InlineStack from "../../Containers/InlineStack";
-import { Block } from "@mui/icons-material";
+
+const METHOD_OPTIONS = ["POST", "GET", "PUT", "PATCH", "DELETE"];
+
+// The three n8n workflows, each with a trigger toggle and a method/url/secret
+// trio. Option keys are prefix + suffix throughout, matching what
+// inc/ajax/shop/shop.php reads and writes.
+const WORKFLOWS = [
+  {
+    key: "event_created",
+    triggerTitle: "Event Created Trigger",
+    triggerDescription:
+      "Enable this to trigger the workflow whenever a new event is created.",
+    settingsTitle: "Event Created Wrokflow Settings",
+    settingsDescription:
+      "Configure how n8n should handle new event creation. Define the HTTP method, the endpoint URL and the secret used to verify requests.",
+  },
+  {
+    key: "new_booking",
+    triggerTitle: "New Booking Trigger",
+    triggerDescription:
+      "Enable this to trigger the workflow whenever a new booking is made.",
+    settingsTitle: "New Booking Workflow Settings",
+    settingsDescription:
+      "Configure how n8n should handle new bookings. Define the HTTP method, the endpoint URL and the secret used to verify requests.",
+  },
+  {
+    key: "canceled_booking",
+    triggerTitle: "Canceled Booking Trigger",
+    triggerDescription:
+      "Enable this to trigger the workflow whenever a booking is canceled.",
+    settingsTitle: "Canceled Booking Workflow Settings",
+    settingsDescription:
+      "Configure how n8n should handle canceled bookings. Define the HTTP method, the endpoint URL and the secret used to verify requests.",
+  },
+];
 
 const N8NSettings = ({ n8nSettingsData = {}, settingsUpdate = () => {} }) => {
-  const selectOptions = ["POST", "GET", "PUT", "PATCH", "DELETE"];
-  const responsiveBlockStack = "w-full min-w-0 items-center";
   const responsiveInput = "w-full min-w-0";
 
-  // const convertTitle = (title) => {
-  //   return title.charAt(0).toUpperCase() + title.split("_").join(" ").slice(1);
-  // };
   const handleValueChange = (key, val) => {
     let currValues = n8nSettingsData;
 
@@ -27,259 +55,93 @@ const N8NSettings = ({ n8nSettingsData = {}, settingsUpdate = () => {} }) => {
     }
     settingsUpdate(currValues);
   };
-  const renderN8NSettings = () => {
-    return (
-      <div className="flex flex-col w-full gap-16">
-        <div className="flex flex-col gap-4">
-          {/* <span className="font-semibold border-b pb-1">Triggers</span> */}
-          <AnnotatedSection
-            className={`${responsiveInput} items-center`}
-            title={"Event Created Trigger"}
-            description={
-              "Enable this to trigger the workflow whenever a new event is created."
-            }
-          >
-            <CheckboxControl
-              checked={
-                typeof n8nSettingsData.event_created_active === "boolean"
-                  ? n8nSettingsData.event_created_active
-                  : Number.parseInt(n8nSettingsData.event_created_active) === 1
-              }
-              onChange={() =>
-                handleValueChange(
-                  "event_created_active",
-                  n8nSettingsData.event_created_active
-                )
-              }
-            />
-          </AnnotatedSection>
-          <AnnotatedSection
-            className={`${responsiveInput} items-center`}
-            title={"New Booking Trigger"}
-            description={
-              "Enable this to trigger the workflow whenever a new booking is made."
-            }
-          >
-            <CheckboxControl
-              checked={
-                typeof n8nSettingsData.new_booking_active === "boolean"
-                  ? n8nSettingsData.new_booking_active
-                  : Number.parseInt(n8nSettingsData.new_booking_active) === 1
-              }
-              onChange={() =>
-                handleValueChange(
-                  "new_booking_active",
-                  n8nSettingsData.new_booking_active
-                )
-              }
-            />
-          </AnnotatedSection>
-          <AnnotatedSection
-            className={`${responsiveInput} items-center`}
-            title={"Canceled Booking Trigger"}
-            description={
-              "Enable this to trigger the workflow whenever a booking is canceled."
-            }
-          >
-            <CheckboxControl
-              checked={
-                typeof n8nSettingsData.canceled_booking_active === "boolean"
-                  ? n8nSettingsData.canceled_booking_active
-                  : Number.parseInt(n8nSettingsData.canceled_booking_active) ===
-                    1
-              }
-              onChange={() =>
-                handleValueChange(
-                  "canceled_booking_active",
-                  n8nSettingsData.canceled_booking_active
-                )
-              }
-            />
-          </AnnotatedSection>
-        </div>
-        <BlockStack gap={4}>
-          <span className="font-semibold border-b pb-1 w-full self-end">
-            Triggers settings
-          </span>
-          <AnnotatedSection
-            className={responsiveInput}
-            title={"Event Created Wrokflow Settings"}
-            description={
-              "Configure how n8n should handle new event creation. Define the HTTP method, the endpoint URL and the secret used to verify requests."
-            }
-          >
-            <BlockStack gap={2}>
-              <div className="flex flex-row w-full items-end gap-2 mb-2">
-                <div className="flex-none">
-                  <SelectControl
-                    options={selectOptions}
-                    selected={n8nSettingsData.event_created_method || null}
-                    onSelectChange={(newVal) =>
-                      handleValueChange("event_created_method", newVal)
-                    }
-                    style={{ padding: "10px" }}
-                  />
-                </div>
-                <div className="flex-1">
-                  <InputFieldControl
-                    className={responsiveBlockStack}
-                    align="left"
-                    value={n8nSettingsData.event_created_url}
-                    onChange={(newVal) =>
-                      handleValueChange("event_created_url", newVal)
-                    }
-                    placeholder="Endpoint URL"
-                  />
-                </div>
-              </div>
-              <div className="flex-1">
-                <InputFieldControl
-                  className={responsiveBlockStack}
-                  align="left"
-                  value={n8nSettingsData.event_created_secret}
-                  onChange={(newVal) =>
-                    handleValueChange("event_created_secret", newVal)
-                  }
-                  placeholder="Secret"
-                />
-              </div>
-            </BlockStack>
-          </AnnotatedSection>
-          <AnnotatedSection
-            className={responsiveInput}
-            title={"New Booking Workflow Settings"}
-            description={
-              "Configure how n8n should handle new bookings. Define the HTTP method, the endpoint URL and the secret used to verify requests."
-            }
-          >
-            <BlockStack gap={2}>
-              <div className="flex flex-row w-full items-end gap-2 mb-2">
-                <div className="flex-none">
-                  <SelectControl
-                    options={selectOptions}
-                    selected={n8nSettingsData.new_booking_method || null}
-                    onSelectChange={(newVal) =>
-                      handleValueChange("new_booking_method", newVal)
-                    }
-                    style={{ padding: "10px" }}
-                  />
-                </div>
-                <div className="flex-1">
-                  <InputFieldControl
-                    className={responsiveBlockStack}
-                    align="left"
-                    value={n8nSettingsData.new_booking_url}
-                    onChange={(newVal) =>
-                      handleValueChange("new_booking_url", newVal)
-                    }
-                    placeholder="Endpoint URL"
-                  />
-                </div>
-              </div>
-              <div className="flex-1">
-                <InputFieldControl
-                  className={responsiveBlockStack}
-                  align="left"
-                  value={n8nSettingsData.canceled_booking_secret}
-                  onChange={(newVal) =>
-                    handleValueChange("canceled_booking_secret", newVal)
-                  }
-                  placeholder="Secret"
-                />
-              </div>
-            </BlockStack>
-          </AnnotatedSection>
-          <AnnotatedSection
-            className={responsiveInput}
-            title={"Canceled Booking Workflow Settings"}
-            description={
-              "Configure how n8n should handle canceled bookings. Define the HTTP method, the endpoint URL and the secret used to verify requests."
-            }
-          >
-            <BlockStack gap={2}>
-              <div className="flex flex-row w-full items-end gap-2 mb-2">
-                <div className="flex-none">
-                  <SelectControl
-                    options={selectOptions}
-                    selected={n8nSettingsData.canceled_booking_method || null}
-                    onSelectChange={(newVal) =>
-                      handleValueChange("canceled_booking_method", newVal)
-                    }
-                    style={{ padding: "10px" }}
-                  />
-                </div>
-                <div className="flex-1">
-                  <InputFieldControl
-                    className={responsiveBlockStack}
-                    align="left"
-                    value={n8nSettingsData.canceled_booking_url}
-                    onChange={(newVal) =>
-                      handleValueChange("canceled_booking_url", newVal)
-                    }
-                    placeholder="Endpoint URL"
-                  />
-                </div>
-              </div>
-              <div className="flex-1">
-                <InputFieldControl
-                  className={responsiveBlockStack}
-                  align="left"
-                  value={n8nSettingsData.new_booking_secret}
-                  onChange={(newVal) =>
-                    handleValueChange("new_booking_secretn", newVal)
-                  }
-                  placeholder="Secret"
-                />
-              </div>
-            </BlockStack>
-          </AnnotatedSection>
-        </BlockStack>
-      </div>
-    );
-    // return Object.keys(n8nSettingsData).map((setting) => {
-    //   if (
-    //     setting === "canceled_booking_active" ||
-    //     setting === "event_created_active" ||
-    //     setting === "new_booking_active"
-    //   ) {
-    //     return (
-    //       <AnnotatedSection
-    //         className={responsiveInput}
-    //         title={convertTitle(setting)}
-    //       >
-    //         <CheckboxControl
-    //           checked={
-    //             typeof n8nSettingsData[setting] === "boolean"
-    //               ? n8nSettingsData[setting]
-    //               : Number.parseInt(n8nSettingsData[setting]) === 1
-    //           }
-    //           onChange={() =>
-    //             handleValueChange(setting, n8nSettingsData[setting])
-    //           }
-    //         />
-    //       </AnnotatedSection>
-    //     );
-    //   } else {
-    //     return (
-    //       <AnnotatedSection
-    //         title={convertTitle(setting)}
-    //         className={responsiveBlockStack}
-    //       >
-    //         <InputFieldControl
-    //           className={responsiveBlockStack}
-    //           align="left"
-    //           value={n8nSettingsData[setting]}
-    //           onChange={(newVal) => handleValueChange(setting, newVal)}
-    //         />
-    //       </AnnotatedSection>
-    //     );
-    //   }
-    // });
-  };
+
+  // The toggle arrives either as a boolean or as the "1"/"0" the option stores.
+  const isTriggerActive = (value) =>
+    typeof value === "boolean" ? value : Number.parseInt(value) === 1;
+
   return (
     <Fragment>
-      <div className="flex flex-col w-full">{renderN8NSettings()}</div>
+      <div className="flex flex-col w-full">
+        <div className="flex flex-col w-full gap-16">
+          <div className="flex flex-col gap-4">
+            {WORKFLOWS.map(({ key, triggerTitle, triggerDescription }) => (
+              <AnnotatedSection
+                key={key}
+                className={`${responsiveInput} items-center`}
+                title={triggerTitle}
+                description={triggerDescription}
+              >
+                <CheckboxItem
+                  checked={isTriggerActive(n8nSettingsData[`${key}_active`])}
+                  onChange={() =>
+                    handleValueChange(
+                      `${key}_active`,
+                      n8nSettingsData[`${key}_active`],
+                    )
+                  }
+                />
+              </AnnotatedSection>
+            ))}
+          </div>
+
+          <BlockStack gap={4}>
+            <span className="font-semibold border-b pb-1 w-full self-end">
+              Triggers settings
+            </span>
+
+            {WORKFLOWS.map(({ key, settingsTitle, settingsDescription }) => (
+              <AnnotatedSection
+                key={key}
+                className={responsiveInput}
+                title={settingsTitle}
+                description={settingsDescription}
+              >
+                <BlockStack gap={2}>
+                  <div className="flex flex-row w-full items-end gap-2 mb-2">
+                    <div className="flex-none">
+                      <NewSelectControl
+                        options={METHOD_OPTIONS.map((option) => ({
+                          value: option,
+                          label: option,
+                        }))}
+                        value={n8nSettingsData[`${key}_method`] || null}
+                        onChange={(newVal) =>
+                          handleValueChange(`${key}_method`, newVal)
+                        }
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <NewInputFieldControl
+                        width="100%"
+                        align="left"
+                        value={n8nSettingsData[`${key}_url`]}
+                        onChange={(newVal) =>
+                          handleValueChange(`${key}_url`, newVal)
+                        }
+                        placeholder="Endpoint URL"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex-1">
+                    <NewInputFieldControl
+                      width="100%"
+                      align="left"
+                      value={n8nSettingsData[`${key}_secret`]}
+                      onChange={(newVal) =>
+                        handleValueChange(`${key}_secret`, newVal)
+                      }
+                      placeholder="Secret"
+                    />
+                  </div>
+                </BlockStack>
+              </AnnotatedSection>
+            ))}
+          </BlockStack>
+        </div>
+      </div>
     </Fragment>
   );
 };
+
 export default N8NSettings;

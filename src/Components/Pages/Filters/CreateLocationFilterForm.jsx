@@ -1,20 +1,16 @@
-import BlockStack from "../../Containers/BlockStack";
-import InlineStack from "../../Containers/InlineStack";
-import InputFieldControl from "../../Controls/InputFieldControl";
-import PageActionButton from "../../Controls/PageActionButton";
-import PageHeader from "../../Containers/PageHeader";
-import PageContent from "../../Containers/PageContent";
-import AnnotatedSection from "../../Containers/AnnotatedSection";
-import MobileFooterActions from "../../Controls/MobileFooterActions";
-import TimeInputControl from "../../Controls/TimeInputControl";
-import PageWrapper from "../PageWrapper";
-import { Fragment, useState, useEffect } from "react";
+import styles from "./FilterForm.module.scss";
+import FilterFormSection, {
+  FilterField,
+  FilterOrdering,
+} from "./FilterFormSection";
+import NewTimeInputControl from "../../Controls/NewTimeInputControl";
+import FilterFormLayout from "./FilterFormLayout";
+import { useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import axios from "axios";
 import moment from "moment";
-import SpinnerLoader from "../SpinnerLoader";
+import { saveFilter } from "../../../utilities/filters";
 import { useServvStore } from "../../../store/useServvStore";
-import FilterFormSection from "../../Containers/FilterFormSection";
+
 const CreateLocationFilterForm = ({
   setLoading = () => {},
   loading,
@@ -35,13 +31,6 @@ const CreateLocationFilterForm = ({
       : null;
 
   const [locationData, setLocationData] = useState(existingLocation || {});
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   const onCancel = () => navigate(-1);
 
@@ -53,26 +42,8 @@ const CreateLocationFilterForm = ({
     if (!locationData?.name) return;
 
     setLoading(true);
-
-    let url = "/wp-json/servv-plugin/v1/filters/locations";
-    let method = "POST";
-
-    if (existingLocation) {
-      url += `/${existingLocation.id}`;
-      method = "PATCH";
-    }
-
-    await axios({
-      method,
-      url,
-      headers: { "X-WP-Nonce": servvData.nonce },
-      data: {
-        ...locationData,
-        priority: Number.parseInt(locationData.priority) || 0,
-      },
-    });
+    await saveFilter("locations", locationData, existingLocation?.id);
     await syncSingleFilterFromServer("locations");
-
     navigate(-1);
   };
 
@@ -112,131 +83,74 @@ const CreateLocationFilterForm = ({
   const isFormValid = locationData?.name?.length > 0;
 
   return (
-    <PageWrapper withBackground={true}>
-      <div className="dashboard-card">
-        <div className="servv-dashboard-header">
-          {/* LEFT: title + description */}
-          <div className="dashboard-heading">
-            <h1 className="dashboard-title text-gray-900">
-              {existingLocation
-                ? `Location Filter "${existingLocation.name}"`
-                : "New Location"}
-            </h1>
-
-            <p className="dashboard-description text-gray-600 mt-4 text-base leading-relaxed">
-              {existingLocation
-                ? `Edit details for ${existingLocation.name}`
-                : "Create a new location filter"}
-            </p>
-          </div>
-
-          {/* RIGHT: actions (desktop only) */}
-          {!isMobile && (
-            <div className="dashboard-actions hidden md:flex flex-row items-center gap-2 flex-nowrap">
-              <PageActionButton
-                text="Cancel"
-                type="secondary"
-                onAction={onCancel}
-              />
-
-              <PageActionButton
-                text="Save"
-                type="primary"
-                onAction={handleLocationSave}
-                disabled={!isFormValid}
-              />
-            </div>
-          )}
-        </div>
-
-        <div className="header-line" />
-
-        <PageContent className="py-0 my-0">
-          <div className="pb-20 md:pb-0 w-full">
-            <SpinnerLoader isLoading={loading}>
-              <BlockStack gap={8} cardsLayout>
-                {/* Location Name */}
-                <FilterFormSection
-                  title="Location Name"
-                  className="items-start"
-                >
-                  <InputFieldControl
-                    value={locationData?.name || ""}
-                    type="text"
-                    align="left"
-                    maxLength={100}
-                    onChange={(val) => handleLocationChange("name", val)}
-                  />
-                </FilterFormSection>
-
-                {/* Location Details */}
-                <FilterFormSection
-                  title="Location Details"
-                  className="items-start"
-                >
-                  <InputFieldControl
-                    value={locationData?.details || ""}
-                    type="text"
-                    align="left"
-                    maxLength={200}
-                    onChange={(val) => handleLocationChange("details", val)}
-                  />
-                </FilterFormSection>
-
-                {/* Operational Hours */}
-                <FilterFormSection
-                  title="Operational Hours"
-                  className="items-start"
-                >
-                  <div
-                    className={`${
-                      isMobile ? "flex-col" : "flex-row"
-                    } flex gap-4 flex-wrap`}
-                  >
-                    <TimeInputControl
-                      label="Start Time"
-                      time={getStartTime()}
-                      onChange={handleStartTimeChange}
-                      timeFormat={timeFormat}
-                    />
-                    <TimeInputControl
-                      label="End Time"
-                      time={getEndTime()}
-                      onChange={handleEndTimeChange}
-                      timeFormat={timeFormat}
-                    />
-                  </div>
-                </FilterFormSection>
-
-                {/* Order (edit only) */}
-                {existingLocation && (
-                  <FilterFormSection title="Order" className="items-start">
-                    <InputFieldControl
-                      value={locationData.priority || ""}
-                      type="text"
-                      align="left"
-                      maxLength={10}
-                      onChange={(val) => handleLocationChange("priority", val)}
-                    />
-                  </FilterFormSection>
-                )}
-              </BlockStack>
-            </SpinnerLoader>
-          </div>
-        </PageContent>
-
-        {/* Mobile footer */}
-        {isMobile && (
-          <MobileFooterActions
-            onSave={handleLocationSave}
-            onCancel={onCancel}
-            saveText="Save"
-            cancelText="Cancel"
-            saveDisabled={!isFormValid}
+    <FilterFormLayout
+      title={existingLocation ? `Edit location` : "New location"}
+      description={
+        existingLocation
+          ? `Edit details for ${existingLocation.name}`
+          : "Create a new location filter"
+      }
+      editing={Boolean(existingLocation)}
+      onSave={handleLocationSave}
+      onCancel={onCancel}
+      saveDisabled={!isFormValid}
+      loading={loading}
+    >
+      <FilterFormSection
+        title="Details"
+        description="Add the information for this filter value."
+        grid
+      >
+        <FilterField
+          label="Location name"
+          value={locationData?.name || ""}
+          type="text"
+          maxLength={100}
+          required
+          fullWidth
+          hint="This name identifies the value in your event filters."
+          disabled={loading}
+          onChange={(value) => handleLocationChange("name", value)}
+        />
+        <FilterField
+          label="Details"
+          value={locationData?.details || ""}
+          type="text"
+          maxLength={200}
+          textarea
+          rows={3}
+          fullWidth
+          disabled={loading}
+          onChange={(value) => handleLocationChange("details", value)}
+        />
+      </FilterFormSection>
+      <FilterFormSection
+        title="Operational hours"
+        description="Set the start and end time for this location."
+      >
+        <div className={styles.hours}>
+          <NewTimeInputControl
+            label="Start time"
+            time={getStartTime()}
+            onChange={handleStartTimeChange}
+            timeFormat={timeFormat}
+            disabled={loading}
           />
-        )}
-      </div>
-    </PageWrapper>
+          <NewTimeInputControl
+            label="End time"
+            time={getEndTime()}
+            onChange={handleEndTimeChange}
+            timeFormat={timeFormat}
+            disabled={loading}
+          />
+        </div>
+      </FilterFormSection>
+      <FilterOrdering
+        editing={Boolean(existingLocation)}
+        value={locationData.priority}
+        onChange={(value) => handleLocationChange("priority", value)}
+      />
+    </FilterFormLayout>
   );
 };
 

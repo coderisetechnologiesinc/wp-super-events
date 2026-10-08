@@ -1,0 +1,22 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+
+@include m.scoped {
+  .root {
+    position: relative;
+  }
+
+  // Reference popover: 8px below the activator, radius 18, flat drop shadow.
+  .menu {
+    position: absolute;
+    z-index: t.$z-dropdown;
+    margin-top: t.$space-4;
+  }
+
+  // Drawn only when the child is not a surface of its own.
+  .surface {
+    @include m.card-surface;
+    padding: t.$space-8;
+    box-shadow: t.$shadow-popover;
+  }
+}

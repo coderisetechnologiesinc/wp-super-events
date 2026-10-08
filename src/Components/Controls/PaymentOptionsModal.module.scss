@@ -1,0 +1,39 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+
+@include m.scoped {
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: t.$space-6;
+    width: 100%;
+  }
+  .summary {
+    margin: 0;
+    > div {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: t.$space-8;
+      padding: t.$space-6 0;
+      border-bottom: 1px solid t.$border;
+      &:first-child {
+        padding-top: 0;
+      }
+      &:last-child {
+        padding-bottom: 0;
+        border-bottom: 0;
+      }
+    }
+    dt {
+      @include m.text(13, t.$weight-medium);
+      color: t.$text-secondary;
+    }
+    dd {
+      margin: 0;
+      @include m.text(14, t.$weight-semibold);
+      color: t.$text;
+    }
+  }
+}

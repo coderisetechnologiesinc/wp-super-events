@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from "react";
 import moment from "moment";
-import DatePickerControl from "./DatePickerControl";
+import NewDatePickerControl from "../Controls/NewDatePickerControl";
 import NewSelectControl from "../Controls/NewSelectControl";
 import NewButtonGroup from "../Controls/NewButtonGroup";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
@@ -83,10 +83,12 @@ const NewEndDateControl = ({
         {mode === "date" && (
           <Fragment>
             <span className="step__content_title">Select end date</span>
-            <DatePickerControl
-              date={endDate}
+            <NewDatePickerControl
+              mode="single"
+              value={endDate}
               onChange={handleEndDateChange}
-              variant="field"
+              label="Select end date"
+              fullWidth
               minDate={minDate}
               maxDate={maxDate}
             />

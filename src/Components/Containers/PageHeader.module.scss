@@ -1,0 +1,82 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+
+@include m.scoped {
+  // Reference: <header style="display:flex;flex-direction:column;gap:16px">
+  .header {
+    display: flex;
+    flex-direction: column;
+    gap: t.$space-8;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .bottomLine {
+    padding-bottom: t.$space-8;
+    border-bottom: 1px solid t.$border;
+  }
+
+  // The title/actions row: actions sit on the text baseline and wrap under it
+  // when the viewport runs out of room.
+  .row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: t.$space-12;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .text {
+    min-width: 0;
+  }
+
+  .eyebrow {
+    @include m.eyebrow;
+    margin-bottom: t.$space-4;
+    color: t.$primary;
+  }
+
+  .title {
+    margin: 0;
+    @include m.text(32, t.$weight-extrabold);
+  }
+
+  // One line, next to the actions — it ellipsises rather than wrapping under
+  // them and pushing the row's height around. `.text` already carries the
+  // `min-width: 0` that lets it shrink instead of forcing the actions to wrap.
+  .description {
+    @include m.truncate;
+    margin: t.$space-3 0 0;
+    @include m.text(15, t.$weight-medium);
+    color: t.$text-secondary;
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: t.$space-5;
+  }
+
+  @media (max-width: 735px) {
+    .title {
+      @include m.text(24, t.$weight-extrabold);
+    }
+
+    // On a phone the actions sit on their own row, so the description has the
+    // full width and is better off wrapping than being cut.
+    .text {
+      width: 100%;
+    }
+
+    .description {
+      overflow: visible;
+      white-space: normal;
+    }
+
+    .actions {
+      width: 100%;
+    }
+  }
+}

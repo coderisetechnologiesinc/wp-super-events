@@ -1,4 +1,5 @@
 import { Filter } from "../../assets/icons";
+import StepActions from "./StepActions";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import NewSelectControl from "../Controls/NewSelectControl";
 import NewInputControl from "../Controls/NewInputControl";
@@ -162,34 +163,12 @@ const FiltersStep = ({
           </div>
         </div>
       </div>
-      <div className="servv_actions mt-auto">
-        {!isNew && (
-          <button
-            type="button"
-            className="servv_button servv_button--secondary"
-            onClick={() => handleFormSubmit(true)}
-          >
-            Save and Exit
-          </button>
-        )}
-        <button
-          type="button"
-          className="servv_button servv_button--secondary"
-          onClick={() => changeStep("tickets")}
-        >
-          Previous
-        </button>
-
-        <button
-          type="button"
-          className="servv_button servv_button--primary"
-          onClick={() => {
-            handleFormSubmit();
-          }}
-        >
-          {isNew ? "Create" : "Save"}
-        </button>
-      </div>
+      <StepActions
+        onSaveAndExit={isNew ? undefined : () => handleFormSubmit(true)}
+        onPrevious={() => changeStep("tickets")}
+        onPrimary={() => handleFormSubmit()}
+        primaryText={isNew ? "Create" : "Save"}
+      />
     </div>
   );
 };

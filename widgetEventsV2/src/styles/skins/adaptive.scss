@@ -1,0 +1,342 @@
+@use "../unit" as *;
+@use "../breakpoints" as *;
+
+.svv-wgt-v2-container {
+  --svv-v2-bg-radius: 0px;
+
+  background: var(--svv-v2-skin-bg, rgb(var(--color-background, var(--color-base-background-1, 255 255 255))));
+
+  @include mobile {
+    padding: $svv-mobile-inset 0;
+  }
+}
+
+.svv-wgt-v2 {
+  --svv-adaptive-ink: var(
+    --svv-v2-text,
+    rgb(var(--color-foreground, var(--color-base-text, 18 18 18)))
+  );
+  --svv-adaptive-paper: var(
+    --svv-v2-surface,
+    rgb(var(--color-background, var(--color-base-background-1, 255 255 255)))
+  );
+  --svv-adaptive-button: var(
+    --svv-v2-primary,
+    rgb(var(--color-button, var(--color-base-accent-1, 18 18 18)))
+  );
+  --svv-adaptive-button-text: var(
+    --svv-v2-primary-text,
+    rgb(var(--color-button-text, var(--color-base-solid-button-labels, 255 255 255)))
+  );
+  --svv-adaptive-tint: color-mix(in srgb, var(--svv-adaptive-ink) 4%, var(--svv-adaptive-paper));
+  --svv-adaptive-heading-weight: var(--font-heading-weight, 600);
+  --svv-adaptive-tracking: 0.06rem;
+
+  --svv-text: var(--svv-adaptive-ink);
+  --svv-text-muted: color-mix(in srgb, var(--svv-adaptive-ink) 70%, var(--svv-adaptive-paper));
+  --svv-bg: var(--svv-v2-bg, var(--svv-adaptive-paper));
+  --svv-surface: var(--svv-adaptive-tint);
+  --svv-border: color-mix(in srgb, var(--svv-adaptive-ink) 12%, var(--svv-adaptive-paper));
+  --svv-border-strong: color-mix(in srgb, var(--svv-adaptive-ink) 55%, var(--svv-adaptive-paper));
+
+  --svv-primary: var(--svv-adaptive-button);
+  --svv-primary-hover: color-mix(in srgb, var(--svv-adaptive-button) 85%, var(--svv-adaptive-paper));
+  --svv-primary-text: var(--svv-adaptive-button-text);
+  --svv-primary-subtle: var(--svv-adaptive-tint);
+
+  --svv-card-bg: var(--svv-v2-card-bg, var(--svv-adaptive-paper));
+  --svv-card-text: var(--svv-v2-card-text, var(--svv-adaptive-ink));
+  --svv-card-shadow: none;
+  --svv-card-shadow-hover: none;
+
+  --svv-radius: var(--product-card-corner-radius, var(--svv-v2-radius, 0px));
+  --svv-pill: var(--buttons-radius, 0px);
+  --svv-adaptive-input-radius: var(--inputs-radius, var(--svv-pill));
+
+  --svv-font: var(--svv-v2-skin-font, var(--font-body-family, inherit));
+  --svv-heading-font: var(--svv-v2-skin-heading-font, var(--font-heading-family, var(--svv-font)));
+
+  letter-spacing: var(--svv-adaptive-tracking);
+
+  .svv-shell {
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    overflow: visible;
+  }
+
+  .svv-shell__header {
+    padding: 0 0 u(1.25);
+    border-bottom: 1px solid var(--svv-border);
+  }
+
+  .svv-shell__aside {
+    padding: u(1.75) u(1.75) u(1.75) 0;
+    background: transparent;
+    border-bottom: 0;
+  }
+
+  .svv-shell__content {
+    padding: u(1.75) 0 u(2);
+  }
+
+  @container svv-shell (min-width: 832px) {
+    .svv-shell--with-aside .svv-shell__aside {
+      border-right: 1px solid var(--svv-border);
+    }
+
+    .svv-shell--with-aside .svv-shell__content {
+      padding-left: u(2);
+    }
+
+    .svv-shell--with-aside.svv-shell--aside-end .svv-shell__aside {
+      padding: u(1.75) 0 u(1.75) u(1.75);
+      border-right: 0;
+      border-left: 1px solid var(--svv-border);
+    }
+
+    .svv-shell--with-aside.svv-shell--aside-end .svv-shell__content {
+      padding-left: 0;
+      padding-right: u(2);
+    }
+  }
+
+  .svv-results__title {
+    font-size: u(2.5);
+    font-weight: var(--svv-adaptive-heading-weight);
+    letter-spacing: var(--svv-adaptive-tracking);
+  }
+
+  .svv-calendar__month,
+  .svv-monthview__month {
+    font-size: u(1.125);
+    font-weight: var(--svv-adaptive-heading-weight);
+    letter-spacing: var(--svv-adaptive-tracking);
+  }
+
+  .svv-summary__card strong {
+    font-weight: var(--svv-adaptive-heading-weight);
+    letter-spacing: normal;
+  }
+
+  .svv-card {
+    margin: 0;
+    padding-inline: 0;
+    border: 0;
+    border-top: 1px solid var(--svv-border);
+    border-radius: 0;
+
+    &:hover {
+      border-color: var(--svv-border);
+      background: transparent;
+      box-shadow: none;
+      transform: none;
+    }
+  }
+
+  .svv-card__title {
+    font-family: var(--svv-heading-font);
+    font-size: u(1.1875);
+    font-weight: var(--svv-adaptive-heading-weight);
+    letter-spacing: 0.04rem;
+
+    a:hover {
+      color: var(--svv-adaptive-ink);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+  }
+
+  .svv-card__when,
+  .svv-card__meta,
+  .svv-card__availability {
+    font-size: u(0.875);
+  }
+
+  .svv-card__description {
+    font-size: u(0.9375);
+  }
+
+  .svv-card__price {
+    font-size: u(1.0625);
+    font-weight: 400;
+    letter-spacing: 0.1rem;
+  }
+
+  .svv-events__separator {
+    color: var(--svv-adaptive-ink);
+    font-size: u(0.8125);
+    letter-spacing: 0.13rem;
+  }
+
+  .svv-events--grid .svv-card {
+    border: 0;
+  }
+
+  .svv-events--grid .svv-card__body {
+    padding: u(1) 0 0;
+  }
+
+  .svv-events--grid .svv-card__action {
+    padding: u(0.875) 0 u(0.25);
+  }
+
+  .svv-events--grid .svv-card:hover .svv-card__media {
+    opacity: 0.9;
+  }
+
+  .svv-card__cta,
+  .svv-drawer__cta,
+  .svv-submit {
+    min-height: u(2.8125);
+    padding: 0 u(1.75);
+    border-radius: var(--svv-pill);
+    color: var(--svv-adaptive-button-text);
+    font-size: u(0.9375);
+    font-weight: 400;
+    letter-spacing: 0.1rem;
+  }
+
+  .svv-card__share {
+    width: u(2.8125);
+    height: u(2.8125);
+    border-color: var(--svv-border-strong);
+    border-radius: var(--svv-pill);
+    color: var(--svv-adaptive-ink);
+
+    &:hover {
+      border-color: var(--svv-adaptive-ink);
+      background: var(--svv-adaptive-tint);
+    }
+  }
+
+  .svv-search,
+  .svv-select {
+    min-height: u(2.8125);
+    border-color: var(--svv-border-strong);
+    border-radius: var(--svv-adaptive-input-radius);
+    background: transparent;
+
+    &:focus-within {
+      border-color: var(--svv-adaptive-ink);
+      box-shadow: inset 0 0 0 1px var(--svv-adaptive-ink);
+    }
+  }
+
+  .svv-viewmode {
+    gap: u(1.25);
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+
+    button {
+      min-height: u(2.8125);
+      padding: 0;
+      border-radius: 0;
+      font-size: u(0.9375);
+      font-weight: 400;
+      letter-spacing: var(--svv-adaptive-tracking);
+
+      &.is-active {
+        background: transparent;
+        box-shadow: none;
+        text-decoration: underline;
+        text-underline-offset: 6px;
+      }
+    }
+  }
+
+  .svv-quick button,
+  .svv-pill,
+  .svv-filters select,
+  .svv-pagination select,
+  .svv-filters__toggle {
+    border-color: var(--svv-border-strong);
+    border-radius: 40px;
+    font-size: u(0.875);
+  }
+
+  .svv-datestrip__chip {
+    border-color: var(--svv-border-strong);
+    border-radius: var(--svv-adaptive-input-radius);
+
+    &.is-selected {
+      border-color: var(--svv-adaptive-ink);
+      background: var(--svv-adaptive-ink);
+      color: var(--svv-adaptive-paper);
+    }
+  }
+
+  .svv-calendar__day.is-selected {
+    background: var(--svv-adaptive-ink);
+    color: var(--svv-adaptive-paper);
+  }
+
+  .svv-monthview__event {
+    color: var(--svv-adaptive-ink);
+
+    &:hover {
+      background: var(--svv-adaptive-ink);
+      color: var(--svv-adaptive-paper);
+    }
+  }
+
+  .svv-field__input {
+    min-height: u(2.8125);
+    border-radius: var(--svv-adaptive-input-radius);
+
+    &:focus {
+      border-color: var(--svv-adaptive-ink);
+      box-shadow: inset 0 0 0 1px var(--svv-adaptive-ink);
+    }
+  }
+
+  .svv-choice input {
+    accent-color: var(--svv-adaptive-ink);
+  }
+
+  .svv-drawer__pane-title {
+    font-size: u(0.9375);
+    letter-spacing: var(--svv-adaptive-tracking);
+  }
+
+  .svv-drawer__title,
+  .svv-drawer__total strong,
+  .svv-modal__title {
+    font-weight: var(--svv-adaptive-heading-weight);
+    letter-spacing: var(--svv-adaptive-tracking);
+  }
+
+  .svv-modal__panel,
+  .svv-share__link {
+    border-radius: 0;
+  }
+
+  @include mobile {
+    .svv-shell__header {
+      padding: 12px 16px;
+    }
+
+    .svv-viewmode {
+      justify-content: flex-start;
+    }
+
+    .svv-shell__content {
+      padding: 20px 16px 24px;
+    }
+
+    .svv-results__title {
+      font-size: 28px;
+    }
+
+    .svv-events--grid .svv-card {
+      border: 0;
+    }
+
+    .svv-events--grid .svv-card__body {
+      padding: 0;
+    }
+  }
+}

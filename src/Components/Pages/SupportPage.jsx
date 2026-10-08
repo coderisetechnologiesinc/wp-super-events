@@ -1,354 +1,127 @@
-import moment from "moment";
-import { useState, useEffect } from "react";
-import BlockStack from "../Containers/BlockStack";
-import PageWrapper from "./PageWrapper";
-import { useLocation } from "react-router-dom";
+import { useRef, useState } from "react";
 import {
-  EnvelopeIcon,
-  ChatBubbleLeftRightIcon,
   ArrowTopRightOnSquareIcon,
-  InformationCircleIcon,
-} from "@heroicons/react/16/solid";
-import { useServvStore } from "../../store/useServvStore";
-const SupportPage = () => {
-  const settings = useServvStore((s) => s.settings);
-  const [intercomLaded, setIntercomLoaded] = useState(false);
-  const FAQs = [
-    {
-      title: "How do I create my first event?",
-      url: "https://support.servv.ai/pages/getting-started/events/events/#create-an-event",
-    },
-    {
-      title: "Can I customise the booking form fields?",
-      url: "https://support.servv.ai/pages/getting-started/bookings/viewbookings/#table-customization",
-    },
-    {
-      title: "How do I set booking limits or max capacity?",
-      url: "https://support.servv.ai/pages/getting-started/events/ticket/",
-    },
-    {
-      title: "How do I configure event categories or tags?",
-      url: "https://support.servv.ai/pages/getting-started/filters/filters/#category-filter",
-    },
-    {
-      title: "This is an example question with external link?",
-      url: "https://support.servv.ai/pages/getting-started/filters/memberfilter/#related-links",
-    },
-  ];
+  BookOpenIcon,
+  ChatBubbleLeftRightIcon,
+  CodeBracketIcon,
+  DocumentDuplicateIcon,
+} from "@heroicons/react/24/outline";
+import PageWrapper from "./PageWrapper";
+import PageContent from "../Containers/PageContent";
+import PageHeader from "../Containers/PageHeader";
+import PageActionButton from "../Controls/PageActionButton";
+import styles from "./PlansSupport.module.scss";
 
-  const [mainLinks, setMetaLinks] = useState([
-    {
-      title: "Documentation",
-      description: "Step-by-step guides & API docs",
-      url: "https://support.servv.ai",
-    },
-
-    {
-      title: "Submit ticket",
-      description: "One-to-one help",
-      url: "https://servv.ai/contact/",
-    },
-    {
-      title: "Feature request",
-      description: "Have an idea for us?",
-      url: "https://servv.ai/contact/",
-    },
-  ]);
-
-  useEffect(() => {
-    if (settings?.current_plan?.id && !settings?.is_wp_marketplace)
-      setMetaLinks([
-        {
-          title: "Documentation",
-          description: "Step-by-step guides & API docs",
-          url: "https://support.servv.ai",
-        },
-        {
-          title: "Support forum",
-          description: "Real-time answers from power users",
-          url: "https://wordpress.org/support/plugin/servvai-event-booking",
-        },
-        {
-          title: "Submit ticket",
-          description: "One-to-one help",
-          url: "https://servv.ai/contact/",
-        },
-        {
-          title: "Raise a bug",
-          description: "Log an issue on GitHub",
-          url: "https://github.com/coderisetechnologiesinc/wp-super-events/issues",
-        },
-        {
-          title: "Feature request",
-          description: "Have an idea for us?",
-          url: "https://servv.ai/contact/",
-        },
-      ]);
-  }, [settings]);
-
-  const additionalLinks = [
-    {
-      title: "Changelog",
-      description: "View the latest updates and changes to our platform",
-      url: "https://support.servv.ai/changelogs/releasenotes/",
-    },
-    {
-      title: "Releases",
-      description: "See what's coming next and upcoming features",
-      url: "https://github.com/coderisetechnologiesinc/wp-super-events/releases",
-    },
-  ];
-
-  const versionInfo = {
-    Version: "2.1.4",
-    Build: "2024.01.15",
-    Environment: "Production",
-    "Last Updated": "2025-08-13T12:34:56Z",
-  };
-  const renderFAQ = () => {
-    return (
-      <div className="flex flex-col border border-gray-200 rounded-lg p-3xl mt-4xl">
-        {FAQs.map((item, index) => {
-          const isFirst = index === 0;
-          const isLast = index === FAQs.length - 1;
-
-          return (
-            <div
-              key={index}
-              className={`flex flex-row justify-between items-baseline 
-              ${!isFirst ? "pt-2xl" : ""} 
-              ${!isLast ? "border-b border-gray-200 pb-2xl" : ""}`}
-            >
-              <a
-                href={item.url}
-                className="text-brand-600 no-underline font-[500] text-[1rem]"
-              >
-                {item.title}
-              </a>
-              <ArrowTopRightOnSquareIcon className="w-[18px] fill-gray-400" />
-            </div>
-          );
-        })}
-      </div>
-    );
-  };
-
-  const renderVersionInfo = () => {
-    const info = Object.keys(versionInfo);
-    const currentTime = moment();
-    const last_updated = versionInfo["Last Updated"];
-    const lastUpdatedMoment = moment.utc(last_updated);
-    const diff = moment.duration(currentTime.diff(lastUpdatedMoment));
-
-    let parts = [];
-    if (diff.months()) parts.push(`${diff.months()} months`);
-    if (diff.days()) parts.push(`${diff.days()} days`);
-    if (diff.hours()) parts.push(`${diff.hours()} hours`);
-    if (diff.minutes()) parts.push(`${diff.minutes()} minutes`);
-
-    const diffString = parts.join(", ");
-    return (
-      <div className="flex flex-col border border-gray-200 rounded-lg p-3xl mt-4xl">
-        <div className="flex flex-col mb-3xl gap-2">
-          <div className="flex flex-row gap-2">
-            <InformationCircleIcon className="fill-[#717182] w-[0.875rem]" />
-            <span className="text-[#0A0A0A] font-[500] text-md">
-              System Information
-            </span>
-          </div>
-          <span className="text-[#717182] font-[400] text-sm">
-            Current version and build details
-          </span>
-        </div>
-
-        {info.map((item, index) => {
-          const isFirst = index === 0;
-          const isLast = index === info.length - 1;
-
-          return (
-            <div
-              key={index}
-              className={`flex flex-row justify-between items-baseline 
-              ${!isFirst ? "pt-2xl" : ""} 
-              ${!isLast ? "border-b border-gray-200 pb-2xl" : ""}`}
-            >
-              <p className="text-[#0A0A0A] font-[500] text-sm">{item}</p>
-              <p className="text-[#717182] font-[400] text-sm">
-                {item !== "Last Updated" ? versionInfo[item] : diffString}
-              </p>
-            </div>
-          );
-        })}
-      </div>
-    );
-  };
-
-  const renderLinks = (links, layout) => {
-    return (
-      <div
-        className={`mt-16 gap-4 max-md:flex-col max-md:justify-start max-md:flex-nowrap 
-        ${
-          layout === 3
-            ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-            : "grid grid-cols-1 sm:grid-cols-2"
-        }`}
-      >
-        {links.map((link, index) => (
-          <div
-            key={index}
-            className="border rounded-xl border-gray-200 shadow-lg p-[1.5rem] flex flex-col"
-          >
-            <BlockStack gap={8}>
-              <button
-                onClick={() => window.open(link.url, "_blank")}
-                className="inline-flex w-fit rounded-[0.625rem] border border-gray-300 bg-white shadow-sm p-[14px]"
-              >
-                <ArrowTopRightOnSquareIcon className="w-[20px] fill-gray-700" />
-              </button>
-              <div className="flex flex-col gap-2">
-                <h2 className="text-gray-900 text-display-sm">{link.title}</h2>
-                <p className="text-[0.75rem] font-regular">
-                  {link.description}
-                </p>
-              </div>
-            </BlockStack>
-          </div>
-        ))}
-      </div>
-    );
-  };
-
-  const handleIntercomClick = () => {
-    // Avoid injecting multiple times
-    if (window.IntercomInjected) return;
-    window.IntercomInjected = true;
-
-    // Set Intercom settings
-    window.intercomSettings = {
-      api_base: "https://api-iam.intercom.io",
-      app_id: "peztdh9y",
-      custom_launcher_selector: "#servv_live_chat",
-    };
-
-    // Inject main Intercom loader script
-    const script = document.createElement("script");
-    script.type = "text/javascript";
-    script.async = true;
-    script.innerHTML = `
-      (function () { 
-        var w = window; 
-        var ic = w.Intercom; 
-        if (typeof ic === "function") { 
-          ic('reattach_activator'); 
-          ic('update', w.intercomSettings); 
-        } else { 
-          var d = document; 
-          var i = function () { i.c(arguments); }; 
-          i.q = []; 
-          i.c = function (args) { i.q.push(args); }; 
-          w.Intercom = i; 
-          var l = function () { 
-            var s = d.createElement('script'); 
-            s.type = 'text/javascript'; 
-            s.async = true; 
-            s.src = 'https://widget.intercom.io/widget/peztdh9y'; 
-            var x = d.getElementsByTagName('script')[0]; 
-            x.parentNode.insertBefore(s, x); 
-          }; 
-          if (document.readyState === 'complete') { 
-            l(); 
-          } else if (w.attachEvent) { 
-            w.attachEvent('onload', l); 
-          } else { 
-            w.addEventListener('load', l, false); 
-          } 
-        } 
-      })();
-    `;
-    document.body.appendChild(script);
-
-    script.onload = () => {
-      if (window.Intercom) {
-        window.Intercom("boot");
-      }
-    };
-    setIntercomLoaded(true);
-  };
-  const location = useLocation();
-
-  useEffect(() => {
-    if (location.pathname !== "/support") return;
-
-    handleIntercomClick();
-  }, [location.pathname]);
-
-  useEffect(() => {
-    if (location.pathname === "/support") {
-      handleIntercomClick();
-    } else if (window.Intercom) {
-      window.Intercom("shutdown");
-      window.IntercomInjected = false;
+const links = [
+  {
+    title: "Documentation",
+    note: "Find guides and product information.",
+    url: "https://wpsuperevents.com",
+    Icon: BookOpenIcon,
+  },
+  {
+    title: "WordPress.org support",
+    note: "Ask questions through the official support forum.",
+    url: "https://wordpress.org/support/plugin/servvai-event-booking",
+    Icon: ChatBubbleLeftRightIcon,
+  },
+  {
+    title: "GitHub issues",
+    note: "Report bugs and implementation issues.",
+    url: "https://github.com/coderisetechnologiesinc/wp-super-events/issues",
+    Icon: CodeBracketIcon,
+  },
+];
+const label = (key) =>
+  key.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+export default function SupportPage() {
+  const diagnostics = window.servvData?.diagnostics || {};
+  const report = JSON.stringify(diagnostics, null, 2);
+  const [message, setMessage] = useState("");
+  const reportField = useRef(null);
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(report);
+      setMessage("System report copied.");
+    } catch {
+      reportField.current?.focus();
+      reportField.current?.select();
+      setMessage("Copy the selected system report manually.");
     }
-  }, [location.pathname]);
-
+  }
   return (
-    <PageWrapper loading={false} withBackground={true}>
-      <div className="dashboard-card">
-        <BlockStack gap={4}>
-          <div className="flex flex-col justify-center items-center ">
-            <h2 className="text-gray-900 text-display-sm">Help & Support</h2>
-            <p className="text-regular text-[#475467] text-md text-center">
-              Get help, find resources, and connect with our support team to
-              resolve any issues quickly.
-            </p>
+    <PageWrapper flush>
+      <PageContent>
+        <PageHeader
+          title="Help & support"
+          description="Use the official support channels for product help, bug reports, and implementation questions."
+        />
+        <div className={styles.divider} />
+        <div className={styles.supportLayout}>
+          <div className={styles.stack}>
+            <div className={styles.linkGrid}>
+              {links.map(({ title, note, url, Icon }) => (
+                <a
+                  key={url}
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${styles.card} ${styles.resource}`}
+                >
+                  <span className={styles.resourceIcon}>
+                    <Icon />
+                  </span>
+                  <h2>{title}</h2>
+                  <p>{note}</p>
+                  <ArrowTopRightOnSquareIcon className={styles.external} />
+                </a>
+              ))}
+            </div>
+            <section className={styles.card}>
+              <h2>Safe diagnostics</h2>
+              <p>
+                This system report excludes tokens, secrets, and private
+                integration credentials.
+              </p>
+              <textarea
+                ref={reportField}
+                className={styles.report}
+                aria-label="System report"
+                rows={12}
+                value={report}
+                readOnly
+              />
+              <div className={styles.reportActions}>
+                <PageActionButton
+                  text="Copy system report"
+                  icon={<DocumentDuplicateIcon />}
+                  size="sm"
+                  onAction={copy}
+                />
+                <span role="status">{message}</span>
+              </div>
+            </section>
           </div>
-          <div className="flex flex-row gap-2 justify-center">
-            <a
-              href="mailto:support@servv.ai"
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
-              className="rounded-[0.625rem] border no-underline border-gray-300 bg-white shadow-sm flex flex-row gap-2 justify-between px-[14px] py-[10px]"
-            >
-              <EnvelopeIcon className="w-[20px] fill-gray-700" />
-              <span className="text-sm text-gray-700 font-semibold">
-                Email Us
-              </span>
-            </a>
-
-            {intercomLaded && (
-              <button
-                id="servv_live_chat"
-                className="rounded-[0.625rem] border border-white bg-brand-600 shadow-sm flex flex-row gap-2 justify-between px-[14px] py-[10px]"
-                // onClick={handleIntercomClick}
-              >
-                <ChatBubbleLeftRightIcon className="w-[20px] fill-white" />
-                <span className="text-sm text-white font-semibold">
-                  Live Chat
-                </span>
-              </button>
-            )}
-          </div>
-        </BlockStack>
-
-        {renderLinks(mainLinks, 3)}
-
-        <h2 className="text-gray-900 text-display-sm mt-16">
-          Frequently Asked Questions
-        </h2>
-
-        {renderFAQ()}
-
-        {settings?.current_plan?.id &&
-          !settings?.is_wp_marketplace &&
-          renderLinks(additionalLinks)}
-        <p className="text-regular text-sm text-gray-[#0A0A0A] mt-4xl">
-          Version Information : 1.0
-        </p>
-        {/* {renderVersionInfo()} */}
-      </div>
+          <aside className={`${styles.card} ${styles.system}`}>
+            <span className={styles.eyebrow}>System information</span>
+            <h2>Site health</h2>
+            <dl className={styles.facts}>
+              {Object.entries(diagnostics).map(([key, value]) => (
+                <div key={key}>
+                  <dt>{label(key)}</dt>
+                  <dd>
+                    {typeof value === "boolean"
+                      ? value
+                        ? "Yes"
+                        : "No"
+                      : String(value)}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </aside>
+        </div>
+      </PageContent>
     </PageWrapper>
   );
-};
-
-export default SupportPage;
+}

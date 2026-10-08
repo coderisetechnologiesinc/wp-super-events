@@ -1,0 +1,100 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+
+@include m.scoped {
+  .field {
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .content {
+    @include m.field-surface;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: t.$control-lg;
+    padding: 0 t.$space-6;
+
+    &:hover:not(.disabled) {
+      border-color: t.$primary-border-soft;
+    }
+
+    &:focus-within {
+      @include m.focus-ring;
+    }
+  }
+
+  .textarea {
+    height: auto;
+    padding: t.$space-5 t.$space-6;
+  }
+
+  .native {
+    @include m.wp-reset-control;
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    color: t.$text;
+    @include m.text(14, t.$weight-medium);
+    outline: none;
+    appearance: none;
+
+    &:focus {
+      outline: none;
+      box-shadow: none;
+    }
+
+    &::placeholder {
+      color: t.$text-placeholder;
+      font-weight: t.$weight-medium;
+    }
+
+    &:disabled {
+      color: t.$text-soft;
+      cursor: not-allowed;
+    }
+
+    // Hide the spinner on numeric inputs: the design pairs them with explicit
+    // stepper buttons instead.
+    &[type="number"] {
+      -moz-appearance: textfield;
+    }
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      margin: 0;
+      appearance: none;
+    }
+  }
+
+  textarea.native {
+    line-height: 21px;
+    resize: vertical;
+  }
+
+  .left {
+    text-align: left;
+  }
+
+  .center {
+    text-align: center;
+  }
+
+  .right {
+    text-align: right;
+  }
+
+  .error .content {
+    @include m.field-error;
+  }
+
+  .disabled .content {
+    background: t.$surface-subtle;
+    box-shadow: none;
+  }
+}

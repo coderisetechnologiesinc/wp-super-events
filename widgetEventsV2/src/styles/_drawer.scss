@@ -1,0 +1,457 @@
+@use "unit" as *;
+
+.svv-wgt-v2 {
+  .svv-drawer {
+    --svv-drawer-inset: 0px;
+
+    width: min(
+      var(--svv-drawer-width, 640px),
+      calc(100% - var(--svv-drawer-inset) - var(--svv-drawer-inset))
+    );
+    max-width: none;
+    height: 100dvh;
+    max-height: 100dvh;
+    padding: 0;
+    border: 0;
+    background: var(--svv-drawer-bg);
+    color: var(--svv-card-text);
+    font-family: var(--svv-font);
+    font-size: var(--svv-font-size);
+    overscroll-behavior: contain;
+  }
+
+  .svv-drawer--right {
+    margin: 0 0 0 auto;
+  }
+
+  .svv-drawer--left {
+    margin: 0 auto 0 0;
+  }
+
+  // entrance: allow-discrete lets display and overlay animate out with the rest
+  .svv-drawer {
+    transition:
+      transform 0.32s cubic-bezier(0.32, 0.72, 0, 1),
+      overlay 0.32s allow-discrete,
+      display 0.32s allow-discrete;
+  }
+
+  // the open state needs an explicit identity, not the absence of a rule
+  .svv-drawer--right {
+    transform: translateX(0);
+  }
+
+  .svv-drawer--left {
+    transform: translateX(0);
+  }
+
+  .svv-drawer--right:not([open]) {
+    transform: translateX(100%);
+  }
+
+  .svv-drawer--left:not([open]) {
+    transform: translateX(-100%);
+  }
+
+  @starting-style {
+    .svv-drawer--right[open] {
+      transform: translateX(100%);
+    }
+
+    .svv-drawer--left[open] {
+      transform: translateX(-100%);
+    }
+  }
+
+  .svv-drawer::backdrop {
+    background: var(--svv-drawer-backdrop);
+    opacity: 1;
+    transition:
+      opacity 0.32s ease,
+      overlay 0.32s allow-discrete,
+      display 0.32s allow-discrete;
+  }
+
+  .svv-drawer:not([open])::backdrop {
+    opacity: 0;
+  }
+
+  @starting-style {
+    .svv-drawer[open]::backdrop {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .svv-drawer,
+    .svv-drawer::backdrop {
+      transition: none;
+    }
+
+    .svv-drawer--right:not([open]),
+    .svv-drawer--left:not([open]) {
+      transform: none;
+    }
+  }
+
+  .svv-drawer__panel {
+    container-type: inline-size;
+    container-name: svv-drawer;
+
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    height: 100%;
+  }
+
+  .svv-drawer__head,
+  .svv-drawer__foot {
+    display: flex;
+    align-items: center;
+    gap: u(0.75);
+    padding: u(1) u(1.125);
+    background: var(--svv-drawer-bg);
+  }
+
+  .svv-drawer__head {
+    justify-content: space-between;
+    border-bottom: 1px solid var(--svv-border);
+  }
+
+  .svv-drawer__badges,
+  .svv-drawer__head-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: u(0.375);
+  }
+
+  .svv-drawer__icon {
+    display: grid;
+    place-items: center;
+    width: u(2.375);
+    height: u(2.375);
+    border: 1px solid var(--svv-border);
+    border-radius: var(--svv-pill);
+    background: var(--svv-drawer-bg);
+    color: var(--svv-card-text-muted);
+    font-size: u(1.125);
+    line-height: 1;
+
+    &:hover {
+      border-color: var(--svv-primary);
+      color: var(--svv-primary);
+    }
+
+    svg {
+      display: block;
+      width: 1em;
+      height: 1em;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+  }
+
+  .svv-drawer__body {
+    padding: u(1.125);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .svv-drawer__pane-title {
+    font-size: u(1.0625);
+    font-weight: 700;
+  }
+
+  .svv-drawer--filters .svv-filters {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: stretch;
+    margin: 0;
+  }
+
+  .svv-drawer--filters .svv-drawer__foot .svv-filters__clear {
+    align-self: start;
+    padding-inline: 0;
+  }
+
+  .svv-drawer--filters .svv-drawer__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: u(0.5);
+
+    span {
+      text-transform: inherit;
+    }
+
+    .svv-filters__toggle-count {
+      background: color-mix(in srgb, var(--svv-primary-text) 26%, transparent);
+      color: var(--svv-primary-text);
+    }
+  }
+
+  .svv-drawer__hero {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: var(--svv-image-ratio);
+    margin-bottom: u(1.125);
+    border-radius: var(--svv-radius);
+    background: var(--svv-surface);
+    object-fit: cover;
+  }
+
+  .svv-drawer__title {
+    margin: 0 0 u(0.625);
+    font-size: u(1.875);
+    font-weight: 700;
+    line-height: 1.08;
+  }
+
+  .svv-drawer__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: u(0.5) u(0.875);
+    margin-bottom: u(1.125);
+    color: var(--svv-card-text-muted);
+    font-size: u(0.875);
+
+    div {
+      display: inline-flex;
+      align-items: center;
+      gap: u(0.3125);
+      white-space: nowrap;
+    }
+
+    dt {
+      font-weight: 800;
+
+      &::after {
+        content: ":";
+      }
+    }
+  }
+
+  .svv-drawer__section {
+    margin-bottom: u(1.125);
+    padding: u(0.875);
+    border: 1px solid var(--svv-border);
+    border-radius: var(--svv-radius);
+    background: var(--svv-card-bg);
+
+    h3 {
+      margin: 0 0 u(0.625);
+      font-size: u(0.9375);
+      font-weight: 700;
+    }
+
+    p,
+    li {
+      color: var(--svv-card-text-muted);
+      font-size: u(0.875);
+      line-height: 1.5;
+    }
+
+    ul {
+      display: grid;
+      gap: u(0.25);
+      list-style: disc;
+      padding-left: u(1.125);
+    }
+  }
+
+  .svv-hosts {
+    display: grid;
+    gap: u(0.5);
+
+    li {
+      display: grid;
+      gap: u(0.125);
+    }
+
+    strong {
+      font-weight: 700;
+    }
+
+    span {
+      color: var(--svv-card-text-muted);
+      font-size: u(0.8125);
+    }
+  }
+
+  .svv-calendar-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: u(0.5);
+  }
+
+  .svv-pill {
+    display: inline-flex;
+    align-items: center;
+    min-height: u(2.25);
+    padding: 0 u(0.875);
+    border: 1px solid color-mix(in srgb, var(--svv-primary) 35%, var(--svv-card-bg));
+    border-radius: var(--svv-pill);
+    background: var(--svv-card-bg);
+    color: var(--svv-primary);
+    font-size: u(0.875);
+    font-weight: 850;
+
+    &:hover {
+      background: var(--svv-primary-subtle);
+    }
+  }
+
+  .svv-related {
+    display: grid;
+    gap: u(0.625);
+
+    li {
+      padding: u(0.75);
+      border: 1px solid var(--svv-border);
+      border-radius: var(--svv-radius);
+    }
+  }
+
+  .svv-related__title {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: var(--svv-primary);
+    font-weight: 850;
+    text-align: left;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .svv-related__meta {
+    color: var(--svv-card-text-muted);
+    font-size: u(0.8125);
+  }
+
+  .svv-drawer__section .svv-choice {
+    margin-top: u(0.75);
+  }
+
+  .svv-stepper {
+    display: inline-flex;
+    align-items: center;
+    gap: u(0.5);
+    padding: u(0.25);
+    border: 1px solid var(--svv-border);
+    border-radius: var(--svv-pill);
+    background: var(--svv-surface);
+
+    button {
+      width: u(2.125);
+      height: u(2.125);
+      border: 0;
+      border-radius: var(--svv-pill);
+      background: var(--svv-card-bg);
+      color: var(--svv-primary);
+      font-weight: 950;
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: default;
+      }
+    }
+
+    output {
+      min-width: u(1.75);
+      text-align: center;
+      font-weight: 900;
+    }
+  }
+
+  .svv-drawer__foot {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    border-top: 1px solid var(--svv-border);
+  }
+
+  .svv-drawer__foot-error {
+    flex-basis: 100%;
+  }
+
+  .svv-drawer__total {
+    display: grid;
+    gap: u(0.1875);
+
+    span {
+      color: var(--svv-card-text-muted);
+      font-size: u(0.75);
+      font-weight: 800;
+    }
+
+    strong {
+      font-size: u(1.375);
+      font-weight: 700;
+    }
+  }
+
+  .svv-drawer__summary {
+    display: flex;
+    align-items: center;
+    gap: u(0.75);
+    margin-bottom: u(1.125);
+    padding-bottom: u(1.125);
+    border-bottom: 1px solid var(--svv-border);
+  }
+
+  .svv-drawer__summary-image {
+    flex: none;
+    display: block;
+    width: u(3.5);
+    height: u(3.5);
+    border-radius: var(--svv-radius);
+    background: var(--svv-surface);
+    object-fit: cover;
+  }
+
+  .svv-drawer__summary-text {
+    display: grid;
+    gap: u(0.125);
+    min-width: 0;
+
+    strong {
+      font-size: u(0.9375);
+      font-weight: 700;
+    }
+
+    span {
+      color: var(--svv-card-text-muted);
+      font-size: u(0.8125);
+    }
+  }
+
+  .svv-drawer__step {
+    display: grid;
+    gap: u(0.875);
+  }
+
+  .svv-drawer__step-title {
+    margin: 0;
+    font-size: u(1.0625);
+    font-weight: 700;
+  }
+
+  @container svv-drawer (max-width: 30em) {
+    .svv-drawer__foot {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .svv-drawer__cta {
+      width: 100%;
+    }
+
+    .svv-drawer__title {
+      font-size: u(1.5);
+    }
+  }
+}

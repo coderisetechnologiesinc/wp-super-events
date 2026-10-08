@@ -1,285 +1,261 @@
-import { ArrowUpRightIcon } from "@heroicons/react/16/solid";
-import BlockStack from "../../Containers/BlockStack";
-import InlineStack from "../../Containers/InlineStack";
-import PageContent from "../../Containers/PageContent";
-import CalendarsPage from "./CalendarsPage";
-import Badge from "../../Containers/Badge";
-import { useState, Fragment, useEffect } from "react";
-import EmailsPage from "../EmailsPage";
-import ZoomPage from "./ZoomPage";
-import ZoomSettingsPage from "./ZoomSettingsPage";
-import StripeIntegrationsPage from "./StripeIntegrationsPage";
-import PageWrapper from "../PageWrapper";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import PageWrapper from "../PageWrapper";
+import PageContent from "../../Containers/PageContent";
+import PageHeader from "../../Containers/PageHeader";
+import ServiceCard from "../../Containers/ServiceCard";
+import PageActionButton from "../../Controls/PageActionButton";
 import { useServvStore } from "../../../store/useServvStore";
+import axios from "../../../utilities/adminApi";
+import { toast } from "react-toastify";
+import useCacheRefresh from "../../../hooks/useCacheRefresh";
+import styles from "./IntegrationsPage.module.scss";
+
+// The integrations landing. The copy comes from the native WordPress screen
+// this replaced (servv_render_integrations_overview in servv.php) — that one
+// no longer renders, so these are the single source of those strings.
 const IntegrationsPage = ({
   handleResetSubpage = () => {},
   resetSelectedSubpage = false,
 }) => {
-  const { settings } = useServvStore();
-  const [selectedPage, setSelectedPage] = useState("main");
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-  const handleSelectPage = (page) => {
-    navigate(page);
+  const settings = useServvStore((s) => s.settings);
+  const zoomConnected = useServvStore((s) => s.zoomConnected);
+  const stripeConnected = useServvStore((s) => s.stripeConnected);
+  const gmailConnected = useServvStore((s) => s.gmailConnected);
+  const calendarConnected = useServvStore((s) => s.calendarConnected);
+
+  const [accounts, setAccounts] = useState({});
+  const [busy, setBusy] = useState(null);
+  const loadAccounts = async () => {
+    const services = ["calendar", "gmail", "zoom", "stripe"];
+    const results = await Promise.allSettled(
+      services.map((service) =>
+        axios.get(`/wp-json/servv-plugin/v1/${service}/account`, {
+          headers: { "X-WP-Nonce": window.servvData.nonce },
+        }),
+      ),
+    );
+    setAccounts((previous) => {
+      const next = { ...previous };
+      results.forEach((result, index) => {
+        if (result.status === "fulfilled")
+          next[services[index]] = result.value.data;
+      });
+      return next;
+    });
   };
-  console.log("marketplace condition", settings && settings?.is_wp_marketplace);
   useEffect(() => {
-    if (resetSelectedSubpage) {
-      setSelectedPage("main");
-      handleResetSubpage(false);
+    loadAccounts();
+  }, []);
+  useCacheRefresh(["accounts"], loadAccounts);
+  const disconnect = async (service) => {
+    setBusy(service);
+    try {
+      await axios.delete(`/wp-json/servv-plugin/v1/${service}/account`, {
+        headers: { "X-WP-Nonce": window.servvData.nonce },
+      });
+      setAccounts((previous) => ({ ...previous, [service]: null }));
+      await useServvStore.getState().syncAccountsAfterEvents();
+    } catch {
+      toast.error("Unable to disconnect the account. Please try again.");
+    } finally {
+      setBusy(null);
     }
-  }, [resetSelectedSubpage]);
+  };
+  const navigate = useNavigate();
+
   useEffect(() => {
-    const parsedUrl = new URL(window.location);
-    const params = new URLSearchParams(parsedUrl.search);
-    const section = params.get("section");
-    if (section && section === "stripe-integration") {
-      setSelectedPage("stripe");
+    if (resetSelectedSubpage) handleResetSubpage(false);
+  }, [resetSelectedSubpage]);
+
+  // Stripe sends the admin back here with a section parameter after connecting.
+  useEffect(() => {
+    const params = new URLSearchParams(new URL(window.location).search);
+
+    if (params.get("section") === "stripe-integration") {
       window.history.pushState(
         {},
         "",
-        window.location.origin +
-          `${servvData.adminUrl}?page=servvai-event-booking`,
+        `${window.location.origin}${servvData.adminUrl}?page=servvai-event-booking`,
       );
+      navigate("/integrations/stripe");
     }
   }, []);
 
+  // Zoom and Stripe are paid-plan features.
   const isFeatureAvailable =
     settings?.current_plan?.id === 2 || settings?.current_plan?.id === 3;
 
-  // const isFeatureAvailable = true;
-  // console.log(isFeatureAvailable);
+  let analyticsId = "";
+  try {
+    const raw = settings?.settings?.widget_style_settings;
+    analyticsId =
+      (typeof raw === "string" ? JSON.parse(raw) : raw)?.google_analytics_id ||
+      "";
+  } catch {
+    /* Leave the status unconfigured when settings are unavailable. */
+  }
+
+  const cards = [
+    {
+      key: "calendars",
+      glyph: "G",
+      title: "Google Calendar",
+      // From the native screen.
+      description: "Sync event schedules to Google Calendar.",
+      connected: calendarConnected,
+
+      route: "/integrations/calendars",
+    },
+    {
+      key: "gmail",
+      glyph: "M",
+      title: "Gmail",
+      description: "Send event email notifications and reminders with Gmail.",
+      connected: gmailConnected,
+
+      route: "/integrations/gmail",
+    },
+    {
+      key: "zoom",
+      glyph: "Z",
+      title: "Zoom",
+      description: "Create and manage online event meetings.",
+      connected: zoomConnected,
+
+      route: "/integrations/zoom",
+      requiresPlan: true,
+    },
+    {
+      key: "stripe",
+      glyph: "S",
+      title: "Stripe",
+      description: "Accept paid registrations and manage payout settings.",
+      connected: stripeConnected,
+
+      route: "/integrations/stripe",
+      requiresPlan: true,
+    },
+    ...(settings?.is_wp_marketplace
+      ? [
+          {
+            key: "analytics",
+            glyph: "A",
+            title: "Google Analytics",
+            description:
+              "Track visits, clicks, and conversions for your events in one place.",
+            connected: analyticsId.length > 2,
+            route: "/integrations/analytics",
+          },
+        ]
+      : []),
+  ];
+
+  const paymentsOffline =
+    isFeatureAvailable &&
+    !("stripe" in accounts
+      ? accounts.stripe?.charges_enabled
+      : stripeConnected);
+
   return (
-    <PageWrapper loading={loading || !settings} withBackground={true}>
-      <div className="dashboard-card">
-        <div className="servv-dashboard-header">
-          <div className="dashboard-heading">
-            <h1 className="dashboard-title">Integrations</h1>
-            <p className="dashboard-description">
-              Connect and manage your integrations to enhance your event
-              management
-            </p>
+    <PageWrapper loading={!settings} withBackground={true} flush>
+      <PageContent className={styles.page}>
+        <PageHeader
+          title={t("Integrations")}
+          description="Payments, calendars, and email — connected in the same place"
+        >
+          <div className={styles.divider} />
+        </PageHeader>
+
+        {paymentsOffline && (
+          <div className={styles.notice}>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              aria-hidden="true"
+            >
+              <path d="M12 8v4m0 3.5v.5" />
+              <circle cx="12" cy="12" r="9" />
+            </svg>
+
+            <div className={styles.noticeText}>
+              <strong>{t("Payments are not live.")}</strong>{" "}
+              {t(
+                "Connect Stripe to sell paid tickets — free registrations work already.",
+              )}
+            </div>
+
+            <PageActionButton
+              type="primary"
+              size="sm"
+              text={t("Connect Stripe")}
+              onAction={() => navigate("/integrations/stripe")}
+            />
           </div>
+        )}
+
+        <div className={styles.grid}>
+          {[...cards]
+            .sort((a, b) =>
+              a.key === "stripe" ? -1 : b.key === "stripe" ? 1 : 0,
+            )
+            .map((card) => {
+              const service = card.key === "calendars" ? "calendar" : card.key;
+              const account = accounts[service];
+              const accountLabel =
+                account?.google_calendar_email ||
+                account?.email ||
+                account?.name ||
+                (service === "analytics" ? analyticsId : "");
+              const connected =
+                service in accounts
+                  ? Boolean(
+                      service === "zoom" || service === "gmail"
+                        ? account?.email
+                        : account?.id,
+                    )
+                  : card.connected;
+              const incomplete =
+                service === "stripe" && connected && !account?.charges_enabled;
+              const locked = card.requiresPlan && !isFeatureAvailable;
+
+              return (
+                <ServiceCard
+                  key={card.key}
+                  tile="raised"
+                  glyph={card.glyph}
+                  title={t(card.title)}
+                  description={t(card.description)}
+                  status={
+                    incomplete
+                      ? t("Connection incomplete")
+                      : connected
+                      ? t("Connected")
+                      : t("Not connected")
+                  }
+                  tone={incomplete ? "warn" : connected ? "on" : "neutral"}
+                  meta={locked ? t("Available on a paid plan") : undefined}
+                  actionLabel={connected ? t("Manage") : t("Connect")}
+                  actionType={connected ? "secondary" : "primary"}
+                  accountLabel={connected ? accountLabel : undefined}
+                  onDisconnect={
+                    connected && !locked && service !== "analytics"
+                      ? () => disconnect(service)
+                      : undefined
+                  }
+                  busy={busy === service}
+                  disabled={locked}
+                  onAction={() => navigate(card.route)}
+                />
+              );
+            })}
         </div>
-        {selectedPage === "main" && (
-          <Fragment>
-            <PageContent>
-              <div className="grid h-full gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3 items-stretch">
-                <div
-                  className={`h-full w-full border rounded-xl border-gray-200 shadow-lg p-[1.5rem] flex flex-col`}
-                >
-                  <BlockStack
-                    gap={2}
-                    cardsLayout={true}
-                    action={true}
-                    onAction={() => handleSelectPage("calendars")}
-                  >
-                    <a
-                      href=""
-                      className="servv-button-link"
-                      onClick={(e) => e.preventDefault()}
-                    >
-                      Calendars
-                    </a>
-                    <InlineStack align={"left"} justify={"space"}>
-                      <h2 className="card-section-heading">Calendars</h2>
-                      <ArrowUpRightIcon className="size-6" />
-                    </InlineStack>
-                    <p className="section-description mb-2">
-                      Keep your team and attendees aligned by syncing events
-                      directly with Google Calendar
-                    </p>
-                    <InlineStack align={"left"}>
-                      <Badge
-                        text="Google Calendar"
-                        type="pill-outline"
-                        size="medium"
-                      />
-                    </InlineStack>
-                  </BlockStack>
-                </div>
-
-                <div
-                  className={`h-full w-full border rounded-xl border-gray-200 shadow-lg p-[1.5rem] flex flex-col`}
-                >
-                  <BlockStack
-                    gap={2}
-                    action={true}
-                    cardsLayout={true}
-                    onAction={() => handleSelectPage("gmail")}
-                    disabled={!isFeatureAvailable}
-                  >
-                    <a
-                      href=""
-                      className="servv-button-link"
-                      onClick={(e) => e.preventDefault()}
-                    >
-                      Emails
-                    </a>
-                    <InlineStack align={"left"} justify={"space"}>
-                      <h2 className="card-section-heading">Emails</h2>
-                      <ArrowUpRightIcon className="size-6" />
-                    </InlineStack>
-                    <p className="section-description mb-2">
-                      Automate email notifications and reminders through your
-                      Gmail account to ensure smooth event communication
-                    </p>
-                    <InlineStack align={"left"}>
-                      <Badge text="Gmail" type="pill-outline" size="medium" />
-                    </InlineStack>
-                  </BlockStack>
-                </div>
-
-                {settings && (
-                  <div
-                    className={`h-full w-full border rounded-xl border-gray-200 shadow-lg p-[1.5rem] flex flex-col ${
-                      !isFeatureAvailable ? "opacity-[0.5]" : ""
-                    }`}
-                  >
-                    <BlockStack
-                      gap={2}
-                      cardsLayout={true}
-                      onAction={
-                        isFeatureAvailable
-                          ? () => handleSelectPage("zoom")
-                          : () => {}
-                      }
-                      disabled={!isFeatureAvailable}
-                    >
-                      <a
-                        href=""
-                        className="servv-button-link"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        Video Conferencing
-                      </a>
-                      <InlineStack align={"left"} justify={"space"}>
-                        <h2 className="card-section-heading">
-                          Video Conferencing
-                        </h2>
-                        <ArrowUpRightIcon className="size-6" />
-                      </InlineStack>
-                      <p className="section-description mb-2">
-                        Host and manage Zoom events effortlessly by integrating
-                        Zoom
-                      </p>
-                      <InlineStack align={"left"}>
-                        <Badge
-                          text="Zoom"
-                          type="pill-outline"
-                          size="medium"
-                          align="center"
-                        />
-                      </InlineStack>
-                    </BlockStack>
-                  </div>
-                )}
-                <div
-                  className={`h-full w-full border rounded-xl border-gray-200 shadow-lg p-[1.5rem] flex flex-col ${
-                    !isFeatureAvailable ? "opacity-[0.5]" : ""
-                  }`}
-                >
-                  <BlockStack
-                    action={true}
-                    gap={2}
-                    cardsLayout={true}
-                    disabled={!isFeatureAvailable}
-                    onAction={
-                      isFeatureAvailable
-                        ? () => handleSelectPage("stripe")
-                        : () => {}
-                    }
-                  >
-                    <a
-                      href=""
-                      className="servv-button-link"
-                      onClick={(e) => e.preventDefault()}
-                    >
-                      Stripe
-                    </a>
-                    <InlineStack align={"left"} justify={"space"}>
-                      <h2 className="card-section-heading">Stripe</h2>
-                      <ArrowUpRightIcon className="size-6" />
-                    </InlineStack>
-                    <p
-                      className="section-description mb-2"
-                      // style={{
-                      //   maxWidth:
-                      //     settings && settings.current_plan
-                      //       ? "calc(33% - 1rem)"
-                      //       : "calc(50% - 1rem)",
-                      // }}
-                    >
-                      Accept secure payments for your events with Stripe,
-                      ensuring a seamless checkout experience for attendees
-                    </p>
-                    <InlineStack align={"left"}>
-                      <Badge text="Stripe" type="pill-outline" size="medium" />
-                    </InlineStack>
-                  </BlockStack>
-                </div>
-
-                {settings && settings?.is_wp_marketplace && (
-                  <div
-                    className={`h-full w-full border rounded-xl border-gray-200 shadow-lg p-[1.5rem] flex flex-col`}
-                  >
-                    <BlockStack
-                      gap={2}
-                      cardsLayout={true}
-                      action={true}
-                      onAction={() => handleSelectPage("analytics")}
-                    >
-                      <a
-                        href=""
-                        className="servv-button-link"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        Analytics
-                      </a>
-                      <InlineStack align={"left"} justify={"space"}>
-                        <h2 className="card-section-heading">
-                          Google Analytics
-                        </h2>
-                        <ArrowUpRightIcon className="size-6" />
-                      </InlineStack>
-                      <p className="section-description mb-2">
-                        Connect Google Analytics to track visits, clicks, and
-                        conversions in one place.
-                      </p>
-                      <InlineStack align={"left"}>
-                        <Badge
-                          text="Google Analytics"
-                          type="pill-outline"
-                          size="medium"
-                        />
-                      </InlineStack>
-                    </BlockStack>
-                  </div>
-                )}
-              </div>
-            </PageContent>
-          </Fragment>
-        )}
-        {selectedPage === "calendars" && (
-          <CalendarsPage onPageSelect={handleSelectPage} />
-        )}
-        {selectedPage === "gmail" && (
-          <EmailsPage onPageSelect={handleSelectPage} />
-        )}
-        {selectedPage === "stripe" && (
-          <StripeIntegrationsPage
-            loading={loading}
-            setLoading={setLoading}
-            onPageSelect={setSelectedPage}
-          />
-        )}
-        {selectedPage === "zoom" && <ZoomPage onPageSelect={setSelectedPage} />}
-        {selectedPage === "settings" && (
-          <ZoomSettingsPage onPageSelect={handleSelectPage} />
-        )}
-      </div>
+      </PageContent>
     </PageWrapper>
   );
 };
+
 export default IntegrationsPage;

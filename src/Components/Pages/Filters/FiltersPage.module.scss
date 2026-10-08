@@ -1,0 +1,344 @@
+@use "../../../styles/tokens" as t;
+@use "../../../styles/mixins" as m;
+
+@include m.scoped {
+  .typeGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: t.$space-10;
+  }
+  .typeCard {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    border: 1px solid t.$border;
+    border-radius: t.$radius-2xl;
+    background: t.$surface;
+    box-shadow: t.$shadow-card;
+    h2 {
+      margin: 0;
+      font-size: 17px;
+      line-height: 24px;
+    }
+  }
+  .cardHeader {
+    padding: 16px 20px;
+    border-bottom: 1px solid t.$border-hairline;
+    h2 {
+      margin: 4px 0 0;
+      color: t.$text;
+      font-size: 17px;
+      line-height: 24px;
+      font-weight: 700;
+    }
+  }
+  .typeHeader {
+    display: flex;
+    align-items: center;
+    gap: t.$space-7;
+    h2 {
+      margin: 0;
+    }
+  }
+  .eyebrow {
+    color: t.$primary;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .cardBody {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    flex: 1;
+  }
+  .formCard {
+    width: 100%;
+    max-width: 840px;
+  }
+  .formBody {
+    > div {
+      gap: 18px;
+    }
+    :global(.annotated-section) {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    :global(.annotated-section-header) {
+      width: 100%;
+    }
+    :global(.annotated-section-header) h3 {
+      margin: 0;
+      font-family: t.$font-sans !important;
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 19px;
+      color: t.$text-strong;
+    }
+  }
+  .typeFooter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: t.$space-6;
+    margin-top: auto;
+  }
+  .divider {
+    height: 3px;
+    border-radius: 99px;
+    background: t.$surface;
+    box-shadow:
+      inset 2px 2px 4px t.$shade,
+      inset -1px -1px 3px t.$light;
+  }
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: t.$space-6;
+  }
+  .overviewHead,
+  .overviewRow {
+    grid-template-columns: minmax(240px, 2fr) minmax(0, 2fr) 100px auto;
+  }
+  .overviewHead,
+  .valueHead {
+    display: grid;
+    gap: t.$space-7;
+    padding: 0 t.$space-10;
+    color: t.$text-placeholder;
+    @include m.eyebrow;
+  }
+  .row {
+    display: grid;
+    gap: t.$space-7;
+    align-items: center;
+    width: 100%;
+    min-width: 0;
+    padding: t.$space-9 t.$space-10;
+    border: 1px solid t.$border;
+    border-radius: t.$radius-2xl;
+    background: t.$surface;
+    box-shadow:
+      8px 8px 20px t.$shade,
+      -4px -4px 12px t.$light;
+    transition:
+      box-shadow t.$duration t.$ease,
+      transform t.$duration t.$ease;
+    &:hover {
+      box-shadow:
+        12px 12px 28px t.$shade-strong,
+        -5px -5px 14px t.$light;
+      transform: translateY(-3px);
+    }
+  }
+  .picked {
+    background: rgba(100, 54, 201, 0.06);
+  }
+  .identity {
+    display: flex;
+    align-items: center;
+    gap: t.$space-7;
+    min-width: 0;
+    > div {
+      min-width: 0;
+    }
+  }
+  .mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 40px;
+    width: 40px;
+    height: 40px;
+    border: 1px solid t.$border;
+    border-radius: 13px;
+    background: t.$surface;
+    box-shadow: t.$shadow-raised-sm;
+    color: t.$primary;
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+  .name {
+    @include m.text(16, t.$weight-bold);
+    color: t.$text;
+    overflow-wrap: anywhere;
+  }
+  .secondary {
+    @include m.text(12, t.$weight-medium);
+    color: t.$text-soft;
+    margin: 2px 0 0;
+  }
+  .values {
+    @include m.text(13, t.$weight-medium);
+    color: t.$text-secondary;
+    @include m.truncate;
+  }
+  .count {
+    @include m.text(12, t.$weight-semibold);
+    color: t.$text-strong;
+  }
+  .toolbar {
+    display: flex;
+    align-items: center;
+    padding-inline: calc(#{t.$space-10} + 1px);
+    gap: t.$space-6;
+    flex-wrap: wrap;
+    min-height: 38px;
+  }
+  .pick {
+    display: flex;
+    align-items: center;
+  }
+  .detail {
+    min-width: 0;
+    @include m.text(13, t.$weight-medium);
+    color: t.$text-secondary;
+    > span:last-child {
+      display: block;
+      @include m.truncate;
+    }
+  }
+  .order {
+    @include m.text(13, t.$weight-semibold);
+    color: t.$text-strong;
+  }
+  .mobileLabel {
+    display: none;
+  }
+  .rowActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: t.$space-2;
+  }
+  .action {
+    @include m.button-reset;
+    @include m.wp-reset-button;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: t.$radius-sm;
+    color: t.$text-soft;
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+    &:hover {
+      background: t.$surface-subtle;
+      box-shadow: t.$shadow-raised-sm;
+      color: t.$primary;
+    }
+    &:focus-visible {
+      @include m.focus-ring-raised;
+    }
+    &:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+  }
+  .danger:hover {
+    color: t.$danger-text;
+    background: t.$danger-surface;
+  }
+  .empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: t.$space-6;
+    padding: 48px 24px;
+    text-align: center;
+    border: 1px solid t.$border;
+    border-radius: t.$radius-2xl;
+    background: t.$surface;
+    box-shadow: t.$shadow-card;
+    h2 {
+      @include m.text(20, t.$weight-bold);
+      margin: 0;
+    }
+    p {
+      max-width: 430px;
+      @include m.text(14, t.$weight-medium);
+      color: t.$text-soft;
+    }
+  }
+  .emptyIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: t.$primary-surface;
+    color: t.$primary;
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+  .menuIcon {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+    margin-top: 2px;
+    color: t.$primary;
+  }
+  .limit {
+    color: t.$danger-text;
+    @include m.text(13, t.$weight-medium);
+  }
+  @media (max-width: 1100px) {
+    .overviewHead,
+    .valueHead {
+      display: none;
+    }
+    .overviewRow {
+      grid-template-columns: minmax(0, 1fr) auto;
+      .identity {
+        grid-column: 1;
+      }
+      .values {
+        grid-column: 1 / -1;
+        grid-row: 2;
+      }
+      .count {
+        grid-column: 1;
+        grid-row: 3;
+      }
+      > a:last-child {
+        grid-column: 2;
+        grid-row: 1;
+      }
+    }
+    .valueRow {
+      grid-template-columns: 18px minmax(0, 1fr) auto !important;
+      .identity {
+        grid-column: 2 / -1;
+      }
+      .detail,
+      .order {
+        grid-column: 2 / -1;
+      }
+      .rowActions {
+        grid-column: 2 / -1;
+      }
+    }
+    .mobileLabel {
+      display: block;
+      margin-bottom: 3px;
+      color: t.$text-placeholder;
+      @include m.text(11, t.$weight-semibold);
+    }
+  }
+  @media (max-width: 735px) {
+    .createMenuPanel {
+      left: 0 !important;
+      right: auto !important;
+    }
+  }
+}

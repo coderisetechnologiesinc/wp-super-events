@@ -1,43 +1,41 @@
 import React from "react";
+import NewInputFieldControl from "./NewInputFieldControl";
+import styles from "./NewInputControl.module.scss";
 
+// A labelled field: NewInputFieldControl plus a label and error message.
 const NewInputControl = ({
   label = "",
-  value = "",
-  placeholder = "",
   helpText = "",
-  disabled = false,
-  onChange = () => {},
-  textarea = false,
-  style = {},
+  placeholder = "",
   error,
-  maxValue,
+  style = {},
+  width = "100%",
+  ...inputProps
 }) => {
-  const InputTag = textarea ? "textarea" : "input";
+  let errorMessage = "";
+
+  if (typeof error === "string") {
+    errorMessage = error;
+  } else if (error) {
+    errorMessage = "This field is required.";
+  }
 
   return (
-    <div className="servv_input" style={{ width: "100%" }}>
-      {label && <label className="step__content_title">{label}</label>}
+    <div className={styles.wrapper}>
+      {label && <label className={styles.label}>{label}</label>}
 
-      <div
-        className={`servv-input ${textarea ? "textarea" : "input"} ${
-          error ? "servv-input--error" : ""
-        }`}
+      <NewInputFieldControl
+        {...inputProps}
+        placeholder={placeholder || helpText}
+        error={Boolean(error)}
+        width={width}
         style={style}
-      >
-        <div className="servv-input__content">
-          <InputTag
-            className="servv-input__native"
-            value={value}
-            placeholder={placeholder || helpText}
-            disabled={disabled}
-            onChange={(e) => onChange(e.target.value)}
-            rows={textarea ? 4 : undefined}
-            max={maxValue ? Number.parseFloat(maxValue) : undefined}
-          />
+      />
+
+      {errorMessage && (
+        <div className={styles.errorText} role="alert">
+          {errorMessage}
         </div>
-      </div>
-      {error && typeof error === "string" && (
-        <div className="servv-input__error-text">{error}</div>
       )}
     </div>
   );

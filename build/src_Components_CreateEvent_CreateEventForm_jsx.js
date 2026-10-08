@@ -13,18 +13,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _assets_icons__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../assets/icons */ "./src/assets/icons/index.js");
-/* harmony import */ var _store_useServvStore__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../store/useServvStore */ "./src/store/useServvStore.js");
-/* harmony import */ var _assets_images_logo_png__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../assets/images/logo.png */ "./src/assets/images/logo.png");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-4WY6JWTD.mjs");
-/* harmony import */ var _utilities_events__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../utilities/events */ "./src/utilities/events.js");
-/* harmony import */ var _Pages_PageWrapper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Pages/PageWrapper */ "./src/Components/Pages/PageWrapper.jsx");
-/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/index.mjs");
-/* harmony import */ var _utilities_tickets__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../utilities/tickets */ "./src/utilities/tickets.js");
-/* harmony import */ var _Pages_Events_useServvData__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Pages/Events/useServvData */ "./src/Components/Pages/Events/useServvData.js");
-/* harmony import */ var _Pages_SpinnerLoader__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../Pages/SpinnerLoader */ "./src/Components/Pages/SpinnerLoader.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var _utilities_attributes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utilities/attributes */ "./src/utilities/attributes.js");
+/* harmony import */ var _assets_icons__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../assets/icons */ "./src/assets/icons/index.js");
+/* harmony import */ var _store_useServvStore__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../store/useServvStore */ "./src/store/useServvStore.js");
+/* harmony import */ var _assets_images_logo_png__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../assets/images/logo.png */ "./src/assets/images/logo.png");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-4WY6JWTD.mjs");
+/* harmony import */ var _utilities_events__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../utilities/events */ "./src/utilities/events.js");
+/* harmony import */ var _Pages_PageWrapper__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Pages/PageWrapper */ "./src/Components/Pages/PageWrapper.jsx");
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/index.mjs");
+/* harmony import */ var _utilities_tickets__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../utilities/tickets */ "./src/utilities/tickets.js");
+/* harmony import */ var _Pages_Events_useServvData__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../Pages/Events/useServvData */ "./src/Components/Pages/Events/useServvData.js");
+/* harmony import */ var _Pages_SpinnerLoader__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../Pages/SpinnerLoader */ "./src/Components/Pages/SpinnerLoader.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__);
 
 
 
@@ -37,11 +38,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const DateStep = react__WEBPACK_IMPORTED_MODULE_0___default().lazy(() => Promise.all(/*! import() */[__webpack_require__.e("vendors-node_modules_react-tailwindcss-datepicker_dist_index_esm_js"), __webpack_require__.e("vendors-node_modules_react-is_index_js-node_modules_use-isomorphic-layout-effect_dist_use-iso-b5fcbb"), __webpack_require__.e("vendors-node_modules_react-select_dist_react-select_esm_js-node_modules_heroicons_react_24_ou-9d1212"), __webpack_require__.e("vendors-node_modules_react-day-picker_dist_esm_DayPicker_js"), __webpack_require__.e("src_Components_CreateEvent_DateStep_jsx")]).then(__webpack_require__.bind(__webpack_require__, /*! ./DateStep */ "./src/Components/CreateEvent/DateStep.jsx")));
-const VenueStep = react__WEBPACK_IMPORTED_MODULE_0___default().lazy(() => Promise.all(/*! import() */[__webpack_require__.e("vendors-node_modules_react-is_index_js-node_modules_use-isomorphic-layout-effect_dist_use-iso-b5fcbb"), __webpack_require__.e("vendors-node_modules_react-select_dist_react-select_esm_js-node_modules_heroicons_react_24_ou-9d1212"), __webpack_require__.e("vendors-node_modules_prop-types_index_js"), __webpack_require__.e("vendors-node_modules_mui_icons-material_esm_Close_js-node_modules_mui_icons-material_esm_Fibe-47d8b8"), __webpack_require__.e("src_Components_CreateEvent_VenueStep_jsx")]).then(__webpack_require__.bind(__webpack_require__, /*! ./VenueStep */ "./src/Components/CreateEvent/VenueStep.jsx")));
-const FiltersStep = react__WEBPACK_IMPORTED_MODULE_0___default().lazy(() => Promise.all(/*! import() */[__webpack_require__.e("vendors-node_modules_react-is_index_js-node_modules_use-isomorphic-layout-effect_dist_use-iso-b5fcbb"), __webpack_require__.e("vendors-node_modules_react-select_dist_react-select_esm_js-node_modules_heroicons_react_24_ou-9d1212"), __webpack_require__.e("src_Components_CreateEvent_FiltersStep_jsx")]).then(__webpack_require__.bind(__webpack_require__, /*! ./FiltersStep */ "./src/Components/CreateEvent/FiltersStep.jsx")));
+
+const DateStep = react__WEBPACK_IMPORTED_MODULE_0___default().lazy(() => Promise.all(/*! import() */[__webpack_require__.e("vendors-node_modules_react-select_dist_react-select_esm_js"), __webpack_require__.e("vendors-node_modules_react-day-picker_dist_esm_DayPicker_js"), __webpack_require__.e("src_Components_CreateEvent_DateStep_jsx")]).then(__webpack_require__.bind(__webpack_require__, /*! ./DateStep */ "./src/Components/CreateEvent/DateStep.jsx")));
+const VenueStep = react__WEBPACK_IMPORTED_MODULE_0___default().lazy(() => Promise.all(/*! import() */[__webpack_require__.e("vendors-node_modules_react-select_dist_react-select_esm_js"), __webpack_require__.e("vendors-node_modules_prop-types_index_js"), __webpack_require__.e("vendors-node_modules_mui_icons-material_esm_Close_js-node_modules_mui_icons-material_esm_Fibe-0ba647"), __webpack_require__.e("src_Components_CreateEvent_VenueStep_jsx")]).then(__webpack_require__.bind(__webpack_require__, /*! ./VenueStep */ "./src/Components/CreateEvent/VenueStep.jsx")));
+const FiltersStep = react__WEBPACK_IMPORTED_MODULE_0___default().lazy(() => Promise.all(/*! import() */[__webpack_require__.e("vendors-node_modules_react-select_dist_react-select_esm_js"), __webpack_require__.e("src_Components_CreateEvent_FiltersStep_jsx")]).then(__webpack_require__.bind(__webpack_require__, /*! ./FiltersStep */ "./src/Components/CreateEvent/FiltersStep.jsx")));
 const BrandingStep = react__WEBPACK_IMPORTED_MODULE_0___default().lazy(() => __webpack_require__.e(/*! import() */ "src_Components_CreateEvent_BrandingStep_jsx").then(__webpack_require__.bind(__webpack_require__, /*! ./BrandingStep */ "./src/Components/CreateEvent/BrandingStep.jsx")));
-const TicketsStep = react__WEBPACK_IMPORTED_MODULE_0___default().lazy(() => Promise.all(/*! import() */[__webpack_require__.e("vendors-node_modules_react-tailwindcss-datepicker_dist_index_esm_js"), __webpack_require__.e("src_Components_CreateEvent_TicketsStep_jsx")]).then(__webpack_require__.bind(__webpack_require__, /*! ./TicketsStep */ "./src/Components/CreateEvent/TicketsStep.jsx")));
+const TicketsStep = react__WEBPACK_IMPORTED_MODULE_0___default().lazy(() => Promise.all(/*! import() */[__webpack_require__.e("vendors-node_modules_react-day-picker_dist_esm_DayPicker_js"), __webpack_require__.e("src_Components_CreateEvent_TicketsStep_jsx")]).then(__webpack_require__.bind(__webpack_require__, /*! ./TicketsStep */ "./src/Components/CreateEvent/TicketsStep.jsx")));
 const RegistrantsStep = react__WEBPACK_IMPORTED_MODULE_0___default().lazy(() => __webpack_require__.e(/*! import() */ "src_Components_CreateEvent_RegistrantsStep_jsx").then(__webpack_require__.bind(__webpack_require__, /*! ./RegistrantsStep */ "./src/Components/CreateEvent/RegistrantsStep.jsx")));
 
 
@@ -52,15 +54,15 @@ const StepperIcon = ({
   active,
   showLine
 }) => {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
     className: "stepper-icon",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
       className: `icon-box ${active ? "is-active" : ""}`,
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(Icon, {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(Icon, {
         className: `icon-box__svg ${iconClass}`,
         "aria-hidden": "true"
       })
-    }), showLine && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+    }), showLine && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
       className: "icon-line"
     })]
   });
@@ -70,35 +72,35 @@ const StepperText = ({
   subtitle,
   active
 }) => {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
     className: `stepper-text ${active ? "is-active" : ""}`,
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
       className: "stepper-title",
       children: title
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
       className: "stepper-subtitle",
       children: subtitle
     })]
   });
 };
 const CreateEventForm = () => {
-  const settings = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_2__.useServvStore)(s => s.settings);
-  const adminDashboardRaw = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_2__.useServvStore)(s => s.settings?.settings?.admin_dashboard);
-  const zoomConnected = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_2__.useServvStore)(s => s.zoomConnected);
-  const stripeConnected = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_2__.useServvStore)(s => s.stripeConnected);
-  const calendarConnected = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_2__.useServvStore)(s => s.calendarConnected);
-  const gmailConnected = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_2__.useServvStore)(s => s.gmailConnected);
-  const filtersList = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_2__.useServvStore)(s => s.filtersList);
+  const settings = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_3__.useServvStore)(s => s.settings);
+  const adminDashboardRaw = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_3__.useServvStore)(s => s.settings?.settings?.admin_dashboard);
+  const zoomConnected = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_3__.useServvStore)(s => s.zoomConnected);
+  const stripeConnected = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_3__.useServvStore)(s => s.stripeConnected);
+  const calendarConnected = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_3__.useServvStore)(s => s.calendarConnected);
+  const gmailConnected = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_3__.useServvStore)(s => s.gmailConnected);
+  const filtersList = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_3__.useServvStore)(s => s.filtersList);
   const {
     fetchEventTickets
-  } = (0,_Pages_Events_useServvData__WEBPACK_IMPORTED_MODULE_8__.useServvData)();
-  const navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_11__.useNavigate)();
+  } = (0,_Pages_Events_useServvData__WEBPACK_IMPORTED_MODULE_9__.useServvData)();
+  const navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_12__.useNavigate)();
   const [currentSettings, setCurrentSettings] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({});
   const contentRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const {
     fetchSettings,
     syncFiltersFromServer
-  } = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_2__.useServvStore)();
+  } = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_3__.useServvStore)();
   const [attributes, setAttributes] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
     location: "offline",
     defaultLocationChanged: false,
@@ -134,31 +136,31 @@ const CreateEventForm = () => {
     key: "branding",
     title: "Event details",
     subtitle: "Add additional information and an image",
-    Icon: _assets_icons__WEBPACK_IMPORTED_MODULE_1__.BrushIcon,
+    Icon: _assets_icons__WEBPACK_IMPORTED_MODULE_2__.BrushIcon,
     iconClass: "icon--angled"
   }, {
     key: "date",
     title: "Date and time",
     subtitle: "Select the event’s date, time, and frequency",
-    Icon: _assets_icons__WEBPACK_IMPORTED_MODULE_1__.CalendarIcon,
+    Icon: _assets_icons__WEBPACK_IMPORTED_MODULE_2__.CalendarIcon,
     iconClass: ""
   }, {
     key: "venue",
     title: "Location",
     subtitle: "Choose the event location",
-    Icon: _assets_icons__WEBPACK_IMPORTED_MODULE_1__.MapMarkIcon,
+    Icon: _assets_icons__WEBPACK_IMPORTED_MODULE_2__.MapMarkIcon,
     iconClass: "icon--tall"
   }, {
     key: "tickets",
     title: "Tickets",
     subtitle: "Create ticket types and quantities",
-    Icon: _assets_icons__WEBPACK_IMPORTED_MODULE_1__.TicketIcon,
+    Icon: _assets_icons__WEBPACK_IMPORTED_MODULE_2__.TicketIcon,
     iconClass: "icon--wide"
   }, {
     key: "filters",
     title: "Additional notes",
     subtitle: "Set filters and add notes",
-    Icon: _assets_icons__WEBPACK_IMPORTED_MODULE_1__.Filter,
+    Icon: _assets_icons__WEBPACK_IMPORTED_MODULE_2__.Filter,
     iconClass: ""
   }]);
   const [currentStep, setCurrentStep] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(steps[0].key);
@@ -169,9 +171,9 @@ const CreateEventForm = () => {
   const StepComponent = stepComponents[currentStep];
   const {
     id: routeId
-  } = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_11__.useParams)();
-  const [searchParams] = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_11__.useSearchParams)();
-  const location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_11__.useLocation)();
+  } = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_12__.useParams)();
+  const [searchParams] = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_12__.useSearchParams)();
+  const location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_12__.useLocation)();
   const occurrenceIdFromQuery = searchParams.get("occurrence_id") || searchParams.get("occurrenceId") || searchParams.get("occ") || null;
   const isOnboarding = searchParams.get("onboarding_step");
   const registrantsView = searchParams.get("registrants");
@@ -199,7 +201,7 @@ const CreateEventForm = () => {
       return featuredImageCache.get(postId);
     }
     try {
-      const url = await (0,_utilities_events__WEBPACK_IMPORTED_MODULE_4__.getFeaturedImage)(postId, signal);
+      const url = await (0,_utilities_events__WEBPACK_IMPORTED_MODULE_5__.getFeaturedImage)(postId, signal);
       const resolved = url || PLACEHOLDER_IMAGE;
       featuredImageCache.set(postId, resolved);
       return resolved;
@@ -254,7 +256,7 @@ const CreateEventForm = () => {
     };
     const eventType = getEventTypeFromPath(location.pathname);
     try {
-      const data = await (0,_utilities_events__WEBPACK_IMPORTED_MODULE_4__.getEvent)(postId, occurrenceId);
+      const data = await (0,_utilities_events__WEBPACK_IMPORTED_MODULE_5__.getEvent)(postId, occurrenceId);
       const imageUrl = await fetchFeaturedImage(postId, controller.signal);
       let startTime = null;
       if (data.meeting.start_time) {
@@ -349,11 +351,11 @@ const CreateEventForm = () => {
     } catch (error) {
       console.log(error);
       if (error?.response?.status === 404) {
-        react_toastify__WEBPACK_IMPORTED_MODULE_6__.toast.error("Event not found or has been deleted.");
+        react_toastify__WEBPACK_IMPORTED_MODULE_7__.toast.error("Event not found or has been deleted.");
       } else if (error?.response?.status === 403) {
-        react_toastify__WEBPACK_IMPORTED_MODULE_6__.toast.error("You do not have permission to open this event.");
+        react_toastify__WEBPACK_IMPORTED_MODULE_7__.toast.error("You do not have permission to open this event.");
       } else {
-        react_toastify__WEBPACK_IMPORTED_MODULE_6__.toast.error("Unable to open the event. Please try again.");
+        react_toastify__WEBPACK_IMPORTED_MODULE_7__.toast.error("Unable to open the event. Please try again.");
       }
     }
     setLoadingEvent(false);
@@ -445,22 +447,7 @@ const CreateEventForm = () => {
     }
   }, [routeId, occurrenceIdFromQuery]);
   const mergeAttributes = patch => {
-    setAttributes(prev => {
-      const next = {
-        ...prev
-      };
-      Object.keys(patch).forEach(key => {
-        if (typeof patch[key] === "object" && patch[key] !== null && !Array.isArray(patch[key])) {
-          next[key] = {
-            ...(prev[key] || {}),
-            ...patch[key]
-          };
-        } else {
-          next[key] = patch[key];
-        }
-      });
-      return next;
-    });
+    setAttributes(prev => (0,_utilities_attributes__WEBPACK_IMPORTED_MODULE_1__.mergeAttributesPatch)(prev, patch));
   };
   const updateTickets = async () => {
     const tickets = attributes.tickets?.map(ticket => ({
@@ -496,14 +483,14 @@ const CreateEventForm = () => {
 
     // CREATE
     if (toCreate.length === 1) {
-      await (0,_utilities_tickets__WEBPACK_IMPORTED_MODULE_7__.createTicket)({
+      await (0,_utilities_tickets__WEBPACK_IMPORTED_MODULE_8__.createTicket)({
         postId: routeId,
         token: servvData.nonce,
         ticket: toCreate[0],
         occurrenceId: occurrenceIdFromQuery
       });
     } else if (toCreate.length > 1) {
-      await (0,_utilities_tickets__WEBPACK_IMPORTED_MODULE_7__.multipleTicketsCreate)({
+      await (0,_utilities_tickets__WEBPACK_IMPORTED_MODULE_8__.multipleTicketsCreate)({
         postId: routeId,
         token: servvData.nonce,
         tickets: toCreate,
@@ -513,25 +500,23 @@ const CreateEventForm = () => {
 
     // UPDATE
     if (toUpdate.length === 1) {
-      await (0,_utilities_tickets__WEBPACK_IMPORTED_MODULE_7__.updateTicket)({
+      await (0,_utilities_tickets__WEBPACK_IMPORTED_MODULE_8__.updateTicket)({
         postId: routeId,
         token: servvData.nonce,
-        ticket: toUpdate[0],
-        occurrenceId: occurrenceIdFromQuery
+        ticket: toUpdate[0]
       });
     } else if (toUpdate.length > 1) {
-      await (0,_utilities_tickets__WEBPACK_IMPORTED_MODULE_7__.multipleTicketsUpdate)({
+      await (0,_utilities_tickets__WEBPACK_IMPORTED_MODULE_8__.multipleTicketsUpdate)({
         postId: routeId,
         token: servvData.nonce,
-        tickets: toUpdate,
-        occurrenceId: occurrenceIdFromQuery
+        tickets: toUpdate
       });
     }
 
     // REMOVE (soft delete on backend)
 
     if (toRemove.length) {
-      await Promise.all(toRemove.map(ticket => (0,_utilities_tickets__WEBPACK_IMPORTED_MODULE_7__.deleteTicket)({
+      await Promise.all(toRemove.map(ticket => (0,_utilities_tickets__WEBPACK_IMPORTED_MODULE_8__.deleteTicket)({
         postId: routeId,
         token: servvData.nonce,
         ticketId: ticket.id,
@@ -680,15 +665,15 @@ const CreateEventForm = () => {
       }
       if (isNew) {
         const location = attributes.location !== "zoom" ? "offline" : "zoom";
-        await (0,_utilities_events__WEBPACK_IMPORTED_MODULE_4__.createEvent)(location, data);
+        await (0,_utilities_events__WEBPACK_IMPORTED_MODULE_5__.createEvent)(location, data);
       } else {
-        await (0,_utilities_events__WEBPACK_IMPORTED_MODULE_4__.updateEvent)(routeId, data, occurrenceIdFromQuery);
+        await (0,_utilities_events__WEBPACK_IMPORTED_MODULE_5__.updateEvent)(routeId, data, occurrenceIdFromQuery);
       }
-      react_toastify__WEBPACK_IMPORTED_MODULE_6__.toast.success(`Event ${isNew ? "created" : "updated"} successfully.`);
+      react_toastify__WEBPACK_IMPORTED_MODULE_7__.toast.success(`Event ${isNew ? "created" : "updated"} successfully.`);
       if (isNew && !isOnboarding || forceQuit) navigate("/dashboard?created=success");else if (isNew) navigate("/dashboard?created=success");
       setLoadingEvent(false);
     } catch (e) {
-      react_toastify__WEBPACK_IMPORTED_MODULE_6__.toast.error(isNew ? "Event creation failed. Please check the details and try again." : "Event update failed. Please check the details and try again.");
+      react_toastify__WEBPACK_IMPORTED_MODULE_7__.toast.error(isNew ? "Event creation failed. Please check the details and try again." : "Event update failed. Please check the details and try again.");
       setLoadingEvent(false);
     }
   };
@@ -701,34 +686,34 @@ const CreateEventForm = () => {
       });
     }
   }, [currentStep]);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
     className: "create-event",
-    children: [!registrantsView && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("aside", {
+    children: [!registrantsView && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("aside", {
       className: `create-event__sidebar ${settings?.is_wp_marketplace ? "marketplace" : ""}`,
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
         className: "logo-wrapper",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
           className: "logo-bg",
           style: {
-            backgroundImage: `url(${_assets_images_logo_png__WEBPACK_IMPORTED_MODULE_3__})`
+            backgroundImage: `url(${_assets_images_logo_png__WEBPACK_IMPORTED_MODULE_4__})`
           }
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
           className: "sidebar__logo servv-logo-png"
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
         className: "sidebar__stepper",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
           children: steps.map((step, index) => {
             const isActive = step.key === currentStep;
-            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
               className: "stepper__row",
               onClick: () => step.key !== "view" ? !isError ? setCurrentStep(step.key) : () => {} : open(attributes.wp_post_url, "_blank"),
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(StepperIcon, {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(StepperIcon, {
                 Icon: step.Icon,
                 iconClass: step.iconClass,
                 active: isActive,
                 showLine: index < steps.length - 1
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(StepperText, {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(StepperText, {
                 title: step.title,
                 subtitle: step.subtitle,
                 active: isActive
@@ -737,13 +722,13 @@ const CreateEventForm = () => {
           })
         })
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_Pages_PageWrapper__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Pages_PageWrapper__WEBPACK_IMPORTED_MODULE_6__["default"], {
       loading: false,
       withoutSpinner: true,
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("main", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("main", {
         className: `create-event__content ${settings?.is_wp_marketplace ? "marketplace" : ""} ${registrantsView ? "registrants-centered" : ""}`,
         ref: contentRef,
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
           className: "servv-create-form-close",
           onClick: () => {
             const from = location.state?.from;
@@ -751,21 +736,21 @@ const CreateEventForm = () => {
             const canGoBack = from && allowed.some(path => from.includes(path));
             canGoBack ? navigate(-1) : navigate("/events");
           },
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_assets_icons__WEBPACK_IMPORTED_MODULE_1__.CloseIcon, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_assets_icons__WEBPACK_IMPORTED_MODULE_2__.CloseIcon, {
             className: "servv-create-form-close-icon"
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
           className: `step-content-wrapper ${isOnboarding && (currentStep === "tickets" || currentStep === "venue") ? "w-full" : ""}`,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Suspense), {
-            fallback: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Suspense), {
+            fallback: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
               className: "step-loading",
               children: "Loading\u2026"
             }),
-            children: StepComponent && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_Pages_SpinnerLoader__WEBPACK_IMPORTED_MODULE_9__["default"], {
+            children: StepComponent && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Pages_SpinnerLoader__WEBPACK_IMPORTED_MODULE_10__["default"], {
               isLoading: loadingEvent && currentStep !== "registrants",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
                 className: "step-slide",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(StepComponent, {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(StepComponent, {
                   attributes: attributes,
                   setAttributes: mergeAttributes,
                   settings: settings,
@@ -1211,42 +1196,41 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Menu_Spinner__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Menu/Spinner */ "./src/Components/Menu/Spinner.jsx");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-4WY6JWTD.mjs");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _PageWrapper_module_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./PageWrapper.module.scss */ "./src/Components/Pages/PageWrapper.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__);
 
 
 
 
+
+// `flush` drops the wrapper's own side padding for pages that already frame
+// themselves with <PageContent>, so the reference's 32px gutter is not doubled.
 
 const PageWrapper = props => {
-  const location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_4__.useLocation)();
+  const useNativeNavigation = Boolean(window.servvData?.nativeAdmin);
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
     if (window.Intercom) {
-      if (location !== "/support") {
-        window.Intercom("update", {
-          hide_default_launcher: true
-        });
-      } else {
-        window.Intercom("update", {
-          hide_default_launcher: true
-        });
-      }
+      window.Intercom("update", {
+        hide_default_launcher: true
+      });
     }
   }, []);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, {
-    children: [props.withBackground && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-      className: "fixed inset-0 bg-[#F5F5F5]"
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-      className: "w-full relative pl-4 flex flex-col min-h-0",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        className: "absolute inset-0 flex items-center justify-center pointer-events-none",
-        children: props.loading && !props.withoutSpinner && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_Menu_Spinner__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, {
+    children: [props.withBackground && !useNativeNavigation && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+      className: _PageWrapper_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].backdrop
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      className: [_PageWrapper_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].root, props.flush ? "" : _PageWrapper_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].gutterLeft].filter(Boolean).join(" "),
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+        className: _PageWrapper_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].spinner,
+        children: props.loading && !props.withoutSpinner && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_Menu_Spinner__WEBPACK_IMPORTED_MODULE_2__["default"], {
           loading: true
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-        className: `flex flex-col flex-1 w-full pr-4 max-w-full min-w-0 min-h-0 overflow-visible ${props.loading ? "loading" : ""}`,
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_toastify__WEBPACK_IMPORTED_MODULE_0__.ToastContainer, {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        className: [_PageWrapper_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].content, props.flush ? "" : _PageWrapper_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].gutterRight,
+        // `loading` is a legacy global (input.css) blur, not a module class.
+        props.loading ? "loading" : ""].filter(Boolean).join(" "),
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_toastify__WEBPACK_IMPORTED_MODULE_0__.ToastContainer, {
           position: "bottom-right"
         }), props.children]
       })]
@@ -1270,30 +1254,65 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Menu_Spinner__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Menu/Spinner */ "./src/Components/Menu/Spinner.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _SpinnerLoader_module_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SpinnerLoader.module.scss */ "./src/Components/Pages/SpinnerLoader.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__);
 
 
+
+
+// `customStyling` is a pass-through for the overlay's box — call sites use it
+// to give the spinner a height when there are no children to cover.
 
 const SpinnerLoader = ({
   isLoading,
   children,
-  customStyling
+  customStyling = ""
 }) => {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-    className: "relative",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-      className: isLoading ? "blur-sm pointer-events-none" : "",
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+    className: _SpinnerLoader_module_scss__WEBPACK_IMPORTED_MODULE_2__["default"].root,
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+      className: isLoading ? _SpinnerLoader_module_scss__WEBPACK_IMPORTED_MODULE_2__["default"].blurred : "",
       children: children
-    }), isLoading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-      className: `absolute inset-0 flex items-center justify-center ${customStyling}`,
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_Menu_Spinner__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    }), isLoading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+      className: [_SpinnerLoader_module_scss__WEBPACK_IMPORTED_MODULE_2__["default"].overlay, customStyling].filter(Boolean).join(" "),
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_Menu_Spinner__WEBPACK_IMPORTED_MODULE_1__["default"], {
         loading: true
       })
     })]
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (SpinnerLoader);
+
+/***/ }),
+
+/***/ "./src/utilities/attributes.js":
+/*!*************************************!*\
+  !*** ./src/utilities/attributes.js ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   mergeAttributesPatch: () => (/* binding */ mergeAttributesPatch)
+/* harmony export */ });
+// Shallow-merges a patch into the event attributes, one level deep: plain
+// objects are merged with what is already there, while arrays and primitives
+// replace it. Pass the result to a state setter's updater form.
+const mergeAttributesPatch = (prev, patch) => {
+  const next = {
+    ...prev
+  };
+  Object.keys(patch).forEach(key => {
+    const value = patch[key];
+    const isPlainObject = typeof value === "object" && value !== null && !Array.isArray(value);
+    next[key] = isPlainObject ? {
+      ...(prev[key] || {}),
+      ...value
+    } : value;
+  });
+  return next;
+};
 
 /***/ }),
 
@@ -1306,9 +1325,12 @@ const SpinnerLoader = ({
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   createEvent: () => (/* binding */ createEvent),
+/* harmony export */   eventKey: () => (/* binding */ eventKey),
+/* harmony export */   eventRoutePayload: () => (/* binding */ eventRoutePayload),
 /* harmony export */   generateEventData: () => (/* binding */ generateEventData),
 /* harmony export */   getEvent: () => (/* binding */ getEvent),
 /* harmony export */   getFeaturedImage: () => (/* binding */ getFeaturedImage),
+/* harmony export */   openEventPost: () => (/* binding */ openEventPost),
 /* harmony export */   updateEvent: () => (/* binding */ updateEvent)
 /* harmony export */ });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
@@ -1356,6 +1378,31 @@ const getFeaturedImage = async (postId, signal = null) => {
   return post?._embedded?.["wp:featuredmedia"]?.[0]?.source_url || null;
 };
 
+// Opens the public post an event is published as. The events endpoint only
+// knows the post id, so the permalink has to come from WordPress itself.
+const openEventPost = postId => {
+  if (!postId) return;
+  fetch(`/wp-json/wp/v2/posts/${postId}`).then(res => res.json()).then(post => {
+    if (post?.link) open(post.link, "_blank");
+  }).catch(e => console.log(e));
+};
+
+// One event can appear as its series and as a single occurrence, so neither id
+// alone identifies a row.
+const eventKey = event => `${event.id}${event.occurrence_id || ""}`;
+
+// The shape Dashboard's handleOpenEvent expects. Kept in one place so every
+// view — cards, rows, rail — navigates identically.
+const eventRoutePayload = (event, {
+  registrants = false
+} = {}) => ({
+  id: event.post_id,
+  occurrence_id: event.occurrence_id,
+  ...(registrants ? {
+    registrants_view: true
+  } : {})
+});
+
 /***/ }),
 
 /***/ "./src/utilities/tickets.js":
@@ -1401,33 +1448,39 @@ const createTicket = async ({
     return null;
   }
 };
+
+// The editable fields of a ticket; the API ignores anything else on the object.
+const ticketPayload = ticket => ({
+  name: ticket.name,
+  quantity: ticket.quantity,
+  price: ticket.price,
+  is_donation: ticket.is_donation,
+  start_datetime: ticket.start_datetime,
+  end_datetime: ticket.end_datetime
+});
+const patchTicket = async ({
+  postId,
+  token,
+  ticket
+}) => (0,axios__WEBPACK_IMPORTED_MODULE_0__["default"])({
+  method: "PATCH",
+  url: `/wp-json/servv-plugin/v1/event/${postId}/tickets/${ticket.id}`,
+  headers: {
+    "X-WP-Nonce": token
+  },
+  data: ticketPayload(ticket)
+});
 const updateTicket = async ({
   postId,
-  occurrenceId = null,
   token,
   ticket
 }) => {
   try {
-    let requestURL = `/wp-json/servv-plugin/v1/event/${postId}/tickets/${ticket.id}`;
-    // if (occurrenceId) {
-    //   requestURL += `?occurrence_id=${occurrenceId}`;
-    // }
-    const response = await (0,axios__WEBPACK_IMPORTED_MODULE_0__["default"])({
-      method: "PATCH",
-      url: requestURL,
-      headers: {
-        "X-WP-Nonce": token
-      },
-      data: {
-        name: ticket.name,
-        quantity: ticket.quantity,
-        price: ticket.price,
-        is_donation: ticket.is_donation,
-        start_datetime: ticket.start_datetime,
-        end_datetime: ticket.end_datetime
-      }
+    return await patchTicket({
+      postId,
+      token,
+      ticket
     });
-    return response;
   } catch (error) {
     console.error("Error on ticket update:", error);
     return null;
@@ -1482,34 +1535,17 @@ const multipleTicketsCreate = async ({
 };
 const multipleTicketsUpdate = async ({
   postId,
-  occurrenceId = null,
   token,
   tickets
 }) => {
   const responses = [];
   try {
     for (const ticket of tickets) {
-      let requestURL = `/wp-json/servv-plugin/v1/event/${postId}/tickets/${ticket.id}`;
-      // if (occurrenceId) {
-      //   requestURL += `?occurrence_id=${occurrenceId}`;
-      // }
-
-      const response = await (0,axios__WEBPACK_IMPORTED_MODULE_0__["default"])({
-        method: "PATCH",
-        url: requestURL,
-        headers: {
-          "X-WP-Nonce": token
-        },
-        data: {
-          name: ticket.name,
-          quantity: ticket.quantity,
-          price: ticket.price,
-          is_donation: ticket.is_donation,
-          start_datetime: ticket.start_datetime,
-          end_datetime: ticket.end_datetime
-        }
-      });
-      responses.push(response);
+      responses.push(await patchTicket({
+        postId,
+        token,
+        ticket
+      }));
     }
     return responses;
   } catch (error) {
@@ -1517,6 +1553,36 @@ const multipleTicketsUpdate = async ({
     return null;
   }
 };
+
+/***/ }),
+
+/***/ "./src/Components/Pages/PageWrapper.module.scss":
+/*!******************************************************!*\
+  !*** ./src/Components/Pages/PageWrapper.module.scss ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"backdrop":"GwbBdwO7UxUbci6wtyds","root":"whZeFIc454jkDbuWw6zj","gutterLeft":"nH2l6oxNCJ28ihBOUf7w","gutterRight":"KKg_qLS4gdJXh4u6HnvG","spinner":"Al4EqMTkXH8MiW77lCyS","content":"DhHmGpnbQlurQkapo8Ei"});
+
+/***/ }),
+
+/***/ "./src/Components/Pages/SpinnerLoader.module.scss":
+/*!********************************************************!*\
+  !*** ./src/Components/Pages/SpinnerLoader.module.scss ***!
+  \********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"root":"NvXIBF17sKtsJ5DppGj6","blurred":"s8xU0aT_Upum9VaMUtFv","overlay":"rwBQn7Ep0HRpuD73wvEE"});
 
 /***/ }),
 
@@ -1531,4 +1597,4 @@ module.exports = __webpack_require__.p + "images/logo.b4e524fb.png";
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_CreateEvent_CreateEventForm_jsx.js.map?ver=dc516d55a60d6e8480a4
+//# sourceMappingURL=src_Components_CreateEvent_CreateEventForm_jsx.js.map?ver=ba9d06c2ea2dbf1b07ae

@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "./adminApi";
 
 export const saveSettings = async (settings) => {
   const response = await axios.put(

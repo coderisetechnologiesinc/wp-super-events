@@ -1,0 +1,71 @@
+@use "../../../styles/tokens" as t;
+@use "../../../styles/mixins" as m;
+
+@include m.scoped {
+  .page {
+    display: flex;
+    flex-direction: column;
+    gap: t.$space-10;
+  }
+
+  // The carved groove under the page header.
+  .divider {
+    height: 3px;
+    border-radius: t.$radius-pill;
+    background: t.$surface;
+    box-shadow: t.$shadow-track;
+  }
+
+  // Reference: repeat(auto-fill, minmax(300px, 1fr)) with a 16px gutter.
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: t.$space-8;
+  }
+
+  // Reference: the amber strip that says payments are not live yet.
+  .notice {
+    display: flex;
+    align-items: center;
+    gap: t.$space-6;
+    padding: t.$space-7 t.$space-8;
+    border: 1px solid t.$warning-border;
+    border-radius: t.$radius-lg;
+    background: t.$warning-surface;
+
+    svg {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 18px;
+      color: t.$warning-text;
+    }
+  }
+
+  .noticeText {
+    flex: 1;
+    @include m.text(13, t.$weight-medium);
+    line-height: 20px;
+    color: #93370d;
+
+    strong {
+      font-weight: t.$weight-bold;
+    }
+  }
+
+  // The note the native screen carried about how Google connections work.
+  .footnote {
+    @include m.text(12, t.$weight-medium);
+    line-height: 18px;
+    color: t.$text-soft;
+  }
+
+  @media (max-width: 735px) {
+    .notice {
+      flex-wrap: wrap;
+    }
+
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}

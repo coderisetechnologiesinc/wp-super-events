@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 
 import BlockStack from "../Containers/BlockStack";
 import InlineStack from "../Containers/InlineStack";
-import InputFieldControl from "../Controls/InputFieldControl";
+import NewInputFieldControl from "../Controls/NewInputFieldControl";
 import SortableItem from "../Shared/SortableItem";
 
 import { DndContext, closestCenter } from "@dnd-kit/core";
@@ -68,8 +68,8 @@ const LinkInBioModal = ({
             <p className="text-sm font-semibold text-gray-800 mb-1">
               Instagram Profile
             </p>
-            <InputFieldControl
-              label="Instagram URL"
+            <NewInputFieldControl
+              width="100%"
               placeholder="https://instagram.com/yourname"
               value={instagram}
               onChange={setInstagram}
@@ -82,8 +82,8 @@ const LinkInBioModal = ({
             <p className="text-sm font-semibold text-gray-800 mb-1">
               X (Twitter) Profile
             </p>
-            <InputFieldControl
-              label="X URL"
+            <NewInputFieldControl
+              width="100%"
               placeholder="https://x.com/yourname"
               value={x}
               onChange={setX}
@@ -96,8 +96,8 @@ const LinkInBioModal = ({
             <p className="text-sm font-semibold text-gray-800 mb-1">
               YouTube Channel
             </p>
-            <InputFieldControl
-              label="YouTube URL"
+            <NewInputFieldControl
+              width="100%"
               placeholder="https://youtube.com/@channel"
               value={youtube}
               onChange={setYoutube}
@@ -110,8 +110,8 @@ const LinkInBioModal = ({
             <p className="text-sm font-semibold text-gray-800 mb-1">
               Facebook Page
             </p>
-            <InputFieldControl
-              label="Facebook URL"
+            <NewInputFieldControl
+              width="100%"
               placeholder="https://facebook.com/page"
               value={facebook}
               onChange={setFacebook}
@@ -124,8 +124,8 @@ const LinkInBioModal = ({
             <p className="text-sm font-semibold text-gray-800 mb-1">
               TikTok Profile
             </p>
-            <InputFieldControl
-              label="TikTok URL"
+            <NewInputFieldControl
+              width="100%"
               placeholder="https://tiktok.com/@yourname"
               value={tiktok}
               onChange={setTikTok}

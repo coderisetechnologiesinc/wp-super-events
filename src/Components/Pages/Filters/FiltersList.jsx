@@ -1,202 +1,185 @@
-import FilterTable from "../../Containers/FilterTable";
-import Card from "../../Containers/Card";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
+import CheckboxItem from "../../Controls/CheckboxItem";
 import PageActionButton from "../../Controls/PageActionButton";
-import { Fragment, useState } from "react";
-import InlineStack from "../../Containers/InlineStack";
-import BlockStack from "../../Containers/BlockStack";
+import ModalShell from "../../Modals/ModalShell";
+import BulkBar from "../../Containers/BulkBar";
+import { FILTER_TYPES } from "./CreateFilterMenu";
+import styles from "./FiltersPage.module.scss";
 
-import CheckboxControl from "../../Controls/CheckboxControl";
-import { PencilIcon, TrashIcon } from "@heroicons/react/16/solid";
-import { useNavigate } from "react-router-dom";
-import SpinnerLoader from "../SpinnerLoader";
-import ConfirmationModal from "../../Controls/ConfirmationModal";
-const FiltersList = ({
+const FIELDS = {
+  Locations: [
+    { key: "details", label: "Details" },
+    { key: "operational_hours", label: "Operational hours" },
+  ],
+  Languages: [],
+  Categories: [{ key: "details", label: "Description" }],
+  Members: [
+    { key: "email", label: "Email" },
+    { key: "phone", label: "Phone" },
+    { key: "description", label: "Description" },
+  ],
+};
+
+export default function FiltersList({
   title,
   filters,
   selected,
   onSelect,
-  onEdit,
   onDelete,
   onSelectAll,
-  handleSingleDelete,
-  setLoading,
+  onClearSelection,
   loading,
-}) => {
-  const navigate = useNavigate();
-  const [confirmModal, setConfirmModal] = useState({
-    open: false,
-    title: "",
-    text: "",
-    onAccept: () => {},
-  });
-
-  const openConfirm = ({ title, text, onAccept }) => {
-    setConfirmModal({ open: true, title, text, onAccept });
+}) {
+  const [confirm, setConfirm] = useState(null);
+  const { Icon } = FILTER_TYPES[title];
+  const fields = FIELDS[title] || [];
+  const grid = {
+    gridTemplateColumns: `18px minmax(150px, 2fr) ${fields
+      .map(() => "minmax(100px, 1fr)")
+      .join(" ")} 70px 76px`,
   };
-
-  const closeConfirm = () => {
-    setConfirmModal((prev) => ({ ...prev, open: false }));
-  };
-
-  const headings = () => {
-    if (title === "Languages") {
-      return [
-        { label: "Name", value: "name" },
-        { label: "Order", value: "priority" },
-        { label: "", value: "action1" },
-      ];
-    }
-    if (title === "Locations") {
-      return [
-        { label: "Name", value: "name" },
-        { label: "Details", value: "details" },
-        { label: "Operational hours", value: "operational_hours" },
-        { label: "Order", value: "priority" },
-        { label: "", value: "action" },
-      ];
-    }
-    if (title === "Members") {
-      return [
-        { label: "Name", value: "name" },
-        { label: "Email", value: "email" },
-        { label: "Phone", value: "phone" },
-        { label: "Description", value: "description" },
-        { label: "Order", value: "priority" },
-        { label: "", value: "action" },
-      ];
-    }
-    if (title === "Categories") {
-      return [
-        { label: "Name", value: "name" },
-        { label: "Description", value: "details" },
-        { label: "Order", value: "priority" },
-        { label: "", value: "action" },
-      ];
-    }
-    return [
-      { label: "Name", value: "name" },
-      { label: "Order", value: "priority" },
-      { label: "", value: "action" },
-    ];
-  };
-  const renderHeadings = () => (
-    <Fragment>
-      <th>
-        <CheckboxControl
-          checked={selected.length === filters.length}
-          onChange={() => onSelectAll()}
-        />
-      </th>
-      {headings().map((heading) => (
-        <th>{heading.label}</th>
-      ))}
-      <th></th>
-    </Fragment>
-  );
-
-  const renderRows = (filters) =>
-    filters.map((row) => (
-      <tr className="table-row" key={row.id}>
-        <td>
-          <CheckboxControl
-            checked={selected.includes(row.id)}
-            onChange={() => onSelect(row.id)}
-          />
-        </td>
-
-        {headings().map((heading) => (
-          <td key={heading.value} className="max-w-[150px]">
-            {heading.value === "name" ? (
-              <div className="truncate w-full">
-                <a
-                  href="#"
-                  className="filter-table-link"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigate(`/filters/new/${title}?id=${row.id}`);
-                  }}
-                >
-                  {row[heading.value]}
-                </a>
-              </div>
-            ) : (
-              <div className="truncate w-full">
-                <span className="break-all">{row[heading.value]}</span>
-              </div>
-            )}
-          </td>
-        ))}
-
-        <td>
-          <div className="flex flex-row gap-4">
-            <TrashIcon
-              className="button-icon"
-              onClick={() => {
-                openConfirm({
-                  title: `Delete ${title.slice(0, -1)}`,
-                  text: `Are you sure you want to delete this ${title.slice(0, -1).toLowerCase()}?`,
-                  onAccept: () => {
-                    onDelete(title, [row.id]);
-                    closeConfirm();
-                  },
-                });
-              }}
-            />
-
-            <PencilIcon
-              className="button-icon"
-              onClick={(e) => {
-                e.preventDefault();
-                navigate(`/filters/new/${title}?id=${row.id}`);
-              }}
-            />
-          </div>
-        </td>
-      </tr>
-    ));
-
   return (
-    <Fragment>
-      <ConfirmationModal
-        data={{
-          ...confirmModal,
-          onCancel: closeConfirm,
-        }}
-      />
-      <BlockStack gap={4}>
-        <InlineStack>
-          <PageActionButton
-            text="Delete"
-            icon={null}
-            type="secondary"
-            className={selected.length > 0 ? "" : "invisible"}
-            onAction={() => {
-              if (selected.length > 0) {
-                openConfirm({
-                  title: `Delete ${title}`,
-                  text: `Are you sure you want to delete the selected ${title.toLowerCase()}?`,
-                  onAccept: () => {
-                    onDelete(title, selected);
-                    closeConfirm();
-                  },
-                });
-              }
-            }}
-            hidden={selected.length === 0}
-          />
-        </InlineStack>
-        {filters && filters.length > 0 && (
-          <Card>
-            <SpinnerLoader isLoading={loading}>
-              <FilterTable
-                headings={renderHeadings()}
-                rows={renderRows(filters)}
+    <>
+      {confirm && (
+        <ModalShell
+          size="sm"
+          title={
+            confirm.length === 1 ? "Delete filter" : "Delete selected filters"
+          }
+          description="Deleted filters will no longer be available for events."
+          onClose={() => !loading && setConfirm(null)}
+          footer={
+            <>
+              <PageActionButton
+                text="Cancel"
+                type="secondary"
+                disabled={loading}
+                onAction={() => setConfirm(null)}
               />
-            </SpinnerLoader>
-          </Card>
-        )}
-      </BlockStack>
-    </Fragment>
+              <PageActionButton
+                text={loading ? "Deleting…" : "Delete"}
+                type="danger"
+                disabled={loading}
+                onAction={async () => {
+                  await onDelete(title, confirm);
+                  setConfirm(null);
+                }}
+              />
+            </>
+          }
+        >
+          <p>
+            Are you sure you want to delete{" "}
+            {confirm.length === 1
+              ? "this filter"
+              : `these ${confirm.length} filters`}
+            ?
+          </p>
+        </ModalShell>
+      )}
+      <div className={styles.toolbar}>
+        <CheckboxItem
+          label="Select all"
+          ariaLabel="Select all filters"
+          checked={filters.length > 0 && selected.length === filters.length}
+          indeterminate={
+            selected.length > 0 && selected.length < filters.length
+          }
+          disabled={loading}
+          onChange={onSelectAll}
+        />
+        <span className={styles.secondary}>
+          {`${filters.length} ${filters.length === 1 ? "filter" : "filters"}`}
+        </span>
+      </div>
+      <BulkBar
+        selectedCount={selected.length}
+        noun="filter"
+        onClear={onClearSelection}
+      >
+        <PageActionButton
+          text="Delete"
+          icon={<TrashIcon />}
+          type="danger-secondary"
+          size="sm"
+          disabled={loading}
+          onAction={() => setConfirm([...selected])}
+        />
+      </BulkBar>
+      <div className={styles.list}>
+        <div className={styles.valueHead} style={grid}>
+          <span />
+          <span>Name</span>
+          {fields.map((field) => (
+            <span key={field.key}>{field.label}</span>
+          ))}
+          <span>Order</span>
+          <span />
+        </div>
+        {filters.map((filter) => (
+          <div
+            key={filter.id}
+            className={`${styles.row} ${styles.valueRow} ${
+              selected.includes(filter.id) ? styles.picked : ""
+            }`}
+            style={grid}
+          >
+            <div className={styles.pick}>
+              <CheckboxItem
+                ariaLabel={`Select ${filter.name}`}
+                checked={selected.includes(filter.id)}
+                disabled={loading}
+                onChange={() => onSelect(filter.id)}
+              />
+            </div>
+            <div className={styles.identity}>
+              <span className={styles.mark}>
+                <Icon />
+              </span>
+              <Link
+                className={styles.name}
+                to={`/filters/new/${title}?id=${filter.id}`}
+              >
+                {filter.name}
+              </Link>
+            </div>
+            {fields.map((field) => (
+              <div key={field.key} className={styles.detail}>
+                <span className={styles.mobileLabel}>{field.label}</span>
+                <span title={filter[field.key] || undefined}>
+                  {filter[field.key] || "—"}
+                </span>
+              </div>
+            ))}
+            <div className={styles.order}>
+              <span className={styles.mobileLabel}>Order</span>
+              {filter.priority ?? "—"}
+            </div>
+            <div className={styles.rowActions}>
+              <Link
+                className={styles.action}
+                to={`/filters/new/${title}?id=${filter.id}`}
+                aria-label={`Edit ${filter.name}`}
+                title="Edit filter"
+              >
+                <PencilSquareIcon />
+              </Link>
+              <button
+                type="button"
+                className={`${styles.action} ${styles.danger}`}
+                aria-label={`Delete ${filter.name}`}
+                title="Delete filter"
+                disabled={loading}
+                onClick={() => setConfirm([filter.id])}
+              >
+                <TrashIcon />
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
   );
-};
-export default FiltersList;
+}

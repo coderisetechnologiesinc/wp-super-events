@@ -1,0 +1,85 @@
+// ---------------------------------------------------------------------------
+// Keyframes from the design export, emitted as mixins.
+//
+// A `*.module.scss` hashes its own `@keyframes` names, and an animation-name
+// that points at keyframes declared elsewhere would not be rewritten — so each
+// module that animates emits the keyframes it needs, at the top level of the
+// file (outside `m.scoped`).
+// ---------------------------------------------------------------------------
+
+@use "tokens" as t;
+
+@mixin fade {
+  @keyframes svFade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+@mixin fade-out {
+  @keyframes svFadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+}
+
+// The dialog entrance: a short rise with a touch of scale.
+@mixin pop {
+  @keyframes svPop {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+@mixin pop-out {
+  @keyframes svPopOut {
+    from {
+      opacity: 1;
+      transform: none;
+    }
+    to {
+      opacity: 0;
+      transform: translateY(8px) scale(0.98);
+    }
+  }
+}
+
+// Side drawer.
+@mixin slide {
+  @keyframes svSlide {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: none;
+    }
+  }
+}
+
+// Page / section entrance.
+@mixin rise {
+  @keyframes svRise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}

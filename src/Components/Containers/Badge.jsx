@@ -1,9 +1,48 @@
 import BadgeImage from "./BadgeImage";
-// size : small | medium | large
+import styles from "./Badge.module.scss";
 
-// type : pill-colour | pill-outline | badge | badge-modern
+// size  : small | medium | large
+// type  : pill-colour | pill-outline | badge | badge-modern
+// color : gray | brand | error | warning | success | info | purple |
+//         blue-light | zoom | neutral
+const COLORS = {
+  gray: styles.gray,
+  brand: styles.brand,
+  error: styles.error,
+  warning: styles.warning,
+  success: styles.success,
+  info: styles.info,
+  purple: styles.purple,
+  "blue-light": styles.blueLight,
+  zoom: styles.zoom,
+  neutral: styles.neutral,
+};
 
-// color : gray | brand | error | warning | success | gray-blue | blue-light | blue | indigo | purple | pink | orange
+const TYPES = {
+  "pill-colour": styles.pill,
+  "pill-outline": styles.pillOutline,
+  badge: styles.square,
+  "badge-modern": styles.modern,
+};
+
+const SIZES = {
+  small: styles.small,
+  medium: styles.medium,
+  large: styles.large,
+};
+
+const JUSTIFY = {
+  start: styles.justifyStart,
+  center: styles.justifyCenter,
+  end: styles.justifyEnd,
+};
+
+// Extra class names some call sites still pass; anything unrecognised is kept
+// as a literal class so legacy hooks keep working.
+const EXTRAS = {
+  "badge-short": styles.short,
+};
+
 const Badge = ({
   text,
   icon = null,
@@ -18,69 +57,28 @@ const Badge = ({
   justify = null,
   onAction = () => {},
 }) => {
-  const getColor = () => {
-    if (color === "gray") {
-      return "badge-gray";
-    } else if (color === "brand") {
-      return "badge-brand";
-    } else if (color === "error") {
-      return "badge-error";
-    } else if (color === "warning") {
-      return "badge-warning";
-    } else if (color === "success") {
-      return "badge-success";
-    } else if (color === "info") {
-      return "badge-infor";
-    } else if (color === "purple") {
-      return "badge-purple";
-    } else if (color === "blue-light") {
-      return "badge-blue-light";
-    } else if (color === "zoom") {
-      return "badge-zoom";
-    } else if (color === "neutral") {
-      return "";
-    }
-    return "badge-gray";
-  };
-  const getType = () => {
-    if (type === "pill-colour") {
-      return "badge-pill-colour";
-    } else if (type === "pill-outline") {
-      return "badge-pill-outline";
-    } else if (type === "badge") {
-      return "badge-colour";
-    } else if (type === "badge-modern") {
-      return "badge-modern";
-    }
-    return "badge-modern";
-  };
-  const getSize = () => {
-    if (size === "small") {
-      return "badge-small";
-    } else if (size === "medium") {
-      return "badge-medium";
-    } else if (size === "large") {
-      return "badge-large";
-    }
-    return "badge-small";
-  };
+  const classes = [
+    styles.badge,
+    SIZES[size] || SIZES.small,
+    TYPES[type] || TYPES["badge-modern"],
+    COLORS[color] || COLORS.gray,
+    align === "center" ? styles.alignCenter : styles.alignEnd,
+    justify ? JUSTIFY[justify] || "" : "",
+    fullWidth ? styles.fitContent : "",
+    additionalType ? EXTRAS[additionalType] || additionalType : "",
+    styles.clickable,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <div
-      className={`badge ${
-        fullWidth ? "w-max" : ""
-      } ${getSize()} ${getType()} ${getColor()} ${
-        align === "center" ? "items-center" : "items-end"
-      } ${justify && justify === "start" ? "justify-start" : justify} ${
-        additionalType ? additionalType : ""
-      } cursor-pointer
-`}
-      onClick={onAction}
-    >
-      {icon && icon}
+    <div className={classes} onClick={onAction}>
+      {icon && <span className={styles.icon}>{icon}</span>}
       {image && <BadgeImage image={image} />}
       {text && <span>{text}</span>}
-      {iconAfter && iconAfter}
+      {iconAfter && <span className={styles.icon}>{iconAfter}</span>}
     </div>
   );
 };
+
 export default Badge;

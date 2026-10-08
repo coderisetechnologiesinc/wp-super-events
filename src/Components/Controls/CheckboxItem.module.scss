@@ -1,0 +1,86 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+
+@include m.scoped {
+  .item {
+    display: inline-flex;
+    align-items: center;
+    gap: t.$space-5;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .input {
+    position: absolute;
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+    pointer-events: none;
+    appearance: none;
+  }
+
+  .box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 18px;
+    height: 18px;
+    border: 1px solid t.$border-field;
+    border-radius: t.$radius-sm - 1px;
+    background: t.$surface;
+    box-shadow: t.$shadow-field;
+    color: transparent;
+    transition: background t.$duration-fast t.$ease,
+      border-color t.$duration-fast t.$ease, box-shadow t.$duration t.$ease,
+      transform t.$duration-fast t.$ease-spring;
+  }
+
+  .item:hover .box {
+    border-color: t.$primary-border;
+  }
+
+  .input:checked + .box {
+    border-color: t.$primary-strong;
+    background: linear-gradient(145deg, t.$primary-grad-from, t.$primary-grad-to);
+    box-shadow: t.$shadow-raised-sm, inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    color: t.$text-on-primary;
+    transform: scale(1.06);
+  }
+
+  .input:focus-visible + .box {
+    outline: none;
+    box-shadow: t.$shadow-field, 0 0 0 3px t.$primary-ring;
+  }
+
+  // Same fill as :checked, drawn by the parent because an indeterminate input
+  // has no CSS state of its own that a sibling selector can read reliably.
+  .mixed {
+    border-color: t.$primary-strong;
+    background: linear-gradient(145deg, t.$primary-grad-from, t.$primary-grad-to);
+    box-shadow: t.$shadow-raised-sm, inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+
+  .dash {
+    width: 9px;
+    height: 2px;
+    border-radius: t.$radius-pill;
+    background: t.$text-on-primary;
+  }
+
+  .check {
+    display: block;
+  }
+
+  .label {
+    @include m.text(13, t.$weight-medium);
+    color: t.$text-strong;
+  }
+
+  .disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+}

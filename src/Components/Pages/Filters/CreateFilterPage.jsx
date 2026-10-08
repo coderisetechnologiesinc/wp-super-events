@@ -3,7 +3,6 @@ import CreateLocationFilterForm from "./CreateLocationFilterForm";
 import CreateLanguageFilterForm from "./CreateLanguageFilterForm";
 import CreateCategoryFilterForm from "./CreateCategoryFilterForm";
 import CreateMemberFilterForm from "./CreateMemberFilterForm";
-import PageWrapper from "../PageWrapper";
 import { useState } from "react";
 export default function CreateFilterPage() {
   const { type } = useParams();
@@ -21,12 +20,12 @@ export default function CreateFilterPage() {
   const Form = map[type];
 
   return (
-    <PageWrapper withBackground={true}>
+    <>
       {Form ? (
         <Form loading={loading} setLoading={setLoading} onCancel={onCancel} />
       ) : (
         <p>Unknown filter type.</p>
       )}
-    </PageWrapper>
+    </>
   );
 }

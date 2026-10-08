@@ -1,0 +1,32 @@
+$svv-phone: 520px;
+$svv-mobile: 860px;
+$svv-touch-target: 44px;
+$svv-mobile-inset: 12px;
+
+@mixin phone {
+  @media (max-width: $svv-phone) {
+    @content;
+  }
+}
+
+@mixin mobile {
+  @media (max-width: $svv-mobile) {
+    @content;
+  }
+}
+
+@mixin skin-phone {
+  @media (max-width: $svv-phone) {
+    &.svv-wgt-v2 {
+      @content;
+    }
+  }
+}
+
+@mixin skin-mobile {
+  @media (max-width: $svv-mobile) {
+    &.svv-wgt-v2 {
+      @content;
+    }
+  }
+}

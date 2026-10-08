@@ -1,0 +1,42 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+@use "../../styles/motion" as motion;
+
+@include motion.rise;
+
+@include m.scoped {
+  // Reference: <main style="flex:1;min-width:0;padding:28px 32px 64px">
+  .shell {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    padding: t.$space-14 t.$space-16 64px;
+  }
+
+  .flush {
+    padding: 0;
+  }
+
+  // Reference: the centred column every screen is built from.
+  // <div style="max-width:1180px;margin:0 auto;display:flex;
+  //             flex-direction:column;gap:24px">
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: t.$space-12;
+    width: 100%;
+    max-width: 1180px;
+    min-width: 0;
+    margin: 0 auto;
+    // `backwards`, not `both`: a filled-forwards transform keeps computing as a
+    // matrix, which would make this column the containing block for every
+    // position:fixed overlay inside it (the filters drawer, modals).
+    animation: svRise t.$duration-slow t.$ease backwards;
+  }
+
+  @media (max-width: 782px) {
+    .shell {
+      padding: t.$space-8 t.$space-7 t.$space-16;
+    }
+  }
+}

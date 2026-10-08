@@ -1,0 +1,976 @@
+// International Typographic Style: ink on paper, one red accent, hairline
+// grid rules, no radii and no shadows, Helvetica-class type at tight tracking.
+@use "../unit" as *;
+@use "../breakpoints" as *;
+
+@mixin swiss-label {
+  font-size: u(0.6875);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.svv-wgt-v2-container {
+  --svv-v2-bg-radius: 0px;
+
+  background: var(--svv-v2-skin-bg, #ffffff);
+}
+
+.svv-wgt-v2 {
+  // The whole skin is drawn from these four; routing them through the block
+  // settings is what lets a merchant recolour Swiss without losing its shape.
+  --svv-swiss-ink: var(--svv-v2-text, #111111);
+  --svv-swiss-red: var(--svv-v2-accent, #e30613);
+  --svv-swiss-paper: var(--svv-v2-skin-bg, #ffffff);
+  --svv-swiss-fill: var(--svv-v2-surface, #f2f2f2);
+  --svv-swiss-rule: 1px solid var(--svv-swiss-ink);
+  --svv-swiss-hair: 1px solid var(--svv-border);
+
+  --svv-text: var(--svv-swiss-ink);
+  --svv-text-muted: var(--svv-v2-text-muted, #6f6f6f);
+  --svv-bg: var(--svv-swiss-paper);
+  --svv-surface: var(--svv-swiss-paper);
+  --svv-border: var(--svv-v2-border, #dcdcdc);
+  --svv-border-strong: var(--svv-swiss-ink);
+
+  --svv-primary: var(--svv-swiss-ink);
+  --svv-primary-hover: var(--svv-swiss-red);
+  --svv-primary-text: var(--svv-v2-primary-text, var(--svv-swiss-paper));
+  --svv-primary-subtle: var(--svv-swiss-fill);
+
+  --svv-accent: var(--svv-swiss-red);
+  --svv-accent-strong: var(--svv-swiss-red);
+  --svv-accent-subtle: var(--svv-swiss-fill);
+
+  --svv-success: var(--svv-v2-success, #0f7a4a);
+  --svv-warning: var(--svv-v2-warning, #8a6200);
+  --svv-critical: var(--svv-swiss-red);
+  --svv-info: var(--svv-swiss-ink);
+
+  --svv-card-bg: var(--svv-v2-card-bg, var(--svv-swiss-paper));
+  --svv-card-text: var(--svv-swiss-ink);
+  --svv-card-shadow: none;
+  --svv-card-shadow-hover: none;
+  --svv-radius: 0px;
+  --svv-pill: 0px;
+
+  --svv-font: var(
+    --svv-v2-skin-font,
+    "Helvetica Neue",
+    Helvetica,
+    Inter,
+    Arial,
+    "Liberation Sans",
+    sans-serif
+  );
+  --svv-heading-font: var(--svv-v2-skin-heading-font, var(--svv-font));
+
+  --svv-calendar-text: var(--svv-swiss-ink);
+  --svv-calendar-marked-bg: var(--svv-swiss-fill);
+  --svv-calendar-selected-bg: var(--svv-swiss-red);
+  --svv-calendar-selected-text: var(--svv-swiss-paper);
+  --svv-calendar-today-border: var(--svv-swiss-ink);
+  --svv-drawer-bg: var(--svv-swiss-paper);
+  --svv-drawer-backdrop: var(--svv-v2-drawer-backdrop, rgba(17, 17, 17, 0.5));
+
+  color: var(--svv-text);
+  letter-spacing: -0.005em;
+
+  :where(h1, h2, h3, h4) {
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+
+  :where(:focus-visible) {
+    outline: 2px solid var(--svv-swiss-red);
+    outline-offset: 1px;
+  }
+
+  // Shell: a red top rule over a hairline module grid
+  .svv-shell {
+    border: 0;
+    border-top: u(0.25) solid var(--svv-swiss-red);
+    border-bottom: var(--svv-swiss-rule);
+    border-radius: 0;
+    background: var(--svv-swiss-paper);
+    box-shadow: none;
+  }
+
+  .svv-shell__header {
+    padding: u(1) u(1.25);
+    border-bottom: var(--svv-swiss-rule);
+    background: var(--svv-swiss-paper);
+  }
+
+  .svv-shell__aside {
+    padding: u(1.25) u(1.25);
+    border-bottom: var(--svv-swiss-rule);
+    background: var(--svv-swiss-paper);
+  }
+
+  .svv-shell__content {
+    padding: u(1.25) u(1.25) u(1.5);
+  }
+
+  @container svv-shell (min-width: 832px) {
+    .svv-shell--with-aside .svv-shell__aside {
+      border-bottom: 0;
+      border-right: var(--svv-swiss-rule);
+    }
+
+    .svv-shell--with-aside.svv-shell--aside-end .svv-shell__aside {
+      border-right: 0;
+      border-left: var(--svv-swiss-rule);
+    }
+  }
+
+  // Controls: square fields, hairline ink boxes
+  .svv-search,
+  .svv-select {
+    min-height: u(2.5);
+    border: var(--svv-swiss-rule);
+    border-radius: 0;
+    background: var(--svv-swiss-paper);
+  }
+
+  .svv-search:focus-within,
+  .svv-select:focus-within {
+    background: var(--svv-swiss-fill);
+  }
+
+  .svv-select__label {
+    @include swiss-label;
+
+    color: var(--svv-swiss-ink);
+  }
+
+  .svv-select select,
+  .svv-search input {
+    color: var(--svv-swiss-ink);
+    font-weight: 500;
+  }
+
+  .svv-viewmode {
+    gap: 0;
+    padding: 0;
+    border: var(--svv-swiss-rule);
+    border-radius: 0;
+    background: var(--svv-swiss-paper);
+
+    button {
+      @include swiss-label;
+
+      min-height: u(2.25);
+      padding: 0 u(1);
+      border-radius: 0;
+      color: var(--svv-swiss-ink);
+
+      + button {
+        border-left: var(--svv-swiss-rule);
+      }
+
+      &:hover {
+        background: var(--svv-swiss-fill);
+        color: var(--svv-swiss-ink);
+      }
+
+      &.is-active {
+        background: var(--svv-swiss-ink);
+        color: var(--svv-swiss-paper);
+      }
+    }
+  }
+
+  .svv-quick button {
+    @include swiss-label;
+
+    border: var(--svv-swiss-rule);
+    border-radius: 0;
+    margin: 0 -1px -1px 0;
+    background: var(--svv-swiss-paper);
+    color: var(--svv-swiss-ink);
+
+    &:hover {
+      background: var(--svv-swiss-fill);
+      color: var(--svv-swiss-ink);
+    }
+
+    &.is-active {
+      background: var(--svv-swiss-ink);
+      color: var(--svv-swiss-paper);
+    }
+  }
+
+  .svv-filters__toggle {
+    @include swiss-label;
+
+    border: var(--svv-swiss-rule);
+    border-radius: 0;
+    background: var(--svv-swiss-paper);
+    color: var(--svv-swiss-ink);
+
+    &:hover {
+      background: var(--svv-swiss-fill);
+      color: var(--svv-swiss-ink);
+    }
+  }
+
+  .svv-filters select,
+  .svv-pagination select {
+    border: var(--svv-swiss-rule);
+    border-radius: 0;
+    background: var(--svv-swiss-paper);
+    font-weight: 500;
+  }
+
+  .svv-filters__field label {
+    @include swiss-label;
+
+    color: var(--svv-text-muted);
+  }
+
+  .svv-filters__clear {
+    @include swiss-label;
+
+    color: var(--svv-swiss-red);
+
+    &:hover:not(:disabled) {
+      color: var(--svv-swiss-ink);
+    }
+  }
+
+  .svv-summary__card {
+    border: 0;
+    border-top: var(--svv-swiss-rule);
+    border-radius: 0;
+    padding: u(0.625) 0 0;
+    background: transparent;
+
+    strong {
+      font-size: u(2);
+      font-weight: 500;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    span {
+      @include swiss-label;
+
+      color: var(--svv-text-muted);
+    }
+  }
+
+  // Results head
+  .svv-results {
+    align-items: end;
+    padding-bottom: u(0.75);
+    border-bottom: var(--svv-swiss-rule);
+    margin-bottom: u(1.125);
+  }
+
+  .svv-results__title {
+    font-size: clamp(#{u(1.5)}, 5cqi, #{u(2.5)});
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1.02;
+  }
+
+  .svv-results__meta {
+    @include swiss-label;
+
+    color: var(--svv-text-muted);
+  }
+
+  // Cards: collapsed hairline cells
+  .svv-events__items {
+    gap: 0;
+  }
+
+  .svv-card {
+    padding: u(1) u(1);
+    border: var(--svv-swiss-rule);
+    border-radius: 0;
+    background: var(--svv-swiss-paper);
+    transition: border-color 0.18s ease;
+
+    &:hover {
+      border-color: var(--svv-swiss-red);
+      box-shadow: none;
+      transform: none;
+      z-index: 1;
+    }
+  }
+
+  .svv-events__items > li + li .svv-card {
+    margin-top: -1px;
+  }
+
+  .svv-card__media {
+    border: 0;
+    border-radius: 0;
+    filter: grayscale(1) contrast(1.05);
+  }
+
+  .svv-card:hover .svv-card__media {
+    filter: none;
+  }
+
+  .svv-card__when {
+    @include swiss-label;
+
+    color: var(--svv-swiss-red);
+  }
+
+  .svv-card__title {
+    font-size: u(1.25);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.12;
+
+    a:hover {
+      color: var(--svv-swiss-red);
+    }
+  }
+
+  .svv-card__meta {
+    font-size: u(0.8125);
+    color: var(--svv-text-muted);
+  }
+
+  .svv-card__description {
+    color: var(--svv-text-muted);
+  }
+
+  .svv-card__price {
+    font-size: u(1.25);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+    color: var(--svv-swiss-ink);
+  }
+
+  .svv-card__availability {
+    @include swiss-label;
+
+    color: var(--svv-text-muted);
+  }
+
+  .svv-events--grid .svv-events__items {
+    gap: u(0.75);
+  }
+
+  .svv-events--grid .svv-card {
+    padding: 0;
+    margin-top: 0;
+  }
+
+  .svv-events--grid .svv-card__media {
+    border-bottom: var(--svv-swiss-rule);
+  }
+
+  .svv-events--grid .svv-card__body {
+    padding: u(0.875) u(0.875) 0;
+  }
+
+  .svv-events--grid .svv-card__action {
+    padding: u(0.875);
+  }
+
+  .svv-events__separator {
+    @include swiss-label;
+
+    margin: u(1.5) 0 u(0.625);
+    color: var(--svv-swiss-ink);
+
+    &::before {
+      display: none;
+    }
+
+    &::after {
+      background: var(--svv-swiss-ink);
+    }
+  }
+
+  .svv-events__state {
+    border: var(--svv-swiss-rule);
+    border-style: solid;
+    border-radius: 0;
+    background: var(--svv-swiss-paper);
+  }
+
+  // Buttons
+  .svv-card__cta,
+  .svv-drawer__cta,
+  .svv-submit {
+    @include swiss-label;
+
+    min-height: u(2.5);
+    padding: 0 u(1.125);
+    border: var(--svv-swiss-rule);
+    border-radius: 0;
+    background: var(--svv-swiss-ink);
+    color: var(--svv-swiss-paper);
+
+    &:hover:not(:disabled) {
+      border-color: var(--svv-swiss-red);
+      background: var(--svv-swiss-red);
+      color: var(--svv-swiss-paper);
+    }
+  }
+
+  .svv-card__cta--muted,
+  .svv-drawer__cta--muted {
+    border-color: var(--svv-swiss-red);
+    background: var(--svv-swiss-paper);
+    color: var(--svv-swiss-red);
+
+    &:hover:not(:disabled) {
+      background: var(--svv-swiss-red);
+      color: var(--svv-swiss-paper);
+    }
+  }
+
+  .svv-card__share {
+    border: var(--svv-swiss-rule);
+    border-radius: 0;
+    background: var(--svv-swiss-paper);
+    color: var(--svv-swiss-ink);
+
+    &:hover {
+      border-color: var(--svv-swiss-red);
+      background: var(--svv-swiss-paper);
+      color: var(--svv-swiss-red);
+    }
+  }
+
+  .svv-badge,
+  .svv-pill {
+    @include swiss-label;
+
+    border-radius: 0;
+    border: 1px solid currentcolor;
+    background: transparent;
+    color: var(--svv-swiss-ink);
+  }
+
+  .svv-badge--critical {
+    color: var(--svv-swiss-red);
+  }
+
+  .svv-badge--success {
+    color: var(--svv-success);
+  }
+
+  .svv-badge--accent {
+    color: var(--svv-swiss-red);
+  }
+
+  // Calendars
+  .svv-calendar__month {
+    font-size: u(1.125);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .svv-monthview__month {
+    font-size: u(2.125);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+  }
+
+  .svv-calendar__weekday,
+  .svv-monthview__weekday {
+    @include swiss-label;
+
+    font-size: u(0.625);
+    color: var(--svv-text-muted);
+  }
+
+  .svv-calendar__nav button,
+  .svv-monthview__nav button {
+    border: var(--svv-swiss-rule);
+    border-radius: 0;
+    background: var(--svv-swiss-paper);
+    color: var(--svv-swiss-ink);
+
+    &:hover {
+      border-color: var(--svv-swiss-red);
+      background: var(--svv-swiss-paper);
+      color: var(--svv-swiss-red);
+    }
+  }
+
+  .svv-calendar__grid {
+    gap: 1px;
+  }
+
+  .svv-calendar__day {
+    border-radius: 0;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+
+    &::after {
+      border-radius: 0;
+      background: var(--svv-swiss-red);
+    }
+
+    &:hover {
+      border-color: var(--svv-swiss-ink);
+      background: var(--svv-swiss-fill);
+    }
+
+    &.is-selected {
+      border-color: var(--svv-swiss-red);
+    }
+  }
+
+  .svv-calendar__clear {
+    @include swiss-label;
+
+    border: var(--svv-swiss-rule);
+    border-radius: 0;
+    background: var(--svv-swiss-paper);
+    color: var(--svv-swiss-ink);
+
+    &:hover {
+      border-color: var(--svv-swiss-red);
+      color: var(--svv-swiss-red);
+    }
+  }
+
+  .svv-monthview__grid,
+  .svv-monthview__cell {
+    border-color: var(--svv-swiss-ink);
+    border-radius: 0;
+  }
+
+  .svv-monthview__date {
+    font-size: u(1);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .svv-monthview__cell.is-outside {
+    background: var(--svv-swiss-fill);
+  }
+
+  // primary is ink here, so today needs the red to read as marked
+  .svv-monthview__cell.is-today .svv-monthview__date {
+    color: var(--svv-swiss-red);
+  }
+
+  .svv-monthview__time {
+    @include swiss-label;
+
+    color: var(--svv-swiss-red);
+  }
+
+  .svv-monthview__name {
+    font-weight: 500;
+    letter-spacing: -0.015em;
+  }
+
+  .svv-monthview__today,
+  .svv-monthview__more {
+    @include swiss-label;
+
+    color: var(--svv-swiss-ink);
+  }
+
+  .svv-monthview__today {
+    border: var(--svv-swiss-rule);
+    border-radius: 0;
+    background: var(--svv-swiss-paper);
+
+    &:hover {
+      border-color: var(--svv-swiss-red);
+      color: var(--svv-swiss-red);
+    }
+  }
+
+  .svv-monthview__more {
+    border-top: var(--svv-swiss-rule);
+  }
+
+  .svv-monthview__nav button {
+    border: var(--svv-swiss-rule);
+    border-radius: 0;
+    background: var(--svv-swiss-paper);
+    color: var(--svv-swiss-ink);
+
+    &:hover {
+      border-color: var(--svv-swiss-red);
+      background: var(--svv-swiss-paper);
+      color: var(--svv-swiss-red);
+    }
+  }
+
+  // Categories
+  .svv-categories__title h3 {
+    font-size: u(1.375);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+
+  .svv-categories__head {
+    padding-bottom: u(0.5);
+    border-bottom: var(--svv-swiss-rule);
+  }
+
+  .svv-categories__nav button {
+    border: var(--svv-swiss-rule);
+    border-radius: 0;
+    background: var(--svv-swiss-paper);
+
+    &:hover:not(:disabled) {
+      border-color: var(--svv-swiss-red);
+      color: var(--svv-swiss-red);
+    }
+  }
+
+  .svv-categories__row {
+    gap: u(0.75);
+  }
+
+  .svv-categories__dots button {
+    border-radius: 0;
+    background: var(--svv-border);
+  }
+
+  .svv-categories__dots .is-active button {
+    background: var(--svv-swiss-red);
+  }
+
+  // Pagination
+  .svv-pagination {
+    @include swiss-label;
+
+    padding-top: u(0.875);
+    border-top: var(--svv-swiss-rule);
+    color: var(--svv-swiss-ink);
+
+    button {
+      @include swiss-label;
+
+      border: var(--svv-swiss-rule);
+      border-radius: 0;
+      background: var(--svv-swiss-paper);
+      color: var(--svv-swiss-ink);
+
+      &:hover:not(:disabled) {
+        border-color: var(--svv-swiss-red);
+        color: var(--svv-swiss-red);
+      }
+    }
+
+    select {
+      border-color: var(--svv-swiss-ink);
+    }
+  }
+
+  // Drawer and overlays
+  .svv-drawer__panel {
+    border-radius: 0;
+    border-left: var(--svv-swiss-rule);
+    background: var(--svv-swiss-paper);
+    box-shadow: none;
+  }
+
+  .svv-drawer--left .svv-drawer__panel {
+    border-left: 0;
+    border-right: var(--svv-swiss-rule);
+  }
+
+  .svv-drawer__head {
+    border-bottom: var(--svv-swiss-rule);
+    background: var(--svv-swiss-paper);
+    backdrop-filter: none;
+  }
+
+  .svv-drawer__icon {
+    border: var(--svv-swiss-rule);
+    border-radius: 0;
+    color: var(--svv-swiss-ink);
+
+    &:hover {
+      border-color: var(--svv-swiss-red);
+      color: var(--svv-swiss-red);
+    }
+  }
+
+  .svv-drawer__hero {
+    border-radius: 0;
+  }
+
+  .svv-drawer__title {
+    font-size: u(1.875);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1.04;
+    color: var(--svv-swiss-ink);
+  }
+
+  .svv-drawer__section {
+    border: 0;
+    border-top: var(--svv-swiss-rule);
+    border-radius: 0;
+    padding: u(0.875) 0 0;
+    background: transparent;
+
+    h3 {
+      @include swiss-label;
+
+      color: var(--svv-swiss-red);
+    }
+  }
+
+  .svv-drawer__summary {
+    border-bottom: var(--svv-swiss-rule);
+  }
+
+  .svv-drawer__summary-image {
+    border-radius: 0;
+  }
+
+  .svv-drawer__foot {
+    border-top: var(--svv-swiss-rule);
+    background: var(--svv-swiss-paper);
+    backdrop-filter: none;
+  }
+
+  .svv-drawer__total {
+    strong {
+      font-size: u(1.5);
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    span {
+      @include swiss-label;
+
+      color: var(--svv-text-muted);
+    }
+  }
+
+  .svv-related li {
+    border: 0;
+    border-top: var(--svv-swiss-hair);
+    border-radius: 0;
+    padding: u(0.625) 0;
+  }
+
+  .svv-related__title {
+    color: var(--svv-swiss-ink);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+
+    &:hover {
+      color: var(--svv-swiss-red);
+      text-decoration: none;
+    }
+  }
+
+  // Forms
+  .svv-field__label,
+  .svv-members__legend,
+  .svv-form__question-text {
+    @include swiss-label;
+
+    color: var(--svv-swiss-ink);
+  }
+
+  .svv-field__required {
+    color: var(--svv-swiss-red);
+  }
+
+  .svv-field__input,
+  .svv-stepper {
+    border: var(--svv-swiss-rule);
+    border-radius: 0;
+    background: var(--svv-swiss-paper);
+  }
+
+  .svv-field__input:focus,
+  .svv-field__input:focus-visible {
+    border-color: var(--svv-swiss-red);
+  }
+
+  .svv-stepper button {
+    border-radius: 0;
+    background: var(--svv-swiss-paper);
+    color: var(--svv-swiss-ink);
+
+    &:hover:not(:disabled) {
+      background: var(--svv-swiss-ink);
+      color: var(--svv-swiss-paper);
+    }
+  }
+
+  .svv-members__row {
+    border: 0;
+    border-top: var(--svv-swiss-rule);
+    border-radius: 0;
+    padding: u(0.875) 0 0;
+    background: transparent;
+  }
+
+  .svv-choice input {
+    accent-color: var(--svv-swiss-red);
+  }
+
+  .svv-error {
+    border: 1px solid var(--svv-swiss-red);
+    border-radius: 0;
+    background: var(--svv-swiss-paper);
+    color: var(--svv-swiss-red);
+  }
+
+  .svv-confirmation__mark {
+    border-radius: 0;
+    border-color: var(--svv-success);
+    background: var(--svv-swiss-paper);
+  }
+
+  .svv-modal {
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .svv-modal__panel {
+    border: var(--svv-swiss-rule);
+    border-radius: 0;
+    background: var(--svv-swiss-paper);
+    box-shadow: none;
+  }
+
+  .svv-modal__title {
+    font-size: u(1.5);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--svv-swiss-ink);
+  }
+
+  .svv-modal__close {
+    border-radius: 0;
+    color: var(--svv-swiss-ink);
+
+    &:hover {
+      background: var(--svv-swiss-fill);
+    }
+  }
+
+  .svv-share__target {
+    @include swiss-label;
+
+    color: var(--svv-swiss-ink);
+  }
+
+  .svv-share__icon {
+    border-radius: 0;
+    border: var(--svv-swiss-rule);
+    background: var(--svv-swiss-paper);
+    color: var(--svv-swiss-ink);
+    font-weight: 500;
+  }
+
+  .svv-share__target:hover .svv-share__icon {
+    border-color: var(--svv-swiss-red);
+    background: var(--svv-swiss-paper);
+    color: var(--svv-swiss-red);
+  }
+
+  .svv-share__link {
+    border: var(--svv-swiss-rule);
+    border-radius: 0;
+    background: var(--svv-swiss-paper);
+  }
+
+  @include mobile {
+    .svv-shell__header {
+      padding: 12px 16px;
+    }
+
+    .svv-viewmode {
+      justify-content: stretch;
+
+      button {
+        flex: 1;
+      }
+    }
+
+    .svv-shell__content {
+      padding: 20px 16px 24px;
+    }
+
+    .svv-results {
+      padding: 0 0 16px;
+    }
+
+    .svv-results__title {
+      font-size: 48px;
+    }
+
+    .svv-events {
+      padding: 0;
+    }
+
+    .svv-pagination {
+      margin: 24px 0 0;
+    }
+
+    .svv-shell__strip {
+      gap: 0;
+      border-bottom: var(--svv-swiss-rule);
+    }
+
+    .svv-datestrip,
+    .svv-datestrip__days {
+      gap: 0;
+    }
+
+    .svv-datestrip__chip {
+      margin-right: -1px;
+      border-color: var(--svv-swiss-ink);
+    }
+
+    .svv-events--list .svv-card {
+      padding: 16px 0;
+    }
+
+    .svv-events--list .svv-card__title {
+      font-size: 18px;
+    }
+
+    .svv-events--grid .svv-events__items {
+      gap: 0 12px;
+    }
+
+    .svv-events--grid .svv-card {
+      padding: 10px 0 24px;
+      border: 0;
+      border-top: 3px solid var(--svv-swiss-ink);
+      border-radius: 0;
+    }
+
+    .svv-events--grid .svv-card__media {
+      margin-top: 10px;
+    }
+
+    .svv-events--grid .svv-card__title {
+      font-size: 16px;
+    }
+
+    .svv-events--grid .svv-card__action {
+      padding-top: 10px;
+    }
+  }
+
+  @include phone {
+    .svv-card__actions {
+      display: grid;
+      grid-template-columns: 40px minmax(0, 1fr);
+    }
+  }
+}

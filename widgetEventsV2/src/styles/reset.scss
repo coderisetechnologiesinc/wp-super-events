@@ -1,0 +1,67 @@
+.svv-wgt-v2.svv-wgt-v2 {
+  :where(*, *::before, *::after) {
+    box-sizing: border-box;
+  }
+
+  :where(
+      div, span, p, h1, h2, h3, h4, h5, h6, ul, ol, li, dl, dt, dd, figure,
+      blockquote, fieldset, legend, form, section, article, header, footer,
+      aside, main, nav, hr, pre, label, strong, b, em, i, small, time, code
+    ) {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    color: inherit;
+    text-align: inherit;
+    text-transform: none;
+    letter-spacing: inherit;
+    text-decoration: none;
+    box-shadow: none;
+    float: none;
+    position: static;
+    width: auto;
+    height: auto;
+    min-width: 0;
+    min-height: 0;
+    max-width: none;
+    max-height: none;
+  }
+
+  :where(ul, ol) {
+    list-style: none;
+  }
+
+  :where(a) {
+    color: inherit;
+    font: inherit;
+    text-decoration: none;
+    background: none;
+  }
+
+  :where(img, svg, video, picture) {
+    max-width: 100%;
+    border: 0;
+  }
+
+  :where(button, input, select, textarea, output, progress) {
+    all: revert;
+    box-sizing: border-box;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    letter-spacing: inherit;
+    text-transform: none;
+  }
+
+  :where(dialog) {
+    all: revert;
+    box-sizing: border-box;
+  }
+
+  :where(table) {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+}

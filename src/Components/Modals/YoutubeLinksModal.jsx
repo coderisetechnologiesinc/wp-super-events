@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import BlockStack from "../Containers/BlockStack";
 import InlineStack from "../Containers/InlineStack";
-import InputFieldControl from "../Controls/InputFieldControl";
+import NewInputFieldControl from "../Controls/NewInputFieldControl";
 
 import { DndContext, closestCenter } from "@dnd-kit/core";
 import {
@@ -72,7 +72,8 @@ const YoutubeLinksModal = ({ youtubeVideos, setYoutubeVideos }) => {
       {/* ✅ Add at Bottom */}
       <div className="border-t pt-4">
         <InlineStack gap={2}>
-          <InputFieldControl
+          <NewInputFieldControl
+            width="100%"
             placeholder="Type your link here"
             value={input}
             onChange={setInput}

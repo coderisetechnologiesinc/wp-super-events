@@ -1,46 +1,38 @@
+import useCacheRefresh from "../../hooks/useCacheRefresh";
 import { useEffect, useState, useRef, Fragment } from "react";
 import { toast } from "react-toastify";
+import moment from "moment-timezone";
+import {
+  ArrowDownOnSquareStackIcon,
+  PaperAirplaneIcon,
+  WalletIcon,
+  XCircleIcon,
+} from "@heroicons/react/24/outline";
 import {
   fetchBookings as fetchBookingsUtil,
   refundBooking as refundBookingUtil,
   cancelBooking,
   resendBookingConfirmation,
 } from "../../utilities/bookings";
-import moment from "moment-timezone";
-import PageWrapper from "./PageWrapper";
-import PageHeader from "../Containers/PageHeader";
-import BlockStack from "../Containers/BlockStack";
-import FilterTable from "../Containers/FilterTable";
-import Card from "../Containers/Card";
-import Badge from "../Containers/Badge";
-import InlineStack from "../Containers/InlineStack";
-import ButtonGroupConnected from "../Controls/ButtonGroupConnected";
-import ConnectedButton from "../Controls/ConnectedButton";
-import NewButtonGroup from "../Controls/NewButtonGroup";
-import InputFieldControl from "../Controls/InputFieldControl";
-import Datepicker from "react-tailwindcss-datepicker";
-import ListPagination from "../Controls/ListPagination";
-import Dropdown from "../Containers/Dropdown";
-import PageActionButton from "../Controls/PageActionButton";
-import CheckboxControl from "../Controls/CheckboxControl";
+import { loadHeadings, saveHeadings } from "../../utilities/tableHeadings";
 import { timezonesList } from "../../utilities/timezones";
-import timezonesWithOffset from "../../utilities/timezones";
-import {
-  Bars4Icon,
-  PencilSquareIcon,
-  EyeIcon,
-  CalendarDaysIcon,
-  PaperAirplaneIcon,
-  XCircleIcon,
-  XMarkIcon,
-  WalletIcon,
-  AdjustmentsVerticalIcon,
-  ArrowDownOnSquareStackIcon,
-} from "@heroicons/react/16/solid";
 import { useServvStore } from "../../store/useServvStore";
+import PageWrapper from "./PageWrapper";
+import PageContent from "../Containers/PageContent";
+import PageHeader from "../Containers/PageHeader";
+import PageActionButton from "../Controls/PageActionButton";
+import DisplayOptions from "../Controls/DisplayOptions";
+import NewButtonGroup from "../Controls/NewButtonGroup";
+import NewInputFieldControl from "../Controls/NewInputFieldControl";
+import NewDatePickerControl from "../Controls/NewDatePickerControl";
+import CheckboxItem from "../Controls/CheckboxItem";
+import FiltersDropdown from "../Containers/FiltersDropdown";
+import BulkBar, { SelectAllRow } from "../Containers/BulkBar";
+import ModalShell from "../Modals/ModalShell";
 import SpinnerLoader from "./SpinnerLoader";
-import AnimatedModal from "../Modals/AnimatedModal";
-import CalendarInline from "../CreateEvent/CalendarInline";
+import DashboardPagination from "../Shared/DashboardPagination";
+import BookingRows, { BOOKING_COLUMNS } from "./Bookings/BookingRows";
+import styles from "./BookingsPage.module.scss";
 
 // =====================================================================
 // HEADINGS STORAGE HELPERS
@@ -48,36 +40,28 @@ import CalendarInline from "../CreateEvent/CalendarInline";
 
 const HEADINGS_STORAGE_KEY = "servv_bookings_headings";
 
-const defaultHeadings = [
-  { label: "Order ID", value: "order", visible: true },
-  { label: "Order Date/Time", value: "date", visible: true },
-  { label: "Registrant", value: "registrant", visible: true },
-  { label: "Title", value: "title", visible: true },
-  { label: "Occurrence", value: "occurrence", visible: true },
-  { label: "Mode", value: "paid", visible: true },
-  { label: "Status", value: "status", visible: true },
-];
+// Which columns the list shows is a per-browser preference, so it lives in
+// localStorage and is edited through the Display options popover.
+const defaultHeadings = BOOKING_COLUMNS.map(({ label, value }) => ({
+  label,
+  value,
+  visible: true,
+}));
 
-const loadHeadings = () => {
-  try {
-    const saved = localStorage.getItem(HEADINGS_STORAGE_KEY);
-    if (!saved) return defaultHeadings;
-    const savedMap = JSON.parse(saved); // { [value]: boolean }
-    return defaultHeadings.map((h) =>
-      h.value in savedMap ? { ...h, visible: savedMap[h.value] } : h,
-    );
-  } catch {
-    return defaultHeadings;
-  }
-};
-
-const saveHeadings = (updated) => {
-  try {
-    const savedMap = Object.fromEntries(
-      updated.map((h) => [h.value, h.visible]),
-    );
-    localStorage.setItem(HEADINGS_STORAGE_KEY, JSON.stringify(savedMap));
-  } catch {}
+// What the destructive bulk actions have to be confirmed for.
+const CONFIRMABLE = {
+  refund: {
+    title: "Refund these bookings?",
+    description:
+      "The money goes back to the registrant through Stripe. This cannot be undone.",
+    action: "Issue refund",
+  },
+  cancel: {
+    title: "Cancel these bookings?",
+    description:
+      "The registrants lose their place and are notified. This cannot be undone.",
+    action: "Cancel booking",
+  },
 };
 
 // =====================================================================
@@ -90,7 +74,9 @@ const BookingsPage = () => {
   const [loading, setLoading] = useState(false);
   const [timezone, setTimezone] = useState("US/Pacific");
   // Lazy initializer reads from localStorage once on mount
-  const [headings, setHeadings] = useState(loadHeadings);
+  const [headings, setHeadings] = useState(() =>
+    loadHeadings(HEADINGS_STORAGE_KEY, defaultHeadings),
+  );
 
   const timeIntervals = [
     { label: "All time", value: "all" },
@@ -99,26 +85,20 @@ const BookingsPage = () => {
     { label: "7 days", value: "7" },
   ];
 
-  const providers = ["offline", "zoom"];
-  const [calendarModalOpen, setCalendarModalOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState([]);
-  const [customizeDropdown, setCustomizeDropdown] = useState(false);
   const [bookings, setBookings] = useState(false);
   const [selectedInterval, setSelectedTimeInterval] = useState("all");
-  const [activeDropdown, setActiveDropdown] = useState(null);
   const [searchString, setSearchString] = useState("");
+  const [localSearch, setLocalSearch] = useState("");
   const [dates, setDates] = useState({ startDate: null, endDate: null });
   const [price, setPrice] = useState({ from: null, to: null });
-  const [filterDropdown, setFilterDropdown] = useState(false);
   const [selectedProvider, setSelectedProvider] = useState({
     offline: true,
     zoom: true,
   });
-  const [showBulkAction, setShowBulkActions] = useState(false);
+  const [confirming, setConfirming] = useState(null);
+  const [firstFetchDone, setFirstFetchDone] = useState(false);
   const firstFetch = useRef(false);
-
-  const customizeDropdownRef = useRef(null);
-  const filterDropdownRef = useRef(null);
 
   const timezones = Object.keys(timezonesList).map((zone) => {
     return { id: zone, name: timezonesList[zone] };
@@ -143,19 +123,6 @@ const BookingsPage = () => {
     }
   };
 
-  useEffect(() => {
-    if (!customizeDropdown) return;
-    const handleClickOutside = (event) => {
-      if (
-        customizeDropdownRef.current &&
-        !customizeDropdownRef.current.contains(event.target)
-      ) {
-        setCustomizeDropdown(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [customizeDropdown]);
 
   useEffect(() => {
     if (settings?.settings) {
@@ -164,18 +131,9 @@ const BookingsPage = () => {
   }, [settings]);
 
   useEffect(() => {
-    if (!filterDropdown) return;
-    const handleClickOutside = (event) => {
-      if (
-        filterDropdownRef.current &&
-        !filterDropdownRef.current.contains(event.target)
-      ) {
-        setFilterDropdown(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [filterDropdown]);
+    const timezoneFromSettings = getTimezoneFromSettings();
+    setTimezone(timezoneFromSettings);
+  }, [settings]);
 
   const getPostId = (variant) => {
     if (variant.indexOf("0") < variant.length - 1) {
@@ -188,25 +146,26 @@ const BookingsPage = () => {
     }
   };
 
-  const handleOrderSelect = (ID) => {
-    let newOrders = [...selectedOrder];
-    if (selectedOrder.includes(ID)) {
-      newOrders = newOrders.filter((order) => order !== ID);
-      setSelectedOrder(newOrders);
-    } else {
-      newOrders.push(ID);
-      setSelectedOrder(newOrders);
-    }
-  };
+  const handleOrderSelect = (id) =>
+    setSelectedOrder((prev) =>
+      prev.includes(id) ? prev.filter((order) => order !== id) : [...prev, id],
+    );
 
-  const handleSelectAll = () => {
-    if (!bookings || bookings.bookings.length === 0) return;
-    if (selectedOrder.length === bookings.bookings.length) {
-      setSelectedOrder([]);
-      return;
-    }
-    setSelectedOrder(bookings.bookings.map((booking) => booking.id));
-  };
+  const rows = bookings?.bookings ?? [];
+
+  const handleSelectAll = () =>
+    setSelectedOrder((prev) =>
+      prev.length === rows.length ? [] : rows.map((booking) => booking.id),
+    );
+
+  // A selection only means something while its rows are on screen.
+  useEffect(() => {
+    const visible = new Set(rows.map((booking) => booking.id));
+    setSelectedOrder((prev) => {
+      const kept = prev.filter((id) => visible.has(id));
+      return kept.length === prev.length ? prev : kept;
+    });
+  }, [bookings]);
 
   const resendConfirmations = async ({ id, occurrence, registrant }) => {
     setLoading(true);
@@ -221,30 +180,14 @@ const BookingsPage = () => {
     } catch (error) {
       toast("Failed to resend emails");
     } finally {
-      setActiveDropdown(null);
       setLoading(false);
     }
-  };
-
-  const refundBooking = async ({ id, occurrence }) => {
-    setLoading(true);
-    const refundBookingResponse = await refundBookingUtil(id).catch(() => {
-      toast("Failed to refund booking");
-      setActiveDropdown(null);
-      setLoading(false);
-    });
-    if (refundBookingResponse && refundBookingResponse.status === 200) {
-      toast("Booking successfully refunded");
-    }
-    setActiveDropdown(null);
-    setLoading(false);
   };
 
   const cancelBookings = async (id) => {
     setLoading(true);
     const refundBookingResponse = await cancelBooking(id).catch(() => {
       toast("Failed to cancel booking");
-      setActiveDropdown(null);
       setLoading(false);
     });
     if (refundBookingResponse && refundBookingResponse.status === 200) {
@@ -264,46 +207,9 @@ const BookingsPage = () => {
       };
       setBookings(newBookings);
 
-      setActiveDropdown(null);
       setLoading(false);
     }
   };
-
-  const setActive = (id) => {
-    setActiveDropdown(activeDropdown === id ? null : id);
-  };
-
-  const getDates = () => {
-    let datesValue = { startDate: null, endDate: null };
-    if (dates.startDate) {
-      const d = dates.startDate;
-      datesValue.startDate = new Date(
-        d.year(),
-        d.month(),
-        d.date(),
-        d.hour(),
-        d.minute(),
-        d.second(),
-      );
-    }
-    if (dates.endDate) {
-      const d = dates.endDate;
-      datesValue.endDate = new Date(
-        d.year(),
-        d.month(),
-        d.date(),
-        d.hour(),
-        d.minute(),
-        d.second(),
-      );
-    }
-    return datesValue;
-  };
-
-  useEffect(() => {
-    const timezoneFromSettings = getTimezoneFromSettings();
-    setTimezone(timezoneFromSettings);
-  }, [settings]);
 
   const handleSetDates = (dates) => {
     let startDate = null;
@@ -385,330 +291,80 @@ const BookingsPage = () => {
     return { bookings: bookings.bookings, page: bookings.page_number };
   };
 
-  const onFiltering = async () => {
-    await fetchBookings();
-  };
-  const changeFilterDropdown = () => {
-    setFilterDropdown(!filterDropdown);
-  };
+
+  useCacheRefresh(["bookings"], () => fetchBookings({ page: bookings?.page_number || 1 }));
+
+  // Apply and Reset change several pieces of filter state at once, and
+  // fetchBookings reads them from its closure — calling it in the same handler
+  // would fetch with the values the render started with. Bumping a counter
+  // lets the effect below run once React has settled the new state.
+  const [filtersRun, setFiltersRun] = useState(0);
+  const onFiltering = () => setFiltersRun((run) => run + 1);
 
   useEffect(() => {
+    if (!filtersRun) return;
     fetchBookings();
+  }, [filtersRun]);
+
+  useEffect(() => {
+    fetchBookings().finally(() => setFirstFetchDone(true));
   }, [dates, selectedInterval]);
 
-  const handleChangeTimeInterval = (newVal) => {
-    setSelectedTimeInterval(newVal);
-  };
-  console.log(loading);
+  // The field holds what is typed; the list is refetched once typing settles.
+  useEffect(() => {
+    if (localSearch === searchString) return undefined;
 
-  const renderHeadings = () => (
-    <Fragment>
-      <th>
-        <CheckboxControl
-          onChange={() => handleSelectAll()}
-          checked={
-            bookings &&
-            bookings.bookings &&
-            selectedOrder.length === bookings.bookings.length
-          }
-        />
-      </th>
-      {headings.map((heading) =>
-        heading.visible ? <th key={heading.value} className={`col-${heading.value}`}>{heading.label}</th> : null,
-      )}
-      <th className="col-actions"></th>
-    </Fragment>
-  );
+    const timer = setTimeout(() => setSearchString(localSearch), 400);
+    return () => clearTimeout(timer);
+  }, [localSearch]);
 
-  const isRefundAvailable = () => {
-    let selectedBookings = bookings.bookings.map(
-      (booking) => selectedOrder.indexOf(booking.id) >= 0,
-    );
-    if (selectedBookings.length > 0) {
-      return selectedBookings.filter((booking) => booking.price > 0).length > 0;
-    } else return false;
-  };
+  const searchedRef = useRef(searchString);
+  useEffect(() => {
+    if (searchedRef.current === searchString) return;
+    searchedRef.current = searchString;
+    fetchBookings();
+  }, [searchString]);
 
-  const renderRows = () => {
-    return bookings.bookings.map((row) => {
-      const startDate = moment(row.start_datetime).tz(row.timezone);
-      const orderDate = moment(row.created_datetime).tz(row.timezone);
-
-      return (
-        <tr className="table-row" key={row.id}>
-          <td className="w-auto whitespace-nowrap">
-            <CheckboxControl
-              checked={selectedOrder.includes(row.id)}
-              size={2}
-              onChange={() => handleOrderSelect(row.id)}
-            />
-          </td>
-
-          {headings.map((heading) => {
-            if (!heading.visible) return null;
-
-            switch (heading.value) {
-              case "order":
-                return (
-                  <td key="order" className="col-order">
-                    <span className="font-semibold text-sm">
-                      {t("#")}
-                      {row.id}
-                    </span>
-                  </td>
-                );
-
-              case "date":
-                return (
-                  <td key="date" className="col-date">
-                    <div className="flex flex-col">
-                      <span className="text-sm font-semibold">
-                        {orderDate.format("MMM DD YYYY")}
-                      </span>
-                      <span className="text-xs font-regular">
-                        {orderDate.format(timeFormat)}
-                      </span>
-                    </div>
-                  </td>
-                );
-
-              case "registrant":
-                return (
-                  <td key="registrant" data-tooltip data-full={row.email}>
-                    <span className="cell-truncate">{row.email}</span>
-                  </td>
-                );
-
-              case "title":
-                return (
-                  <td key="title" data-tooltip data-full={row.product_name}>
-                    <span className="cell-truncate font-semibold text-sm">
-                      {row.product_name}
-                    </span>
-                  </td>
-                );
-
-              case "occurrence":
-                return (
-                  <td key="occurrence" className="col-occurrence">
-                    <div className="flex flex-col">
-                      <span className="text-sm font-semibold">
-                        {startDate.format("MMM DD YYYY")}
-                      </span>
-                      <span className="text-xs font-regular">
-                        {startDate.format(timeFormat)}
-                      </span>
-                    </div>
-                  </td>
-                );
-
-              case "paid":
-                return (
-                  <td key="paid" className="col-paid mode">
-                    {Number(row.price) > 0
-                      ? `${
-                          Number(row.price) +
-                          " " +
-                          stripeCurrency?.toUpperCase()
-                        }`
-                      : "Free"}
-                  </td>
-                );
-
-              case "status":
-                return (
-                  <td key="status" className="col-status">
-                    <Badge
-                      text={
-                        row.active_registrants === 0
-                          ? "Canceled"
-                          : row.reunded_quantity >= row.quantity
-                          ? "Refunded"
-                          : "Active"
-                      }
-                      color={
-                        row.active_registrants === 0
-                          ? "error"
-                          : row.reunded_quantity >= row.quantity
-                          ? "warning"
-                          : "success"
-                      }
-                      size="small"
-                      align="center"
-                      type="pill-colour"
-                      additionalType="badge-short"
-                    />
-                  </td>
-                );
-
-              default:
-                return null;
-            }
-          })}
-
-          <td className="col-actions w-auto shrink-0 whitespace-nowrap text-right">
-            <button onClick={() => setActive(row.id)}>
-              <Bars4Icon className="dropdown-icon" />
-            </button>
-
-            {activeDropdown === row.id && (
-              <div className="filter-table-dropdown">
-                <span className="dropdown-header">
-                  #{row.id}
-                  <p
-                    className="dropdown-description wrap-break-word truncate max-w-xs"
-                    data-full={row.email}
-                  >
-                    {row.email}
-                  </p>
-                </span>
-
-                {row.active_registrants > 0 && (
-                  <div className="dropdown-actions">
-                    <BlockStack gap={4}>
-                      <button
-                        className="dropdown-action"
-                        onClick={() =>
-                          resendConfirmations({
-                            ...getPostId(row.variant_id),
-                            registrant: row.registrants_ids,
-                          })
-                        }
-                      >
-                        <PaperAirplaneIcon className="dropdown-icon" />
-                        {t("Resend confirmation")}
-                      </button>
-                    </BlockStack>
-                  </div>
-                )}
-
-                {row.active_registrants > 0 && (
-                  <div className="dropdown-actions border-t w-full">
-                    <BlockStack gap={4}>
-                      {row.price > 0 && (
-                        <button
-                          className="dropdown-action"
-                          onClick={() => refundBooking(row.id)}
-                        >
-                          <WalletIcon className="dropdown-icon" />
-                          {t("Issue refund")}
-                        </button>
-                      )}
-                      {row.active_registrants > 0 && (
-                        <button
-                          className="dropdown-action"
-                          onClick={() => cancelBookings(row.id)}
-                        >
-                          <XCircleIcon className="dropdown-icon" />
-                          {t("Cancel booking")}
-                        </button>
-                      )}
-                    </BlockStack>
-                  </div>
-                )}
-              </div>
-            )}
-          </td>
-        </tr>
-      );
-    });
-  };
-
-  const onChange = (newValue) => {
-    setSearchString(newValue);
-  };
-  const handleEnterButton = (event) => {
-    if (event.key === "Enter") fetchBookings();
-  };
-
-  // ── column customization ──
-  const customizeHeading = (value) => {
-    const newHeadings = headings.map((h) =>
-      h.value === value ? { ...h, visible: !h.visible } : h,
-    );
-    setHeadings(newHeadings);
-    saveHeadings(newHeadings); // persist immediately on every toggle
-  };
-
-  const renderHeadingsCustomization = () =>
-    headings.map((heading) => (
-      <CheckboxControl
-        key={heading.value}
-        label={heading.label}
-        name={heading.label}
-        checked={heading.visible}
-        onChange={() => customizeHeading(heading.value)}
-      />
-    ));
+  const handleChangeTimeInterval = (newVal) => setSelectedTimeInterval(newVal);
 
   const handlePriceChange = (newVal, attribute) => {
     const newPrice = { ...price };
-    let newPriceValue = newVal.replace(".", ",");
+    const newPriceValue = newVal.replace(".", ",");
     if (attribute === "from") newPrice.from = Number.parseFloat(newPriceValue);
     else newPrice.to = Number.parseFloat(newPriceValue);
     setPrice({ ...newPrice });
   };
 
-  const handleSelectProvider = (provider) => {
-    let newProvidersSelection = { ...selectedProvider };
-    if (provider === "offline")
-      newProvidersSelection.offline = !newProvidersSelection.offline;
-    else newProvidersSelection.zoom = !newProvidersSelection.zoom;
-    setSelectedProvider({ ...newProvidersSelection });
-  };
-
-  const renderFilteringWithFilters = () => (
-    <Fragment>
-      <BlockStack gap={2}>
-        <InputFieldControl
-          value={price.from}
-          placeholder="Price from"
-          onChange={(val) => handlePriceChange(val, "from")}
-          maxLength={6}
-          width="w-8"
-          align="left"
-          type="number"
-          step="any"
-          minValue="0"
-        />
-        <InputFieldControl
-          value={price.to}
-          placeholder="Price to"
-          onChange={(val) => handlePriceChange(val, "to")}
-          maxLength={6}
-          width="w-8"
-          align="left"
-          type="number"
-          step="any"
-          minValue="0"
-        />
-      </BlockStack>
-    </Fragment>
-  );
-
-  const handleGetPrevPage = () => {
-    fetchBookings({ page: bookings.page_number - 1 });
-  };
-  const handleGetNextPage = () => {
-    fetchBookings({ page: bookings.page_number + 1 });
-  };
+  const handleSelectProvider = (provider) =>
+    setSelectedProvider((prev) => ({ ...prev, [provider]: !prev[provider] }));
 
   const resetFilters = () => {
     setDates({ startDate: null, endDate: null });
     setSearchString("");
+    setLocalSearch("");
     setSelectedProvider({ offline: true, zoom: true });
     setPrice({ from: null, to: null });
     firstFetch.current = true;
   };
 
-  const performBulkAction = async (actionType) => {
-    if (!selectedOrder || selectedOrder.length === 0) return;
+  // What the Filters drawer itself holds — the search and the period sit in
+  // the toolbar, so they are not part of its badge.
+  const drawerFilterCount =
+    (Number.isFinite(price.from) ? 1 : 0) +
+    (Number.isFinite(price.to) ? 1 : 0) +
+    (selectedProvider.offline && selectedProvider.zoom ? 0 : 1);
+
+  const isFiltersApplied =
+    Boolean(searchString) || Boolean(dates.startDate) || drawerFilterCount > 0;
+
+  const performBulkAction = async (actionType, ids = selectedOrder) => {
+    if (!ids || ids.length === 0) return;
     setLoading(true);
     let successCount = 0;
     let failureCount = 0;
 
     try {
-      for (const variant of selectedOrder) {
+      for (const variant of ids) {
         const variantData = bookings.bookings.find(
           (booking) => booking.id === variant,
         );
@@ -763,8 +419,6 @@ const BookingsPage = () => {
         toast(`${successCount} succeeded, ${failureCount} failed.`);
       else toast("All actions failed.");
     } finally {
-      setActiveDropdown(null);
-      setShowBulkActions(false);
       setLoading(false);
     }
   };
@@ -843,293 +497,310 @@ const BookingsPage = () => {
     link.click();
   }
 
-  console.log(bookings);
 
-  const renderBulkActions = () => (
-    <div className="filter-table-dropdown left-5 top-9 ml-6 mt-6">
-      <div className="dropdown-actions">
-        <BlockStack gap={4}>
-          <button
-            className="dropdown-action"
-            onClick={() => performBulkAction("resend")}
-          >
-            <PaperAirplaneIcon className="dropdown-icon" />
-            Resend confirmations
-          </button>
-          {isRefundAvailable() && (
-            <button
-              className="dropdown-action"
-              onClick={() => performBulkAction("refund")}
-            >
-              <WalletIcon className="dropdown-icon" />
-              {t("Refund bookings")}
-            </button>
-          )}
-          <button
-            className="dropdown-action"
-            onClick={() => performBulkAction("cancel")}
-          >
-            <XCircleIcon className="dropdown-icon" />
-            {t("Cancel bookings")}
-          </button>
-        </BlockStack>
-      </div>
-    </div>
-  );
+  // --- single-row actions ---------------------------------------------------
+  // Each one runs through the same confirm + bulk path, so there is one place
+  // where a refund or a cancellation can actually happen.
+  const askFor = (action, ids) => setConfirming({ action, ids });
 
-  const renderBookingsHeader = () => (
-    <div className="card-header">
-      <div className="card-heading">
-        {/* {bookings?.total_records > 0 && (
-          <Badge
-            text={`${bookings?.bookings?.length || 0} item${
-              bookings && bookings?.bookings?.length > 1 ? "s" : ""
-            }`}
-            color="secondary"
-            size="small"
-            align="center"
-            additionalType="badge-short"
+  const runConfirmed = async () => {
+    if (!confirming) return;
+    const { action, ids } = confirming;
+    setSelectedOrder(ids);
+    setConfirming(null);
+    await performBulkAction(action, ids);
+    await fetchBookings();
+  };
+
+  const resendFor = async (ids) => {
+    await performBulkAction("resend", ids);
+  };
+
+  // --- display options ------------------------------------------------------
+  const customizeHeading = (value) => {
+    const newHeadings = headings.map((h) =>
+      h.value === value ? { ...h, visible: !h.visible } : h,
+    );
+    setHeadings(newHeadings);
+    saveHeadings(HEADINGS_STORAGE_KEY, newHeadings); // persist on every toggle
+  };
+
+  const displayGroups = [
+    {
+      key: "columns",
+      type: "checkbox",
+      title: t("Columns"),
+      note: t("Which columns this list shows. Affects this page only."),
+      options: headings.map((heading) => ({
+        value: heading.value,
+        label: t(heading.label),
+        checked: heading.visible,
+        // Never let the last column be switched off.
+        disabled:
+          heading.visible && headings.filter((h) => h.visible).length === 1,
+      })),
+      onToggle: customizeHeading,
+    },
+  ];
+
+  // --- filters drawer -------------------------------------------------------
+  const filterSections = [
+    {
+      key: "price",
+      title: t("Price"),
+      content: (
+        <Fragment>
+          <NewInputFieldControl
+            value={price.from ?? ""}
+            placeholder={t("Price from")}
+            onChange={(val) => handlePriceChange(val, "from")}
+            maxLength={6}
+            width="100%"
+            type="number"
+            step="any"
+            minValue="0"
           />
-        )} */}
-      </div>
-      <div className="card-description">
-        {Boolean(
-          searchString.length > 0 ||
-            dates.startDate ||
-            dates.endDate ||
-            !selectedProvider.offline ||
-            !selectedProvider.zoom ||
-            price.from ||
-            price.to,
-        ) && (
-          <a
-            className="card-header-description-link"
-            onClick={() => resetFilters()}
-          >
-            {t("Clear filters")}
-          </a>
-        )}
-      </div>
-
-      <InlineStack align={"left"} gap={4} cardsLayout={false}>
-        <InputFieldControl
-          value={searchString}
-          placeholder="Search by event title"
-          onChange={onChange}
-          handleKeyPress={handleEnterButton}
-          fullWidth={true}
-          align="left"
-        />
-
-        {/* Desktop */}
-        <div className="hidden sm:block sm:w-full">
-          <Datepicker
-            displayFormat={"MMM DD, YYYY"}
-            value={getDates()}
-            placeholder="Select dates"
-            inputClassName="input-control section-description text-left w-full shadow-sm border-solid border border-gray-300 bg-white"
-            onChange={(newValue) => handleSetDates(newValue)}
+          <NewInputFieldControl
+            value={price.to ?? ""}
+            placeholder={t("Price to")}
+            onChange={(val) => handlePriceChange(val, "to")}
+            maxLength={6}
+            width="100%"
+            type="number"
+            step="any"
+            minValue="0"
           />
-        </div>
+        </Fragment>
+      ),
+    },
+    {
+      key: "provider",
+      title: t("Event type"),
+      content: (
+        <Fragment>
+          <CheckboxItem
+            label={t("In-person")}
+            checked={selectedProvider.offline}
+            onChange={() => handleSelectProvider("offline")}
+          />
+          <CheckboxItem
+            label={t("Online")}
+            checked={selectedProvider.zoom}
+            onChange={() => handleSelectProvider("zoom")}
+          />
+        </Fragment>
+      ),
+    },
+  ];
 
-        {/* Mobile: calendar icon button */}
-        <button
-          onClick={() => setCalendarModalOpen(true)}
-          className="flex sm:hidden items-center justify-center px-2.5 py-2.5 bg-white border border-[#D5D7DA] rounded-lg shadow-sm hover:bg-gray-50"
-        >
-          <CalendarDaysIcon className="w-5 h-5 text-[#414651]" />
-        </button>
-        <div ref={filterDropdownRef}>
-          <Dropdown
-            activator={
-              <PageActionButton
-                text="Filters"
-                icon={<AdjustmentsVerticalIcon className="button-icon" />}
-                type="secondary"
-                onAction={() => changeFilterDropdown()}
-              />
-            }
-            status={filterDropdown}
-            onClose={() => setFilterDropdown(false)}
-          >
-            <BlockStack gap={4}>
-              {renderFilteringWithFilters()}
-              <PageActionButton
-                text={<span className="text-center">{t("Apply")}</span>}
-                type="primary"
-                icon={null}
-                onAction={() => {
-                  onFiltering();
-                  setFilterDropdown(false);
-                }}
-                justify={"justify-center"}
-              />
-            </BlockStack>
-          </Dropdown>
-        </div>
-      </InlineStack>
-    </div>
-  );
+  const pagination = {
+    pageNumber: bookings?.page_number ?? 1,
+    pageCount: bookings?.page_count ?? 0,
+    totalItems: bookings?.total_records ?? 0,
+  };
 
   return (
-    <PageWrapper loading={false} withBackground={true}>
-      <BlockStack gap={4}>
-        <div className="dashboard-card">
-          <div className="servv-dashboard-header">
-            <div className="dashboard-heading">
-              <h1 className="dashboard-title">Bookings</h1>
-              <p className="dashboard-description">
-                View and manage all event bookings in one place
-              </p>
-            </div>
-
-            <div className="dashboard-actions flex flex-row items-center gap-2 flex-nowrap">
-              <div ref={customizeDropdownRef}>
-                <Dropdown
-                  activator={
-                    <button
-                      className="flex items-center px-5 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 font-medium text-base hover:bg-gray-100 transition"
-                      onClick={() => setCustomizeDropdown(!customizeDropdown)}
-                    >
-                      <AdjustmentsVerticalIcon className="w-5 h-5" />
-                    </button>
-                  }
-                  status={customizeDropdown}
-                  onClose={() => setCustomizeDropdown(false)}
-                >
-                  <ul>{renderHeadingsCustomization()}</ul>
-                </Dropdown>
-              </div>
-
+    <PageWrapper withBackground={true} flush>
+      <PageContent className={styles.page}>
+        <PageHeader
+          eyebrow="WP Super Events by ServvAI"
+          title={t("Bookings")}
+          description="View and manage all event bookings in one place"
+          actions={
+            <Fragment>
+              <DisplayOptions groups={displayGroups} />
               <PageActionButton
-                text="Export"
-                icon={<ArrowDownOnSquareStackIcon className="button-icon" />}
                 type="secondary"
-                disabled={!bookings || bookings?.bookings?.length === 0}
-                onAction={() => exportToCSV(bookings.bookings)}
+                icon={<ArrowDownOnSquareStackIcon />}
+                text={t("Export")}
+                disabled={rows.length === 0}
+                onAction={handleExport}
               />
+            </Fragment>
+          }
+        >
+          <div className={styles.divider} />
+        </PageHeader>
+
+        <div className={styles.browser}>
+          <div className={styles.toolbar}>
+            <div className={styles.toolbarTitle}>
+              <h2 className={styles.heading}>{t("All bookings")}</h2>
+              {rows.length > 0 && (
+                <span className={styles.count}>{rows.length}</span>
+              )}
             </div>
-          </div>
 
-          <div className="header-line" />
+            <div className={styles.controls}>
+              <NewInputFieldControl
+                className={styles.search}
+                value={localSearch}
+                placeholder={t("Search by event title")}
+                onChange={setLocalSearch}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") setSearchString(localSearch);
+                }}
+                width="100%"
+              />
 
-          <BlockStack gap={4}>
-            <div className="inline-flex w-fit mb-4">
               <NewButtonGroup
-                buttons={timeIntervals.map((i) => i.label)}
-                active={
-                  timeIntervals.find((i) => i.value === selectedInterval)?.label
-                }
-                onChange={(label) => {
-                  const selected = timeIntervals.find((i) => i.label === label);
-                  handleChangeTimeInterval(selected.value);
-                }}
+                buttons={timeIntervals.map((interval) => ({
+                  value: interval.value,
+                  label: t(interval.label),
+                }))}
+                active={selectedInterval}
+                onChange={handleChangeTimeInterval}
               />
-            </div>
 
-            <Card>
-              {renderBookingsHeader()}
-
-              <SpinnerLoader isLoading={loading} customStyling="h-[50vh]">
-                {bookings && bookings?.bookings?.length > 0 && (
-                  <FilterTable
-                    tableClassName={"bookings-table"}
-                    headings={renderHeadings()}
-                    rows={renderRows()}
-                  />
-                )}
-              </SpinnerLoader>
-
-              {selectedOrder.length > 1 && (
-                <div className="filter-table-dropdown-container py-xl px-2 text-gray-600 font-regular justify-start border-b first:font-medium first:text-gray-900 md:text-sm flex flex-row">
-                  <button
-                    onClick={() => setShowBulkActions(!showBulkAction)}
-                    className={`mr-auto flex flex-row items-center gap-2 px-3 py-1.5 rounded-lg border text-sm font-medium transition-colors
-                            ${
-                              showBulkAction
-                                ? "bg-purple-600 text-white border-purple-600"
-                                : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
-                            }`}
-                  >
-                    <Bars4Icon className="w-4 h-4" />
-                    Bulk actions
-                  </button>
-                  {showBulkAction && renderBulkActions()}
-                  {showBulkAction && renderBulkActions()}
-                </div>
-              )}
-
-              {bookings.page_count > 1 && (
-                <ListPagination
-                  hasPrev={bookings.page_number > 1}
-                  hasNext={bookings.page_number < bookings.page_count}
-                  onPrev={() => handleGetPrevPage()}
-                  onNext={() => handleGetNextPage()}
-                  showingItems={bookings?.bookings?.length}
-                  totalItems={bookings.total_records}
-                />
-              )}
-            </Card>
-          </BlockStack>
-        </div>
-      </BlockStack>
-      <AnimatedModal
-        open={calendarModalOpen}
-        onClose={() => setCalendarModalOpen(false)}
-      >
-        {({ close }) => (
-          <div className="relative w-full max-w-[360px] bg-white rounded-xl shadow-lg flex flex-col">
-            {/* Close button */}
-            <button
-              onClick={close}
-              className="absolute -top-4 -right-4 w-9 h-9 flex items-center justify-center rounded-full border border-[#D5D7DA] bg-white hover:bg-gray-50 shadow-md"
-            >
-              <XMarkIcon className="w-5 h-5 text-[#414651]" />
-            </button>
-
-            {/* Header */}
-            <div className="text-center px-6 pt-6 pb-2">
-              <h2 className="text-xl font-semibold text-[#181D27]">
-                Select Dates
-              </h2>
-            </div>
-
-            {/* Calendar */}
-            <div className="px-4 py-2 flex justify-center">
-              <CalendarInline
-                value={
-                  dates.startDate
-                    ? new Date(dates.startDate.valueOf())
-                    : undefined
-                }
-                onChange={(date) => {
-                  handleSetDates({ startDate: date, endDate: date });
-                  close();
-                }}
+              <NewDatePickerControl
+                value={dates}
+                onChange={handleSetDates}
+                label="Select dates"
               />
-            </div>
 
-            {/* Footer */}
-            <div className="flex justify-between items-center gap-3 p-6 pt-2 border-t border-gray-200">
-              <button
-                onClick={() => {
-                  setDates({ startDate: null, endDate: null });
-                  close();
+              <FiltersDropdown
+                isApplied={drawerFilterCount > 0}
+                appliedCount={drawerFilterCount}
+                onClear={() => {
+                  resetFilters();
+                  onFiltering();
                 }}
-                className="text-sm text-gray-500 hover:text-gray-700"
-              >
-                Clear
-              </button>
-              <button
-                onClick={close}
-                className="px-5 py-2 border border-[#D5D7DA] rounded-lg hover:bg-gray-50 font-semibold text-sm"
-              >
-                Cancel
-              </button>
+                sections={filterSections}
+                onApply={onFiltering}
+              />
             </div>
           </div>
-        )}
-      </AnimatedModal>
+
+          {!loading ? (
+            <Fragment>
+              {firstFetchDone && rows.length === 0 ? (
+                <div className={styles.empty}>
+                  <h2 className={styles.emptyTitle}>
+                    {isFiltersApplied
+                      ? t("No bookings match this view")
+                      : t("No bookings yet")}
+                  </h2>
+                  <p className={styles.emptyText}>
+                    {isFiltersApplied
+                      ? t(
+                          "Try another period, clear the search, or reset the filters.",
+                        )
+                      : t(
+                          "Bookings appear here as soon as someone registers for one of your events.",
+                        )}
+                  </p>
+                  {isFiltersApplied && (
+                    <PageActionButton
+                      type="secondary"
+                      text={t("Clear filters")}
+                      className={styles.emptyAction}
+                      onAction={() => {
+                        resetFilters();
+                        onFiltering();
+                      }}
+                    />
+                  )}
+                </div>
+              ) : (
+                <Fragment>
+                  <SelectAllRow
+                    total={rows.length}
+                    selectedCount={selectedOrder.length}
+                    onToggleAll={handleSelectAll}
+                  />
+
+                  <BulkBar
+                    selectedCount={selectedOrder.length}
+                    noun="booking"
+                    onClear={() => setSelectedOrder([])}
+                  >
+                    <PageActionButton
+                      type="secondary"
+                      size="sm"
+                      icon={<PaperAirplaneIcon />}
+                      text={t("Resend")}
+                      onAction={() => resendFor(selectedOrder)}
+                    />
+                    <PageActionButton
+                      type="secondary"
+                      size="sm"
+                      icon={<WalletIcon />}
+                      text={t("Refund")}
+                      onAction={() => askFor("refund", selectedOrder)}
+                    />
+                    <PageActionButton
+                      type="danger-secondary"
+                      size="sm"
+                      icon={<XCircleIcon />}
+                      text={t("Cancel")}
+                      onAction={() => askFor("cancel", selectedOrder)}
+                    />
+                  </BulkBar>
+
+                  <BookingRows
+                    bookings={rows}
+                    columns={headings}
+                    currency={stripeCurrency}
+                    timeFormat={timeFormat}
+                    selectedIds={selectedOrder}
+                    onToggleSelect={handleOrderSelect}
+                    onResend={(row) => resendFor([row.id])}
+                    onRefund={(row) => askFor("refund", [row.id])}
+                    onCancel={(row) => askFor("cancel", [row.id])}
+                  />
+
+                  {pagination.pageCount > 1 && (
+                    <DashboardPagination
+                      currentPage={pagination.pageNumber}
+                      totalPages={pagination.pageCount}
+                      totalRecords={pagination.totalItems}
+                      pageSize={10}
+                      onPageChange={(page) => fetchBookings({ page })}
+                    />
+                  )}
+                </Fragment>
+              )}
+            </Fragment>
+          ) : (
+            <SpinnerLoader isLoading={loading} customStyling={styles.loader} />
+          )}
+        </div>
+      </PageContent>
+
+      {confirming && (
+        <ModalShell
+          size="sm"
+          title={t(CONFIRMABLE[confirming.action].title)}
+          description={t(CONFIRMABLE[confirming.action].description)}
+          onClose={() => setConfirming(null)}
+          footer={
+            <Fragment>
+              <PageActionButton
+                type="secondary"
+                text={t("Keep them")}
+                onAction={() => setConfirming(null)}
+              />
+              <PageActionButton
+                type="danger"
+                text={t(CONFIRMABLE[confirming.action].action)}
+                onAction={runConfirmed}
+              />
+            </Fragment>
+          }
+        >
+          <ul className={styles.confirmList}>
+            {confirming.ids.map((id) => {
+              const row = rows.find((booking) => booking.id === id);
+              return (
+                <li key={id}>
+                  #{id}
+                  {row ? ` — ${row.product_name} (${row.email})` : ""}
+                </li>
+              );
+            })}
+          </ul>
+        </ModalShell>
+      )}
     </PageWrapper>
   );
 };

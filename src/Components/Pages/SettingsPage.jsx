@@ -1,25 +1,25 @@
 // SettingsPage.jsx - Refactored with card layout
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import axios from "../../utilities/adminApi";
 import moment from "moment";
 import { toast } from "react-toastify";
-import { loadStripe } from "@stripe/stripe-js";
 import startCase from "lodash.startcase";
 import capitalize from "lodash.capitalize";
 import {
   Cog6ToothIcon,
   BellIcon,
-  CreditCardIcon,
   Square3Stack3DIcon,
   LanguageIcon,
   CommandLineIcon,
   ShoppingCartIcon,
-  CheckCircleIcon,
-  XCircleIcon,
+  DocumentTextIcon,
 } from "@heroicons/react/24/outline";
-import InteractiveCard from "../Containers/InteractiveCard";
+import BreadCrumbs from "../Menu/BreadCrumbs";
 import PageWrapper from "./PageWrapper";
 import PageContent from "../Containers/PageContent";
+import PageHeader from "../Containers/PageHeader";
+import pageStyles from "./SettingsPage.module.scss";
 import { timezonesList } from "../../utilities/timezones";
 import {
   mergeTranslations,
@@ -27,8 +27,8 @@ import {
 } from "../../utilities/translations";
 import { getLanguagesList } from "../../utilities/languages";
 import { useServvStore } from "../../store/useServvStore";
-import CheckboxControl from "../Controls/CheckboxControl";
-import InputFieldControl from "../Controls/InputFieldControl";
+import CheckboxItem from "../Controls/CheckboxItem";
+import NewInputFieldControl from "../Controls/NewInputFieldControl";
 import BlockStack from "../Containers/BlockStack";
 
 // Import new components
@@ -38,20 +38,15 @@ import RemindersSettings from "./Settings/RemindersSettings";
 import CheckoutSettings from "./Settings/CheckoutSettings";
 import WidgetSettings from "./Settings/WidgetSettings";
 import TranslationsSection from "./Settings/TranslationsSection";
-import BillingSettings from "./Settings/BillingSettings";
 import WorkflowSettings from "./Settings/WorkflowSettings";
 import SpinnerLoader from "./SpinnerLoader";
 
 const SettingsPage = () => {
+  const navigate = useNavigate();
   const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [billingPlans, setBillingPlans] = useState(null);
-  const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [zoomAccount, setZoomAccount] = useState(null);
   const [stripeAccount, setStripeAccount] = useState(null);
-  const [selectedPlan, setSelectedPlan] = useState(null);
-  const [showPaymentOptionsModal, setShowPaymentOptionsModal] = useState(false);
-  const [stripeForm, setStripeForm] = useState(null);
   const [defaultEndTime, setDefaultEndTime] = useState(moment());
 
   const [tabsList, setTabsList] = useState([]);
@@ -218,7 +213,6 @@ const SettingsPage = () => {
       { label: "Translations", value: 6 },
     ];
 
-    const billingTab = { label: "Billing", value: 7 };
     const planId = validatedSettings?.current_plan?.id;
 
     let tabs = [...baseTabs];
@@ -227,9 +221,8 @@ const SettingsPage = () => {
       if (!newSettings.is_wp_marketplace) {
         tabs.push(...widgetTabs);
       }
-      tabs.push(billingTab);
     } else {
-      tabs.push(...widgetTabs, billingTab);
+      tabs.push(...widgetTabs);
     }
 
     setTabsList(tabs);
@@ -298,16 +291,6 @@ const SettingsPage = () => {
     }
   };
 
-  const getBillingPlans = async () => {
-    const getBillingPlansResponse = await axios(
-      "/wp-json/servv-plugin/v1/shop/paymentplans",
-      { headers: { "X-WP-Nonce": servvData.nonce } },
-    ).catch(() => toast("Servv unable to fetch billing plans."));
-
-    if (getBillingPlansResponse?.status === 200) {
-      setBillingPlans(getBillingPlansResponse.data.plans);
-    }
-  };
 
   const getZoomAccount = async () => {
     const getZoomAccountResponse = await axios.get(
@@ -388,7 +371,6 @@ const SettingsPage = () => {
     if (servvData.servv_plugin_mode === "development") {
       setLoading(true);
       await getSettings();
-      await getBillingPlans();
       await getN8nSettings();
       if (settings.current_plan && settings?.current_plan?.id !== 1) {
         await getZoomAccount();
@@ -398,7 +380,6 @@ const SettingsPage = () => {
     } else {
       setLoading(true);
       getSettings();
-      getBillingPlans();
       getN8nSettings();
       if (settings.curent_plan && settings?.current_plan?.id !== 1) {
         getZoomAccount();
@@ -501,10 +482,6 @@ const SettingsPage = () => {
     setSettings(currentSettings);
   };
 
-  const showPaymentOptions = (plan) => {
-    setSelectedPlan(plan);
-    setShowPaymentOptionsModal(true);
-  };
 
   const handleTimeFormatChange = (format) => {
     let currentSettings = { ...settings };
@@ -760,7 +737,7 @@ const SettingsPage = () => {
     const selectedFilters = filterSettings.split(",");
 
     return filters.map((filter, index) => (
-      <CheckboxControl
+      <CheckboxItem
         key={index}
         label={filter}
         checked={selectedFilters.some(
@@ -797,9 +774,18 @@ const SettingsPage = () => {
   };
 
   const handleTranslationChange = (section, lang, field, newVal) => {
-    let currentSettings = { ...settings };
-    settings.settings.widget_style_settings.translations[lang][section][field] =
-      newVal;
+    const currentSettings = { ...settings };
+    const widgetSettings = currentSettings.settings.widget_style_settings;
+    const stored = widgetSettings.translations || {};
+    const storedLang = stored[lang] || {};
+
+    widgetSettings.translations = {
+      ...stored,
+      [lang]: {
+        ...storedLang,
+        [section]: { ...storedLang[section], [field]: newVal },
+      },
+    };
     setSettings(currentSettings);
   };
 
@@ -810,256 +796,68 @@ const SettingsPage = () => {
 
     if (!langCode) return null;
 
-    const translationSection =
-      settings?.settings?.widget_style_settings?.translations?.[langCode]?.[
-        section
-      ] || {};
+    const translationSection = translations?.[langCode]?.[section] || {};
+    const getFieldLabel = (field) => {
+      if (section !== "customFilters") return capitalize(startCase(field));
+      if (field === "filter_label_dates") return "Dates";
+      if (field.startsWith("filter_label_")) {
+        return capitalize(settings?.settings?.widget_style_settings?.[field]);
+      }
+      return capitalize(startCase(field).replace("Filter Property", ""));
+    };
 
     return Object.keys(translationSection).map((translation, index) => (
       <BlockStack key={index} gap={1} className={responsiveBlockStack}>
-        <span className="font-semibold">
-          {capitalize(startCase(translation))}
-        </span>
-        <InputFieldControl
-          value={translationSection[translation]}
-          fullWidth={true}
-          type="text"
-          align="left"
-          suffix={langCode}
-          onChange={(newVal) =>
-            handleTranslationChange(section, langCode, translation, newVal)
-          }
-        />
+        <span className="font-semibold">{getFieldLabel(translation)}</span>
+        <div className="flex items-center gap-2">
+          <NewInputFieldControl
+            width="100%"
+            value={translationSection[translation]}
+            type="text"
+            align="left"
+            onChange={(newVal) =>
+              handleTranslationChange(section, langCode, translation, newVal)
+            }
+          />
+          <span className="text-sm text-gray-500">{langCode}</span>
+        </div>
       </BlockStack>
     ));
-  };
-
-  const getPortalLink = async () => {
-    setLoading(true);
-    const getPortalLink = await axios({
-      url: "/wp-json/servv-plugin/v1/shop/billing/portal/session",
-      method: "POST",
-      headers: { "X-WP-Nonce": servvData.nonce },
-    }).catch(() => {
-      setLoading(false);
-      toast("WP Super Events was unable to open the billing portal.");
-    });
-
-    if (getPortalLink?.status === 200) {
-      setLoading(false);
-      return getPortalLink.data;
-    }
-  };
-
-  const handleOpenPortal = async () => {
-    const link = await getPortalLink();
-    if (link) {
-      open(link.redirect_url, "_blank");
-    }
-  };
-
-  const activateBillingPlan = async (id, isAnnual = false) => {
-    setLoading(true);
-    setShowPaymentOptionsModal(false);
-
-    const saveSettingsResponse = await axios({
-      method: "POST",
-      url: `/wp-json/servv-plugin/v1/shop/paymentplans/${id}`,
-      headers: { "X-WP-Nonce": servvData.nonce },
-      data: { is_annual: isAnnual },
-    });
-
-    if (saveSettingsResponse?.status === 200) {
-      const { client_secret, public_key } = saveSettingsResponse.data;
-      const stripe = await loadStripe(public_key);
-
-      const handleComplete = async function () {
-        checkout.destroy();
-        toast("Your billing plan has been successfully activated.");
-        await getSettings();
-        setShowPaymentForm(false);
-      };
-
-      const checkout = await stripe.initEmbeddedCheckout({
-        clientSecret: client_secret,
-        onComplete: handleComplete,
-      });
-
-      setShowPaymentForm(true);
-      const form = checkout.mount("#servv-payment-element");
-      setStripeForm(checkout);
-    }
-    setLoading(false);
-  };
-  const isMarketplace = settings?.is_wp_marketplace;
-
-  const renderBillingPlans = () => {
-    if (!settings?.current_plan || !billingPlans) return null;
-
-    const maxPlanId = Math.max(...billingPlans.map((p) => p.id));
-
-    return billingPlans.map((plan) => {
-      const isCurrent = settings.current_plan.id === plan.id;
-      const isUpgradeable = plan.id > settings.current_plan.id;
-      const isPremium = plan.id === maxPlanId;
-      const isPaid = plan.price > 0 || plan.price_annual > 0;
-
-      const ctaButtonStyle = {
-        background:
-          "linear-gradient(74.06deg, #583DFF -11.67%, #9B25F8 47.12%)",
-        border: "3px solid rgba(255, 255, 255, 0.35)",
-        boxShadow:
-          "0px 4px 8px -2px rgba(10, 13, 18, 0.1), 0px 2px 4px -2px rgba(10, 13, 18, 0.06)",
-        color: "#FFFFFF",
-      };
-
-      const subtitle = (
-        <p
-          className="text-sm font-bold tracking-widest uppercase"
-          style={{
-            color: isPremium ? "transparent" : "#872CFA",
-            background: isPremium
-              ? "linear-gradient(91.35deg, #FFFFFF 2.18%, #CAC5E6 16.69%, #C4CBF7 40.59%, #C3E2E9 67.97%, #E8A76B 98.12%)"
-              : undefined,
-            WebkitBackgroundClip: isPremium ? "text" : undefined,
-            WebkitTextFillColor: isPremium ? "transparent" : undefined,
-            backgroundClip: isPremium ? "text" : undefined,
-          }}
-        >
-          {plan.name}
-        </p>
-      );
-
-      const title = (
-        <h2
-          className="text-3xl font-bold"
-          style={{ color: isPremium ? "#FFFFFF" : "#070908" }}
-        >
-          {plan.price > 0
-            ? `$${plan.price}/mo`
-            : plan.price_annual > 0
-            ? `$${plan.price_annual}/yr`
-            : "Free"}
-        </h2>
-      );
-
-      const text = (
-        <p
-          className={`text-sm ${
-            plan.application_fee_percent === 0 ? "mt-5" : ""
-          }`}
-          style={{ color: isPremium ? "rgba(255,255,255,0.6)" : "#717680" }}
-        >
-          {plan.application_fee_percent > 0
-            ? `${plan.application_fee_percent}% transaction fee`
-            : ""}
-        </p>
-      );
-
-      const action = isCurrent ? (
-        isPaid ? (
-          <button
-            className="w-full rounded-lg text-sm font-extrabold py-2.5 px-6 transition-opacity hover:opacity-90"
-            style={ctaButtonStyle}
-            onClick={handleOpenPortal}
-          >
-            Manage
-          </button>
-        ) : null
-      ) : isUpgradeable ? (
-        <button
-          className="w-full rounded-lg text-sm font-extrabold py-2.5 px-6 transition-opacity hover:opacity-90"
-          style={ctaButtonStyle}
-          onClick={() => {
-            if (isMarketplace) {
-              activateBillingPlan(plan.id);
-            } else {
-              showPaymentOptions(plan);
-            }
-          }}
-        >
-          Activate
-        </button>
-      ) : null;
-
-      const footer = isCurrent ? (
-        <span
-          className="text-xs font-semibold px-2 py-1 rounded-full"
-          style={{
-            color: isPremium ? "#462986" : "#6941C6",
-            background: isPremium ? "#FFFFFF" : "#F4EBFF",
-          }}
-        >
-          Current plan
-        </span>
-      ) : null;
-      if (plan.id !== 1 || !isMarketplace)
-        return (
-          <InteractiveCard
-            key={plan.id}
-            isPremium={isPremium}
-            subtitle={subtitle}
-            title={title}
-            text={text}
-            action={action}
-            footer={footer}
-            style={{ minHeight: 474 }}
-          >
-            <ul className="mt-4 flex flex-col gap-1">
-              {plan.features.map((feature, index) => (
-                <li key={index} className="flex items-start gap-2.5">
-                  {feature.value === "true" ? (
-                    <CheckCircleIcon
-                      className="w-5 h-5 shrink-0"
-                      style={{ color: isPremium ? "#E3E1F2" : "#299E6C" }}
-                    />
-                  ) : (
-                    <XCircleIcon
-                      className="w-5 h-5 shrink-0"
-                      style={{
-                        color: isPremium ? "rgba(255,255,255,0.3)" : "#D0D5DD",
-                      }}
-                    />
-                  )}
-                  <span
-                    className="text-base font-light"
-                    style={{ color: isPremium ? "#FFFFFF" : "#070908" }}
-                  >
-                    {feature.title}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </InteractiveCard>
-        );
-    });
   };
 
   const isBillingPlanRestriction =
     settings?.current_plan && settings.current_plan.id === 1;
   // console.log(loading);
   return (
-    <PageWrapper loading={false} withBackground={true}>
-      <div className="dashboard-card">
-        <div className="servv-dashboard-header">
-          <div className="dashboard-heading">
-            <h1 className="dashboard-title">Settings</h1>
-            <p className="dashboard-description mt-4">
-              Set default values to save time
-            </p>
-          </div>
-        </div>
+    <PageWrapper loading={false} withBackground={true} flush>
+      <PageContent className={pageStyles.page}>
+        {/* An open section brings its own header with it. */}
+        {!activeSection && (
+          <>
+          <BreadCrumbs
+            breadcrumbs={[
+              { label: t("Dashboard"), to: "/dashboard" },
+              { label: t("Settings") },
+            ]}
+          />
+          <PageHeader
+            eyebrow="WP Super Events by ServvAI"
+            title={t("Settings")}
+            description="Set defaults once so every new event starts right"
+          >
+            <div className={pageStyles.divider} />
+          </PageHeader>
+          </>
+        )}
 
-        <div className="header-line" />
-
-        <PageContent className="py-0 my-0">
-          <div className="w-full flex flex-col max-w-[100%] gap-6 items-stretch sm:grid sm:grid-cols-[repeat(auto-fit,minmax(310px,1fr))]">
+        <div className={activeSection ? pageStyles.single : pageStyles.grid}>
             {/* General Settings */}
             {(!activeSection || activeSection === "general") && (
               <SettingsSection
                 icon={Cog6ToothIcon}
                 title="General"
                 description="Time zone, format and event defaults"
+                editDescription="Time zone, formats, and the defaults every new event inherits."
                 statusText="General settings configured"
                 status="available"
                 onSave={saveAllSettings}
@@ -1098,6 +896,20 @@ const SettingsPage = () => {
                   />
                 </SpinnerLoader>
               </SettingsSection>
+            )}
+
+            {!activeSection && (
+              <SettingsSection
+                icon={DocumentTextIcon}
+                title="Email templates"
+                description="Customize booking confirmations, reminders, and event updates"
+                statusText="Manage notification email content"
+                status="available"
+                sectionId="email-templates"
+                activeSection={activeSection}
+                direct
+                onView={() => navigate("/templates")}
+              />
             )}
 
             {/* Reminders Settings */}
@@ -1159,8 +971,7 @@ const SettingsPage = () => {
             )}
 
             {/* Checkout Settings */}
-            {!activeSection ||
-              (activeSection === "checkout" && (
+            {(!activeSection || activeSection === "checkout") && (
                 <SettingsSection
                   icon={ShoppingCartIcon}
                   title="Checkout"
@@ -1188,48 +999,18 @@ const SettingsPage = () => {
                     />
                   </SpinnerLoader>
                 </SettingsSection>
-              ))}
-
-            {/* Widget Settings */}
-            {(!activeSection || activeSection === "widget") &&
-              settings &&
-              settings.is_wp_marketplace === false && (
-                <SettingsSection
-                  icon={Square3Stack3DIcon}
-                  title="Widget"
-                  description="Display mode, filters, and widget elements"
-                  statusText="Widget configured"
-                  status="available"
-                  onSave={saveAllSettings}
-                  onCancel={getSettingsInfo}
-                  sectionId={"widget"}
-                  activeSection={activeSection}
-                  setActiveSection={setActiveSection}
-                >
-                  <SpinnerLoader isLoading={loading}>
-                    <WidgetSettings
-                      settings={settings}
-                      responsiveBlockStack={responsiveBlockStack}
-                      responsiveInlineStack={responsiveInlineStack}
-                      responsiveInput={responsiveInput}
-                      availableViewMods={availableViewMods}
-                      selectedView={selectedView}
-                      availablePageSizes={availablePageSizes}
-                      selectedPageSize={selectedPageSize}
-                      handleViewModeChange={handleViewModeChange}
-                      handleChangeFluidGrid={handleChangeFluidGrid}
-                      handleDescriptionLengthChange={
-                        handleDescriptionLengthChange
-                      }
-                      handlePageSizeChange={handlePageSizeChange}
-                      renderAvailableFilters={renderAvailableFilters}
-                      handleAdditionalPropertyChange={
-                        handleAdditionalPropertyChange
-                      }
-                    />
-                  </SpinnerLoader>
-                </SettingsSection>
               )}
+
+            {/* Widget appearance is configured on its dedicated page. */}
+            {(!activeSection || activeSection === "widget") && (
+              <SettingsSection icon={Square3Stack3DIcon} title="Widget"
+                description="Display mode, filters, appearance, and embedding"
+                statusText="Open widget settings" status="available" showActions={false}
+                sectionId="widget" activeSection={activeSection} setActiveSection={setActiveSection}>
+                <p>Choose your widget layout and appearance, preview events, and generate a shortcode.</p>
+                <a href={window.servvData?.adminPages?.widget || "#/widget"}>Open widget settings</a>
+              </SettingsSection>
+            )}
 
             {/* Translations Settings */}
             {(!activeSection || activeSection === "translations") &&
@@ -1264,37 +1045,6 @@ const SettingsPage = () => {
                 </SettingsSection>
               )}
 
-            {/* Billing Settings */}
-            {(!activeSection || activeSection === "billing") && (
-              <SettingsSection
-                icon={CreditCardIcon}
-                title="Billing"
-                description="Manage your subscription and payment plans"
-                statusText={settings?.current_plan?.name || "No plan"}
-                status="available"
-                onSave={saveAllSettings}
-                onCancel={getSettingsInfo}
-                showActions={false}
-                sectionId={"billing"}
-                activeSection={activeSection}
-                setActiveSection={setActiveSection}
-              >
-                <SpinnerLoader isLoading={loading}>
-                  <BillingSettings
-                    responsiveBlockStack={responsiveBlockStack}
-                    showPaymentForm={showPaymentForm}
-                    renderBillingPlans={renderBillingPlans}
-                    showPaymentOptionsModal={showPaymentOptionsModal}
-                    setShowPaymentOptionsModal={setShowPaymentOptionsModal}
-                    selectedPlan={selectedPlan}
-                    setSelectedPlan={setSelectedPlan}
-                    activateBillingPlan={activateBillingPlan}
-                    isMarketplace={isMarketplace}
-                  />
-                </SpinnerLoader>
-              </SettingsSection>
-            )}
-
             {/* Workflow Settings */}
             {/* {(!activeSection || activeSection === "workflow") && (
               <SettingsSection
@@ -1317,9 +1067,8 @@ const SettingsPage = () => {
                 />
               </SettingsSection>
             )} */}
-          </div>
-        </PageContent>
-      </div>
+        </div>
+      </PageContent>
     </PageWrapper>
   );
 };
