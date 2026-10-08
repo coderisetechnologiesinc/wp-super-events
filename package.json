@@ -14,6 +14,7 @@
 		"build": "wp-scripts build src/index.js src/checkout.js src/view.js src/admin.js --experimental-modules --webpack-copy-php && npm run tailwind:build",
 		"test:cache": "node scripts/test-request-cache.cjs",
 		"test:event-form": "node scripts/test-event-form.cjs",
+		"test:breadcrumbs": "node scripts/test-breadcrumbs.cjs",
 		"format": "wp-scripts format",
 		"lint:css": "wp-scripts lint-style",
 		"lint:js": "wp-scripts lint-js",
