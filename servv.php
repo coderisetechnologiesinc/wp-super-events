@@ -3,7 +3,7 @@
  * Plugin Name: WP Super Events – Event Booking & Tickets
  * Plugin URI: https://wpsuperevents.com
  * Description: Create event calendars, registrations, recurring events, tickets, and online or in-person events directly in WordPress.
- * Version: 1.2.1
+ * Version: 2.0.0
  * Author: ServvAI
  * Author URI: https://wpsuperevents.com
  * License: GPL2
