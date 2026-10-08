@@ -1,0 +1,128 @@
+@use "../../../styles/tokens" as t;
+@use "../../../styles/mixins" as m;
+
+@include m.scoped {
+  .page {
+    display: flex;
+    flex-direction: column;
+    gap: t.$space-10;
+    min-width: 0;
+  }
+
+  .header {
+    display: flex;
+    flex-direction: column;
+    gap: t.$space-8;
+  }
+
+  .divider {
+    height: 3px;
+    border-radius: t.$radius-pill;
+    background: t.$surface;
+    box-shadow: t.$shadow-track;
+  }
+
+  .panel {
+    background: t.$surface;
+    border: 1px solid t.$border;
+    border-radius: t.$radius-2xl;
+    box-shadow: t.$shadow-card;
+    min-width: 0;
+    // Keep select popovers visible; round the first/last cells instead.
+    > :first-child {
+      border-top-left-radius: inherit;
+      border-top-right-radius: inherit;
+    }
+    > :last-child {
+      border-bottom-left-radius: inherit;
+      border-bottom-right-radius: inherit;
+    }
+  }
+
+  .group {
+    padding: t.$space-8 t.$space-10;
+    border-bottom: 1px solid t.$border-hairline;
+
+    &:not(:first-child) {
+      border-top: 1px solid t.$border-hairline;
+    }
+    h2 {
+      margin: 0;
+      @include m.text(16, t.$weight-bold);
+    }
+    p {
+      margin: t.$space-1 0 0;
+      color: t.$text-soft;
+      @include m.text(13, t.$weight-medium);
+    }
+  }
+
+  .rows {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 0;
+    border-bottom: 1px solid rgba(21, 27, 43, 0.07);
+    &:last-child {
+      border-bottom: 0;
+    }
+  }
+
+  .label {
+    padding: t.$space-9 t.$space-10;
+    h3 {
+      margin: 0;
+      color: t.$text-strong;
+      @include m.text(13, t.$weight-semibold);
+    }
+  }
+
+  .value {
+    min-width: 0;
+    padding: t.$space-9 t.$space-10;
+    border-left: 1px solid rgba(21, 27, 43, 0.07);
+  }
+
+  .hint {
+    margin: t.$space-3 0 0;
+    color: t.$text-soft;
+    @include m.text(12, t.$weight-medium);
+  }
+
+  .compact {
+    max-width: 320px;
+  }
+  .number {
+    max-width: 120px;
+  }
+  .times {
+    display: flex;
+    flex-wrap: wrap;
+    gap: t.$space-8;
+    max-width: 560px;
+  }
+  .billing {
+    padding: t.$space-10;
+  }
+
+  @media (max-width: 735px) {
+    .row {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .label {
+      padding-bottom: t.$space-4;
+    }
+    .value {
+      border-left: 0;
+      padding-top: 0;
+    }
+    .compact {
+      max-width: 100%;
+    }
+  }
+}

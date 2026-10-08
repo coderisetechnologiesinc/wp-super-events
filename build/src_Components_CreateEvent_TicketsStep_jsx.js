@@ -1,6 +1,102 @@
 "use strict";
 (self["webpackChunkservv_plugin"] = self["webpackChunkservv_plugin"] || []).push([["src_Components_CreateEvent_TicketsStep_jsx"],{
 
+/***/ "./src/Components/Containers/Dropdown.jsx":
+/*!************************************************!*\
+  !*** ./src/Components/Containers/Dropdown.jsx ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Dropdown_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Dropdown.module.scss */ "./src/Components/Containers/Dropdown.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+// `surface` draws the white card around the menu. Pass false when the child is
+// already a surface of its own (CalendarInline) so it isn't framed twice.
+
+const Dropdown = ({
+  activator,
+  status,
+  children,
+  onClose,
+  align = "right",
+  surface = true,
+  className = "",
+  dropdownClassName = "",
+  ...rest
+}) => {
+  const dropdownRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const [dropdownStyle, setDropdownStyle] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
+    minWidth: 240
+  });
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (!status) return;
+    const handleClickOutside = event => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        if (onClose) onClose();
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [status, onClose]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (status && dropdownRef.current) {
+      const dropdown = dropdownRef.current.querySelector(".dropdown-content-fix");
+      if (dropdown) {
+        const rect = dropdown.getBoundingClientRect();
+        const viewportWidth = window.innerWidth;
+        let newStyle = {
+          minWidth: 240
+        };
+        if (rect.right > viewportWidth) {
+          newStyle.right = 0;
+          newStyle.left = "auto";
+        }
+        if (rect.left < 0) {
+          newStyle.left = 0;
+          newStyle.right = "auto";
+        }
+        setDropdownStyle({
+          ...newStyle
+        });
+      }
+    }
+  }, [status, children]);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+    ref: dropdownRef,
+    className: [_Dropdown_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].root, className].filter(Boolean).join(" "),
+    ...rest,
+    children: [activator, status && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+      className: [_Dropdown_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].menu, dropdownClassName].filter(Boolean).join(" "),
+      style: align === "left" ? {
+        minWidth: 240,
+        left: 0,
+        right: "auto"
+      } : {
+        minWidth: 240,
+        right: 0,
+        left: "auto"
+      },
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+        className: ["dropdown-content-fix", surface ? _Dropdown_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].surface : ""].filter(Boolean).join(" "),
+        style: dropdownStyle,
+        children: children
+      })
+    })]
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Dropdown);
+
+/***/ }),
+
 /***/ "./src/Components/Containers/InteractiveCard.jsx":
 /*!*******************************************************!*\
   !*** ./src/Components/Containers/InteractiveCard.jsx ***!
@@ -65,6 +161,205 @@ const InteractiveCard = ({
 
 /***/ }),
 
+/***/ "./src/Components/Controls/CalendarInline.jsx":
+/*!****************************************************!*\
+  !*** ./src/Components/Controls/CalendarInline.jsx ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react_day_picker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-day-picker */ "./node_modules/react-day-picker/dist/esm/DayPicker.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
+
+
+// The calendar surface shared by every date control: a DayPicker in servv
+// chrome. Render it directly when the surrounding markup is already a panel
+// (a modal, a form block); wrap it in NewDatePickerControl for a popover.
+//
+// react-day-picker speaks { from, to } for ranges while the admin pages store
+// { startDate, endDate }; the translation lives here so no call site has to
+// know about either shape.
+
+const CalendarInline = ({
+  mode = "single",
+  value,
+  onChange = () => {},
+  disabled,
+  defaultMonth
+}) => {
+  var _value$startDate, _value$endDate;
+  const isRange = mode === "range";
+  const selected = isRange ? value?.startDate || value?.endDate ? {
+    from: (_value$startDate = value.startDate) !== null && _value$startDate !== void 0 ? _value$startDate : undefined,
+    to: (_value$endDate = value.endDate) !== null && _value$endDate !== void 0 ? _value$endDate : undefined
+  } : undefined : value !== null && value !== void 0 ? value : undefined;
+  const handleSelect = next => {
+    var _next$from, _ref, _next$to;
+    if (!isRange) {
+      onChange(next);
+      return;
+    }
+    onChange({
+      startDate: (_next$from = next?.from) !== null && _next$from !== void 0 ? _next$from : null,
+      endDate: (_ref = (_next$to = next?.to) !== null && _next$to !== void 0 ? _next$to : next?.from) !== null && _ref !== void 0 ? _ref : null
+    });
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+    className: "date-picker-menu",
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_day_picker__WEBPACK_IMPORTED_MODULE_1__.DayPicker, {
+      mode: mode,
+      selected: selected,
+      defaultMonth: defaultMonth !== null && defaultMonth !== void 0 ? defaultMonth : isRange ? selected?.from : selected,
+      onSelect: handleSelect,
+      disabled: disabled,
+      weekStartsOn: 1 // Mo → Su
+      ,
+      showOutsideDays: true
+    })
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (CalendarInline);
+
+/***/ }),
+
+/***/ "./src/Components/Controls/NewDatePickerControl.jsx":
+/*!**********************************************************!*\
+  !*** ./src/Components/Controls/NewDatePickerControl.jsx ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment */ "moment");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _Containers_Dropdown__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Containers/Dropdown */ "./src/Components/Containers/Dropdown.jsx");
+/* harmony import */ var _CalendarInline__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./CalendarInline */ "./src/Components/Controls/CalendarInline.jsx");
+/* harmony import */ var _NewDatePickerControl_module_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./NewDatePickerControl.module.scss */ "./src/Components/Controls/NewDatePickerControl.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__);
+
+
+
+
+
+
+const DEFAULT_FORMAT = "MMM DD, YYYY";
+const toDate = value => {
+  if (!value) return null;
+  const parsed = moment__WEBPACK_IMPORTED_MODULE_1___default().isMoment(value) ? value : moment__WEBPACK_IMPORTED_MODULE_1___default()(value);
+  return parsed.isValid() ? parsed.startOf("day").toDate() : null;
+};
+
+// A calendar icon button that opens CalendarInline in a popover.
+//
+// mode="range" takes and emits { startDate, endDate } as Dates — the shape the
+// filter pages already keep in state. mode="single" takes anything
+// moment-parsable and emits a moment, matching the event form's handlers.
+const NewDatePickerControl = ({
+  mode = "range",
+  value,
+  onChange = () => {},
+  label = "Select dates",
+  displayFormat = DEFAULT_FORMAT,
+  minDate,
+  maxDate,
+  disabled = false,
+  fullWidth = false,
+  className = ""
+}) => {
+  const [open, setOpen] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const isRange = mode === "range";
+  const selected = isRange ? {
+    startDate: toDate(value?.startDate),
+    endDate: toDate(value?.endDate)
+  } : toDate(value);
+  const before = toDate(minDate);
+  const after = toDate(maxDate);
+  const disabledDays = before || after ? {
+    ...(before ? {
+      before
+    } : {}),
+    ...(after ? {
+      after
+    } : {})
+  } : undefined;
+  const triggerLabel = () => {
+    if (!isRange) {
+      return selected ? moment__WEBPACK_IMPORTED_MODULE_1___default()(selected).format(displayFormat) : label;
+    }
+    if (!selected.startDate) return label;
+    const from = moment__WEBPACK_IMPORTED_MODULE_1___default()(selected.startDate).format(displayFormat);
+    if (!selected.endDate || selected.endDate.valueOf() === selected.startDate.valueOf()) {
+      return from;
+    }
+    return `${from} – ${moment__WEBPACK_IMPORTED_MODULE_1___default()(selected.endDate).format(displayFormat)}`;
+  };
+  const handleSelect = next => {
+    if (!isRange) {
+      if (!next) return;
+      onChange(moment__WEBPACK_IMPORTED_MODULE_1___default()(next));
+      setOpen(false);
+      return;
+    }
+    onChange(next);
+    // Hold the popover open until both ends of the range are picked.
+    if (next?.startDate && next?.endDate) setOpen(false);
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_Containers_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    className: [_NewDatePickerControl_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].root, fullWidth ? _NewDatePickerControl_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].block : "", className].filter(Boolean).join(" "),
+    align: "left",
+    surface: false,
+    status: open && !disabled,
+    onClose: () => setOpen(false),
+    activator: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("button", {
+      type: "button",
+      className: _NewDatePickerControl_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].button,
+      disabled: disabled,
+      onClick: () => setOpen(prev => !prev),
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("svg", {
+        className: _NewDatePickerControl_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].icon,
+        xmlns: "http://www.w3.org/2000/svg",
+        viewBox: "0 0 24 24",
+        fill: "none",
+        "aria-hidden": "true",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("rect", {
+          x: "3",
+          y: "5",
+          width: "18",
+          height: "16",
+          rx: "3",
+          stroke: "currentColor",
+          strokeWidth: "1.9"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
+          d: "M8 3v4M16 3v4M3 11h18",
+          stroke: "currentColor",
+          strokeWidth: "1.9"
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+        className: _NewDatePickerControl_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].label,
+        children: triggerLabel()
+      })]
+    }),
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_CalendarInline__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      mode: mode,
+      value: selected,
+      onChange: handleSelect,
+      disabled: disabledDays
+    })
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (NewDatePickerControl);
+
+/***/ }),
+
 /***/ "./src/Components/Controls/NewInputControl.jsx":
 /*!*****************************************************!*\
   !*** ./src/Components/Controls/NewInputControl.jsx ***!
@@ -77,49 +372,46 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _NewInputFieldControl__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./NewInputFieldControl */ "./src/Components/Controls/NewInputFieldControl.jsx");
+/* harmony import */ var _NewInputControl_module_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./NewInputControl.module.scss */ "./src/Components/Controls/NewInputControl.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__);
 
+
+
+
+// A labelled field: NewInputFieldControl plus a label and error message.
 
 const NewInputControl = ({
   label = "",
-  value = "",
-  placeholder = "",
   helpText = "",
-  disabled = false,
-  onChange = () => {},
-  textarea = false,
-  style = {},
+  placeholder = "",
   error,
-  maxValue
+  style = {},
+  width = "100%",
+  ...inputProps
 }) => {
-  const InputTag = textarea ? "textarea" : "input";
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-    className: "servv_input",
-    style: {
-      width: "100%"
-    },
-    children: [label && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("label", {
-      className: "step__content_title",
+  let errorMessage = "";
+  if (typeof error === "string") {
+    errorMessage = error;
+  } else if (error) {
+    errorMessage = "This field is required.";
+  }
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+    className: _NewInputControl_module_scss__WEBPACK_IMPORTED_MODULE_2__["default"].wrapper,
+    children: [label && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("label", {
+      className: _NewInputControl_module_scss__WEBPACK_IMPORTED_MODULE_2__["default"].label,
       children: label
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-      className: `servv-input ${textarea ? "textarea" : "input"} ${error ? "servv-input--error" : ""}`,
-      style: style,
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-        className: "servv-input__content",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(InputTag, {
-          className: "servv-input__native",
-          value: value,
-          placeholder: placeholder || helpText,
-          disabled: disabled,
-          onChange: e => onChange(e.target.value),
-          rows: textarea ? 4 : undefined,
-          max: maxValue ? Number.parseFloat(maxValue) : undefined
-        })
-      })
-    }), error && typeof error === "string" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-      className: "servv-input__error-text",
-      children: error
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_NewInputFieldControl__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      ...inputProps,
+      placeholder: placeholder || helpText,
+      error: Boolean(error),
+      width: width,
+      style: style
+    }), errorMessage && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+      className: _NewInputControl_module_scss__WEBPACK_IMPORTED_MODULE_2__["default"].errorText,
+      role: "alert",
+      children: errorMessage
     })]
   });
 };
@@ -139,47 +431,69 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _NewInputFieldControl_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./NewInputFieldControl.module.scss */ "./src/Components/Controls/NewInputFieldControl.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
 
 
+
+// The single text-entry primitive: a bare input (or textarea) in the recessed
+// field chrome. NewInputControl wraps this with a label and error text; use
+// this directly when the surrounding markup already supplies them.
+
+const ALIGN = {
+  left: _NewInputFieldControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].left,
+  center: _NewInputFieldControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].center,
+  right: _NewInputFieldControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].right
+};
 const NewInputFieldControl = ({
   placeholder = "",
   value = "",
   type = "text",
+  inputMode,
   disabled = false,
   onChange = () => {},
   onBlur = () => {},
+  onKeyDown = () => {},
   maxLength,
   minValue,
   maxValue,
   align = "left",
+  step,
   width,
+  textarea = false,
+  rows = 4,
   className = "",
+  style,
   error = false
 }) => {
-  const handleChange = e => {
-    let val = e.target.value;
-    onChange(val);
-  };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-    className: `servv-input ${className} ${error ? "servv-input__native--error" : ""}`,
+  const InputTag = textarea ? "textarea" : "input";
+  const wrapperClasses = [_NewInputFieldControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].field, error ? _NewInputFieldControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].error : "", disabled ? _NewInputFieldControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].disabled : "", className].filter(Boolean).join(" ");
+  const contentClasses = [_NewInputFieldControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].content, textarea ? _NewInputFieldControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].textarea : ""].filter(Boolean).join(" ");
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+    className: wrapperClasses,
     style: {
-      width: width || "384px"
+      width: width || "384px",
+      ...style
     },
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-      className: "servv-input__content",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
-        type: type,
-        className: `servv-input__native servv-input__native--${align}`,
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+      className: contentClasses,
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(InputTag, {
+        type: textarea ? undefined : type,
+        inputMode: inputMode,
+        rows: textarea ? rows : undefined,
+        className: `${_NewInputFieldControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].native} ${ALIGN[align] || ALIGN.left}`,
         placeholder: placeholder,
         value: value,
         disabled: disabled,
+        "aria-invalid": Boolean(error),
         maxLength: maxLength,
         min: minValue,
         max: maxValue,
-        onChange: handleChange,
+        step: step,
+        onChange: e => onChange(e.target.value),
         onBlur: onBlur,
+        onKeyDown: onKeyDown,
         autoComplete: "off"
       })
     })
@@ -350,10 +664,66 @@ const NewTimePeriodControl = ({
 
 /***/ }),
 
-/***/ "./src/Components/Controls/RecurrenceRadioGroup.jsx":
-/*!**********************************************************!*\
-  !*** ./src/Components/Controls/RecurrenceRadioGroup.jsx ***!
-  \**********************************************************/
+/***/ "./src/Components/Controls/RadioGroup.jsx":
+/*!************************************************!*\
+  !*** ./src/Components/Controls/RadioGroup.jsx ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _RadioGroup_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./RadioGroup.module.scss */ "./src/Components/Controls/RadioGroup.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+// The admin shell's radio group: one control per set of options rather than
+// one per button.
+
+const RadioGroup = ({
+  name,
+  value,
+  options = [],
+  // [{ value, label }]
+  onChange,
+  disabled = false,
+  direction = "row",
+  // row | column
+  className = ""
+}) => {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+    className: [_RadioGroup_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].group, direction === "column" ? _RadioGroup_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].column : "", className].filter(Boolean).join(" "),
+    children: options.map(opt => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("label", {
+      className: _RadioGroup_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].option,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+        type: "radio",
+        name: name,
+        value: opt.value,
+        checked: value === opt.value,
+        onChange: () => onChange(opt.value),
+        disabled: disabled || opt.disabled
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+        className: _RadioGroup_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].control
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+        className: _RadioGroup_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].label,
+        children: opt.label
+      })]
+    }, opt.value))
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (RadioGroup);
+
+/***/ }),
+
+/***/ "./src/Components/CreateEvent/StepActions.jsx":
+/*!****************************************************!*\
+  !*** ./src/Components/CreateEvent/StepActions.jsx ***!
+  \****************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -366,117 +736,43 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
 
 
-const RadioGroup = ({
-  name,
-  value,
-  options = [],
-  // [{ value, label }]
-  onChange,
-  disabled = false,
-  className = ""
-}) => {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-    className: `servv-recurrence-group ${className}`,
-    children: options.map(opt => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("label", {
-      className: "servv-radio",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
-        type: "radio",
-        name: name,
-        value: opt.value,
-        checked: value === opt.value,
-        onChange: () => onChange(opt.value),
-        disabled: disabled || opt.disabled
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-        className: "servv-radio__control"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-        className: "servv-radio__label",
-        children: opt.label
-      })]
-    }, opt.value))
-  });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (RadioGroup);
+// The footer every event-form and onboarding step ends with: an optional
+// Save and Exit, an optional Previous, and the step's primary action.
+//
+// A handler left undefined drops its button, which is how the steps express
+// "no Save and Exit while creating" or "nothing to continue to yet" — the call
+// sites used to wrap each button in its own conditional for that.
 
-/***/ }),
-
-/***/ "./src/Components/CreateEvent/DatePickerControl.jsx":
-/*!**********************************************************!*\
-  !*** ./src/Components/CreateEvent/DatePickerControl.jsx ***!
-  \**********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment */ "moment");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var react_tailwindcss_datepicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-tailwindcss-datepicker */ "./node_modules/react-tailwindcss-datepicker/dist/index.esm.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__);
-
-
-
-
-const DatePickerControl = ({
-  date = null,
-  onChange = () => {},
-  label = "Select a Date",
-  variant = "button",
-  adminSection = false
-}) => {
-  const [open, setOpen] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const wrapperRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  const [value, setValue] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
-    startDate: date ? moment__WEBPACK_IMPORTED_MODULE_1___default()(date).startOf("day").toDate() : null,
-    endDate: null
-  });
-
-  // useEffect(() => {
-  //   const editor = document.querySelector(".block-editor__container");
-
-  //   function handleClickOutside(event) {
-  //     if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
-  //       setOpen(false);
-  //     }
-  //   }
-  //   editor.addEventListener("mousedown", handleClickOutside);
-  //   return () => editor.removeEventListener("mousedown", handleClickOutside);
-  // }, []);
-
-  const minDate = moment__WEBPACK_IMPORTED_MODULE_1___default()().startOf("day").toDate();
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    setValue({
-      startDate: date ? moment__WEBPACK_IMPORTED_MODULE_1___default()(date).startOf("day").toDate() : null,
-      endDate: null
-    });
-  }, [date]);
-  const handleDateChange = val => {
-    setValue(val);
-    if (val?.startDate) {
-      const newDate = moment__WEBPACK_IMPORTED_MODULE_1___default()(val.startDate);
-      onChange(newDate);
-    } else {
-      onChange(null);
-    }
-  };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_tailwindcss_datepicker__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    ref: wrapperRef,
-    minDate: minDate,
-    asSingle: true,
-    useRange: false,
-    displayFormat: "MMM DD, YYYY",
-    selected: value,
-    value: value,
-    placeholder: value?.startDate && moment__WEBPACK_IMPORTED_MODULE_1___default()(value.startDate, (moment__WEBPACK_IMPORTED_MODULE_1___default().ISO_8601), true).isValid() ? moment__WEBPACK_IMPORTED_MODULE_1___default()(value.startDate).format("MMM DD, YYYY") : "Select dates",
-    inputClassName: `input-control section-description text-left w-full ${variant === "button" ? adminSection ? "max-w-full" : "max-w-[10rem]" : "w-full"} ${adminSection ? "min-w-[8rem]" : "min-w-[10rem]"} min-w-8 shadow-sm border-solid border border-gray-300 bg-white placeholder-gray-700 max-sm:w-full`,
-    onChange: handleDateChange,
-    show: open
-  });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (DatePickerControl);
+const StepActions = ({
+  onSaveAndExit,
+  onPrevious,
+  onPrimary,
+  primaryText = "Continue",
+  previousText = "Previous",
+  saveAndExitText = "Save and Exit",
+  primaryDisabled = false,
+  className = "mt-auto"
+}) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+  className: `servv_actions ${className}`,
+  children: [onSaveAndExit && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
+    type: "button",
+    className: "servv_button servv_button--secondary",
+    onClick: onSaveAndExit,
+    children: saveAndExitText
+  }), onPrevious && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
+    type: "button",
+    className: "servv_button servv_button--secondary",
+    onClick: onPrevious,
+    children: previousText
+  }), onPrimary && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
+    type: "button",
+    className: "servv_button servv_button--primary",
+    onClick: onPrimary,
+    disabled: primaryDisabled,
+    children: primaryText
+  })]
+});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (StepActions);
 
 /***/ }),
 
@@ -491,18 +787,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _assets_icons__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../assets/icons */ "./src/assets/icons/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
-/* harmony import */ var _Containers_InteractiveCard__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Containers/InteractiveCard */ "./src/Components/Containers/InteractiveCard.jsx");
-/* harmony import */ var _Controls_RecurrenceRadioGroup__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Controls/RecurrenceRadioGroup */ "./src/Components/Controls/RecurrenceRadioGroup.jsx");
-/* harmony import */ var _Controls_NewInputControl__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Controls/NewInputControl */ "./src/Components/Controls/NewInputControl.jsx");
-/* harmony import */ var _Controls_NewTimeInputControl__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Controls/NewTimeInputControl */ "./src/Components/Controls/NewTimeInputControl.jsx");
-/* harmony import */ var _DatePickerControl__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./DatePickerControl */ "./src/Components/CreateEvent/DatePickerControl.jsx");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! moment */ "moment");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _StepActions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./StepActions */ "./src/Components/CreateEvent/StepActions.jsx");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var _Containers_InteractiveCard__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Containers/InteractiveCard */ "./src/Components/Containers/InteractiveCard.jsx");
+/* harmony import */ var _Controls_RadioGroup__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Controls/RadioGroup */ "./src/Components/Controls/RadioGroup.jsx");
+/* harmony import */ var _Controls_NewInputControl__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Controls/NewInputControl */ "./src/Components/Controls/NewInputControl.jsx");
+/* harmony import */ var _Controls_NewTimeInputControl__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Controls/NewTimeInputControl */ "./src/Components/Controls/NewTimeInputControl.jsx");
+/* harmony import */ var _Controls_NewDatePickerControl__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Controls/NewDatePickerControl */ "./src/Components/Controls/NewDatePickerControl.jsx");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! moment */ "moment");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__);
+
 
 
 
@@ -532,9 +830,9 @@ const TicketsStep = ({
     availability = "open" // "open" | "scheduled"
   } = attributes || {};
   const MIN_QTY = 1;
-  const [MAX_QTY, SET_MAX_QTY] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(settings.free_registrants_limit || 15);
-  const [defaultQty, setDefaultQty] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(1);
-  const [defaultPrice, setDefaultPrice] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(1);
+  const [MAX_QTY, SET_MAX_QTY] = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)(settings.free_registrants_limit || 15);
+  const [defaultQty, setDefaultQty] = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)(1);
+  const [defaultPrice, setDefaultPrice] = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)(1);
   const isFreePlanRestricted = settings?.current_plan?.id === 1;
   const AVAILABILITY_OPTIONS = [{
     value: "open",
@@ -543,7 +841,7 @@ const TicketsStep = ({
     value: "scheduled",
     label: "Sales Start & End"
   }];
-  const [TIYCKET_TYPES, setTicketTypes] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([{
+  const [TIYCKET_TYPES, setTicketTypes] = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)([{
     value: "free",
     label: "Free"
   }, {
@@ -591,15 +889,15 @@ const TicketsStep = ({
   };
   const getTimeFromISO = iso => {
     if (!iso) return "";
-    return moment__WEBPACK_IMPORTED_MODULE_7___default()(iso).tz(timezone).format("HH:mm");
+    return moment__WEBPACK_IMPORTED_MODULE_8___default()(iso).tz(timezone).format("HH:mm");
   };
-  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+  (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
     const visibleFreeTickets = tickets.filter(t => t.action !== "remove" && t.type === "free");
     const usedFreeQuantity = visibleFreeTickets.reduce((sum, ticket) => sum + Number(ticket.quantity || 0), 0);
     const remaining = Math.max(0, (settings.free_registrants_limit || 15) - usedFreeQuantity);
     SET_MAX_QTY(remaining);
   }, [tickets, settings.free_registrants_limit]);
-  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+  (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
     if (settings?.settings?.admin_dashboard) {
       let adminSettings = JSON.parse(settings.settings.admin_dashboard);
       let defaultQtyFromSettings = Number.parseInt(adminSettings.default_quantity) || 1;
@@ -608,7 +906,7 @@ const TicketsStep = ({
       setDefaultPrice(defaultPriceFromSettings);
     }
   }, [settings]);
-  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+  (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
     if (stripeConnected) {
       setTicketTypes([{
         value: "free",
@@ -642,7 +940,7 @@ const TicketsStep = ({
   // }, [isFreePlanRestricted]);
 
   const setTimeToISO = (iso, time) => {
-    const base = iso ? moment__WEBPACK_IMPORTED_MODULE_7___default()(iso).tz(timezone) : moment__WEBPACK_IMPORTED_MODULE_7___default()().tz(timezone);
+    const base = iso ? moment__WEBPACK_IMPORTED_MODULE_8___default()(iso).tz(timezone) : moment__WEBPACK_IMPORTED_MODULE_8___default()().tz(timezone);
     let hour, minute;
     if (typeof time === "string") {
       [hour, minute] = time.split(":").map(Number);
@@ -671,7 +969,7 @@ const TicketsStep = ({
         label: "Select date"
       };
     }
-    const dateMoment = moment__WEBPACK_IMPORTED_MODULE_7___default().tz(activeTicket.start_datetime, timezone);
+    const dateMoment = moment__WEBPACK_IMPORTED_MODULE_8___default().tz(activeTicket.start_datetime, timezone);
     const dateStr = dateMoment.format("YYYY-MM-DD");
     return {
       date: dateStr,
@@ -685,7 +983,7 @@ const TicketsStep = ({
         label: "Select date"
       };
     }
-    const dateMoment = moment__WEBPACK_IMPORTED_MODULE_7___default().tz(activeTicket.end_datetime, timezone);
+    const dateMoment = moment__WEBPACK_IMPORTED_MODULE_8___default().tz(activeTicket.end_datetime, timezone);
     const dateStr = dateMoment.format("YYYY-MM-DD");
     return {
       date: dateStr,
@@ -693,15 +991,15 @@ const TicketsStep = ({
     };
   };
   const getSaleStartTime = () => {
-    return activeTicket?.start_datetime ? moment__WEBPACK_IMPORTED_MODULE_7___default().tz(activeTicket.start_datetime, timezone) : moment__WEBPACK_IMPORTED_MODULE_7___default()().tz(timezone);
+    return activeTicket?.start_datetime ? moment__WEBPACK_IMPORTED_MODULE_8___default().tz(activeTicket.start_datetime, timezone) : moment__WEBPACK_IMPORTED_MODULE_8___default()().tz(timezone);
   };
   const getSaleEndTime = () => {
-    return activeTicket?.end_datetime ? moment__WEBPACK_IMPORTED_MODULE_7___default().tz(activeTicket.end_datetime, timezone) : moment__WEBPACK_IMPORTED_MODULE_7___default()().add(1, "hour").tz(timezone);
+    return activeTicket?.end_datetime ? moment__WEBPACK_IMPORTED_MODULE_8___default().tz(activeTicket.end_datetime, timezone) : moment__WEBPACK_IMPORTED_MODULE_8___default()().add(1, "hour").tz(timezone);
   };
   const handleSaleStartDateChange = date => {
-    const base = activeTicket?.start_datetime ? moment__WEBPACK_IMPORTED_MODULE_7___default().tz(activeTicket.start_datetime, "YYYY-MM-DDTHH:mm:ss", timezone) : moment__WEBPACK_IMPORTED_MODULE_7___default()().tz(timezone);
-    const selectedMoment = moment__WEBPACK_IMPORTED_MODULE_7___default().isMoment(date) ? date : moment__WEBPACK_IMPORTED_MODULE_7___default()(date);
-    const newDateTime = moment__WEBPACK_IMPORTED_MODULE_7___default().tz({
+    const base = activeTicket?.start_datetime ? moment__WEBPACK_IMPORTED_MODULE_8___default().tz(activeTicket.start_datetime, "YYYY-MM-DDTHH:mm:ss", timezone) : moment__WEBPACK_IMPORTED_MODULE_8___default()().tz(timezone);
+    const selectedMoment = moment__WEBPACK_IMPORTED_MODULE_8___default().isMoment(date) ? date : moment__WEBPACK_IMPORTED_MODULE_8___default()(date);
+    const newDateTime = moment__WEBPACK_IMPORTED_MODULE_8___default().tz({
       year: selectedMoment.year(),
       month: selectedMoment.month(),
       date: selectedMoment.date(),
@@ -715,9 +1013,9 @@ const TicketsStep = ({
     });
   };
   const handleSaleEndDateChange = date => {
-    const base = activeTicket?.end_datetime ? moment__WEBPACK_IMPORTED_MODULE_7___default().tz(activeTicket.end_datetime, "YYYY-MM-DDTHH:mm:ss", timezone) : moment__WEBPACK_IMPORTED_MODULE_7___default()().add(1, "day").tz(timezone);
-    const selectedMoment = moment__WEBPACK_IMPORTED_MODULE_7___default().isMoment(date) ? date : moment__WEBPACK_IMPORTED_MODULE_7___default()(date);
-    const newDateTime = moment__WEBPACK_IMPORTED_MODULE_7___default().tz({
+    const base = activeTicket?.end_datetime ? moment__WEBPACK_IMPORTED_MODULE_8___default().tz(activeTicket.end_datetime, "YYYY-MM-DDTHH:mm:ss", timezone) : moment__WEBPACK_IMPORTED_MODULE_8___default()().add(1, "day").tz(timezone);
+    const selectedMoment = moment__WEBPACK_IMPORTED_MODULE_8___default().isMoment(date) ? date : moment__WEBPACK_IMPORTED_MODULE_8___default()(date);
+    const newDateTime = moment__WEBPACK_IMPORTED_MODULE_8___default().tz({
       year: selectedMoment.year(),
       month: selectedMoment.month(),
       date: selectedMoment.date(),
@@ -744,9 +1042,9 @@ const TicketsStep = ({
       end_datetime: formatted
     });
   };
-  const [activeTicketId, setActiveTicketId] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(tickets[0]?.id || null);
+  const [activeTicketId, setActiveTicketId] = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)(tickets[0]?.id || null);
   const visibleTickets = tickets.filter(t => t.action !== "remove");
-  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+  (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
     const current = tickets.find(ticket => ticket.id === activeTicketId);
     if (!current) return;
     if (current.start_datetime || current.end_datetime) {
@@ -772,13 +1070,13 @@ const TicketsStep = ({
       setActiveTicketId(null);
     }
   };
-  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+  (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
     if (!activeTicketId && tickets.length) {
       setActiveTicketId(tickets[0].id);
     }
   }, [tickets]);
   const activeTicket = visibleTickets.find(t => t.id === activeTicketId);
-  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+  (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
     if (!activeTicket && visibleTickets.length) {
       setActiveTicketId(visibleTickets[0].id);
     }
@@ -803,7 +1101,7 @@ const TicketsStep = ({
     const remainingFreeQuota = MAX_QTY;
     const initialQty = remainingFreeQuota > 0 ? Math.min(defaultQty, remainingFreeQuota) : 0;
     const newTicket = {
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_10__["default"])(),
       type: "free",
       title: "Standard",
       quantity: initialQty,
@@ -812,14 +1110,14 @@ const TicketsStep = ({
     updateTickets([...tickets, newTicket]);
     setActiveTicketId(newTicket.id);
   };
-  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+  (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
     if (isOnboarding) setFullWidth?.(false);
   }, [isOnboarding]);
-  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+  (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
     if (!isOnboarding || tickets.length) return;
     const initialQty = Math.min(defaultQty, MAX_QTY > 0 ? MAX_QTY : 1);
     const newTicket = {
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_10__["default"])(),
       type: "free",
       title: "Standard",
       quantity: initialQty,
@@ -849,7 +1147,7 @@ const TicketsStep = ({
     } else {
       const initialQty = type === "free" ? Math.min(defaultQty, MAX_QTY > 0 ? MAX_QTY : 1) : defaultQty;
       const newTicket = {
-        id: (0,uuid__WEBPACK_IMPORTED_MODULE_9__["default"])(),
+        id: (0,uuid__WEBPACK_IMPORTED_MODULE_10__["default"])(),
         type,
         title: "Standard",
         quantity: initialQty,
@@ -862,51 +1160,51 @@ const TicketsStep = ({
       setActiveTicketId(newTicket.id);
     }
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
     className: "step__wrapper servv_tickets",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
       className: "step__header",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_assets_icons__WEBPACK_IMPORTED_MODULE_0__.TicketIcon, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_assets_icons__WEBPACK_IMPORTED_MODULE_0__.TicketIcon, {
         className: "step__header_icon"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
         className: "step__heading",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h4", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("h4", {
           className: "step__header_title",
           children: "Tickets"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("p", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("p", {
           className: "step__description",
           children: "Create ticket types and quantities"
         })]
-      }), !isNew && attributes.meeting?.occurrences && attributes.meeting?.occurrences?.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("p", {
+      }), !isNew && attributes.meeting?.occurrences && attributes.meeting?.occurrences?.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("p", {
         className: "step__description",
         children: "This is a recurring event. To see tickets for a specific date, please view that occurrence."
       })]
-    }), isOnboarding ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+    }), isOnboarding ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
       className: "step__content w-full",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
         className: "grid grid-cols-2 gap-4",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Containers_InteractiveCard__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Containers_InteractiveCard__WEBPACK_IMPORTED_MODULE_3__["default"], {
           onClick: () => handleOnboardingTypeSelect("free"),
           selected: activeTicket?.type === "free",
           style: {
             minHeight: 0,
             cursor: "pointer"
           },
-          subtitle: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("p", {
+          subtitle: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("p", {
             className: "text-sm font-bold tracking-widest uppercase",
             style: {
               color: "#872CFA"
             },
             children: "Tickets"
           }),
-          title: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h2", {
+          title: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("h2", {
             className: "text-3xl font-bold",
             style: {
               color: "#070908"
             },
             children: "Free"
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Containers_InteractiveCard__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Containers_InteractiveCard__WEBPACK_IMPORTED_MODULE_3__["default"], {
           onClick: stripeConnected ? () => handleOnboardingTypeSelect("paid") : undefined,
           selected: activeTicket?.type === "paid",
           style: {
@@ -914,14 +1212,14 @@ const TicketsStep = ({
             opacity: stripeConnected ? 1 : 0.45,
             cursor: stripeConnected ? "pointer" : "not-allowed"
           },
-          subtitle: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("p", {
+          subtitle: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("p", {
             className: "text-sm font-bold tracking-widest uppercase",
             style: {
               color: "#872CFA"
             },
             children: stripeConnected ? "Tickets" : "Requires Stripe"
           }),
-          title: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h2", {
+          title: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("h2", {
             className: "text-3xl font-bold",
             style: {
               color: "#070908"
@@ -929,14 +1227,14 @@ const TicketsStep = ({
             children: "Paid"
           })
         })]
-      }), activeTicket && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+      }), activeTicket && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
         className: isOnboarding ? "flex flex-col gap-4 mt-4 w-full max-w-[384px] self-stretch mx-auto" : `flex flex-col gap-4 mt-4`,
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
           className: "step__content_block",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
             className: "step__content_title",
             children: "Title"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Controls_NewInputControl__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Controls_NewInputControl__WEBPACK_IMPORTED_MODULE_5__["default"], {
             placeholder: "Enter title",
             disabled: isFreePlanRestricted,
             value: activeTicket.title || "",
@@ -944,12 +1242,12 @@ const TicketsStep = ({
               title: val
             })
           })]
-        }), activeTicket.type === "paid" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+        }), activeTicket.type === "paid" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
           className: "step__content_block",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
             className: "step__content_title",
             children: "Price"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Controls_NewInputControl__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Controls_NewInputControl__WEBPACK_IMPORTED_MODULE_5__["default"], {
             type: "text",
             inputMode: "decimal",
             placeholder: "Enter price, up to 1000",
@@ -977,14 +1275,14 @@ const TicketsStep = ({
               });
             }
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
           className: "servv_ticket_quantity",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("label", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("label", {
             className: "step__content_title",
             children: "Quantity"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
             className: "servv_ticket_quantity__input",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("button", {
               type: "button",
               onClick: () => {
                 if (qty > MIN_QTY) updateTicket(activeTicketId, {
@@ -992,8 +1290,8 @@ const TicketsStep = ({
                 });
               },
               disabled: qty <= MIN_QTY,
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_assets_icons__WEBPACK_IMPORTED_MODULE_0__.MinusIcon, {})
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("input", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_assets_icons__WEBPACK_IMPORTED_MODULE_0__.MinusIcon, {})
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("input", {
               type: "text",
               inputMode: "numeric",
               pattern: "[0-9]*",
@@ -1019,7 +1317,7 @@ const TicketsStep = ({
                   quantity: MIN_QTY
                 });
               }
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("button", {
               type: "button",
               onClick: () => {
                 if (qty < MAX_TICKET_QTY) updateTicket(activeTicketId, {
@@ -1027,56 +1325,47 @@ const TicketsStep = ({
                 });
               },
               disabled: qty >= MAX_TICKET_QTY,
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_assets_icons__WEBPACK_IMPORTED_MODULE_0__.PlusIcon, {})
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_assets_icons__WEBPACK_IMPORTED_MODULE_0__.PlusIcon, {})
             })]
-          }), isFreeTicket && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("p", {
+          }), isFreeTicket && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("p", {
             className: "servv_ticket_quantity__hint",
             children: ["Maximum number of tickets ", MAX_QTY]
           })]
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-        className: "servv_actions mt-auto",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
-          type: "button",
-          className: "servv_button servv_button--secondary",
-          onClick: () => changeStep("venue"),
-          children: "Previous"
-        }), activeTicket && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
-          type: "button",
-          className: "servv_button servv_button--primary",
-          onClick: () => handleFormSubmit(true),
-          disabled: isError,
-          children: "Create"
-        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_StepActions__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        onPrevious: () => changeStep("venue"),
+        onPrimary: activeTicket ? () => handleFormSubmit(true) : undefined,
+        primaryText: "Create",
+        primaryDisabled: isError
       })]
-    }) : isProductMode ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+    }) : isProductMode ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
       className: "step__content",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
         className: "step__content_block",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
           className: `servv_ticket_card servv_ticket_card--active`,
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
             className: "servv_ticket_card__title",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
               children: "Standard (free)"
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
             className: "servv_ticket_card__count",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("strong", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("strong", {
               children: productQty
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
               children: productQty !== 1 ? "tickets" : "ticket"
             })]
           })]
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
         className: "servv_ticket_quantity",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("label", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("label", {
           className: "step__content_title",
           children: "Quantity"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
           className: "servv_ticket_quantity__input",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("button", {
             type: "button",
             onClick: () => {
               const qty = Number(productQty);
@@ -1085,8 +1374,8 @@ const TicketsStep = ({
               });
             },
             disabled: Number(productQty) <= MIN_QTY,
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_assets_icons__WEBPACK_IMPORTED_MODULE_0__.MinusIcon, {})
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("input", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_assets_icons__WEBPACK_IMPORTED_MODULE_0__.MinusIcon, {})
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("input", {
             type: "text",
             inputMode: "numeric",
             pattern: "[0-9]*",
@@ -1112,7 +1401,7 @@ const TicketsStep = ({
                 quantity: MIN_QTY
               });
             }
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("button", {
             type: "button",
             onClick: () => {
               const qty = Number(productQty);
@@ -1121,34 +1410,34 @@ const TicketsStep = ({
               });
             },
             disabled: Number(productQty) >= productMaxQty,
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_assets_icons__WEBPACK_IMPORTED_MODULE_0__.PlusIcon, {})
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_assets_icons__WEBPACK_IMPORTED_MODULE_0__.PlusIcon, {})
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("p", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("p", {
           className: "servv_ticket_quantity__hint",
           children: ["Maximum number of tickets ", MAX_QTY]
         })]
       })]
-    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, {
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(react__WEBPACK_IMPORTED_MODULE_2__.Fragment, {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
         className: "step__content",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("button", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("button", {
           type: "button",
           className: "servv_ticket_add",
           onClick: addTicket,
           disabled: isFreePlanRestricted,
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_assets_icons__WEBPACK_IMPORTED_MODULE_0__.PlusIcon, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_assets_icons__WEBPACK_IMPORTED_MODULE_0__.PlusIcon, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
             children: "Add ticket"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
           className: "step__content_block",
-          children: tickets.filter(t => t.action !== "remove").map(ticket => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+          children: tickets.filter(t => t.action !== "remove").map(ticket => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
             className: `servv_ticket_card ${activeTicketId === ticket.id ? "servv_ticket_card--active" : ""}`,
             onClick: () => setActiveTicketId(ticket.id),
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
               className: "servv_ticket_card__title",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("span", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("span", {
                 children: [ticket.title || "Untitled", " (", ticket.type, ")"]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("button", {
                 type: "button",
                 className: "servv_ticket_card__remove",
                 onClick: e => {
@@ -1156,24 +1445,24 @@ const TicketsStep = ({
                   removeTicket(ticket.id);
                 },
                 disabled: isFreePlanRestricted,
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_assets_icons__WEBPACK_IMPORTED_MODULE_0__.MinusIcon, {})
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_assets_icons__WEBPACK_IMPORTED_MODULE_0__.MinusIcon, {})
               })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
               className: "servv_ticket_card__count",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("strong", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("strong", {
                 children: ticket.quantity
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
                 children: ticket.quantity > 1 ? "tickets" : "ticket"
               })]
             })]
           }, ticket.id))
-        }), tickets.length > 0 && activeTicketId && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+        }), tickets.length > 0 && activeTicketId && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(react__WEBPACK_IMPORTED_MODULE_2__.Fragment, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
             className: "step__content_block",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
               className: "step__content_title",
               children: "Type"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Controls_RecurrenceRadioGroup__WEBPACK_IMPORTED_MODULE_3__["default"], {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Controls_RadioGroup__WEBPACK_IMPORTED_MODULE_4__["default"], {
               name: "ticket-type",
               value: activeTicket?.type || "free",
               options: TIYCKET_TYPES,
@@ -1207,28 +1496,28 @@ const TicketsStep = ({
                 }
                 updateTicket(activeTicketId, patch);
               }
-            }), !stripeConnected && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("p", {
+            }), !stripeConnected && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("p", {
               className: "servv_ticket_quantity__hint text-justify",
               children: "To create paid or donation tickets, you need to connect your Stripe account."
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
             className: "step__content_block",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
               className: "step__content_title",
               children: "Title"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Controls_NewInputControl__WEBPACK_IMPORTED_MODULE_4__["default"], {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Controls_NewInputControl__WEBPACK_IMPORTED_MODULE_5__["default"], {
               placeholder: "Enter title",
               value: activeTicket?.title || "",
               onChange: val => updateTicket(activeTicketId, {
                 title: val
               })
             })]
-          }), activeTicket?.type === "paid" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+          }), activeTicket?.type === "paid" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
             className: "step__content_block",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
               className: "step__content_title",
               children: "Price"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Controls_NewInputControl__WEBPACK_IMPORTED_MODULE_4__["default"], {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Controls_NewInputControl__WEBPACK_IMPORTED_MODULE_5__["default"], {
               type: "text",
               inputMode: "decimal",
               placeholder: "Enter price, up to 1000",
@@ -1261,14 +1550,14 @@ const TicketsStep = ({
                 });
               }
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
             className: "servv_ticket_quantity",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("label", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("label", {
               className: "step__content_title",
               children: "Quantity"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
               className: "servv_ticket_quantity__input",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("button", {
                 type: "button",
                 onClick: () => {
                   if (qty > MIN_QTY) {
@@ -1278,8 +1567,8 @@ const TicketsStep = ({
                   }
                 },
                 disabled: qty <= MIN_QTY,
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_assets_icons__WEBPACK_IMPORTED_MODULE_0__.MinusIcon, {})
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("input", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_assets_icons__WEBPACK_IMPORTED_MODULE_0__.MinusIcon, {})
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("input", {
                 type: "text",
                 inputMode: "numeric",
                 pattern: "[0-9]*",
@@ -1310,7 +1599,7 @@ const TicketsStep = ({
                     });
                   }
                 }
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("button", {
                 type: "button",
                 onClick: () => {
                   if (qty < MAX_TICKET_QTY) {
@@ -1320,18 +1609,18 @@ const TicketsStep = ({
                   }
                 },
                 disabled: qty >= MAX_TICKET_QTY,
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_assets_icons__WEBPACK_IMPORTED_MODULE_0__.PlusIcon, {})
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_assets_icons__WEBPACK_IMPORTED_MODULE_0__.PlusIcon, {})
               })]
-            }), isFreeTicket && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("p", {
+            }), isFreeTicket && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("p", {
               className: "servv_ticket_quantity__hint",
               children: ["Maximum number of tickets ", MAX_QTY]
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
             className: "step__content_block",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
               className: "step__content_title",
               children: "Availability"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Controls_RecurrenceRadioGroup__WEBPACK_IMPORTED_MODULE_3__["default"], {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Controls_RadioGroup__WEBPACK_IMPORTED_MODULE_4__["default"], {
               name: "ticket-availability",
               value: activeTicket?.availability || "open",
               options: AVAILABILITY_OPTIONS,
@@ -1344,50 +1633,54 @@ const TicketsStep = ({
               }),
               disabled: settings?.current_plan?.id === 1 || !settings.current_plan
             })]
-          }), activeTicket?.availability === "scheduled" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+          }), activeTicket?.availability === "scheduled" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
             className: "servv_ticket_sales_block",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
               className: "servv_datetime_row",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
                 className: "servv_datetime_col",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("label", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("label", {
                   className: "step__content_title",
                   children: "Start date"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_DatePickerControl__WEBPACK_IMPORTED_MODULE_6__["default"], {
-                  variant: "field",
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Controls_NewDatePickerControl__WEBPACK_IMPORTED_MODULE_7__["default"], {
+                  mode: "single",
                   label: getSaleStartDate().label,
-                  date: getSaleStartDate().date,
-                  onChange: handleSaleStartDateChange
+                  value: getSaleStartDate().date,
+                  onChange: handleSaleStartDateChange,
+                  fullWidth: true,
+                  minDate: new Date()
                 })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
                 className: "servv_datetime_col",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("label", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("label", {
                   className: "step__content_title",
                   children: "Start time"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Controls_NewTimeInputControl__WEBPACK_IMPORTED_MODULE_5__["default"], {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Controls_NewTimeInputControl__WEBPACK_IMPORTED_MODULE_6__["default"], {
                   time: getSaleStartTime(),
                   onChange: handleSaleStartTimeChange
                 })]
               })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
               className: "servv_datetime_row",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
                 className: "servv_datetime_col",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("label", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("label", {
                   className: "step__content_title",
                   children: "End date"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_DatePickerControl__WEBPACK_IMPORTED_MODULE_6__["default"], {
-                  variant: "field",
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Controls_NewDatePickerControl__WEBPACK_IMPORTED_MODULE_7__["default"], {
+                  mode: "single",
                   label: getSaleEndDate().label,
-                  date: getSaleEndDate().date,
-                  onChange: handleSaleEndDateChange
+                  value: getSaleEndDate().date,
+                  onChange: handleSaleEndDateChange,
+                  fullWidth: true,
+                  minDate: new Date()
                 })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
                 className: "servv_datetime_col",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("label", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("label", {
                   className: "step__content_title",
                   children: "End time"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Controls_NewTimeInputControl__WEBPACK_IMPORTED_MODULE_5__["default"], {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Controls_NewTimeInputControl__WEBPACK_IMPORTED_MODULE_6__["default"], {
                   time: getSaleEndTime(),
                   onChange: handleSaleEndTimeChange
                 })]
@@ -1396,29 +1689,90 @@ const TicketsStep = ({
           })]
         })]
       })
-    }), !isOnboarding && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-      className: "servv_actions mt-auto",
-      children: [!isNew && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
-        type: "button",
-        className: "servv_button servv_button--secondary",
-        onClick: () => handleFormSubmit(true),
-        children: "Save and Exit"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
-        type: "button",
-        className: "servv_button servv_button--secondary",
-        onClick: () => changeStep("venue"),
-        children: "Previous"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
-        type: "button",
-        className: "servv_button servv_button--primary",
-        onClick: () => isOnboarding ? handleFormSubmit(true) : changeStep("filters"),
-        disabled: isError,
-        children: "Continue"
-      })]
+    }), !isOnboarding && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_StepActions__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      onSaveAndExit: isNew ? undefined : () => handleFormSubmit(true),
+      onPrevious: () => changeStep("venue"),
+      onPrimary: () => isOnboarding ? handleFormSubmit(true) : changeStep("filters"),
+      primaryDisabled: isError
     })]
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (TicketsStep);
+
+/***/ }),
+
+/***/ "./src/Components/Containers/Dropdown.module.scss":
+/*!********************************************************!*\
+  !*** ./src/Components/Containers/Dropdown.module.scss ***!
+  \********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"root":"Q6YwFze7pNwAmhdBzAGO","menu":"lY9gKiKMaPORXMiAcGOK","surface":"seqzcz7VZqZZnhfbs0wM"});
+
+/***/ }),
+
+/***/ "./src/Components/Controls/NewDatePickerControl.module.scss":
+/*!******************************************************************!*\
+  !*** ./src/Components/Controls/NewDatePickerControl.module.scss ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"root":"HwtSSogopbnUP9_7iCDB","button":"F2l5K1tOxIJTh0jK3Kpp","icon":"x9Ei7o54rk9kgx3hWQh3","label":"GHYx3uCSPULDwTUL_kND","block":"due974qaf_ShRcdQYcxi"});
+
+/***/ }),
+
+/***/ "./src/Components/Controls/NewInputControl.module.scss":
+/*!*************************************************************!*\
+  !*** ./src/Components/Controls/NewInputControl.module.scss ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"wrapper":"IFKo2Oy4jAQImQYKp3th","label":"NWAvKcaQuc1HAdNqx3XR","errorText":"zP6FRtHJ4yJjeWueA9uo"});
+
+/***/ }),
+
+/***/ "./src/Components/Controls/NewInputFieldControl.module.scss":
+/*!******************************************************************!*\
+  !*** ./src/Components/Controls/NewInputFieldControl.module.scss ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"field":"mnkZ919trJuW2iv63ypl","content":"_FGd5GJTpG4M_jEm0TPQ","disabled":"qdwYYi7sJT_cRtD8ZXMF","textarea":"fx0sZxO2auf836gJwJSc","native":"EWAiYY_5e6MWQVZT0nkg","left":"BY4ZYyoot9eqQrv6a85U","center":"dAdXU7WqEMXyVrL4Ixvj","right":"jbHOWMLsSp0Wmi85kDYz","error":"D1cdINycMkHcDXE1A7an"});
+
+/***/ }),
+
+/***/ "./src/Components/Controls/RadioGroup.module.scss":
+/*!********************************************************!*\
+  !*** ./src/Components/Controls/RadioGroup.module.scss ***!
+  \********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"group":"P9Kl2Un9_qsfvLsb3uXn","column":"R5Y7DlKBt9H_cGkGvei3","option":"y18GMs3wGuRXYbLPwafV","control":"B1dtgsinuS367twlIF3E","label":"pZKmCR2CTakFEnYqYww8"});
 
 /***/ }),
 
@@ -1594,4 +1948,4 @@ function validate(uuid) {
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_CreateEvent_TicketsStep_jsx.js.map?ver=349557e0d3ea3bd6d9a5
+//# sourceMappingURL=src_Components_CreateEvent_TicketsStep_jsx.js.map?ver=fdd156040d585af8d8ec

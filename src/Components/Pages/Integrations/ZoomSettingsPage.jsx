@@ -1,17 +1,20 @@
-import { Fragment, useEffect, useState } from "react";
-import PageHeader from "../../Containers/PageHeader";
+import { useEffect, useState } from "react";
 import BlockStack from "../../Containers/BlockStack";
 import PageContent from "../../Containers/PageContent";
 import AnnotatedSection from "../../Containers/AnnotatedSection";
-import RadioControl from "../../Controls/RadioControl";
-import InputFieldControl from "../../Controls/InputFieldControl";
-import CheckboxControl from "../../Controls/CheckboxControl";
-import InlineStack from "../../Containers/InlineStack";
+import RadioGroup from "../../Controls/RadioGroup";
+import NewInputFieldControl from "../../Controls/NewInputFieldControl";
+import CheckboxItem from "../../Controls/CheckboxItem";
 import PageActionButton from "../../Controls/PageActionButton";
 import BreadCrumbs from "../../Menu/BreadCrumbs";
 import PageWrapper from "../PageWrapper";
-import axios from "axios";
+import axios from "../../../utilities/adminApi";
 import { useNavigate } from "react-router-dom";
+const YES_NO_OPTIONS = [
+  { value: "yes", label: "Yes" },
+  { value: "no", label: "No" },
+];
+
 const ZoomSettingsPage = () => {
   const navigate = useNavigate();
   const [zoomSettings, setZoomSettings] = useState({
@@ -142,15 +145,23 @@ const ZoomSettingsPage = () => {
               description="Account email & name."
             >
               <BlockStack gap={4}>
-                <InputFieldControl
-                  value={isAccountFetched ? account.email : ""}
-                  fullWidth={true}
-                  type="text"
-                  align="right"
-                  disabled={true}
-                  maxLength={30}
-                  image={isAccountFetched ? account.photo : null}
-                />
+                <div className="flex items-center gap-3">
+                  {isAccountFetched && account.photo && (
+                    <img
+                      src={account.photo}
+                      alt=""
+                      className="w-8 h-8 rounded-full object-cover shrink-0"
+                    />
+                  )}
+                  <NewInputFieldControl
+                    width="100%"
+                    value={isAccountFetched ? account.email : ""}
+                    type="text"
+                    align="right"
+                    disabled={true}
+                    maxLength={30}
+                  />
+                </div>
               </BlockStack>
             </AnnotatedSection>
             <AnnotatedSection
@@ -158,9 +169,9 @@ const ZoomSettingsPage = () => {
               description="Set a default time zone."
             >
               <BlockStack gap={4}>
-                <InputFieldControl
+                <NewInputFieldControl
+                  width="100%"
                   value={isAccountFetched ? account.full_name : ""}
-                  fullWidth={false}
                   type="text"
                   align="right"
                   disabled={true}
@@ -172,27 +183,22 @@ const ZoomSettingsPage = () => {
               {t("Zoom settings")}
             </h1>
             <AnnotatedSection title="Meeting ID" description="Set a meeting ID">
-              <BlockStack gap={4}>
-                <RadioControl
-                  label="Generate automatically"
-                  name="meeting_id"
-                  checked={!zoomSettings.use_pmi}
-                  onChange={() => handleSettingsChange("use_pmi", false)}
-                />
-                <RadioControl
-                  label="Personal meeting ID"
-                  name="meeting_id"
-                  checked={zoomSettings.use_pmi}
-                  onChange={() => handleSettingsChange("use_pmi", true)}
-                />
-              </BlockStack>
+              <RadioGroup
+                name="meeting_id"
+                value={zoomSettings.use_pmi ? "pmi" : "auto"}
+                options={[
+                  { value: "auto", label: "Generate automatically" },
+                  { value: "pmi", label: "Personal meeting ID" },
+                ]}
+                onChange={(val) => handleSettingsChange("use_pmi", val === "pmi")}
+              />
             </AnnotatedSection>
             <AnnotatedSection
               title="Video"
               description="Show/hide host and guest video"
             >
               <BlockStack gap={4}>
-                <CheckboxControl
+                <CheckboxItem
                   label="Host video"
                   name="host_video"
                   checked={zoomSettings.host_video}
@@ -200,7 +206,7 @@ const ZoomSettingsPage = () => {
                     handleSettingsChange("host_video", !zoomSettings.host_video)
                   }
                 />
-                <CheckboxControl
+                <CheckboxItem
                   label="Guest video"
                   name="guest_video"
                   checked={zoomSettings.participant_video}
@@ -217,91 +223,56 @@ const ZoomSettingsPage = () => {
               title="Audio"
               description="Set default audio settings"
             >
-              <BlockStack gap={4}>
-                <RadioControl
-                  label="Telephone"
-                  name="audio"
-                  checked={zoomSettings.audio === "telephony"}
-                  onChange={() => handleSettingsChange("audio", "telephony")}
-                />
-                <RadioControl
-                  label="Computer audio"
-                  name="audio"
-                  checked={zoomSettings.audio === "voip"}
-                  onChange={() => handleSettingsChange("audio", "voip")}
-                />
-                <RadioControl
-                  label="Both"
-                  name="audio"
-                  checked={zoomSettings.audio === "both"}
-                  onChange={() => handleSettingsChange("audio", "both")}
-                />
-              </BlockStack>
+              <RadioGroup
+                name="audio"
+                value={zoomSettings.audio}
+                options={[
+                  { value: "telephony", label: "Telephone" },
+                  { value: "voip", label: "Computer audio" },
+                  { value: "both", label: "Both" },
+                ]}
+                onChange={(val) => handleSettingsChange("audio", val)}
+              />
             </AnnotatedSection>
             <AnnotatedSection
               title="Enable Join Before Host"
               description="Enable or disabled join before host"
             >
-              <BlockStack gap={4}>
-                <RadioControl
-                  label="Yes"
-                  name="join_before_host"
-                  checked={zoomSettings.join_before_host}
-                  onChange={() =>
-                    handleSettingsChange("join_before_host", true)
-                  }
-                />
-                <RadioControl
-                  label="No"
-                  name="join_before_host"
-                  checked={!zoomSettings.join_before_host}
-                  onChange={() =>
-                    handleSettingsChange("join_before_host", false)
-                  }
-                />
-              </BlockStack>
+              <RadioGroup
+                name="join_before_host"
+                value={zoomSettings.join_before_host ? "yes" : "no"}
+                options={YES_NO_OPTIONS}
+                onChange={(val) =>
+                  handleSettingsChange("join_before_host", val === "yes")
+                }
+              />
             </AnnotatedSection>
             <AnnotatedSection
               title="Enable Waiting Room"
               description="Enable or disabled waiting room"
             >
-              <BlockStack gap={4}>
-                <RadioControl
-                  label="Yes"
-                  name="waiting_room"
-                  checked={zoomSettings.waiting_room}
-                  onChange={() => handleSettingsChange("waiting_room", true)}
-                />
-                <RadioControl
-                  label="No"
-                  name="waiting_room"
-                  checked={!zoomSettings.waiting_room}
-                  onChange={() => handleSettingsChange("waiting_room", false)}
-                />
-              </BlockStack>
+              <RadioGroup
+                name="waiting_room"
+                value={zoomSettings.waiting_room ? "yes" : "no"}
+                options={YES_NO_OPTIONS}
+                onChange={(val) =>
+                  handleSettingsChange("waiting_room", val === "yes")
+                }
+              />
             </AnnotatedSection>
             <AnnotatedSection
               title="Automatically record meeting"
               description="Record meeting on local computer"
             >
-              <BlockStack gap={4}>
-                <RadioControl
-                  label="Yes"
-                  name="auto_recording"
-                  checked={zoomSettings.auto_recording === "local"}
-                  onChange={() =>
-                    handleSettingsChange("auto_recording", "local")
-                  }
-                />
-                <RadioControl
-                  label="No"
-                  name="auto_recording"
-                  checked={zoomSettings.auto_recording === "none"}
-                  onChange={() =>
-                    handleSettingsChange("auto_recording", "none")
-                  }
-                />
-              </BlockStack>
+              <RadioGroup
+                name="auto_recording"
+                value={zoomSettings.auto_recording}
+                options={[
+                  { value: "local", label: "Yes" },
+                  { value: "none", label: "No" },
+                ]}
+                onChange={(val) => handleSettingsChange("auto_recording", val)}
+              />
             </AnnotatedSection>
           </BlockStack>
         </PageContent>

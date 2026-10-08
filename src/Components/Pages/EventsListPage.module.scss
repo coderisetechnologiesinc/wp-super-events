@@ -1,0 +1,18 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+
+@include m.scoped {
+  .page {
+    display: flex;
+    flex-direction: column;
+    gap: t.$space-12;
+  }
+
+  // The carved groove under the page header, as on the dashboard.
+  .divider {
+    height: 3px;
+    border-radius: t.$radius-pill;
+    background: t.$surface;
+    box-shadow: t.$shadow-track;
+  }
+}

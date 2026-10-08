@@ -9,6 +9,7 @@ $options = array(
     'servv_stripe_public_key',
     'servv_stripe_account_id',
     'servv_plugin_settings',
+    'servv_widget_v2_settings',
     'servv_install_status',
 );
 

@@ -1,0 +1,39 @@
+@use "unit" as *;
+@use "controls" as controls;
+
+// Keep WordPress constrained layouts from replacing the configured widget width.
+.svv-wgt-v2-container.svv-wgt-v2-container {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: min(var(--svv-v2-container-width, 1440px), 100%); margin: 0 auto;
+  padding: var(--svv-v2-container-padding, 24px); position: relative; isolation: isolate;
+  background-color: var(--svv-v2-bg, #fff); background-image: var(--svv-v2-bg-image, none);
+  background-size: var(--svv-v2-bg-image-size, cover); background-position: center;
+  background-repeat: var(--svv-v2-bg-image-repeat, no-repeat); border-radius: var(--svv-v2-bg-radius, 0);
+}
+.svv-wgt-v2-container::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; border-radius: inherit; background-image: var(--svv-v2-bg-overlay, none); opacity: var(--svv-v2-bg-overlay-opacity, 1); }
+.svv-wgt-v2-container [data-servv-app]:empty { min-height: 420px; }
+
+.svv-wgt-v2 {
+  .svv-field__control {
+    position: relative;
+    display: block;
+
+    &::after {
+      @include controls.svv-chevron(100%);
+    }
+  }
+
+  .svv-field__select {
+    padding-right: u(2);
+    appearance: none;
+
+    &:disabled {
+      opacity: 0.6;
+    }
+
+    option:disabled {
+      color: var(--svv-text-muted);
+    }
+  }
+}

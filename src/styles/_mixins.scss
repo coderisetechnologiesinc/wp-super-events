@@ -1,0 +1,304 @@
+// ---------------------------------------------------------------------------
+// Shared style recipes. Every mixin here is pure output — importing this file
+// emits nothing on its own, so modules can @use it freely.
+// ---------------------------------------------------------------------------
+
+@use "sass:color";
+@use "tokens" as t;
+
+// Reset a <button> down to a styleable box.
+@mixin button-reset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  cursor: pointer;
+  appearance: none;
+}
+
+// The shared geometry of every control that reads as a button.
+@mixin control-base($height: t.$control-lg, $padding: 0 t.$space-7) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: t.$space-3;
+  box-sizing: border-box;
+  height: $height;
+  padding: $padding;
+  border-radius: t.$radius-lg;
+  font-family: t.$font-sans;
+  font-size: t.$text-14;
+  font-weight: t.$weight-semibold;
+  // Not 1: these labels sit in a truncating (overflow:hidden) span, which
+  // would clip the descenders of "Upcoming", "Page" and the like. The control
+  // keeps its explicit height either way.
+  line-height: 1.4;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: box-shadow t.$duration t.$ease, transform t.$duration-fast t.$ease,
+    background t.$duration t.$ease, color t.$duration-fast t.$ease;
+
+  &:active:not(:disabled) {
+    transform: translateY(1px) scale(0.994);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+// A raised white surface — secondary buttons, icon buttons, chips.
+@mixin raised($hoverable: true) {
+  border: 1px solid t.$border-soft;
+  background: t.$surface;
+  color: t.$text-strong;
+  box-shadow: t.$shadow-raised;
+
+  @if $hoverable {
+    &:hover:not(:disabled) {
+      box-shadow: t.$shadow-raised-hover;
+      transform: translateY(-1px);
+    }
+  }
+}
+
+// The brand gradient fill — primary buttons.
+@mixin brand-fill {
+  border: 1px solid t.$primary-strong;
+  background: linear-gradient(145deg, t.$primary-grad-from, t.$primary-grad-to);
+  color: t.$text-on-primary;
+  box-shadow: t.$shadow-brand;
+
+  &:hover:not(:disabled) {
+    box-shadow: t.$shadow-brand-hover;
+    transform: translateY(-1px);
+  }
+}
+
+// A toolbar trigger — the date button and the Filters button on a list screen.
+// Reference: padding:0 12px;border-radius:12px;border:1px solid #EFF2F8;
+// background:#FFFFFF;box-shadow:5px 5px 12px/-2px -2px 8px, with a 16px
+// brand-stroked icon. Height and type come from $control-lg / control-base so
+// the trigger matches the PageActionButton and the segmented control it shares
+// a toolbar with — the reference's 38px/13px left them a step short.
+@mixin toolbar-trigger {
+  @include button-reset;
+  @include wp-reset-button;
+  @include control-base(t.$control-lg, 0 t.$space-6);
+  @include raised;
+  gap: t.$space-4;
+  justify-content: flex-start;
+
+  &:focus-visible {
+    @include focus-ring-raised;
+  }
+}
+
+// The 16px icon inside a toolbar trigger: brand-stroked, never shrinking.
+@mixin toolbar-trigger-icon {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  color: t.$primary;
+}
+
+// A card / panel surface.
+@mixin card-surface($radius: t.$radius-2xl) {
+  border: 1px solid t.$border;
+  border-radius: $radius;
+  background: t.$surface;
+  box-shadow: t.$shadow-card;
+}
+
+// A recessed surface — inputs, selects, textareas, wells.
+@mixin field-surface {
+  border: 1px solid t.$border-field;
+  border-radius: t.$radius-lg;
+  background: t.$surface;
+  box-shadow: t.$shadow-field;
+  transition: box-shadow t.$duration t.$ease, border-color t.$duration-fast t.$ease;
+}
+
+// Keyboard focus. Applied to the element that carries the field chrome.
+@mixin focus-ring {
+  outline: none;
+  border-color: t.$primary-border-strong;
+  box-shadow: t.$shadow-field-focus, 0 0 0 3px t.$primary-ring;
+}
+
+// Focus for a raised (non-recessed) control.
+@mixin focus-ring-raised {
+  outline: none;
+  box-shadow: t.$shadow-raised, 0 0 0 3px t.$primary-ring;
+}
+
+@mixin field-error {
+  border-color: t.$danger-border-strong;
+  box-shadow: inset 4px 4px 9px t.$danger-shade, inset -2px -2px 6px t.$light,
+    0 0 0 3px t.$danger-ring;
+}
+
+// Type scale helper: @include text(14) → size + matching line-height.
+@mixin text($size, $weight: null) {
+  @if $size == 11 {
+    font-size: t.$text-11;
+    line-height: t.$leading-11;
+  } @else if $size == 12 {
+    font-size: t.$text-12;
+    line-height: t.$leading-12;
+  } @else if $size == 13 {
+    font-size: t.$text-13;
+    line-height: t.$leading-13;
+  } @else if $size == 14 {
+    font-size: t.$text-14;
+    line-height: t.$leading-14;
+  } @else if $size == 15 {
+    font-size: t.$text-15;
+    line-height: t.$leading-15;
+  } @else if $size == 16 {
+    font-size: t.$text-16;
+    line-height: t.$leading-16;
+  } @else if $size == 18 {
+    font-size: t.$text-18;
+    line-height: t.$leading-18;
+  } @else if $size == 20 {
+    font-size: t.$text-20;
+    line-height: t.$leading-20;
+  } @else if $size == 24 {
+    font-size: t.$text-24;
+    line-height: t.$leading-24;
+  } @else if $size == 32 {
+    font-size: t.$text-32;
+    line-height: t.$leading-32;
+    letter-spacing: t.$tracking-tight;
+  } @else {
+    @error "text(): unsupported size #{$size}";
+  }
+
+  @if $weight {
+    font-weight: $weight;
+  }
+}
+
+// An all-caps eyebrow label.
+@mixin eyebrow {
+  @include text(11, t.$weight-bold);
+  letter-spacing: t.$tracking-wider;
+  text-transform: uppercase;
+}
+
+@mixin truncate {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Honour the reduced-motion preference for decorative movement.
+@mixin reduced-motion {
+  @media (prefers-reduced-motion: reduce) {
+    @content;
+  }
+}
+
+// --- Form furniture --------------------------------------------------------
+
+// The label above a field.
+@mixin field-label {
+  display: block;
+  margin: 0;
+  @include text(13, t.$weight-semibold);
+  color: t.$text-strong;
+}
+
+// Helper copy under a field.
+@mixin field-hint {
+  @include text(12, t.$weight-medium);
+  color: t.$text-soft;
+}
+
+// Validation copy under a field.
+@mixin field-error-text {
+  display: flex;
+  align-items: center;
+  gap: t.$space-3;
+  @include text(12, t.$weight-semibold);
+  color: t.$danger-text;
+}
+
+// Vertical stack of label + control + message.
+@mixin field-stack {
+  display: flex;
+  flex-direction: column;
+  gap: t.$space-3;
+}
+
+// --- Isolation from the WordPress admin stylesheets -------------------------
+//
+// WordPress styles form controls with selectors like `input[type="text"]`
+// (0,1,1) and `.wp-admin p input[type="checkbox"]` (0,2,1). A bare CSS-module
+// class is only (0,1,0), so core would win. Wrapping a module's rules in
+// `:is(#servv-wrap, .servv-ui)` adds an id to the specificity — (1,1,0) — which
+// outranks every core admin selector that reaches into our subtree, without
+// `!important` anywhere.
+//
+// `.servv-ui` is the same hook for the public widget, where themes misbehave in
+// the same way; add the class to the widget root when those views migrate.
+//
+//   @include m.scoped {
+//     .button { ... }
+//   }
+// `:global()` is required: inside a *.module.scss, css-loader would otherwise
+// hash `#servv-wrap` and `.servv-ui` as local names.
+@mixin scoped {
+  :is(:global(#servv-wrap), :global(.servv-ui)) {
+    @content;
+  }
+}
+
+// Neutralise the properties WordPress' forms.css sets on a native control.
+// Surgical on purpose: a blanket `all: revert` would also strip the inline
+// chrome that react-select, Quill and MUI give their own inputs.
+@mixin wp-reset-control {
+  box-sizing: border-box;
+  min-height: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: inherit;
+  font-family: inherit;
+  line-height: normal;
+  outline: 0;
+  appearance: none;
+
+  &:focus,
+  &:focus-visible {
+    border-color: transparent;
+    box-shadow: none;
+    outline: 0;
+  }
+}
+
+// Same, for an element rendered as a button.
+@mixin wp-reset-button {
+  box-sizing: border-box;
+  min-height: 0;
+  margin: 0;
+  background: none;
+  box-shadow: none;
+  text-decoration: none;
+  text-shadow: none;
+  vertical-align: baseline;
+  appearance: none;
+
+  &:focus {
+    outline: 0;
+  }
+}

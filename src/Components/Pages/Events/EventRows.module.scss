@@ -1,0 +1,247 @@
+@use "../../../styles/tokens" as t;
+@use "../../../styles/mixins" as m;
+
+// "Option A · Floating rows" from the events-list reference: no rules and no
+// cells — each event is a soft slab that lifts on hover, and the columns stay
+// aligned because the header and every row share one grid template.
+// From events-views.html, which is the fuller spec: a leading 18px checkbox
+// column, then elastic columns. The reference's last column is a single
+// overflow button; ours carries the same three actions the cards do, so it is
+// as wide as they are — the header and the rows must share the whole template
+// or the columns stop lining up.
+$columns-tail: minmax(0, 2.2fr) minmax(118px, 150px) minmax(96px, 130px)
+  minmax(88px, 110px) minmax(92px, 108px) auto;
+$columns: 18px $columns-tail;
+
+@include m.scoped {
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: t.$space-6;
+  }
+
+  .head {
+    display: grid;
+    grid-template-columns: $columns;
+    gap: t.$space-7;
+    padding: 0 t.$space-10;
+    color: t.$text-placeholder;
+    @include m.eyebrow;
+    letter-spacing: t.$tracking-wide;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: $columns;
+    gap: t.$space-7;
+    align-items: center;
+    width: 100%;
+    padding: t.$space-9 t.$space-10;
+    border: 1px solid t.$border;
+    border-radius: t.$radius-2xl;
+    background: t.$surface;
+    box-shadow: 8px 8px 20px t.$shade, -4px -4px 12px t.$light;
+    text-align: left;
+    cursor: pointer;
+    transition: box-shadow t.$duration t.$ease, transform t.$duration t.$ease;
+
+    &:hover {
+      box-shadow: 12px 12px 28px t.$shade-strong, -5px -5px 14px t.$light;
+      transform: translateY(-3px);
+    }
+
+    &:focus-visible {
+      @include m.focus-ring-raised;
+    }
+  }
+
+  // An unlisted event stays readable but recedes, as in the reference.
+  .muted {
+    opacity: 0.72;
+  }
+
+  // Reference: .row.is-picked — a brand wash, no border change.
+  .picked {
+    background: rgba(100, 54, 201, 0.06);
+  }
+
+  // The checkbox cell swallows the click so picking a row does not open it.
+  .pick {
+    display: flex;
+    align-items: center;
+  }
+
+  // A list without selection drops the column rather than leaving a gap.
+  .noPick {
+    grid-template-columns: $columns-tail;
+  }
+
+  .event {
+    display: flex;
+    align-items: center;
+    gap: t.$space-7;
+    min-width: 0;
+  }
+
+  .mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 40px;
+    width: 40px;
+    height: 40px;
+    border: 1px solid t.$border;
+    border-radius: 13px;
+    background: t.$surface;
+    box-shadow: t.$shadow-raised-sm;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  .markOffline {
+    color: t.$primary;
+  }
+
+  .markOnline {
+    color: t.$info;
+  }
+
+  .title {
+    @include m.truncate;
+    @include m.text(16, t.$weight-bold);
+    letter-spacing: -0.01em;
+  }
+
+  .venue {
+    @include m.truncate;
+    margin-top: t.$space-1;
+    @include m.text(12, t.$weight-medium);
+    color: t.$text-soft;
+  }
+
+  .date {
+    @include m.text(13, t.$weight-bold);
+    color: t.$text;
+  }
+
+  .time {
+    @include m.truncate;
+    @include m.text(12, t.$weight-medium);
+    color: t.$text-soft;
+  }
+
+  .format {
+    @include m.text(13, t.$weight-semibold);
+    color: t.$text-strong;
+  }
+
+  .recurrence {
+    @include m.text(13, t.$weight-medium);
+    color: t.$text-secondary;
+  }
+
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: t.$space-3;
+    height: 26px;
+    padding: 0 11px;
+    border: 1px solid t.$border;
+    border-radius: t.$radius-pill;
+    background: t.$surface;
+    color: t.$text-strong;
+    box-shadow: t.$shadow-raised-sm;
+    @include m.text(12, t.$weight-bold);
+  }
+
+  .statusLive {
+    border-color: t.$success-border;
+    background: t.$success-surface;
+    color: t.$success-text;
+  }
+
+  .dot {
+    width: 7px;
+    height: 7px;
+    flex: 0 0 7px;
+    border-radius: t.$radius-pill;
+    background: t.$text-placeholder;
+    box-shadow: 0 0 0 3px rgba(142, 151, 171, 0.15);
+  }
+
+  .dotLive {
+    background: t.$success;
+    box-shadow: 0 0 0 3px rgba(23, 178, 106, 0.15);
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: t.$space-2;
+  }
+
+  .action {
+    @include m.button-reset;
+    @include m.wp-reset-button;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: t.$radius-sm;
+    color: t.$text-soft;
+    transition: background t.$duration t.$ease, box-shadow t.$duration t.$ease;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    &:hover {
+      background: t.$surface-subtle;
+      box-shadow: t.$shadow-raised-sm;
+      color: t.$primary;
+    }
+  }
+
+  .actionDanger:hover {
+    color: t.$danger-text;
+    background: t.$danger-surface;
+  }
+
+  .count {
+    padding: 0 t.$space-10;
+    @include m.text(13, t.$weight-medium);
+    color: t.$text-soft;
+  }
+
+  // Below the column widths the grid stops being honest — the row becomes a
+  // stacked card and the header is dropped.
+  @media (max-width: 1100px) {
+    .head {
+      display: none;
+    }
+
+    .row {
+      grid-template-columns: 18px minmax(0, 1fr) auto;
+      gap: t.$space-5 t.$space-8;
+    }
+
+    .event {
+      grid-column: 2 / -1;
+    }
+
+    .actions {
+      grid-column: 2;
+      grid-row: 2;
+    }
+
+    .recurrence,
+    .format {
+      display: none;
+    }
+  }
+}

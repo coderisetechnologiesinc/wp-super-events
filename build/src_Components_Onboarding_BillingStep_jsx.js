@@ -77,8 +77,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _AnimatedModal_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AnimatedModal.module.scss */ "./src/Components/Modals/AnimatedModal.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
+
 
 
 const AnimatedModal = ({
@@ -104,11 +106,11 @@ const AnimatedModal = ({
     }, 160);
   };
   if (!visible) return null;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-    className: `servv-modal-overlay ${closing ? "closing" : ""}`,
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+    className: `${_AnimatedModal_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].overlay} ${closing ? _AnimatedModal_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].closing : ""}`,
     onClick: close,
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-      className: `servv-modal ${closing ? "closing" : ""}`,
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+      className: `${_AnimatedModal_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].panel} ${closing ? _AnimatedModal_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].closing : ""}`,
       onClick: e => e.stopPropagation(),
       children: typeof children === "function" ? children({
         close
@@ -408,24 +410,29 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Menu_Spinner__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Menu/Spinner */ "./src/Components/Menu/Spinner.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _SpinnerLoader_module_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SpinnerLoader.module.scss */ "./src/Components/Pages/SpinnerLoader.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__);
 
 
+
+
+// `customStyling` is a pass-through for the overlay's box — call sites use it
+// to give the spinner a height when there are no children to cover.
 
 const SpinnerLoader = ({
   isLoading,
   children,
-  customStyling
+  customStyling = ""
 }) => {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-    className: "relative",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-      className: isLoading ? "blur-sm pointer-events-none" : "",
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+    className: _SpinnerLoader_module_scss__WEBPACK_IMPORTED_MODULE_2__["default"].root,
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+      className: isLoading ? _SpinnerLoader_module_scss__WEBPACK_IMPORTED_MODULE_2__["default"].blurred : "",
       children: children
-    }), isLoading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-      className: `absolute inset-0 flex items-center justify-center ${customStyling}`,
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_Menu_Spinner__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    }), isLoading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+      className: [_SpinnerLoader_module_scss__WEBPACK_IMPORTED_MODULE_2__["default"].overlay, customStyling].filter(Boolean).join(" "),
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_Menu_Spinner__WEBPACK_IMPORTED_MODULE_1__["default"], {
         loading: true
       })
     })]
@@ -447,19 +454,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   getBillingPlans: () => (/* binding */ getBillingPlans),
 /* harmony export */   getBillingPortalSession: () => (/* binding */ getBillingPortalSession)
 /* harmony export */ });
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
+/* harmony import */ var _adminApi__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./adminApi */ "./src/utilities/adminApi.js");
 
 const headers = () => ({
   "X-WP-Nonce": servvData.nonce
 });
 const getBillingPlans = async () => {
-  const response = await axios__WEBPACK_IMPORTED_MODULE_0__["default"].get("/wp-json/servv-plugin/v1/shop/paymentplans", {
+  const response = await _adminApi__WEBPACK_IMPORTED_MODULE_0__["default"].get("/wp-json/servv-plugin/v1/shop/paymentplans", {
     headers: headers()
   });
   return response.data.plans;
 };
 const activateBillingPlan = async (id, isAnnual = false) => {
-  const response = await axios__WEBPACK_IMPORTED_MODULE_0__["default"].post(`/wp-json/servv-plugin/v1/shop/paymentplans/${id}`, {
+  const response = await _adminApi__WEBPACK_IMPORTED_MODULE_0__["default"].post(`/wp-json/servv-plugin/v1/shop/paymentplans/${id}`, {
     is_annual: isAnnual
   }, {
     headers: headers()
@@ -467,11 +474,41 @@ const activateBillingPlan = async (id, isAnnual = false) => {
   return response.data;
 };
 const getBillingPortalSession = async () => {
-  const response = await axios__WEBPACK_IMPORTED_MODULE_0__["default"].post("/wp-json/servv-plugin/v1/shop/billing/portal/session", null, {
+  const response = await _adminApi__WEBPACK_IMPORTED_MODULE_0__["default"].post("/wp-json/servv-plugin/v1/shop/billing/portal/session", null, {
     headers: headers()
   });
   return response.data;
 };
+
+/***/ }),
+
+/***/ "./src/Components/Modals/AnimatedModal.module.scss":
+/*!*********************************************************!*\
+  !*** ./src/Components/Modals/AnimatedModal.module.scss ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"overlay":"TGn8m83T0B_NsCHTYCOZ","svFade":"sdJAszeOgMWoi0qgaU0P","panel":"REGkLoohoWNHGLrB50QN","svPop":"mtjR5dQk0_uqd80N_R4L","closing":"G61Zw30dvOfUnKKuQbvn","svFadeOut":"tcaNBH8NwDQZ7BaLPHqS","svPopOut":"hvz7KD3CNAqpTeSi2EUv"});
+
+/***/ }),
+
+/***/ "./src/Components/Pages/SpinnerLoader.module.scss":
+/*!********************************************************!*\
+  !*** ./src/Components/Pages/SpinnerLoader.module.scss ***!
+  \********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"root":"NvXIBF17sKtsJ5DppGj6","blurred":"s8xU0aT_Upum9VaMUtFv","overlay":"rwBQn7Ep0HRpuD73wvEE"});
 
 /***/ }),
 
@@ -702,4 +739,4 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Onboarding_BillingStep_jsx.js.map?ver=37d633837f622fe6da5e
+//# sourceMappingURL=src_Components_Onboarding_BillingStep_jsx.js.map?ver=18b28c21714ce29436ba

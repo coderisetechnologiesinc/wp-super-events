@@ -1,3 +1,4 @@
+import useCacheRefresh from "../../hooks/useCacheRefresh";
 import { Fragment, useEffect, useState } from "react";
 import { getSettings } from "../../utilities/settings";
 import {
@@ -8,11 +9,10 @@ import {
 } from "../../utilities/analytics";
 import PageWrapper from "./PageWrapper";
 import PageContent from "../Containers/PageContent";
-import PageHeader from "../Containers/PageHeader";
 import TabsComponent from "../Containers/TabsComponent";
 import BlockStack from "../Containers/BlockStack";
 import InlineStack from "../Containers/InlineStack";
-import SelectControl from "../Controls/SelectControl";
+import NewSelectControl from "../Controls/NewSelectControl";
 import PageActionButton from "../Controls/PageActionButton";
 import {
   StackedBarChart,
@@ -31,9 +31,7 @@ import {
   PieChart,
   PieArcSeries,
 } from "reaviz";
-import Datepicker from "react-tailwindcss-datepicker";
-import he from "he";
-import { getCurrencySymbol } from "../../../widget/servicesShared/currencies";
+import NewDatePickerControl from "../Controls/NewDatePickerControl";
 import moment from "moment-timezone";
 import SpinnerLoader from "./SpinnerLoader";
 
@@ -120,14 +118,15 @@ const AnalyticsPage = () => {
   };
 
   // Registrants fetch
-  const fetchTotalRegistrants = async (month = null) => {
+  const fetchTotalRegistrants = async (month = null, forceTotal = false) => {
     setLoading(true);
     try {
-      const year = (isMonthSelected || month) ? selectedYear : null;
-      const monthIndex = (isMonthSelected || month) ? monthOptions.indexOf(selectedMonth) : null;
+      const useMonth = !forceTotal && (isMonthSelected || month);
+      const year = useMonth ? selectedYear : null;
+      const monthIndex = useMonth ? monthOptions.indexOf(selectedMonth) : null;
       const data = await getAnalyticsRegistrants(year, monthIndex);
       if (data) {
-        if (!isMonthSelected && !month) {
+        if (!useMonth) {
           setTotalRegistrants(data);
         } else {
           setRegistrants(data);
@@ -190,15 +189,16 @@ const AnalyticsPage = () => {
   };
 
   // Filters analytics fetch (from your provided code)
-  const fetchFiltersStatistic = async (month) => {
+  const fetchFiltersStatistic = async (month = null, forceTotal = false) => {
     setLoading(true);
-    const year = (isMonthSelected || month) ? selectedYear : null;
-    const monthIndex = (isMonthSelected || month) ? monthOptions.indexOf(selectedMonth) : null;
+    const useMonth = !forceTotal && (isMonthSelected || month);
+    const year = useMonth ? selectedYear : null;
+    const monthIndex = useMonth ? monthOptions.indexOf(selectedMonth) : null;
     const data = await getAnalyticsTypes(year, monthIndex).catch((error) =>
       console.log(error),
     );
     if (data) {
-      if (!isMonthSelected && !month) setFiltersStatistic(data);
+      if (!useMonth) setFiltersStatistic(data);
       else setFiltersStatisticFilteredByDate(data);
       setLoading(false);
       return data;
@@ -450,6 +450,22 @@ const AnalyticsPage = () => {
     }
   }, [revenueDates]);
 
+  useCacheRefresh(["analytics"], async () => {
+    await fetchTotalRevenue();
+    if (revenueDates.startDate && revenueDates.endDate) {
+      await fetchTotalRevenue(moment(revenueDates.startDate).format("YYYY-MM-DD"), moment(revenueDates.endDate).format("YYYY-MM-DD"));
+    }
+    if (registrantsTotal || selectedTab === 1) {
+      await fetchTotalRegistrants(null, true);
+      if (isMonthSelected) await fetchTotalRegistrants(true);
+    }
+    if (eventsStatistic || selectedTab === 2) await fetchEventsAnalytics();
+    if (filtersStatistic || selectedTab === 3) {
+      await fetchFiltersStatistic(null, true);
+      if (isMonthSelected) await fetchFiltersStatistic(true);
+    }
+  });
+
   // Initial load
   const getData = async () => {
     await fetchTotalRevenue();
@@ -478,6 +494,51 @@ const AnalyticsPage = () => {
 
   const { unique, total } = getRegistrantsTotal();
 
+  // Month + year selects with a Reset, shown above both the registrants and the
+  // filters charts. The two differ only in how the Reset aligns in the row.
+  const renderPeriodFilters = (resetAlign, rowAlign = "") => {
+    const periodOptions = (values) =>
+      values.map((option) => ({ value: option, label: String(option) }));
+
+    const markSelected = (handler) => (val) => {
+      handler(val);
+      setIsMonthSelected(true);
+    };
+
+    return (
+      <InlineStack
+        gap={4}
+        className={`flex-col sm:flex-row w-full ${rowAlign} min-w-0`}
+      >
+        <div className="w-full sm:w-48">
+          <NewSelectControl
+            options={periodOptions(monthOptions)}
+            value={selectedMonth}
+            onChange={markSelected(handleMonthSelect)}
+          />
+        </div>
+        <div className="w-full sm:w-48">
+          <NewSelectControl
+            options={periodOptions(yearOptions)}
+            value={selectedYear}
+            onChange={markSelected(handleYearSelect)}
+          />
+        </div>
+        <PageActionButton
+          text="Reset"
+          icon={null}
+          type="primary"
+          className={`p-3 ${resetAlign} w-full sm:w-auto`}
+          onAction={() => {
+            setIsMonthSelected(false);
+            setSelectedMonth("");
+            setSelectedYear("");
+          }}
+        />
+      </InlineStack>
+    );
+  };
+
   return (
     <PageWrapper loading={false} withBackground={true}>
       <div className="dashboard-card">
@@ -496,7 +557,7 @@ const AnalyticsPage = () => {
             <div className="w-full min-w-0 overflow-x-auto">
               <TabsComponent
                 tabsList={tabsList}
-                selected={selectedTab}
+                value={selectedTab}
                 handleSelectChange={handleSelectTabChange}
                 fullWidth={true}
               />
@@ -507,12 +568,11 @@ const AnalyticsPage = () => {
                 <BlockStack gap={8} className="w-full min-w-0">
                   <div className="flex flex-col md:flex-row justify-end items-end min-w-0 w-full">
                     <div className="w-full md:w-72">
-                      <Datepicker
-                        displayFormat={"MMM DD, YYYY"}
+                      <NewDatePickerControl
                         value={revenueDates}
-                        placeholder="Select Dates"
-                        inputClassName="input-control section-description text-left w-full shadow-sm border-solid border border-gray-300 bg-white"
-                        onChange={(newValue) => setRevenueDates(newValue)}
+                        label="Select Dates"
+                        fullWidth
+                        onChange={setRevenueDates}
                       />
                     </div>
                   </div>
@@ -539,42 +599,7 @@ const AnalyticsPage = () => {
 
               {selectedTab === 1 && (
                 <BlockStack gap={8} className="w-full min-w-0">
-                  <InlineStack
-                    gap={4}
-                    className="flex-col sm:flex-row w-full items-start min-w-0"
-                  >
-                    <div className="w-full sm:w-48">
-                      <SelectControl
-                        options={monthOptions}
-                        selected={selectedMonth}
-                        onSelectChange={(val) => {
-                          handleMonthSelect(val);
-                          setIsMonthSelected(true);
-                        }}
-                      />
-                    </div>
-                    <div className="w-full sm:w-48">
-                      <SelectControl
-                        options={yearOptions}
-                        selected={selectedYear}
-                        onSelectChange={(val) => {
-                          handleYearSelect(val);
-                          setIsMonthSelected(true);
-                        }}
-                      />
-                    </div>
-                    <PageActionButton
-                      text="Reset"
-                      icon={null}
-                      type="primary"
-                      className="p-3 self-center w-full sm:w-auto"
-                      onAction={() => {
-                        setIsMonthSelected(false);
-                        setSelectedMonth("");
-                        setSelectedYear("");
-                      }}
-                    />
-                  </InlineStack>
+                  {renderPeriodFilters("self-center", "items-start")}
                   <div className="w-full h-64 md:h-80 bg-gradient-to-b from-transparent to-[#ECE4F6] rounded-lg flex flex-col items-center justify-center min-w-0">
                     <h2 className="font-semibold text-brand-700 text-3xl">
                       <Count
@@ -638,42 +663,7 @@ const AnalyticsPage = () => {
 
               {selectedTab === 3 && (
                 <BlockStack gap={8} className="w-full min-w-0">
-                  <InlineStack
-                    gap={4}
-                    className="flex-col sm:flex-row w-full min-w-0"
-                  >
-                    <div className="w-full sm:w-48">
-                      <SelectControl
-                        options={monthOptions}
-                        selected={selectedMonth}
-                        onSelectChange={(val) => {
-                          handleMonthSelect(val);
-                          setIsMonthSelected(true);
-                        }}
-                      />
-                    </div>
-                    <div className="w-full sm:w-48">
-                      <SelectControl
-                        options={yearOptions}
-                        selected={selectedYear}
-                        onSelectChange={(val) => {
-                          handleYearSelect(val);
-                          setIsMonthSelected(true);
-                        }}
-                      />
-                    </div>
-                    <PageActionButton
-                      text="Reset"
-                      icon={null}
-                      type="primary"
-                      className="p-[0.75rem] self-end w-full sm:w-auto"
-                      onAction={() => {
-                        setIsMonthSelected(false);
-                        setSelectedMonth("");
-                        setSelectedYear("");
-                      }}
-                    />
-                  </InlineStack>
+                  {renderPeriodFilters("self-end")}
                   {filtersStatistic && renderFiltersStatistic()}
                 </BlockStack>
               )}

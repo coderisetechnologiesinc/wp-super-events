@@ -1,27 +1,43 @@
 import React from "react";
+import styles from "./CheckboxItem.module.scss";
 
+// `indeterminate` is the select-all's third state: some rows picked, not all.
+// It fills the box like a checked one but draws a dash instead of a tick.
 const CheckboxItem = ({
   label = "",
   name,
   checked = false,
+  indeterminate = false,
   disabled = false,
+  ariaLabel,
   onChange = () => {},
 }) => {
   return (
-    <label className={`checkbox-item ${disabled ? "is-disabled" : ""}`}>
+    <label
+      className={`${styles.item} ${disabled ? styles.disabled : ""}`}
+    >
       <input
         type="checkbox"
         name={name}
         checked={checked}
         disabled={disabled}
         onChange={onChange}
-        className="checkbox-item__input"
+        className={styles.input}
+        aria-label={ariaLabel || undefined}
+        ref={(node) => {
+          if (node) node.indeterminate = !checked && indeterminate;
+        }}
       />
 
-      <span className="checkbox-item__box">
+      <span
+        className={`${styles.box} ${
+          !checked && indeterminate ? styles.mixed : ""
+        }`}
+      >
+        {!checked && indeterminate && <span className={styles.dash} />}
         {checked && (
           <svg
-            className="checkbox-item__check"
+            className={styles.check}
             width="12"
             height="12"
             viewBox="0 0 12 12"
@@ -38,7 +54,7 @@ const CheckboxItem = ({
         )}
       </span>
 
-      <span className="checkbox-item__label">{label}</span>
+      <span className={styles.label}>{label}</span>
     </label>
   );
 };

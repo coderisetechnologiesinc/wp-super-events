@@ -1,14 +1,11 @@
-import { Fragment, useEffect, useState } from "react";
-import { ArrowUpRightIcon, ChevronDownIcon } from "@heroicons/react/16/solid";
-import PageHeader from "../Containers/PageHeader";
-import PageContent from "../Containers/PageContent";
-import BlockStack from "../Containers/BlockStack";
-import InlineStack from "../Containers/InlineStack";
-import Badge from "../Containers/Badge";
-import Card from "../Containers/Card";
-import BreadCrumbs from "../Menu/BreadCrumbs";
+import IntegrationLayout, {
+  IntegrationSection,
+  IntegrationAccount,
+} from "./Integrations/IntegrationLayout";
+import styles from "./Integrations/IntegrationLayout.module.scss";
+import { useEffect, useState } from "react";
+import ConnectServiceModalContent from "../Modals/ConnectServiceModalContent";
 import Banner from "../Containers/Banner";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   getGmailAccount as getGmailAccountUtil,
@@ -22,17 +19,13 @@ import {
 } from "../../utilities/mails";
 import { saveSettings } from "../../utilities/settings";
 import { useServvStore } from "../../store/useServvStore";
-import PageWrapper from "./PageWrapper";
-import GmailConnectModalContent from "../Containers/GmailConnectModalContent";
 import ModalShell from "../Modals/ModalShell";
-import SelectControl from "../Controls/SelectControl";
 import PageActionButton from "../Controls/PageActionButton";
 import NewInputFieldControl from "../Controls/NewInputFieldControl";
-import SpinnerLoader from "./SpinnerLoader";
+import NewSelectControl from "../Controls/NewSelectControl";
 const EmailsPage = ({ onPageSelect = () => {} }) => {
   const settings = useServvStore((s) => s.settings);
 
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [account, setAccount] = useState(null);
   const [smtpAccount, setSmtpAccount] = useState(null);
@@ -149,7 +142,7 @@ const EmailsPage = ({ onPageSelect = () => {} }) => {
       toast.success("SMTP account has been connected successfully");
       setSMTPAccountFetched(true);
       setSmtpAccount(res);
-    } else if (res.error) {
+    } else if (res?.error) {
       toast.error(
         "Couldn't connect SMTP account. Check your credentials and make sure your provider allows plain password authentication.",
       );
@@ -174,308 +167,159 @@ const EmailsPage = ({ onPageSelect = () => {} }) => {
   useEffect(() => {
     getConnectedAccounts();
   }, []);
-  const badge = () => (
-    <div className="flex flex-row gap-2 items-center">
-      <Badge
-        background="gray"
-        text={account ? "Connected" : "Not connected"}
-        icon=""
-        justify={"start"}
-      />
-      <span>{account ? account.email : "Please connect your account"}</span>
-    </div>
-  );
-  const smtpBadge = () => {
-    return (
-      <div className="flex flex-row gap-2 items-center">
-        <Badge
-          background="gray"
-          text={smtpAccount ? "SMTP: Connected" : "SMTP: Not connected"}
-          icon=""
-          justify={"start"}
-        />
-        <span style={{ color: "black" }}>
-          {smtpAccount ? smtpAccount.email : "Please connect your account"}
-        </span>
-      </div>
-    );
-  };
-
-  const gmailBadge = () => {
-    return (
-      <div className="flex flex-row gap-2 items-center">
-        <Badge
-          background="gray"
-          text={account ? "Gmail: Connected" : "Gmail: Not connected"}
-          icon=""
-          justify={"start"}
-        />
-        <span style={{ color: "black" }}>
-          {account ? account.email : "Please connect your account"}
-        </span>
-      </div>
-    );
-  };
-
-  const handleBreadCrumbsClick = () => {};
+  const activeAccount = defaultProvider === "gmail" ? account : smtpAccount;
   return (
-    <PageWrapper withBackground={true}>
-      <div className="dashboard-card">
-        <div className="servv-dashboard-header">
-          <div className="dashboard-heading">
-            <div className="flex flex-row justify-between">
-              <h1 className="dashboard-title">Email</h1>
-              <PageActionButton
-                text="Save"
-                type="primary"
-                // icon={<PlusIcon className="button-icon primary" />}
-                onAction={() => handleSaveSettings()}
-                disabled={
-                  defaultProvider === settings?.settings?.email_provider ||
-                  (defaultProvider === "gmail" && !account?.email) ||
-                  (defaultProvider === "smtp" && !smtpAccount?.is_valid)
-                }
-              />
+    <IntegrationLayout
+      title="Email"
+      glyph="M"
+      description="Send event notifications and reminders through Gmail or your SMTP account."
+      connected={Boolean(activeAccount)}
+      accountLabel={activeAccount?.email}
+      loading={loading}
+      actions={
+        <PageActionButton
+          text="Save"
+          onAction={handleSaveSettings}
+          disabled={
+            defaultProvider === settings?.settings?.email_provider ||
+            (defaultProvider === "gmail" && !account?.email) ||
+            (defaultProvider === "smtp" && !smtpAccount?.is_valid)
+          }
+        />
+      }
+    >
+      {smtpAccount?.id && smtpAccount.is_valid === false && (
+        <Banner tone="warning" title="Verify account settings">
+          <p>
+            Your SMTP account needs to be reconnected. Please update your
+            credentials below.
+          </p>
+        </Banner>
+      )}
+      <IntegrationSection
+        title="Email provider"
+        description="Choose the account used for event emails."
+      >
+        <div className={styles.field}>
+          <label>Email provider</label>
+          <NewSelectControl
+            value={defaultProvider}
+            options={[
+              {
+                value: "gmail",
+                label: account?.email ? `Gmail · ${account.email}` : "Gmail",
+              },
+              {
+                value: "smtp",
+                label: smtpAccount?.email
+                  ? `SMTP · ${smtpAccount.email}`
+                  : "SMTP",
+              },
+            ]}
+            onChange={setDefaultProvider}
+            style={{ width: "100%" }}
+          />
+        </div>
+      </IntegrationSection>
+      <IntegrationSection
+        title={defaultProvider === "gmail" ? "Gmail" : "SMTP"}
+        description="Automate email notifications and reminders through your account."
+      >
+        <IntegrationAccount
+          label={activeAccount?.email}
+          status={
+            defaultProvider === "smtp" && activeAccount?.is_valid === false
+              ? "Needs attention"
+              : "Connected"
+          }
+        />
+        {defaultProvider === "gmail" ? (
+          isAccountFetched && (
+            <div className={styles.actions}>
+              {account ? (
+                <PageActionButton
+                  text="Disconnect"
+                  type="danger-secondary"
+                  onAction={handleRemoveAccount}
+                />
+              ) : (
+                <PageActionButton
+                  text="Connect"
+                  onAction={() => setShowModal(true)}
+                />
+              )}
             </div>
-            <div className="dashboard-description">
-              <BreadCrumbs
-                breadcrumbs={[
-                  {
-                    label: "Integrations",
-                    action: () => navigate("../integrations"),
-                  },
-                  { label: "Emails", action: () => {} },
-                ]}
-                onBreadCrumbClick={handleBreadCrumbsClick}
-              />
-            </div>
-            {/* <p className="page-header-description">
-            {t(
-              "Sync your event schedules effortlessly with Google Calendar or\r\n            Outlook to keep everyone informed."
+          )
+        ) : (
+          <>
+            {isSMTPAccountFetched && !smtpAccount && (
+              <div className={styles.fieldGrid}>
+                {[
+                  ["email", "Email", "email", "user@example.com"],
+                  ["host", "Host", "text", "smtp.example.com"],
+                  ["port", "Port", "number", "587"],
+                  ["username", "Username", "text", "user@example.com"],
+                  ["password", "Password", "password", "••••••••"],
+                ].map(([key, label, type, placeholder]) => (
+                  <div className={styles.field} key={key}>
+                    <label htmlFor={`smtp-${key}`}>{label}</label>
+                    <NewInputFieldControl
+                      id={`smtp-${key}`}
+                      value={smtpForm[key]}
+                      type={type}
+                      placeholder={placeholder}
+                      width="100%"
+                      onChange={(value) =>
+                        key === "password"
+                          ? (setSmtpForm((previous) => ({
+                              ...previous,
+                              password: value,
+                            })),
+                            setSmtpErrors((previous) => ({
+                              ...previous,
+                              password: value ? null : "Password is required",
+                            })))
+                          : handleSmtpFieldChange(key, value)
+                      }
+                      error={Boolean(smtpErrors[key])}
+                    />
+                    {smtpErrors[key] && (
+                      <span className={styles.error} role="alert">
+                        {smtpErrors[key]}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
             )}
-          </p> */}
-          </div>
-        </div>
-        {smtpAccount && smtpAccount.id && smtpAccount.is_valid === false && (
-          <Banner tone="warning" title="Verify account settings">
-            <p>
-              Your SMTP account needs to be reconnected. Please update your
-              credentials below.
-            </p>
-          </Banner>
+            {isSMTPAccountFetched && (
+              <div className={styles.actions}>
+                <PageActionButton
+                  text={smtpAccount ? "Disconnect" : "Connect"}
+                  type={smtpAccount ? "danger-secondary" : "primary"}
+                  onAction={
+                    smtpAccount
+                      ? handleRemoveSMTPAccount
+                      : handleSaveSMTPAccount
+                  }
+                />
+              </div>
+            )}
+          </>
         )}
-        <div className="pt-8 flex mx-auto">
-          <SpinnerLoader isLoading={loading}>
-            <InlineStack gap={8} cardsLayout={true}>
-              <Card padding={0} maxWidth="85%" align="center">
-                <div
-                  className="servv-service-image"
-                  style={{
-                    background: `linear-gradient(to bottom, transparent, #ECE4F6)`,
-                  }}
-                >
-                  {account && (
-                    <div className="connected-account bg-gradient-to-b from-transparent to-black/40">
-                      {/* <span>{t("Email provider")}</span>
-                    <NewSelectControl
-                      value="smtp"
-                      options={[
-                        { key: "smtp", label: "SMTP" },
-                        { key: "gmail", label: "Gmail" },
-                      ]}
-                      onChange={() => {}}
-                      iconRight={<ChevronDownIcon />}
-                      style={{ width: "100%" }}
-                    /> */}
-                      <span>{t("Account")}</span>
-                      <SelectControl
-                        value={defaultProvider}
-                        options={[
-                          { key: "smtp", label: smtpBadge() },
-                          { key: "gmail", label: gmailBadge() },
-                        ]}
-                        onChange={(val) => setDefaultProvider(val)}
-                        iconRight={<ChevronDownIcon className="w-6 h-6" />}
-                        style={{ width: "100%" }}
-                      />
-                      {/* <Badge text={badge()} justify={"start"} color="gray" /> */}
-                    </div>
-                  )}
-                </div>
-                {defaultProvider === "gmail" ? (
-                  <div className="card-content">
-                    <h2 className="card-section-heading">{t("Gmail")}</h2>
-                    <p className="section-description">
-                      Automate email notifications and reminders through your
-                      Gmail account to ensure smooth event communication
-                    </p>
-                    {isAccountFetched && !account && (
-                      <a
-                        href="#"
-                        className="servv-button-link"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          // handleGetConnectURL();
-                          setShowModal(true);
-                        }}
-                      >
-                        {t("Connect")}
-                      </a>
-                    )}
-                    {isAccountFetched && account && (
-                      <a
-                        href="#"
-                        className="servv-button-link"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleRemoveAccount();
-                        }}
-                      >
-                        {t("Disconnect")}
-                      </a>
-                    )}
-                  </div>
-                ) : (
-                  <div className="card-content">
-                    <h2 className="card-section-heading">SMTP</h2>
-                    <p className="section-description">
-                      Automate email notifications and reminders through your
-                      SMTP account to ensure smooth event communication
-                    </p>
-                    {isSMTPAccountFetched && !smtpAccount && (
-                      <div className="flex flex-col gap-4 mt-4">
-                        <div className="flex flex-col gap-1">
-                          <label className="servv-label">{t("Email")}</label>
-                          <NewInputFieldControl
-                            placeholder="user@example.com"
-                            value={smtpForm.email}
-                            onChange={(val) =>
-                              handleSmtpFieldChange("email", val)
-                            }
-                            width="100%"
-                          />
-                          {smtpErrors.email && (
-                            <span className="text-red-500 text-xs mt-0.5">
-                              {smtpErrors.email}
-                            </span>
-                          )}
-                        </div>
-                        <div className="flex flex-col gap-1">
-                          <label className="servv-label">{t("Host")}</label>
-                          <NewInputFieldControl
-                            placeholder="smtp.example.com"
-                            value={smtpForm.host}
-                            onChange={(val) =>
-                              handleSmtpFieldChange("host", val)
-                            }
-                            width="100%"
-                          />
-                          {smtpErrors.host && (
-                            <span className="text-red-500 text-xs mt-0.5">
-                              {smtpErrors.host}
-                            </span>
-                          )}
-                        </div>
-                        <div className="flex flex-col gap-1">
-                          <label className="servv-label">{t("Port")}</label>
-                          <NewInputFieldControl
-                            placeholder="587"
-                            value={smtpForm.port}
-                            type="number"
-                            onChange={(val) =>
-                              handleSmtpFieldChange("port", val)
-                            }
-                            width="100%"
-                          />
-                          {smtpErrors.port && (
-                            <span className="text-red-500 text-xs mt-0.5">
-                              {smtpErrors.port}
-                            </span>
-                          )}
-                        </div>
-                        <div className="flex flex-col gap-1">
-                          <label className="servv-label">{t("Username")}</label>
-                          <NewInputFieldControl
-                            placeholder="user@example.com"
-                            value={smtpForm.username}
-                            onChange={(val) =>
-                              handleSmtpFieldChange("username", val)
-                            }
-                            width="100%"
-                          />
-                          {smtpErrors.username && (
-                            <span className="text-red-500 text-xs mt-0.5">
-                              {smtpErrors.username}
-                            </span>
-                          )}
-                        </div>
-                        <div className="flex flex-col gap-1">
-                          <label className="servv-label">{t("Password")}</label>
-                          <NewInputFieldControl
-                            placeholder="••••••••"
-                            value={smtpForm.password}
-                            type="password"
-                            onChange={(val) => {
-                              setSmtpForm((f) => ({ ...f, password: val }));
-                              if (smtpErrors.password) {
-                                setSmtpErrors((e) => ({
-                                  ...e,
-                                  password: val ? null : "Password is required",
-                                }));
-                              }
-                            }}
-                            width="100%"
-                          />
-                          {smtpErrors.password && (
-                            <span className="text-red-500 text-xs mt-0.5">
-                              {smtpErrors.password}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                    {isSMTPAccountFetched && !smtpAccount && (
-                      <a
-                        href="#"
-                        className="servv-button-link"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleSaveSMTPAccount();
-                        }}
-                      >
-                        {t("Connect")}
-                      </a>
-                    )}
-                    {isSMTPAccountFetched && smtpAccount && (
-                      <a
-                        href="#"
-                        className="servv-button-link"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleRemoveSMTPAccount();
-                        }}
-                      >
-                        {t("Disconnect")}
-                      </a>
-                    )}
-                  </div>
-                )}
-              </Card>
-            </InlineStack>
-          </SpinnerLoader>
-        </div>
-        {showModal && (
-          <ModalShell title="Connect Gmail" onClose={() => setShowModal(false)}>
-            <GmailConnectModalContent
-              gmailConfirmed={gmailConfirmed}
-              setGmailConfirmed={setGmailConfirmed}
-              handlerOnAccountAdd={handleGetConnectURL}
-              closeModal={() => setShowModal(false)}
-            />
-          </ModalShell>
-        )}
-      </div>
-    </PageWrapper>
+      </IntegrationSection>
+      {showModal && (
+        <ModalShell title="Connect Gmail" onClose={() => setShowModal(false)}>
+          <ConnectServiceModalContent
+            service="gmail"
+            confirmed={gmailConfirmed}
+            setConfirmed={setGmailConfirmed}
+            onConnect={handleGetConnectURL}
+            closeModal={() => setShowModal(false)}
+          />
+        </ModalShell>
+      )}
+    </IntegrationLayout>
   );
 };
 export default EmailsPage;

@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 
 import BlockStack from "../Containers/BlockStack";
 import InlineStack from "../Containers/InlineStack";
-import InputFieldControl from "../Controls/InputFieldControl";
+import NewInputFieldControl from "../Controls/NewInputFieldControl";
 import PageActionButton from "../Controls/PageActionButton";
 import UploadBars from "../Shared/UploadBars";
 import StepBlock from "../Shared/StepBlock";
@@ -111,7 +111,9 @@ const ThemeBrandingModal = ({
                 onChange={(e) => setTextColor(e.target.value)}
                 className="w-12 h-12 rounded-lg border border-gray-300 cursor-pointer"
               />
-              <InputFieldControl
+              <NewInputFieldControl
+                width="100%"
+                align="center"
                 placeholder="#111827"
                 value={textColor}
                 onChange={setTextColor}
@@ -149,7 +151,9 @@ const ThemeBrandingModal = ({
                 onChange={(e) => setHeaderTextColor(e.target.value)}
                 className="w-12 h-12 rounded-lg border border-gray-300 cursor-pointer"
               />
-              <InputFieldControl
+              <NewInputFieldControl
+                width="100%"
+                align="center"
                 placeholder="#111827"
                 value={headerTextColor}
                 onChange={setHeaderTextColor}
@@ -191,7 +195,9 @@ const ThemeBrandingModal = ({
                   onChange={(e) => setBackgroundColor(e.target.value)}
                   className="w-12 h-12 rounded-lg border border-gray-300 cursor-pointer"
                 />
-                <InputFieldControl
+                <NewInputFieldControl
+                  width="100%"
+                  align="center"
                   placeholder="#ffffff"
                   value={backgroundColor}
                   onChange={setBackgroundColor}
@@ -271,7 +277,9 @@ const ThemeBrandingModal = ({
                 <p className="text-sm font-medium text-gray-800 mb-1">
                   Custom gradient
                 </p>
-                <InputFieldControl
+                <NewInputFieldControl
+                  width="100%"
+                  align="center"
                   placeholder="linear-gradient(...)"
                   value={backgroundGradient}
                   onChange={setBackgroundGradient}
@@ -398,7 +406,9 @@ const ThemeBrandingModal = ({
                   onChange={(e) => setWidgetBgColor(e.target.value)}
                   className="w-12 h-12 rounded-lg border border-gray-300 cursor-pointer"
                 />
-                <InputFieldControl
+                <NewInputFieldControl
+                  width="100%"
+                  align="center"
                   placeholder="#ffffff"
                   value={widgetBgColor}
                   onChange={setWidgetBgColor}
@@ -416,7 +426,9 @@ const ThemeBrandingModal = ({
               <p className="text-sm font-medium text-gray-800 mb-1">
                 Widget background gradient
               </p>
-              <InputFieldControl
+              <NewInputFieldControl
+                width="100%"
+                align="center"
                 placeholder="linear-gradient(...)"
                 value={widgetBgGradient}
                 onChange={setWidgetBgGradient}

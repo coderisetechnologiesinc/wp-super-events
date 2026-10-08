@@ -1,8 +1,9 @@
 import { toast } from "react-toastify";
+import StepActions from "./StepActions";
 import { uploadMedia } from "../../utilities/media";
 import { BrushIcon, UploadIcon } from "../../assets/icons";
 import NewInputControl from "../Controls/NewInputControl";
-import RadioGroup from "../Controls/RecurrenceRadioGroup";
+import RadioGroup from "../Controls/RadioGroup";
 import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 const VISIBILITY_OPTIONS = [
@@ -134,6 +135,25 @@ const BrandingStep = ({
     reader.readAsDataURL(file);
   };
 
+  // The first step has no previous step: go back where the user came from, or
+  // fall back to the events list.
+  const handleGoBack = () => {
+    const from = location.state?.from;
+    const allowed = ["/dashboard", "/events"];
+    const canGoBack = from && allowed.some((path) => from.includes(path));
+
+    canGoBack ? navigate(-1) : navigate("/events");
+  };
+
+  const handleContinue = () => {
+    if (attributes?.meeting?.topic?.length > 0) {
+      changeStep("date");
+      return;
+    }
+    setWarning(true);
+    toast.warning("Please enter the title");
+  };
+
   return (
     <div className="step__wrapper">
       {/* Header */}
@@ -247,46 +267,12 @@ const BrandingStep = ({
             onChange={() => updateField("disable_emails", !disable_emails)}
           />
         </div> */}
-        <div className="servv_actions">
-          {!isNew && (
-            <button
-              type="button"
-              className="servv_button servv_button--secondary"
-              onClick={() => handleFormSubmit(true)}
-            >
-              Save and Exit
-            </button>
-          )}
-          <button
-            type="button"
-            className="servv_button servv_button--secondary"
-            onClick={() => {
-              const from = location.state?.from;
-              const allowed = ["/dashboard", "/events"];
-
-              const canGoBack =
-                from && allowed.some((path) => from.includes(path));
-              canGoBack ? navigate(-1) : navigate("/events");
-            }}
-          >
-            Previous
-          </button>
-
-          <button
-            type="button"
-            className="servv_button servv_button--primary"
-            onClick={() => {
-              if (attributes?.meeting?.topic?.length > 0) {
-                changeStep("date");
-              } else {
-                setWarning(true);
-                toast.warning("Please enter the title");
-              }
-            }}
-          >
-            Continue
-          </button>
-        </div>
+        <StepActions
+          className=""
+          onSaveAndExit={isNew ? undefined : () => handleFormSubmit(true)}
+          onPrevious={handleGoBack}
+          onPrimary={handleContinue}
+        />
       </div>
     </div>
   );

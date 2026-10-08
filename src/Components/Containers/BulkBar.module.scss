@@ -1,0 +1,76 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+
+@include m.scoped {
+  // Reference (events-views.html, .bulkbar): a brand-tinted raised strip that
+  // slides up when the first row is picked.
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: t.$space-5;
+    flex-wrap: wrap;
+    padding: t.$space-6 t.$space-8;
+    border: 1px solid t.$primary-border;
+    border-radius: t.$radius-xl;
+    background: t.$primary-surface;
+    box-shadow: 8px 8px 20px t.$shade, -4px -4px 12px t.$light;
+    animation: bulkSlideUp t.$duration-slow t.$ease backwards;
+  }
+
+  .count {
+    @include m.text(13, t.$weight-bold);
+    color: t.$primary-strong;
+  }
+
+  .spacer {
+    flex: 1;
+  }
+
+  @keyframes bulkSlideUp {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @include m.reduced-motion {
+    .bar {
+      animation: none;
+    }
+  }
+
+  // The select-all row that sits above the list. Its box has to line up with
+  // the checkbox column of the rows below, and the two views inset that column
+  // differently — a floating row pads 20px inside a 1px border, a rail row
+  // pads 18px with no border at all.
+  .selectAll {
+    display: flex;
+    align-items: center;
+    gap: t.$space-5;
+    @include m.text(13, t.$weight-semibold);
+    color: t.$text-soft;
+  }
+
+  .insetRows {
+    padding-left: t.$space-10 + 1px;
+  }
+
+  .insetRail {
+    padding-left: t.$space-9;
+  }
+
+  @media (max-width: 735px) {
+    .spacer {
+      display: none;
+    }
+
+    .bar {
+      gap: t.$space-4;
+    }
+  }
+}

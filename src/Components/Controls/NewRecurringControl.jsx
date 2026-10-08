@@ -3,7 +3,7 @@ import NewSelectControl from "./NewSelectControl";
 import InlineStack from "../Containers/InlineStack";
 import BlockStack from "../Containers/BlockStack";
 import CheckboxItem from "./CheckboxItem";
-import RadioGroup from "./RecurrenceRadioGroup";
+import RadioGroup from "./RadioGroup";
 import NewButtonGroup from "../Controls/NewButtonGroup";
 
 import { ChevronDownIcon } from "@heroicons/react/24/outline";

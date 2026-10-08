@@ -1,0 +1,116 @@
+@use "unit" as *;
+
+.svv-wgt-v2 {
+  .svv-categories {
+    display: grid;
+    gap: u(2);
+  }
+
+  .svv-categories__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: u(0.75);
+    margin-bottom: u(0.875);
+  }
+
+  .svv-categories__title {
+    min-width: 0;
+
+    h3 {
+      margin: 0;
+      font-size: u(1.25);
+      font-weight: 900;
+    }
+
+    p {
+      margin: u(0.25) 0 0;
+      color: var(--svv-text-muted);
+      font-size: u(0.875);
+    }
+  }
+
+  .svv-categories__nav {
+    display: inline-flex;
+    gap: u(0.375);
+
+    button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: u(2.125);
+      min-height: u(2.125);
+      padding: 0;
+      border: 1px solid var(--svv-border-strong);
+      border-radius: var(--svv-pill);
+      background: var(--svv-bg);
+      color: var(--svv-text);
+      font-size: u(1.125);
+      line-height: 1;
+
+      &:hover:not(:disabled) {
+        border-color: var(--svv-primary);
+        color: var(--svv-primary);
+      }
+
+      &:disabled {
+        opacity: 0.4;
+        cursor: default;
+      }
+    }
+  }
+
+  .svv-categories__row {
+    display: grid;
+    gap: u(1);
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(
+        min(
+          max(
+            u(18),
+            (100% - (var(--svv-grid-columns) - 1) * u(1)) / var(--svv-grid-columns)
+          ),
+          (100% - u(1)) / 2
+        ),
+        1fr
+      )
+    );
+
+    > li {
+      container-type: inline-size;
+      container-name: svv-card;
+      min-width: 0;
+    }
+  }
+
+  @container svv-shell (max-width: 544px) {
+    .svv-categories__row {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .svv-categories__dots {
+    display: flex;
+    justify-content: center;
+    gap: u(0.375);
+    margin: u(0.875) 0 0;
+    padding: 0;
+    list-style: none;
+
+    button {
+      width: u(0.5);
+      height: u(0.5);
+      padding: 0;
+      border: 0;
+      border-radius: var(--svv-pill);
+      background: var(--svv-border-strong);
+    }
+
+    .is-active button {
+      width: u(1.25);
+      background: var(--svv-primary);
+    }
+  }
+}

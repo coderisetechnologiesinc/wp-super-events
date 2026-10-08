@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
@@ -14,8 +14,6 @@ import {
   Support,
   Widgets,
   Dashboard,
-  CalendarIcon,
-  CalendarIconMenu,
 } from "../../assets/icons";
 import { useServvStore } from "../../store/useServvStore";
 /* ---------------------------------------------------------
@@ -45,71 +43,34 @@ const SideBar = ({ page, onChange, collapsed = false, onToggle, t }) => {
     navigate(`/${link}`);
   };
 
-  const [manuSections, setMenuSections] = useState([
-    {
-      id: "main",
-      // label: "GENERAL",
-      items: [
-        { title: "Dashboard", link: "dashboard", icon: Dashboard },
-        { title: "Events", link: "events", icon: Events },
-        { title: "Bookings", link: "bookings", icon: Sales },
-        { title: "Calendar", link: "calendar", icon: CalendarIconMenu },
-        { title: "Filters", link: "filters", icon: Filters },
-        { title: "Integrations", link: "integrations", icon: Contacts },
-        // { title: "Branding", link: "branding", icon: Widgets },
-        { title: "Notifications", link: "notifications", icon: Emails },
-        { title: "Analytics", link: "analytics", icon: Analytics },
-      ],
-    },
-    // {
-    //   id: "marketing",
-    //   label: "MARKETING",
-    //   items: [],
-    // },
-    {
-      id: "system",
-      // label: "SYSTEM",
-      bottom: true,
-      items: [
-        { title: "Support", link: "support", icon: Support },
-        { title: "Settings", link: "settings", icon: Settings },
-      ],
-    },
-  ]);
-  useEffect(() => {
-    if (settings && settings.is_wp_marketplace) {
-      setMenuSections([
-        {
-          id: "main",
-          // label: "GENERAL",
-          items: [
-            { title: "Dashboard", link: "dashboard", icon: Dashboard },
-            { title: "Events", link: "events", icon: Events },
-            { title: "Bookings", link: "bookings", icon: Sales },
-            { title: "Calendar", link: "calendar", icon: CalendarIconMenu },
-            { title: "Branding", link: "branding", icon: Widgets },
-            { title: "Filters", link: "filters", icon: Filters },
-            { title: "Integrations", link: "integrations", icon: Contacts },
-            { title: "Notifications", link: "notifications", icon: Emails },
-            { title: "Analytics", link: "analytics", icon: Analytics },
-          ],
-        },
-        // {
-        //   id: "marketing",
-        //   label: "MARKETING",
-        //   items: [],
-        // },
-        {
-          id: "system",
-          // label: "SYSTEM",
-          bottom: true,
-          items: [
-            { title: "Support", link: "support", icon: Support },
-            { title: "Settings", link: "settings", icon: Settings },
-          ],
-        },
-      ]);
-    }
+  // The marketplace build is the only one that exposes Branding; everything else
+  // about the menu is the same, so derive it rather than keeping two copies.
+  const manuSections = useMemo(() => {
+    const mainItems = [
+      { title: "Dashboard", link: "dashboard", icon: Dashboard },
+      { title: "Events", link: "events", icon: Events },
+      { title: "Bookings", link: "bookings", icon: Sales },
+      ...(settings?.is_wp_marketplace
+        ? [{ title: "Branding", link: "branding", icon: Widgets }]
+        : []),
+      { title: "Widget", link: "widget", icon: Widgets },
+      { title: "Filters", link: "filters", icon: Filters },
+      { title: "Integrations", link: "integrations", icon: Contacts },
+      { title: "Notifications", link: "notifications", icon: Emails },
+      { title: "Analytics", link: "analytics", icon: Analytics },
+    ];
+
+    return [
+      { id: "main", items: mainItems },
+      {
+        id: "system",
+        bottom: true,
+        items: [
+          { title: "Support", link: "support", icon: Support },
+          { title: "Settings", link: "settings", icon: Settings },
+        ],
+      },
+    ];
   }, [settings]);
 
   return (

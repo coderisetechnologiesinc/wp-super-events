@@ -1,135 +1,130 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { PlusIcon } from "@heroicons/react/24/outline";
+import BreadCrumbs from "../../Menu/BreadCrumbs";
 import { useServvStore } from "../../../store/useServvStore";
+import axios from "../../../utilities/adminApi";
 import FiltersList from "./FiltersList";
 import PageWrapper from "../PageWrapper";
+import PageContent from "../../Containers/PageContent";
 import PageHeader from "../../Containers/PageHeader";
-import BlockStack from "../../Containers/BlockStack";
 import PageActionButton from "../../Controls/PageActionButton";
-import BreadCrumbs from "../../Menu/BreadCrumbs";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { PlusIcon } from "@heroicons/react/24/outline";
+import FiltersEmptyState from "./FiltersEmptyState";
+import { FILTER_TYPES } from "./CreateFilterMenu";
+import { useFilterLimits } from "./useFilterLimits";
+import styles from "./FiltersPage.module.scss";
+const EMPTY = [];
 
 export default function FiltersListPage() {
   const navigate = useNavigate();
-  const { type } = useParams();
+  const { type: routeType } = useParams();
+  const type = Object.keys(FILTER_TYPES).find(
+    (key) => key.toLowerCase() === routeType?.toLowerCase(),
+  );
   const settings = useServvStore((s) => s.settings);
   const filtersList = useServvStore((s) => s.filtersList);
   const getFilters = useServvStore((s) => s.syncFiltersFromServer);
-  const [maxFiltersNumber, setMaxFiltersNumber] = useState(2);
-  const [defaultFiltersList, setDefaultFiltersList] = useState([
-    "Locations",
-    "Languages",
-    "Categories",
-  ]);
+  const storeLoading = useServvStore((s) => s.loading);
   const [selected, setSelected] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [isLimitReached, setIsLimitReached] = useState(false);
-  const filters = filtersList[type.toLowerCase()] || [];
+  const { isLimitReached, filterCategories } = useFilterLimits(
+    settings,
+    filtersList,
+  );
+  const filters = filtersList[type?.toLowerCase()] || EMPTY;
+  const canCreate = Boolean(
+    settings && filterCategories.includes(type) && !isLimitReached,
+  );
   useEffect(() => {
-    const maxFilters = settings?.current_plan?.filters_limit || 25;
-    setMaxFiltersNumber(maxFilters);
-
-    const totalFilters = Object.values(filtersList).reduce(
-      (total, arr) => total + (arr?.length || 0),
-      0,
+    setSelected((previous) =>
+      previous.filter((id) => filters.some((filter) => filter.id === id)),
     );
-    setIsLimitReached(totalFilters >= maxFilters);
-    if (settings?.current_plan?.id !== 1 || !settings.current_plan) {
-      let newFiltersList = defaultFiltersList;
-      newFiltersList.push("Members");
-      setDefaultFiltersList(newFiltersList);
-    }
-  }, [settings, filtersList]);
+  }, [filters, type]);
   const handleSelect = (id) =>
     setSelected((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
+      prev.includes(id) ? prev.filter((value) => value !== id) : [...prev, id],
     );
-
-  const handleSelectAll = () => {
-    if (selected.length === filters.length) {
-      setSelected([]);
-    } else {
-      setSelected(filters.map((f) => f.id));
+  const handleSelectAll = () =>
+    setSelected(
+      selected.length === filters.length
+        ? []
+        : filters.map((filter) => filter.id),
+    );
+  const handleDelete = async (_, ids) => {
+    setLoading(true);
+    try {
+      const results = await Promise.allSettled(
+        ids.map((id) =>
+          axios.delete(
+            `/wp-json/servv-plugin/v1/filters/${type.toLowerCase()}/${id}`,
+            { headers: { "X-WP-Nonce": window.servvData.nonce } },
+          ),
+        ),
+      );
+      const deleted = ids.filter(
+        (id, index) => results[index].status === "fulfilled",
+      );
+      setSelected((prev) => prev.filter((id) => !deleted.includes(id)));
+      await getFilters();
+      if (deleted.length)
+        toast.success(
+          `${deleted.length} ${
+            deleted.length === 1 ? "filter" : "filters"
+          } deleted.`,
+        );
+      if (deleted.length < ids.length)
+        toast.error("Some filters could not be deleted. Please try again.");
+    } catch {
+      toast.error("Unable to refresh filters. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
-
-  const handleDelete = async (type, ids) => {
-    setLoading(true);
-
-    await Promise.allSettled(
-      ids.map((id) =>
-        fetch(`/wp-json/servv-plugin/v1/filters/${type.toLowerCase()}/${id}`, {
-          method: "DELETE",
-          headers: { "X-WP-Nonce": servvData.nonce },
-        }),
-      ),
-    );
-
-    await getFilters();
-    setSelected([]);
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    getFilters();
-  }, []);
-  const breadcrumbs = [
-    {
-      label: "Filters",
-      action: () => navigate("/filters"),
-    },
-    {
-      label: type,
-      action: () => {},
-    },
-  ];
-
+  const create = (
+    <PageActionButton
+      text="Create filter"
+      icon={<PlusIcon />}
+      onAction={() => navigate(`/filters/new/${type}`)}
+      disabled={!canCreate || loading}
+    />
+  );
   return (
-    <PageWrapper loading={false} withBackground={true}>
-      <div className="dashboard-card">
-        <div className="servv-dashboard-header">
-          {/* LEFT: title + breadcrumbs + description */}
-          <div className="dashboard-heading">
-            <div className="flex flex-row justify-between">
-              <h1 className="dashboard-title">{type}</h1>
-              <PageActionButton
-                text="Create filter"
-                type="primary"
-                icon={<PlusIcon className="button-icon primary" />}
-                onAction={() => navigate(`/filters/new/${type}`)}
-                disabled={isLimitReached}
-              />
-            </div>
-
-            <div className="dashboard-description">
-              <BreadCrumbs
-                breadcrumbs={breadcrumbs}
-                onBreadCrumbClick={(label) => {
-                  const bc = breadcrumbs.find((b) => b.label === label);
-                  if (bc?.action) bc.action();
-                }}
-              />
-              <p className="dashboard-description mt-2">
-                Manage your {type.toLowerCase()} — view, edit, and delete
-                entries.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="header-line" />
-
-        <FiltersList
-          title={type}
-          loading={loading}
-          filters={filters}
-          selected={selected}
-          onSelect={handleSelect}
-          onSelectAll={handleSelectAll}
-          onDelete={handleDelete}
+    <PageWrapper flush loading={loading || storeLoading}>
+      <PageContent>
+        <BreadCrumbs
+          breadcrumbs={[
+            { label: "Filters", to: "/filters" },
+            { label: type || "Unknown filter type" },
+          ]}
         />
-      </div>
+        <PageHeader
+          title={type || "Filters"}
+          description={`Manage your ${
+            type?.toLowerCase() || "filters"
+          } — view, edit, and delete entries.`}
+          actions={type && create}
+        />
+        <div className={styles.divider} />
+        {!type ? (
+          <p>
+            Unknown filter type. <Link to="/filters">Return to Filters</Link>
+          </p>
+        ) : !filters.length && !storeLoading ? (
+          <FiltersEmptyState type={type}>{create}</FiltersEmptyState>
+        ) : (
+          <FiltersList
+            title={type}
+            loading={loading || storeLoading}
+            filters={filters}
+            selected={selected}
+            onSelect={handleSelect}
+            onSelectAll={handleSelectAll}
+            onClearSelection={() => setSelected([])}
+            onDelete={handleDelete}
+          />
+        )}
+      </PageContent>
     </PageWrapper>
   );
 }

@@ -1,11 +1,9 @@
-import { Fragment, useEffect, useState } from "react";
-import PageHeader from "../../Containers/PageHeader";
-import PageContent from "../../Containers/PageContent";
-import BlockStack from "../../Containers/BlockStack";
-import InlineStack from "../../Containers/InlineStack";
-import Badge from "../../Containers/Badge";
-import Card from "../../Containers/Card";
-import BreadCrumbs from "../../Menu/BreadCrumbs";
+import IntegrationLayout, {
+  IntegrationSection,
+  IntegrationAccount,
+} from "./IntegrationLayout";
+import styles from "./IntegrationLayout.module.scss";
+import { useEffect, useState } from "react";
 import {
   getStripeAccount,
   getStripeConnectURL,
@@ -14,25 +12,18 @@ import {
   updateStripeSettings,
   getStripeSettings,
 } from "../../../utilities/stripe";
-import SelectControl from "../../Controls/SelectControl";
+import NewSelectControl from "../../Controls/NewSelectControl";
 import { currenciesList } from "../../../utilities/currencies";
 import PageActionButton from "../../Controls/PageActionButton";
-import { InboxArrowDownIcon } from "@heroicons/react/16/solid";
 import he from "he";
-import { useNavigate } from "react-router-dom";
-import PageWrapper from "../PageWrapper";
-import { useServvStore } from "../../../store/useServvStore";
 const StripeIntegrationsPage = (props) => {
-  const navigate = useNavigate();
   const [account, setAccount] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isAccountFetched, setAccountFetched] = useState(false);
   const [connectedAccounts, setConnectedAccounts] = useState([]);
   const [connectedAccountsFetched, setConnectedAccountsFetched] =
     useState(false);
-  const [connectUrl, setConnectUrl] = useState(null);
   const [selectedCurrency, setSelectedCurrency] = useState(null);
-  const storeSettings = useServvStore((s) => s.settings);
   const fetchAccount = async () => {
     const account = await getStripeAccount(servvData.nonce);
     if (account && account.id) {
@@ -72,41 +63,19 @@ const StripeIntegrationsPage = (props) => {
     );
   };
 
-  const renderExistingAccounts = () => {
-    return (
-      <div className="flex flex-col gap-1">
-        {connectedAccounts.map((account) => {
-          const accountText = (
-            <div className="flex flex-row justify-start items-center gap-2">
-              {account.account_id && (
-                <Badge
-                  text={account.account_id}
-                  align={"start"}
-                  color="success"
-                />
-              )}
-              {account.email && account.email.trim().length > 0 && (
-                <Badge text={account.email} align={"start"} color="success" />
-              )}
-              {account.name && account.name.trim.length > 0 && (
-                <Badge text={account.name} align={"start"} color="brand" />
-              )}
-            </div>
-          );
-          return (
-            <div
-              className="w-full flex flex-row gap-2 border border-gray-25 shadow-sm rounded-lg p-2"
-              onClick={() => {
-                handleConnectExistingAccount(account.account_id);
-              }}
-            >
-              {accountText}
-            </div>
-          );
-        })}
-      </div>
-    );
-  };
+  const renderExistingAccounts = () =>
+    connectedAccounts.map((existing) => (
+      <button
+        key={existing.account_id}
+        type="button"
+        className={styles.existingAccount}
+        onClick={() => handleConnectExistingAccount(existing.account_id)}
+      >
+        {[existing.name, existing.email, existing.account_id]
+          .filter(Boolean)
+          .join(" · ")}
+      </button>
+    ));
 
   const handleGetConnectURL = async () => {
     setLoading(true);
@@ -116,7 +85,7 @@ const StripeIntegrationsPage = (props) => {
     // const url = await getStripeConnectURL(servvData.nonce);
     // setConnectUrl(url.auth_url);
     setLoading(false);
-    if (existingAccounts.length > 0) {
+    if (existingAccounts?.length > 0) {
       setConnectedAccounts(existingAccounts);
       setConnectedAccountsFetched(true);
     } else {
@@ -149,21 +118,6 @@ const StripeIntegrationsPage = (props) => {
   useEffect(() => {
     fetchAccount();
   }, []);
-  const badge = () => (
-    <div className="flex flex-row gap-2 items-center">
-      {account.charges_enabled && (
-        <Badge
-          background="gray"
-          text={account ? "Connected" : "Not connected"}
-          icon=""
-        />
-      )}
-      {account && !account.charges_enabled && (
-        <Badge background="gray" text={"Connection is not completed"} icon="" />
-      )}
-      <span>{account ? account.email : "Please connect your account"}</span>
-    </div>
-  );
   const handleSelectChange = (currency) => {
     const newCurrency = currency.split(" - ")[0];
     setSelectedCurrency(newCurrency);
@@ -179,14 +133,17 @@ const StripeIntegrationsPage = (props) => {
     }
 
     return (
-      <SelectControl
-        options={currencies}
-        selected={
+      <NewSelectControl
+        options={currencies.map((currency) => ({
+          value: currency,
+          label: currency,
+        }))}
+        value={
           currencies.filter(
             (currency) => currency.indexOf(selectedCurrency) >= 0,
           )[0]
         }
-        onSelectChange={handleSelectChange}
+        onChange={handleSelectChange}
       />
     );
   };
@@ -197,133 +154,83 @@ const StripeIntegrationsPage = (props) => {
       setLoading(false);
     }
   };
+  const incomplete = account && !account.charges_enabled;
   return (
-    <PageWrapper loading={loading} withBackground={true}>
-      <div className="dashboard-card">
-        <div className="servv-dashboard-header">
-          <div className="dashboard-heading">
-            <h1 className="dashboard-title">Stripe</h1>
-            <div className="dashboard-description">
-              <BreadCrumbs
-                breadcrumbs={[
-                  {
-                    label: "Integrations",
-                    action: () => navigate("../integrations"),
-                  },
-                  { label: "Stripe", action: () => {} },
-                ]}
-                onBreadCrumbClick={() => {}}
+    <IntegrationLayout
+      title="Stripe"
+      glyph="S"
+      description="Accept paid registrations and manage payout settings."
+      connected={Boolean(account)}
+      status={
+        !isAccountFetched
+          ? "Loading…"
+          : incomplete
+          ? "Connection incomplete"
+          : undefined
+      }
+      accountLabel={account?.email}
+      loading={loading}
+      actions={
+        isAccountFetched && (
+          <>
+            {!account && (
+              <PageActionButton
+                text={
+                  connectedAccountsFetched && connectedAccounts.length > 0
+                    ? "Connect new account"
+                    : "Connect"
+                }
+                onAction={
+                  connectedAccountsFetched && connectedAccounts.length > 0
+                    ? connectNewAccount
+                    : handleGetConnectURL
+                }
               />
-            </div>
-            {/* <p className="page-header-description">
-            {t(
-              "Sync your event schedules effortlessly with Google Calendar or\r\n            Outlook to keep everyone informed."
             )}
-          </p> */}
-          </div>
+            {incomplete && (
+              <PageActionButton
+                text="Resume integration"
+                onAction={() =>
+                  handleConnectExistingAccount(account.account_id)
+                }
+              />
+            )}
+            {account && (
+              <PageActionButton
+                text="Disconnect"
+                type="danger-secondary"
+                onAction={handleRemoveAccount}
+              />
+            )}
+          </>
+        )
+      }
+    >
+      <IntegrationSection title="Account">
+        <IntegrationAccount
+          label={account?.email}
+          status={incomplete ? "Connection incomplete" : "Connected"}
+        />
+      </IntegrationSection>
+      {connectedAccountsFetched && connectedAccounts.length > 0 && !account && (
+        <IntegrationSection title="Connect existing account">
+          {renderExistingAccounts()}
+        </IntegrationSection>
+      )}
+      <IntegrationSection
+        title="Currency"
+        description="The currency used for paid registrations."
+      >
+        <div className={styles.row}>
+          <div>{currencySelect()}</div>
+          <PageActionButton
+            text="Save"
+            disabled={!selectedCurrency || loading}
+            onAction={handleCurrencySave}
+          />
         </div>
-        <PageContent>
-          <InlineStack gap={8} cardsLayout={true}>
-            <Card padding={0} maxWidth={"85%"} align="center">
-              <div
-                className="servv-service-image"
-                style={{
-                  background: `linear-gradient(to bottom, transparent, #ECE4F6)`,
-                }}
-              >
-                {account && (
-                  <div className="connected-account bg-gradient-to-b from-transparent to-black/40">
-                    <span>{t("Account")}</span>
-                    <Badge text={badge()} color="gray" justify={"start"} />
-                  </div>
-                )}
-                {/* {<div className="connected-account bg-gradient-to-b from-transparent to-black/40">
-                <span>Currency</span>
-                <Badge text={currencySelect()} color="gray" justify={"start"} />
-              </div>} */}
-              </div>
-              <div className="card-content">
-                <h2 className="card-section-heading">{t("Stripe")}</h2>
-                <p className="section-description">
-                  {/* {t(
-                  "Sync and manage your Google Calendar account and settings."
-                )} */}
-                  {storeSettings?.is_wp_marketplace
-                    ? "Accept payments seamlessly through WP Super Events, with payouts sent to your connected Stripe account."
-                    : " Accept secure payments for your events with Stripe, ensuring a seamless checkout experience for attendees"}
-                </p>
-                {account && account.charges_enabled && currencySelect()}
-                {connectedAccountsFetched && connectedAccounts.length > 0 && (
-                  <Fragment>
-                    <p className="servv-button-link text-gray-700">
-                      {t("Connect existing account")}
-                    </p>
-                    {renderExistingAccounts()}
-                  </Fragment>
-                )}
-                {isAccountFetched && !account && (
-                  <a
-                    href="#"
-                    className="servv-button-link"
-                    onClick={
-                      connectedAccountsFetched && connectedAccounts.length > 0
-                        ? (e) => {
-                            e.preventDefault();
-                            connectNewAccount();
-                          }
-                        : (e) => {
-                            e.preventDefault();
-                            handleGetConnectURL();
-                          }
-                    }
-                  >
-                    {connectedAccountsFetched && connectedAccounts.length > 0
-                      ? "Connect new account"
-                      : "Connect"}
-                  </a>
-                )}
-                {isAccountFetched && account && !account.charges_enabled && (
-                  <a
-                    href="#"
-                    className="servv-button-link"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleConnectExistingAccount(account.account_id);
-                    }}
-                  >
-                    {t("Resume integration")}
-                  </a>
-                )}
-                {isAccountFetched && account && (
-                  <a
-                    href="#"
-                    className="servv-button-link"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleRemoveAccount();
-                    }}
-                  >
-                    {t("Disconnect")}
-                  </a>
-                )}
-                {/* {isAccountFetched && account && (
-                <a
-                  href="#"
-                  className="servv-button-link"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    props.onPageSelect("settings");
-                  }}
-                >
-                  Manage
-                </a>
-              )} */}
-              </div>
-            </Card>
-          </InlineStack>
-        </PageContent>
-      </div>
-    </PageWrapper>
+      </IntegrationSection>
+    </IntegrationLayout>
   );
 };
 export default StripeIntegrationsPage;

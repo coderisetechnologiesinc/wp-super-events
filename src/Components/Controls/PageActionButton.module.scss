@@ -1,0 +1,158 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+
+@include m.scoped {
+  .button {
+    @include m.button-reset;
+    @include m.wp-reset-button;
+    @include m.control-base;
+
+    &:focus-visible {
+      @include m.focus-ring-raised;
+    }
+  }
+
+  // --- Variants --------------------------------------------------------------
+
+  .primary {
+    @include m.brand-fill;
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: t.$shadow-brand, 0 0 0 3px t.$primary-ring;
+    }
+  }
+
+  .secondary {
+    @include m.raised;
+  }
+
+  .danger {
+    border: 1px solid t.$danger-text;
+    background: linear-gradient(145deg, t.$danger-grad-from, t.$danger-grad-to);
+    color: t.$text-on-primary;
+    box-shadow: t.$shadow-danger;
+
+    &:hover:not(:disabled) {
+      box-shadow: t.$shadow-brand-hover;
+      transform: translateY(-1px);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: t.$shadow-danger, 0 0 0 3px t.$danger-ring;
+    }
+  }
+
+  // White surface, destructive intent — "Remove", "Disconnect".
+  .dangerSecondary {
+    border: 1px solid rgba(253, 162, 155, 0.9);
+    background: t.$surface;
+    color: t.$danger-text;
+    box-shadow: t.$shadow-raised;
+
+    &:hover:not(:disabled) {
+      background: t.$danger-surface;
+      box-shadow: t.$shadow-raised-hover;
+      transform: translateY(-1px);
+    }
+  }
+
+  // Chromeless — menu rows and inline links.
+  .ghost {
+    border: 0;
+    background: transparent;
+    border-radius: t.$radius-sm;
+    color: t.$text-strong;
+    box-shadow: none;
+
+    &:hover:not(:disabled) {
+      background: t.$primary-surface;
+    }
+  }
+
+  .dangerGhost {
+    border: 0;
+    background: transparent;
+    border-radius: t.$radius-sm;
+    color: t.$danger-text;
+    box-shadow: none;
+
+    &:hover:not(:disabled) {
+      background: t.$danger-surface;
+    }
+  }
+
+  // --- Sizes -----------------------------------------------------------------
+
+  .md {
+    height: t.$control-lg;
+    padding: 0 t.$space-8;
+    font-size: t.$text-14;
+  }
+
+  .sm {
+    height: t.$control-md;
+    padding: 0 t.$space-6;
+    font-size: t.$text-13;
+  }
+
+  .xs {
+    height: t.$control-xs;
+    padding: 0 t.$space-5;
+    font-size: t.$text-12;
+    border-radius: t.$radius-md;
+  }
+
+  // Secondary buttons sit one step tighter than the brand fill in the design.
+  .secondary.md,
+  .dangerSecondary.md {
+    padding: 0 t.$space-7;
+  }
+
+  // --- Parts -----------------------------------------------------------------
+
+  .fullWidth {
+    width: 100%;
+  }
+
+  // Square icon button — the design pairs one with the primary action.
+  .iconOnly {
+    padding: 0;
+    gap: 0;
+
+    &.md {
+      width: t.$control-lg;
+    }
+
+    &.sm {
+      width: t.$control-md;
+    }
+
+    &.xs {
+      width: t.$control-xs;
+    }
+  }
+
+  .icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+
+    svg {
+      display: block;
+      width: 16px;
+      height: 16px;
+      transition: transform t.$duration t.$ease;
+    }
+  }
+
+  .button:hover:not(:disabled) .icon svg {
+    transform: scale(1.1);
+  }
+
+  .label {
+    @include m.truncate;
+  }
+}

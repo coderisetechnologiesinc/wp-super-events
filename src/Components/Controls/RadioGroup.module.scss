@@ -1,0 +1,96 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+
+@include m.scoped {
+  .group {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    gap: t.$space-12;
+    min-height: 44px;
+  }
+
+  .column {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: t.$space-5;
+    min-height: 0;
+  }
+
+  .option {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: t.$space-5;
+    cursor: pointer;
+    user-select: none;
+
+    // The WordPress admin stylesheet decorates labels with pseudo-elements.
+    &::before,
+    &::after {
+      content: none;
+      display: none;
+    }
+
+    input[type="radio"] {
+      position: absolute;
+      width: 0;
+      height: 0;
+      margin: 0;
+      padding: 0;
+      opacity: 0;
+      pointer-events: none;
+      appearance: none;
+    }
+
+    &:hover .control {
+      border-color: t.$primary-border;
+    }
+
+    input:checked + .control {
+      border-color: t.$primary-strong;
+      background: t.$primary-surface;
+
+      &::after {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: t.$radius-pill;
+        background: t.$primary;
+      }
+    }
+
+    input:focus-visible + .control {
+      outline: none;
+      box-shadow: t.$shadow-field, 0 0 0 3px t.$primary-ring;
+    }
+
+    input:disabled + .control {
+      opacity: 0.55;
+    }
+
+    input:disabled ~ .label {
+      opacity: 0.55;
+    }
+  }
+
+  .control {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 18px;
+    height: 18px;
+    border: 1px solid t.$border-field;
+    border-radius: t.$radius-pill;
+    background: t.$surface;
+    box-shadow: t.$shadow-field;
+    transition: background t.$duration-fast t.$ease,
+      border-color t.$duration-fast t.$ease, box-shadow t.$duration t.$ease;
+  }
+
+  .label {
+    @include m.text(13, t.$weight-medium);
+    color: t.$text-strong;
+  }
+}

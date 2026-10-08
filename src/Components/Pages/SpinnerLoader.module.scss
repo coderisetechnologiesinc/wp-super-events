@@ -1,0 +1,22 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+
+@include m.scoped {
+  .root {
+    position: relative;
+  }
+
+  // Tailwind's blur-sm, kept as-is so loading states look unchanged.
+  .blurred {
+    filter: blur(4px);
+    pointer-events: none;
+  }
+
+  .overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

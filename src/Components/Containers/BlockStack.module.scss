@@ -1,0 +1,58 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+
+@include m.scoped {
+  .stack {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  // Gap scale. The numeric names mirror the spacing steps the call sites have
+  // always used, so `gap={4}` keeps meaning 16px.
+  .gap0 {
+    gap: 0;
+  }
+
+  .gap1 {
+    gap: t.$space-2; // 4
+  }
+
+  .gap2 {
+    gap: t.$space-4; // 8
+  }
+
+  .gap3 {
+    gap: t.$space-6; // 12
+  }
+
+  .gap4 {
+    gap: t.$space-8; // 16
+  }
+
+  .gap5 {
+    gap: t.$space-10; // 20
+  }
+
+  .gap6 {
+    gap: t.$space-12; // 24
+  }
+
+  .gap8 {
+    gap: t.$space-16; // 32
+  }
+
+  // Fills an equal share of a row of sibling cards.
+  .cards {
+    flex: 1 1 0;
+  }
+
+  .clickable {
+    cursor: pointer;
+  }
+
+  .disabled {
+    filter: grayscale(1);
+    opacity: 0.6;
+  }
+}

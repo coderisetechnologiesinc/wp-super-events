@@ -1,98 +1,17 @@
 import { useEffect, useState } from "react";
+import StepActions from "./StepActions";
+import ConnectServiceModalContent from "../Modals/ConnectServiceModalContent";
 import { MapMarkIcon } from "../../assets/icons";
 import { ChevronDownIcon, VideoCameraIcon } from "@heroicons/react/24/outline";
 import NewSelectControl from "../Controls/NewSelectControl";
-import RadioGroup from "../Controls/RecurrenceRadioGroup";
+import RadioGroup from "../Controls/RadioGroup";
 import NewInputControl from "../Controls/NewInputControl";
 import SelectDropdown from "./SelectDropdown";
+import IntegrationCard from "../Containers/IntegrationCard";
 import InteractiveCard from "../Containers/InteractiveCard";
 import ModalShell from "../Modals/ModalShell";
-import ZoomPaidAccountModalContent from "../Modals/ZoomPaidAccountModalContent";
 import { useServvStore } from "../../store/useServvStore";
 import { getZoomConnectURL } from "../../utilities/accounts";
-const gradient = "linear-gradient(74.06deg, #583DFF -11.67%, #9B25F8 47.12%)";
-const IntegrationCard = ({
-  icon: Icon,
-  title,
-  description,
-  optional,
-  connected,
-  onConnect,
-  disabled,
-}) => (
-  <InteractiveCard
-    style={{ minHeight: 0 }}
-    subtitle={
-      <div className="flex flex-col items-center gap-2">
-        <div className="relative w-16 h-16 flex items-center justify-center">
-          <div className="absolute inset-[6.25%] bg-[#F4EBFF] rounded-lg" />
-          <div className="absolute inset-0 border-2 border-[#E9EAEB] rounded-[10.67px]" />
-          <div className="w-10 h-10 flex items-center justify-center rounded-full border-2 border-[#6941C6] bg-[#6941C6]/20">
-            <Icon className="w-full h-full text-[#6941C6] z-10" />
-          </div>
-        </div>
-      </div>
-    }
-    title={
-      <>
-        {" "}
-        <h2
-          className="text-2xl font-bold"
-          style={{
-            background: gradient,
-            WebkitBackgroundClip: "text",
-            backgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-          }}
-        >
-          {title}
-        </h2>
-        {
-          <span
-            className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full"
-            style={{ background: optional ? "#F3F4F6" : "", color: "#6B7280" }}
-          >
-            {optional && "Optional"}
-          </span>
-        }
-      </>
-    }
-    text={
-      <p className="text-sm" style={{ color: "#717680" }}>
-        {description}
-      </p>
-    }
-    action={
-      connected ? (
-        <div className="flex justify-center">
-          <button
-            type="button"
-            className="servv_button servv_button--secondary w-full"
-          >
-            <CheckIcon className="w-4 h-4 mr-1" />
-            Connected
-          </button>
-        </div>
-      ) : (
-        <button
-          type="button"
-          className="w-full rounded-lg text-sm font-extrabold py-2.5 px-6 transition-opacity hover:opacity-90 disabled:opacity-50"
-          style={{
-            background: gradient,
-            border: "3px solid rgba(255, 255, 255, 0.35)",
-            boxShadow:
-              "0px 4px 8px -2px rgba(10, 13, 18, 0.1), 0px 2px 4px -2px rgba(10, 13, 18, 0.06)",
-            color: "#FFFFFF",
-          }}
-          onClick={onConnect}
-          disabled={disabled}
-        >
-          Connect
-        </button>
-      )
-    }
-  />
-);
 const VENUE_OPTIONS = [
   {
     value: "offline",
@@ -394,25 +313,12 @@ const VenueStep = ({
 
           {renderOnboardingFields()}
 
-          <div className="servv_actions mt-auto">
-            <button
-              type="button"
-              className="servv_button servv_button--secondary"
-              onClick={() => changeStep("date")}
-            >
-              Previous
-            </button>
-
-            {currentVenueType && (
-              <button
-                type="button"
-                className="servv_button servv_button--primary"
-                onClick={() => changeStep("tickets")}
-              >
-                Continue
-              </button>
-            )}
-          </div>
+          <StepActions
+            onPrevious={() => changeStep("date")}
+            onPrimary={
+              currentVenueType ? () => changeStep("tickets") : undefined
+            }
+          />
         </div>
       ) : (
         /* ── Default (non-onboarding) layout ── */
@@ -487,32 +393,12 @@ const VenueStep = ({
               </div>
             )}
 
-            <div className="servv_actions mt-auto">
-              {!isNew && (
-                <button
-                  type="button"
-                  className="servv_button servv_button--secondary"
-                  onClick={() => handleFormSubmit(true)}
-                >
-                  Save and Exit
-                </button>
-              )}
-              <button
-                type="button"
-                className="servv_button servv_button--secondary"
-                onClick={() => changeStep("date")}
-              >
-                Previous
-              </button>
-              <button
-                type="button"
-                className="servv_button servv_button--primary"
-                onClick={() => changeStep("tickets")}
-                disabled={attributes.location === "zoom" && !zoomAccount}
-              >
-                Continue
-              </button>
-            </div>
+            <StepActions
+              onSaveAndExit={isNew ? undefined : () => handleFormSubmit(true)}
+              onPrevious={() => changeStep("date")}
+              onPrimary={() => changeStep("tickets")}
+              primaryDisabled={attributes.location === "zoom" && !zoomAccount}
+            />
           </div>
         </>
       )}
@@ -521,11 +407,12 @@ const VenueStep = ({
           title="Connect Zoom"
           onClose={() => setShowZoomModal(false)}
         >
-          <ZoomPaidAccountModalContent
-            zoomConfirmed={zoomConfirmed}
-            setZoomConfirmed={setZoomConfirmed}
-            handlerOnZoomAccountAdd={() => {
-              getZoomConnectURL();
+          <ConnectServiceModalContent
+            service="zoom"
+            confirmed={zoomConfirmed}
+            setConfirmed={setZoomConfirmed}
+            onConnect={() => {
+            getZoomConnectURL();
             }}
             closeModal={() => setShowZoomModal(false)}
           />

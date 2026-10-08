@@ -1,17 +1,18 @@
+import useCacheRefresh from "../../hooks/useCacheRefresh";
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { XMarkIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { EnvelopeIcon } from "@heroicons/react/24/outline";
 import PageWrapper from "./PageWrapper";
 import FilterTable from "../Containers/FilterTable";
 import ListPagination from "../Controls/ListPagination";
+import NewInputFieldControl from "../Controls/NewInputFieldControl";
 import SpinnerLoader from "./SpinnerLoader";
 import Badge from "../Containers/Badge";
 import Card from "../Containers/Card";
-import InputFieldControl from "../Controls/InputFieldControl";
 import NewSelectControl from "../Controls/NewSelectControl";
 import { getSentEmails, getEmailContent } from "../../utilities/mails";
 import moment from "moment-timezone";
-import Datepicker from "react-tailwindcss-datepicker";
+import NewDatePickerControl from "../Controls/NewDatePickerControl";
 import PageActionButton from "../Controls/PageActionButton";
 import { useServvStore } from "../../store/useServvStore";
 import { useNavigate } from "react-router-dom";
@@ -121,6 +122,8 @@ const SentEmails = () => {
     setStatus(val);
     fetchEmails(1, { status: val });
   };
+
+  useCacheRefresh(["emails"], () => fetchEmails(page));
 
   const handleOpenEmail = async (email) => {
     setSelectedEmail(email);
@@ -280,23 +283,22 @@ const SentEmails = () => {
             {/* Filters bar — desktop */}
             <div className="hidden md:flex items-center gap-3 px-4 py-3 flex-wrap">
               <div className="flex-1 min-w-[180px]">
-                <InputFieldControl
+                <NewInputFieldControl
                   value={localSearch}
                   placeholder="Search by event or recipient"
                   onChange={setLocalSearch}
-                  handleKeyPress={handleSearchKeyPress}
-                  fullWidth={false}
+                  onKeyDown={handleSearchKeyPress}
+                  width="100%"
                   align="left"
                   disabled={isFreePlan}
                 />
               </div>
 
               <div className="min-w-[265px]">
-                <Datepicker
-                  displayFormat="MMM DD, YYYY"
+                <NewDatePickerControl
                   value={dates}
-                  placeholder="Select dates"
-                  inputClassName="input-control section-description text-left w-full shadow-sm border-solid border border-gray-300 bg-white"
+                  label="Select dates"
+                  fullWidth
                   onChange={handleDatesChange}
                   disabled={isFreePlan}
                 />

@@ -1,0 +1,223 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+
+// The card the Settings and Integrations landings are built from. Reference:
+// padding 20, gap 14, card surface; it lifts on hover like an event card.
+@include m.scoped {
+  .account {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 1px solid t.$border;
+    border-radius: t.$radius-lg;
+    box-shadow: t.$shadow-field;
+    > div {
+      min-width: 0;
+    }
+  }
+  .avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: t.$primary-surface;
+    color: t.$primary-strong;
+    @include m.text(11, t.$weight-bold);
+  }
+  .accountTitle {
+    display: block;
+    @include m.eyebrow;
+    color: t.$text-placeholder;
+  }
+  .accountLabel {
+    display: block;
+    @include m.truncate;
+    @include m.text(13, t.$weight-semibold);
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+  .card {
+    @include m.card-surface;
+    display: flex;
+    flex-direction: column;
+    gap: t.$space-7;
+    padding: t.$space-10;
+    transition:
+      box-shadow t.$duration t.$ease,
+      transform t.$duration t.$ease;
+
+    &:hover {
+      box-shadow: t.$shadow-card-hover;
+      transform: translateY(-3px);
+    }
+  }
+
+  .top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: t.$space-6;
+  }
+
+  // Settings: a 44px tinted tile. Integrations: a 48px raised white one, so a
+  // service's own mark reads as a logo rather than as our own iconography.
+  .tile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    @include m.text(16, t.$weight-extrabold);
+
+    svg {
+      width: 22px;
+      height: 22px;
+    }
+  }
+
+  .tileTint {
+    width: 44px;
+    height: 44px;
+    border: 1px solid t.$primary-border;
+    border-radius: t.$radius-md + 1px;
+    background: t.$primary-surface;
+    color: t.$primary;
+  }
+
+  .tileRaised {
+    width: 48px;
+    height: 48px;
+    border: 1px solid t.$border;
+    border-radius: t.$radius-xl;
+    background: t.$surface;
+    color: t.$text-strong;
+    box-shadow: t.$shadow-raised;
+    @include m.text(18, t.$weight-extrabold);
+  }
+
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    height: 26px;
+    padding: 0 11px;
+    border: 1px solid t.$border-hairline;
+    border-radius: t.$radius-pill;
+    background: t.$surface-subtle;
+    color: t.$text-strong;
+    box-shadow: t.$shadow-raised-sm;
+    white-space: nowrap;
+    letter-spacing: 0.01em;
+    @include m.text(12, t.$weight-bold);
+  }
+
+  .statusOn {
+    border-color: t.$success-border;
+    background: t.$success-surface;
+    color: t.$success-text;
+  }
+
+  .statusInfo {
+    border-color: t.$info-border;
+    background: t.$info-surface;
+    color: t.$info;
+  }
+
+  .statusWarn {
+    border-color: t.$warning-border;
+    background: t.$warning-surface;
+    color: t.$warning-text;
+  }
+
+  .dot {
+    width: 7px;
+    height: 7px;
+    flex: 0 0 7px;
+    border-radius: t.$radius-pill;
+    background: t.$text-placeholder;
+    box-shadow: 0 0 0 3px rgba(142, 151, 171, 0.15);
+  }
+
+  .dotOn {
+    background: t.$success;
+    box-shadow: 0 0 0 3px rgba(23, 178, 106, 0.15);
+  }
+
+  .dotInfo {
+    background: #2e90fa;
+    box-shadow: 0 0 0 3px rgba(46, 144, 250, 0.15);
+  }
+
+  .dotWarn {
+    background: t.$warning;
+    box-shadow: 0 0 0 3px rgba(247, 144, 9, 0.15);
+  }
+
+  .title {
+    margin: 0;
+    @include m.text(16, t.$weight-bold);
+    letter-spacing: -0.01em;
+  }
+
+  .description {
+    margin: t.$space-2 0 0;
+    @include m.text(13, t.$weight-medium);
+    line-height: 20px;
+    color: t.$text-secondary;
+  }
+
+  // A carved groove between the copy and the action, as on the dashboard.
+  // `margin-top: auto` lives here rather than on the footer so the groove and
+  // the action stay together at the bottom: descriptions are not all the same
+  // length, and a row of cards has to end on one line.
+  .groove {
+    margin-top: auto;
+    height: 2px;
+    border-radius: t.$radius-pill;
+    background: t.$surface;
+    box-shadow:
+      inset 1px 1px 3px t.$shade,
+      inset -1px -1px 3px t.$light-alt;
+  }
+
+  .foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: t.$space-5;
+    flex-wrap: wrap;
+  }
+
+  .meta {
+    @include m.truncate;
+    @include m.text(12, t.$weight-medium);
+    color: t.$text-soft;
+  }
+
+  // The card is clickable as a whole; this keeps the keyboard with it.
+  .clickable {
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: none;
+      box-shadow:
+        t.$shadow-card,
+        0 0 0 3px t.$primary-ring;
+    }
+  }
+
+  .dimmed {
+    opacity: 0.55;
+
+    &:hover {
+      box-shadow: t.$shadow-card;
+      transform: none;
+    }
+  }
+}

@@ -3,7 +3,7 @@
  * Plugin Name: WP Super Events – Event Booking & Tickets
  * Plugin URI: https://wpsuperevents.com
  * Description: Create event calendars, registrations, recurring events, tickets, and online or in-person events directly in WordPress.
- * Version: 1.2.2
+ * Version: 1.2.1
  * Author: ServvAI
  * Author URI: https://wpsuperevents.com
  * License: GPL2
@@ -20,6 +20,7 @@ require_once __DIR__ . '/vendor-prefixed/autoload.php';
 require_once __DIR__ . '/inc/helpers.php';
 require_once __DIR__ . '/inc/api.php';
 require_once __DIR__ . '/inc/n8n.php';
+require_once __DIR__ . '/inc/widget-v2.php';
 
 add_action('servv_plugin_delayed_install', 'servv_plugin_make_delayed_install');
 add_action('rest_api_init', 'servv_plugin_register_api_endpoint', 1);
@@ -44,6 +45,8 @@ function servv_plugin_activate_single_site() {
     if (!wp_next_scheduled('servv_plugin_delayed_install')) {
         wp_schedule_single_event(time() + 5, 'servv_plugin_delayed_install');
     }
+    update_option('servv_onboarding_status', 'pending', false);
+    update_option('servv_onboarding_redirect', '1', false);
     if (function_exists('spawn_cron')) {
         spawn_cron();
     }
@@ -457,66 +460,478 @@ function servv_render_event_purchase_form($atts) {
 
 add_action('admin_menu', 'servv_add_admin_page');
 add_action('admin_enqueue_scripts', 'servv_admin_enqueue_scripts');
+add_action('admin_init', 'servv_maybe_redirect_to_onboarding');
+add_action('admin_post_servv_dismiss_onboarding', 'servv_handle_dismiss_onboarding');
+
+function servv_get_admin_screens() {
+    return [
+        SERVV_PLUGIN_SLUG => [
+            'label'       => 'Dashboard',
+            'title'       => 'Dashboard',
+            'route'       => 'dashboard',
+            'type'        => 'react',
+        ],
+        'servv-onboarding' => [
+            'label'       => 'Setup',
+            'title'       => 'Setup',
+            'type'        => 'native',
+            'renderer'    => 'servv_render_onboarding_screen',
+            'hidden'      => true,
+        ],
+        'servv-events' => [
+            'label'       => 'Events',
+            'title'       => 'Events',
+            'route'       => 'events',
+            'type'        => 'react',
+        ],
+        'servv-bookings' => [
+            'label'       => 'Bookings',
+            'title'       => 'Bookings',
+            'route'       => 'bookings',
+            'type'        => 'react',
+        ],
+        'servv-calendar' => [
+            'label'       => 'Calendar',
+            'title'       => 'Calendar',
+            'route'       => 'calendar',
+            'type'        => 'react',
+            'hidden'      => true,
+        ],
+        'servv-filters' => [
+            'label'       => 'Filters',
+            'title'       => 'Filters',
+            'route'       => 'filters',
+            'type'        => 'react',
+        ],
+        'servv-integrations' => [
+            'label'       => 'Integrations',
+            'title'       => 'Integrations',
+            'route'       => 'integrations',
+            // Was 'hybrid' with servv_render_integrations_overview printing
+            // native connection cards above the app. The React screen carries
+            // that copy now, so no renderer runs around it.
+            'type'        => 'react',
+        ],
+        'servv-pricing' => [
+            'label'       => 'Plans',
+            'title'       => 'Plans',
+            'route'       => 'plans',
+            'type'        => 'react',
+        ],
+        'servv-widget' => [
+            'label' => 'Widget', 'title' => 'Widget', 'route' => 'widget', 'type' => 'react',
+        ],
+        'servv-settings' => [
+            'label'       => 'Settings',
+            'title'       => 'Settings',
+            'route'       => 'settings',
+            'type'        => 'react',
+        ],
+        'servv-support' => [
+            'label'       => 'Support',
+            'title'       => 'Support',
+            'route'       => 'support',
+            'type'        => 'react',
+        ],
+    ];
+}
+
+function servv_get_admin_screen($page = null) {
+    $screens = servv_get_admin_screens();
+    $page = $page ?: SERVV_PLUGIN_SLUG;
+    return $screens[$page] ?? $screens[SERVV_PLUGIN_SLUG];
+}
+
+function servv_get_current_admin_page() {
+    return isset($_GET['page']) ? sanitize_key(wp_unslash($_GET['page'])) : SERVV_PLUGIN_SLUG;
+}
+
+function servv_admin_screen_uses_react($screen) {
+    return in_array($screen['type'] ?? 'react', ['react', 'hybrid'], true);
+}
 
 function servv_add_admin_page() {
+    $screens = servv_get_admin_screens();
     add_menu_page('WP Super Events', 'WP Super Events', 'manage_options', SERVV_PLUGIN_SLUG, 'servv_render_admin_page','dashicons-calendar-alt');
-    
-    add_submenu_page(
-        SERVV_PLUGIN_SLUG,
-        'Dashboard',
-        'Dashboard',
-        'manage_options',
-        SERVV_PLUGIN_SLUG,
-        'servv_render_admin_page'
-    );
+
+    foreach ($screens as $slug => $screen) {
+        add_submenu_page(
+            SERVV_PLUGIN_SLUG,
+            $screen['title'],
+            $screen['label'],
+            'manage_options',
+            $slug,
+            'servv_render_admin_page'
+        );
+    }
 
     add_submenu_page(SERVV_PLUGIN_SLUG, 'Zoom Integration', 'Zoom Integration', 'manage_options', 'servv-plugin-zoom-confirm-page', 'servv_plugin_zoom_confirm');
-    // remove_submenu_page(SERVV_PLUGIN_SLUG, 'servv-plugin-zoom-confirm-page');
-
     add_submenu_page(SERVV_PLUGIN_SLUG, 'Calendar Integration', 'Calendar Integration', 'manage_options', 'servv-plugin-calendar-confirm-page', 'servv_plugin_calendar_confirm');
-    // remove_submenu_page(SERVV_PLUGIN_SLUG, 'servv-plugin-calendar-confirm-page');
-
     add_submenu_page(SERVV_PLUGIN_SLUG, 'Gmail Integration', 'Gmail Integration', 'manage_options', 'servv-plugin-gmail-confirm-page', 'servv_plugin_gmail_confirm');
-    // remove_submenu_page(SERVV_PLUGIN_SLUG, 'servv-plugin-gmail-confirm-page');
-
     add_submenu_page(SERVV_PLUGIN_SLUG, 'Stripe Integration', 'Stripe Integration', 'manage_options', 'servv-plugin-stripe-confirm-page', 'servv_plugin_stripe_confirm');
-    // remove_submenu_page(SERVV_PLUGIN_SLUG, 'servv-plugin-stripe-confirm-page');
-   
-    wp_enqueue_style(
-    'servv-admin-style',
-    plugins_url('admin.css', __FILE__), // directly in same folder as this PHP file
-    [],
-    SERVV_PLUGIN_VERSION
-);
-}
 
-function servv_render_admin_page() {
-    echo '<div id="servv-wrap"></div>';
-}
-
-
-// Preview Tags
-add_action("wp_ajax_servv_get_shop_settings", "servv_ajax_get_shop_settings");
-add_action("wp_ajax_nopriv_servv_get_shop_settings", "servv_ajax_get_shop_settings");
-
-function servv_ajax_get_shop_settings() {
-    check_ajax_referer("servv_platform_nonce", "security");
-
-    try {
-        $response = servvSendApiRequest("/wordpress/shop/settings", [], "GET");
-
-        wp_send_json_success([
-            "settings" => $response
-        ]);
-
-    } catch (Exception $e) {
-        wp_send_json_error([
-            "message" => $e->getMessage()
-        ]);
+    // WordPress needs the current callback's submenu entry to resolve its
+    // parent and registered page hook during the admin access check.
+    $current_page = servv_get_current_admin_page();
+    foreach ($screens as $slug => $screen) {
+        if (!empty($screen['hidden']) && $current_page !== $slug) {
+            remove_submenu_page(SERVV_PLUGIN_SLUG, $slug);
+        }
+    }
+    foreach (['zoom', 'calendar', 'gmail', 'stripe'] as $integration) {
+        $callback_page = 'servv-plugin-' . $integration . '-confirm-page';
+        if ($current_page !== $callback_page) {
+            remove_submenu_page(SERVV_PLUGIN_SLUG, $callback_page);
+        }
     }
 }
 
+function servv_maybe_redirect_to_onboarding() {
+    if (get_option('servv_onboarding_redirect') !== '1') {
+        return;
+    }
+    if (!current_user_can('manage_options') || wp_doing_ajax() || is_network_admin()) {
+        return;
+    }
+    $page = servv_get_current_admin_page();
+    if ($page === 'servv-onboarding') {
+        delete_option('servv_onboarding_redirect');
+        return;
+    }
+    delete_option('servv_onboarding_redirect');
+    wp_safe_redirect(admin_url('admin.php?page=servv-onboarding'));
+    exit;
+}
 
+function servv_handle_dismiss_onboarding() {
+    if (!current_user_can('manage_options')) {
+        wp_die(esc_html__('You do not have permission to update WP Super Events setup.', 'servv-plugin'));
+    }
+    check_admin_referer('servv_dismiss_onboarding');
+    update_option('servv_onboarding_status', 'dismissed', false);
+    delete_option('servv_onboarding_redirect');
+    wp_safe_redirect(wp_get_referer() ?: admin_url('admin.php?page=' . SERVV_PLUGIN_SLUG));
+    exit;
+}
+
+function servv_is_onboarding_dismissed() {
+    return get_option('servv_onboarding_status') === 'dismissed';
+}
+
+function servv_get_hash_admin_url($page, $route = '') {
+    $url = admin_url('admin.php?page=' . $page);
+    if ($route !== '') {
+        $url .= '#/' . ltrim($route, '/');
+    }
+    return $url;
+}
+
+function servv_get_native_notice_url($dismiss = false) {
+    if (!$dismiss) {
+        return admin_url('admin.php?page=servv-onboarding');
+    }
+    return wp_nonce_url(admin_url('admin-post.php?action=servv_dismiss_onboarding'), 'servv_dismiss_onboarding');
+}
+
+function servv_render_admin_notices($page) {
+    $install_status = get_option('servv_install_status', '');
+    if ($install_status === 'failed') {
+        echo '<div class="notice notice-error"><p><strong>WP Super Events activation failed.</strong> Review your API configuration, then retry activation or contact support.</p></div>';
+    } elseif ($install_status !== 'ok') {
+        echo '<div class="notice notice-info"><p><strong>WP Super Events setup is still finishing.</strong> Some API-backed screens may load limited data until installation completes.</p></div>';
+    }
+
+    if (!function_exists('register_block_type')) {
+        echo '<div class="notice notice-warning"><p><strong>Gutenberg blocks are unavailable.</strong> Activate the block editor to create and embed WP Super Events experiences.</p></div>';
+    }
+
+    // The setup prompt is the React <SetupGuide> banner on the dashboard now —
+    // it reads the same `servv_onboarding_status` option through servvData.
+}
+
+function servv_render_admin_page() {
+    if (!current_user_can('manage_options')) {
+        wp_die(esc_html__('You do not have permission to manage WP Super Events.', 'servv-plugin'));
+    }
+
+    $page = servv_get_current_admin_page();
+    $screen = servv_get_admin_screen($page);
+
+    echo '<div class="wrap servv-native-admin-wrap">';
+    servv_render_admin_notices($page);
+
+    if (!empty($screen['renderer']) && is_callable($screen['renderer'])) {
+        call_user_func($screen['renderer'], $screen, $page);
+    }
+
+    if (servv_admin_screen_uses_react($screen)) {
+        printf(
+            '<div id="servv-wrap" class="servv-react-island" data-default-route="%1$s" data-admin-page="%2$s"></div>',
+            esc_attr($screen['route'] ?? 'dashboard'),
+            esc_attr($page)
+        );
+    }
+    echo '</div>';
+}
+
+function servv_safe_remote_status($route) {
+    try {
+        $response = servvSendApiRequest($route);
+        return ['data' => is_array($response) ? $response : [], 'error' => null];
+    } catch (Exception $e) {
+        return ['data' => [], 'error' => $e->getMessage()];
+    }
+}
+
+function servv_get_connection_status($service) {
+    $routes = [
+        'calendar' => '/calendar/account',
+        'gmail'    => '/mail/gmail/account',
+        'zoom'     => '/zoom/account',
+        'stripe'   => '/payments/stripe/account',
+    ];
+    if (empty($routes[$service])) {
+        return ['connected' => null, 'label' => 'Uses browser OAuth', 'detail' => '', 'error' => null];
+    }
+    $result = servv_safe_remote_status($routes[$service]);
+    $data = $result['data'];
+    $identity = $data['email'] ?? $data['google_calendar_email'] ?? $data['account_id'] ?? $data['id'] ?? '';
+    $connected = !empty($identity) || !empty($data['charges_enabled']);
+    return [
+        'connected' => $connected,
+        'label'     => $connected ? 'Connected' : 'Not connected',
+        'detail'    => $identity,
+        'error'     => $result['error'],
+    ];
+}
+
+function servv_render_status_badge($status) {
+    $class = 'servv-status-badge';
+    if (!empty($status['error'])) {
+        $class .= ' is-warning';
+        $label = 'Needs attention';
+    } elseif ($status['connected'] === true) {
+        $class .= ' is-connected';
+        $label = $status['label'];
+    } elseif ($status['connected'] === false) {
+        $class .= ' is-disconnected';
+        $label = $status['label'];
+    } else {
+        $class .= ' is-neutral';
+        $label = $status['label'];
+    }
+    return '<span class="' . esc_attr($class) . '">' . esc_html($label) . '</span>';
+}
+
+function servv_plugin_stripe_confirm() {
+    servv_js_redirect(servv_get_hash_admin_url('servv-integrations', 'integrations/stripe'));
+}
+
+function servv_render_onboarding_screen() {
+    $steps = [
+        [
+            'title'       => 'Configure business and event defaults',
+            'description' => 'Review timezone, default duration, ticket defaults, checkout, notifications, and widget settings.',
+            'url'         => servv_get_hash_admin_url('servv-settings', 'settings'),
+            'button'      => 'Open settings',
+        ],
+        [
+            'title'       => 'Connect Google Calendar and Gmail',
+            'description' => 'Google connections use browser-based Google OAuth. No standalone Chrome extension or Chrome-only connection was found in this plugin.',
+            'url'         => servv_get_hash_admin_url('servv-integrations', 'integrations'),
+            'button'      => 'Manage Google',
+        ],
+        [
+            'title'       => 'Connect Zoom',
+            'description' => 'Enable online event creation and meeting-link generation for virtual events.',
+            'url'         => servv_get_hash_admin_url('servv-integrations', 'integrations/zoom'),
+            'button'      => 'Manage Zoom',
+        ],
+        [
+            'title'       => 'Connect Stripe',
+            'description' => 'Accept paid registrations and configure the payout account for ticket sales.',
+            'url'         => servv_get_hash_admin_url('servv-integrations', 'integrations/stripe'),
+            'button'      => 'Manage Stripe',
+        ],
+        [
+            'title'       => 'Create your first event',
+            'description' => 'Create a one-time or recurring event, add tickets, and publish it to your site.',
+            'url'         => servv_get_hash_admin_url('servv-events', 'events/new'),
+            'button'      => 'Create event',
+        ],
+    ];
+
+    echo '<div class="servv-admin-grid">';
+    foreach ($steps as $index => $step) {
+        echo '<div class="card servv-native-card">';
+        echo '<h2>' . esc_html(($index + 1) . '. ' . $step['title']) . '</h2>';
+        echo '<p>' . esc_html($step['description']) . '</p>';
+        printf('<p><a class="button button-primary" href="%1$s">%2$s</a></p>', esc_url($step['url']), esc_html($step['button']));
+        echo '</div>';
+    }
+    echo '</div>';
+
+    echo '<form method="post" action="' . esc_url(admin_url('admin-post.php')) . '" class="servv-onboarding-actions">';
+    echo '<input type="hidden" name="action" value="servv_dismiss_onboarding">';
+    wp_nonce_field('servv_dismiss_onboarding');
+    submit_button('Mark setup as reviewed', 'secondary', 'submit', false);
+    echo ' <a class="button" href="' . esc_url(servv_get_hash_admin_url(SERVV_PLUGIN_SLUG, 'onboarding')) . '">Open guided setup flow</a>';
+    echo '</form>';
+}
+
+// No longer wired to a screen: the Integrations screen is React-only and
+// IntegrationsPage.jsx carries this copy. Kept for the native fallback.
+function servv_render_integrations_overview() {
+    $cards = [
+        [
+            'service'     => 'calendar',
+            'title'       => 'Google Calendar',
+            'description' => 'Sync event schedules to Google Calendar.',
+            'url'         => servv_get_hash_admin_url('servv-integrations', 'integrations/calendars'),
+        ],
+        [
+            'service'     => 'gmail',
+            'title'       => 'Gmail',
+            'description' => 'Send event email notifications and reminders with Gmail.',
+            'url'         => servv_get_hash_admin_url('servv-integrations', 'integrations/gmail'),
+        ],
+        [
+            'service'     => 'zoom',
+            'title'       => 'Zoom',
+            'description' => 'Create and manage online event meetings.',
+            'url'         => servv_get_hash_admin_url('servv-integrations', 'integrations/zoom'),
+        ],
+        [
+            'service'     => 'stripe',
+            'title'       => 'Stripe',
+            'description' => 'Accept paid registrations and manage payout settings.',
+            'url'         => servv_get_hash_admin_url('servv-integrations', 'integrations/stripe'),
+        ],
+        [
+            'service'     => 'browser',
+            'title'       => 'Google / Chrome browser',
+            'description' => 'The plugin uses Google OAuth in the user browser for Calendar and Gmail. No separate Chrome connector exists in this codebase.',
+            'url'         => servv_get_hash_admin_url('servv-integrations', 'integrations'),
+        ],
+    ];
+
+    echo '<div class="servv-native-section">';
+    echo '<h2>Connection Status</h2>';
+    echo '<div class="servv-admin-grid">';
+    foreach ($cards as $card) {
+        $status = servv_get_connection_status($card['service']);
+        echo '<div class="card servv-native-card">';
+        echo '<div class="servv-card-title-row"><h3>' . esc_html($card['title']) . '</h3>' . wp_kses_post(servv_render_status_badge($status)) . '</div>';
+        echo '<p>' . esc_html($card['description']) . '</p>';
+        if (!empty($status['detail'])) {
+            echo '<p><strong>Account:</strong> ' . esc_html($status['detail']) . '</p>';
+        }
+        if (!empty($status['error'])) {
+            echo '<p class="description">Status could not be refreshed: ' . esc_html($status['error']) . '</p>';
+        }
+        printf('<p><a class="button" href="%1$s">%2$s</a></p>', esc_url($card['url']), esc_html__('Manage', 'servv-plugin'));
+        echo '</div>';
+    }
+    echo '</div>';
+    echo '</div>';
+    echo '<hr class="servv-native-divider">';
+    echo '<h2>Integration Settings</h2>';
+}
+
+function servv_fetch_recurring_events_preview() {
+    $events = [];
+    foreach (['/offline/meetings', '/zoom/meetings'] as $route) {
+        $query = servv_build_api_query([
+            'page'                => 1,
+            'page_size'           => 25,
+            'without_occurrences' => true,
+        ]);
+        $result = servv_safe_remote_status($route . '?' . $query);
+        if (!empty($result['data']['meetings']) && is_array($result['data']['meetings'])) {
+            $events = array_merge($events, $result['data']['meetings']);
+        }
+    }
+    return array_values(array_filter($events, function ($event) {
+        if (!empty($event['recurrence']) && is_array($event['recurrence'])) {
+            return true;
+        }
+        return isset($event['recurrence']) && strtolower((string)$event['recurrence']) === 'recurring';
+    }));
+}
+
+function servv_format_recurrence_summary($recurrence) {
+    if (empty($recurrence)) {
+        return 'One-time';
+    }
+    if (is_string($recurrence)) {
+        return $recurrence;
+    }
+    $types = [1 => 'Daily', 2 => 'Weekly', 3 => 'Monthly'];
+    $type = $types[(int)($recurrence['type'] ?? 0)] ?? 'Recurring';
+    $interval = (int)($recurrence['repeat_interval'] ?? 1);
+    $parts = [$type, 'every ' . max(1, $interval) . ' interval(s)'];
+    if (!empty($recurrence['weekly_days']) && is_array($recurrence['weekly_days'])) {
+        $parts[] = 'days: ' . implode(', ', array_map('intval', $recurrence['weekly_days']));
+    }
+    if (!empty($recurrence['end_times'])) {
+        $parts[] = 'ends after ' . (int)$recurrence['end_times'] . ' occurrence(s)';
+    }
+    if (!empty($recurrence['end_date_time'])) {
+        $parts[] = 'until ' . esc_html($recurrence['end_date_time']);
+    }
+    return implode(' · ', $parts);
+}
+
+function servv_render_recurring_events_screen() {
+    $timezone = wp_timezone_string() ?: 'UTC';
+    echo '<div class="notice notice-info"><p><strong>Timezone:</strong> Recurring schedules are displayed using the site timezone: ' . esc_html($timezone) . '.</p></div>';
+    echo '<div class="card servv-native-card">';
+    echo '<h2>Supported recurrence rules</h2>';
+    echo '<p>WP Super Events currently supports one-time, daily, weekly, monthly, custom repeat intervals, recurrence end counts, and recurrence end dates in the event builder.</p>';
+    echo '</div>';
+
+    $events = servv_fetch_recurring_events_preview();
+    echo '<h2>Recurring Series</h2>';
+    if (empty($events)) {
+        echo '<div class="notice notice-warning inline"><p>No recurring series were returned by the event API. Create a recurring event or review API connectivity.</p></div>';
+        echo '<p><a class="button button-primary" href="' . esc_url(servv_get_hash_admin_url('servv-events', 'events/new')) . '">Create recurring event</a> <a class="button" href="' . esc_url(servv_get_hash_admin_url('servv-events', 'events')) . '">View all events</a></p>';
+        return;
+    }
+
+    echo '<table class="widefat striped servv-native-table"><thead><tr><th>Event</th><th>Type</th><th>Pattern</th><th>Starts</th><th>Actions</th></tr></thead><tbody>';
+    foreach ($events as $event) {
+        $title = $event['topic'] ?? $event['title'] ?? 'Untitled event';
+        $type = strtolower((string)($event['type'] ?? 'offline'));
+        $route_type = $type === 'zoom' ? 'zoom' : 'offline';
+        $event_id = $event['id'] ?? '';
+        $edit_url = $event_id ? servv_get_hash_admin_url('servv-events', 'events/' . $route_type . '/' . rawurlencode((string)$event_id)) : servv_get_hash_admin_url('servv-events', 'events');
+        echo '<tr>';
+        echo '<td><strong>' . esc_html($title) . '</strong></td>';
+        echo '<td>' . esc_html(ucfirst($route_type)) . '</td>';
+        echo '<td>' . esc_html(servv_format_recurrence_summary($event['recurrence'] ?? null)) . '</td>';
+        echo '<td>' . esc_html($event['start_time'] ?? $event['startTime'] ?? 'Not available') . '</td>';
+        echo '<td><a class="button button-small" href="' . esc_url($edit_url) . '">Manage</a></td>';
+        echo '</tr>';
+    }
+    echo '</tbody></table>';
+}
+
+function servv_get_admin_diagnostics() {
+    global $wp_version;
+    return [
+        'plugin'        => 'WP Super Events',
+        'plugin_slug'   => SERVV_PLUGIN_SLUG,
+        'plugin_version'=> SERVV_PLUGIN_VERSION,
+        'wordpress'     => $wp_version,
+        'php'           => PHP_VERSION,
+        'site_url'      => home_url(),
+        'install_status'=> get_option('servv_install_status', ''),
+        'mode'          => servv_plugin_get_config('servv_plugin_mode'),
+        'timezone'      => wp_timezone_string(),
+        'gutenberg'     => function_exists('register_block_type'),
+    ];
+
+}
 
 function servv_fetch_widget_settings_server() {
 
@@ -583,17 +998,38 @@ add_action("wp_head", function () {
 function servv_admin_enqueue_scripts() {
     if (!isset($_GET['page'])) return;
 
-    $page = sanitize_text_field(wp_unslash($_GET['page']));
-    if ($page !== SERVV_PLUGIN_SLUG && $page !== 'events') return;
-
-    $asset_file = include plugin_dir_path(__FILE__) . 'build/admin.asset.php';
-
+    $page = sanitize_key(wp_unslash($_GET['page']));
+    $screens = servv_get_admin_screens();
+    if (!isset($screens[$page])) return;
 
     wp_enqueue_style(
-    'servv-inter-font',
-    'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900&display=swap',
-    [],
-    null
+        'servv-admin-style',
+        plugins_url('admin.css', __FILE__),
+        [],
+        SERVV_PLUGIN_VERSION
+    );
+
+    $screen = servv_get_admin_screen($page);
+    if (!servv_admin_screen_uses_react($screen)) {
+        return;
+    }
+
+    wp_enqueue_media();
+    $asset_file = include plugin_dir_path(__FILE__) . 'build/admin.asset.php';
+
+    wp_enqueue_style(
+        'servv-inter-font',
+        'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900&display=swap',
+        [],
+        null
+    );
+
+    // Plus Jakarta Sans is the typeface of the current admin design system.
+    wp_enqueue_style(
+        'servv-ui-font',
+        'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap',
+        [],
+        null
     );
 
      wp_enqueue_style(
@@ -602,6 +1038,16 @@ function servv_admin_enqueue_scripts() {
         ['servv-inter-font'],
         SERVV_PLUGIN_VERSION
     );
+
+    // Component styles compiled from the SCSS modules under src/. Loaded after
+    // the Tailwind sheet so migrated components win over the legacy utilities.
+    wp_enqueue_style(
+        'servv-components',
+        plugins_url('build/admin.css', __FILE__),
+        ['servv-styles', 'servv-ui-font'],
+        SERVV_PLUGIN_VERSION
+    );
+    wp_style_add_data('servv-components', 'rtl', 'replace');
     wp_enqueue_script(
         SERVV_PLUGIN_SLUG,
         plugins_url('build/admin.js', __FILE__),
@@ -609,10 +1055,25 @@ function servv_admin_enqueue_scripts() {
         SERVV_PLUGIN_VERSION,
         true
     );
+    $admin_routes = [];
+    foreach ($screens as $slug => $admin_screen) {
+        if (servv_admin_screen_uses_react($admin_screen) && !empty($admin_screen['route'])) {
+            $admin_routes[] = [
+                'url' => admin_url('admin.php?page=' . $slug),
+                'route' => '/' . ltrim($admin_screen['route'], '/'),
+            ];
+        }
+    }
     wp_localize_script(SERVV_PLUGIN_SLUG, 'servvData', [
         'page'              => $page,
+        'nativeAdmin'       => true,
+        'diagnostics'       => servv_get_admin_diagnostics(),
+        'defaultRoute'      => $screen['route'] ?? 'dashboard',
+        'adminRoutes'       => $admin_routes,
+        'onboardingUrl'     => admin_url('admin.php?page=servv-onboarding'),
         'pluginUrl'         => plugin_dir_url(__FILE__),
         'nonce'             => wp_create_nonce("wp_rest"),
+        'ajaxUrl'           => admin_url('admin-ajax.php'),
         'stripePublicKey'   => get_option('servv_stripe_public_key'),
         'stripeAccountId'   => get_option('servv_stripe_account_id'),
         'shopify_app'       => servv_plugin_get_config('shopify_app_url'),
@@ -620,9 +1081,23 @@ function servv_admin_enqueue_scripts() {
         'postUrl'           => admin_url('post.php'),
         'adminUrl'          => admin_url('admin.php'),
         'install_status'    => get_option('servv_install_status', ''),
+        'setupDismissed'    => servv_is_onboarding_dismissed(),
+        'setupDismissUrl'   => servv_get_native_notice_url(true),
         'gutenberg_active'  => (int)function_exists( 'register_block_type' ),
         'homepage'          => home_url(),
         'env'               => (str_contains(servv_plugin_get_config('api_base_url'), 'testapi') ? 'test' : (str_contains(servv_plugin_get_config('api_base_url'), 'devapi') ? 'dev' : 'prod')),
+        'adminPages'        => [
+            'dashboard'         => admin_url('admin.php?page=' . SERVV_PLUGIN_SLUG),
+            'events'            => admin_url('admin.php?page=servv-events'),
+            'bookings'          => admin_url('admin.php?page=servv-bookings'),
+            'calendar'          => admin_url('admin.php?page=servv-calendar'),
+            'filters'           => admin_url('admin.php?page=servv-filters'),
+            'integrations'      => admin_url('admin.php?page=servv-integrations'),
+            'pricing'           => admin_url('admin.php?page=servv-pricing'),
+            'widget'            => admin_url('admin.php?page=servv-widget'),
+            'settings'          => admin_url('admin.php?page=servv-settings'),
+            'support'           => admin_url('admin.php?page=servv-support'),
+        ],
     ]);
 }
 

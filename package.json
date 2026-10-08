@@ -12,11 +12,15 @@
 		"tailwind:watch": "npm run tailwind:build -- --watch",
 		"start": "wp-scripts start src/index.js src/checkout.js src/view.js src/admin.js --experimental-modules --webpack-copy-php & npm run tailwind:watch",
 		"build": "wp-scripts build src/index.js src/checkout.js src/view.js src/admin.js --experimental-modules --webpack-copy-php && npm run tailwind:build",
+		"test:cache": "node scripts/test-request-cache.cjs",
+		"test:event-form": "node scripts/test-event-form.cjs",
 		"format": "wp-scripts format",
 		"lint:css": "wp-scripts lint-style",
 		"lint:js": "wp-scripts lint-js",
 		"packages-update": "wp-scripts packages-update",
-		"plugin-zip": "wp-scripts plugin-zip"
+		"plugin-zip": "wp-scripts plugin-zip",
+		"build:widget-v2": "npm --prefix widgetEventsV2 run build",
+		"test:widget-v2": "npm --prefix widgetEventsV2 test"
 	},
 	"files": [
 		"[^.]*"
@@ -57,7 +61,6 @@
 		"react-router-dom": "^7.9.6",
 		"react-select": "^5.10.2",
 		"react-spinners": "^0.15.0",
-		"react-tailwindcss-datepicker": "^1.7.3",
 		"react-toastify": "^11.0.5",
 		"reaviz": "^16.0.4",
 		"stripe": "^17.7.0",
@@ -74,6 +77,7 @@
 		"autoprefixer": "^10.4.20",
 		"babel-plugin-wrap-jsx-text": "file:babel-plugins/wrap-jsx-text",
 		"jscodeshift": "^17.3.0",
+		"sass": "^1.105.1",
 		"tailwindcss": "^3.4.15"
 	}
 }

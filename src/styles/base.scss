@@ -1,0 +1,106 @@
+// ---------------------------------------------------------------------------
+// Global base for the admin app. Everything is scoped to the app root so the
+// surrounding WordPress admin keeps its own look — and so core's admin
+// stylesheets stop at our boundary (see the `scoped` mixin for the specificity
+// reasoning). Imported once, from src/admin.js.
+// ---------------------------------------------------------------------------
+
+@use "tokens" as t;
+@use "mixins" as m;
+
+:is(#servv-wrap, .servv-ui) {
+  // Exposed as custom properties for the few places that still need to reach
+  // tokens from inline styles or third-party widgets (react-select, Quill).
+  --sv-primary: #{t.$primary};
+  --sv-primary-strong: #{t.$primary-strong};
+  --sv-primary-surface: #{t.$primary-surface};
+  --sv-primary-border: #{t.$primary-border};
+  --sv-text: #{t.$text};
+  --sv-text-strong: #{t.$text-strong};
+  --sv-text-secondary: #{t.$text-secondary};
+  --sv-text-soft: #{t.$text-soft};
+  --sv-text-placeholder: #{t.$text-placeholder};
+  --sv-surface: #{t.$surface};
+  --sv-border: #{t.$border};
+  --sv-border-field: #{t.$border-field};
+  --sv-radius-lg: #{t.$radius-lg};
+  --sv-radius-2xl: #{t.$radius-2xl};
+  --sv-shadow-card: #{t.$shadow-card};
+  --sv-shadow-field: #{t.$shadow-field};
+  --sv-shadow-raised: #{t.$shadow-raised};
+  --sv-font-sans: #{t.$font-sans};
+
+  box-sizing: border-box;
+  background: t.$canvas;
+  color: t.$text;
+  font-family: t.$font-sans;
+  @include m.text(14, t.$weight-medium);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  h1 {
+    margin: 0;
+    @include m.text(32, t.$weight-extrabold);
+  }
+
+  h2 {
+    margin: 0;
+    @include m.text(24, t.$weight-bold);
+    letter-spacing: t.$tracking-tight;
+  }
+
+  h3 {
+    margin: 0;
+    @include m.text(18, t.$weight-semibold);
+  }
+
+  h4,
+  h5 {
+    margin: 0;
+    @include m.text(14, t.$weight-semibold);
+  }
+
+  p {
+    margin: 0;
+    @include m.text(14, t.$weight-medium);
+    color: t.$text-secondary;
+  }
+
+  a {
+    color: t.$primary;
+    text-decoration: none;
+    transition: color t.$duration-fast t.$ease;
+
+    &:hover,
+    &:focus {
+      color: t.$primary-strong;
+      text-decoration: underline;
+    }
+  }
+
+  input,
+  select,
+  textarea,
+  button {
+    font-family: inherit;
+  }
+
+  ::placeholder {
+    color: t.$text-placeholder;
+  }
+
+  @include m.reduced-motion {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}

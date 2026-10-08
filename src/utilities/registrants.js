@@ -1,7 +1,29 @@
-import axios from "axios";
-import apiFetch from "@wordpress/api-fetch";
+import axios from "./adminApi";
+import apiFetch from "./adminApiFetch";
 
 /* ------------------ helpers ------------------ */
+
+// Shared registrant shape. The paged and token-paged fetches used to map their
+// own subsets of this; callers read only the fields they need.
+const mapRegistrant = (registrant) => {
+  if (!registrant) return null;
+
+  return {
+    id: registrant.id,
+    firstName: registrant.first_name,
+    lastName: registrant.last_name,
+    email: registrant.email,
+    status: registrant.status,
+    joinUrl: registrant.join_url,
+    createdAt: registrant.created_datetime,
+  };
+};
+
+const mapRegistrants = (res) =>
+  res.registrants?.map(mapRegistrant).filter(Boolean) || [];
+
+const withOccurrence = (url, occurrenceId) =>
+  occurrenceId ? `${url}&occurrence_id=${occurrenceId}` : url;
 
 const getNonceHeaders = () => {
   if (typeof servvData !== "undefined" && servvData.nonce) {
@@ -17,30 +39,16 @@ export const fetchRegistrants = async ({
   page = 1,
   occurrenceId = null,
 }) => {
-  let url = `/servv-plugin/v1/event/${postID}/registrants?page_size=20&page=${page}`;
-
-  if (occurrenceId) {
-    url += `&occurrence_id=${occurrenceId}`;
-  }
+  const url = withOccurrence(
+    `/servv-plugin/v1/event/${postID}/registrants?page_size=20&page=${page}`,
+    occurrenceId,
+  );
 
   try {
     const res = await apiFetch({ path: url });
 
-    const registrants =
-      res.registrants
-        ?.map((registrant) => {
-          if (!registrant) return null;
-          return {
-            id: registrant.id,
-            firstName: registrant.first_name,
-            lastName: registrant.last_name,
-            email: registrant.email,
-          };
-        })
-        .filter(Boolean) || [];
-
     return {
-      registrants,
+      registrants: mapRegistrants(res),
       pagination: {
         pageNumber: res.page_number,
         pageCount: res.page_count,
@@ -66,29 +74,11 @@ export const fetchRegistrantsWithToken = async ({
     url += `&next_page_token=${encodeURIComponent(next_page_token)}`;
   }
 
-  if (occurrenceId) {
-    url += `&occurrence_id=${occurrenceId}`;
-  }
+  url = withOccurrence(url, occurrenceId);
 
   try {
     const res = await apiFetch({ path: url });
-
-    const registrants =
-      res.registrants
-        ?.map((registrant) => {
-          if (!registrant) return null;
-
-          return {
-            id: registrant.id,
-            firstName: registrant.first_name,
-            lastName: registrant.last_name,
-            email: registrant.email,
-            status: registrant.status,
-            joinUrl: registrant.join_url,
-            createdAt: registrant.created_datetime,
-          };
-        })
-        .filter(Boolean) || [];
+    const registrants = mapRegistrants(res);
 
     return {
       registrants,

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { mergeAttributesPatch } from "../../utilities/attributes";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { BrushIcon, CloseIcon, Support } from "../../assets/icons";
 import {
@@ -270,26 +271,7 @@ const OnboardingFlow = () => {
   const StepComponent = stepComponents[currentStep];
 
   const mergeAttributes = (patch) => {
-    setAttributes((prev) => {
-      const next = { ...prev };
-
-      Object.keys(patch).forEach((key) => {
-        if (
-          typeof patch[key] === "object" &&
-          patch[key] !== null &&
-          !Array.isArray(patch[key])
-        ) {
-          next[key] = {
-            ...(prev[key] || {}),
-            ...patch[key],
-          };
-        } else {
-          next[key] = patch[key];
-        }
-      });
-
-      return next;
-    });
+    setAttributes((prev) => mergeAttributesPatch(prev, patch));
   };
 
   const markStepCompleted = (stepKey) => {

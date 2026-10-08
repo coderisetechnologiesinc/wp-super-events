@@ -1,0 +1,215 @@
+@use "../../../styles/tokens" as t;
+@use "../../../styles/mixins" as m;
+
+// The events list's "floating rows" (option A), carrying bookings instead of
+// events. Which columns show is a per-browser preference, so the grid template
+// arrives as an inline style and only the chrome lives here.
+@include m.scoped {
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: t.$space-6;
+  }
+
+  // The template rides in on a custom property rather than an inline
+  // grid-template-columns, so the narrow layout below can still override it
+  // without !important.
+  .head {
+    display: grid;
+    grid-template-columns: var(--booking-cols);
+    gap: t.$space-7;
+    // The rows below have a 1px border; without the same inset here their
+    // flexible columns resolve 2px narrower and every heading sits a pixel off.
+    border: 1px solid transparent;
+    padding: 0 t.$space-10;
+    color: t.$text-placeholder;
+    @include m.eyebrow;
+    letter-spacing: t.$tracking-wide;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: var(--booking-cols);
+    gap: t.$space-7;
+    align-items: center;
+    width: 100%;
+    padding: t.$space-9 t.$space-10;
+    border: 1px solid t.$border;
+    border-radius: t.$radius-2xl;
+    background: t.$surface;
+    box-shadow: 8px 8px 20px t.$shade, -4px -4px 12px t.$light;
+    text-align: left;
+    transition: box-shadow t.$duration t.$ease, transform t.$duration t.$ease;
+
+    &:hover {
+      box-shadow: 12px 12px 28px t.$shade-strong, -5px -5px 14px t.$light;
+      transform: translateY(-3px);
+    }
+  }
+
+  // A cancelled booking stays readable but recedes.
+  .muted {
+    opacity: 0.72;
+  }
+
+  .picked {
+    background: rgba(100, 54, 201, 0.06);
+  }
+
+  .pick {
+    display: flex;
+    align-items: center;
+  }
+
+  // --- Cells ----------------------------------------------------------------
+
+  .strong {
+    @include m.truncate;
+    @include m.text(13, t.$weight-bold);
+    color: t.$text;
+  }
+
+  .title {
+    @include m.truncate;
+    @include m.text(14, t.$weight-bold);
+    letter-spacing: -0.01em;
+  }
+
+  .text {
+    @include m.truncate;
+    @include m.text(13, t.$weight-medium);
+    color: t.$text-secondary;
+  }
+
+  .sub {
+    @include m.truncate;
+    margin-top: t.$space-1;
+    @include m.text(12, t.$weight-medium);
+    color: t.$text-soft;
+  }
+
+  .money {
+    @include m.text(13, t.$weight-bold);
+    color: t.$text;
+  }
+
+  .free {
+    @include m.text(13, t.$weight-semibold);
+    color: t.$text-soft;
+  }
+
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: t.$space-3;
+    height: 26px;
+    padding: 0 11px;
+    border: 1px solid t.$border;
+    border-radius: t.$radius-pill;
+    background: t.$surface;
+    color: t.$text-strong;
+    box-shadow: t.$shadow-raised-sm;
+    @include m.text(12, t.$weight-bold);
+  }
+
+  .statusActive {
+    border-color: t.$success-border;
+    background: t.$success-surface;
+    color: t.$success-text;
+  }
+
+  .statusRefunded {
+    border-color: t.$warning-border;
+    background: t.$warning-surface;
+    color: t.$warning-text;
+  }
+
+  .statusCanceled {
+    border-color: t.$danger-border;
+    background: t.$danger-surface;
+    color: t.$danger-text;
+  }
+
+  .dot {
+    width: 7px;
+    height: 7px;
+    flex: 0 0 7px;
+    border-radius: t.$radius-pill;
+    background: t.$text-placeholder;
+    box-shadow: 0 0 0 3px rgba(142, 151, 171, 0.15);
+  }
+
+  .dotActive {
+    background: t.$success;
+    box-shadow: 0 0 0 3px rgba(23, 178, 106, 0.15);
+  }
+
+  .dotRefunded {
+    background: t.$warning;
+    box-shadow: 0 0 0 3px rgba(247, 144, 9, 0.15);
+  }
+
+  .dotCanceled {
+    background: t.$danger;
+    box-shadow: 0 0 0 3px rgba(240, 68, 56, 0.15);
+  }
+
+  // --- Actions --------------------------------------------------------------
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: t.$space-2;
+  }
+
+  .action {
+    @include m.button-reset;
+    @include m.wp-reset-button;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: t.$radius-sm;
+    color: t.$text-soft;
+    transition: background t.$duration t.$ease, box-shadow t.$duration t.$ease;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    &:hover:not(:disabled) {
+      background: t.$surface-subtle;
+      box-shadow: t.$shadow-raised-sm;
+      color: t.$primary;
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+
+  .actionDanger:hover:not(:disabled) {
+    color: t.$danger-text;
+    background: t.$danger-surface;
+  }
+
+  // Below the column widths the grid stops being honest: the row becomes a
+  // stacked card and the header is dropped.
+  @media (max-width: 1100px) {
+    .head {
+      display: none;
+    }
+
+    .row {
+      grid-template-columns: 18px minmax(0, 1fr) auto;
+      gap: t.$space-5 t.$space-8;
+    }
+
+    .actions {
+      grid-column: 2;
+    }
+  }
+}

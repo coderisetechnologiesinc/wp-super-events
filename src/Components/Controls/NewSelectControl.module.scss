@@ -1,0 +1,96 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+
+@include m.scoped {
+  .wrapper {
+    @include m.field-stack;
+    width: 100%;
+  }
+
+  .label {
+    @include m.field-label;
+  }
+
+  .control {
+    @include m.field-surface;
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: t.$control-lg;
+    padding: 0 t.$space-5;
+
+    &:hover:not(.disabled) {
+      border-color: t.$primary-border-soft;
+    }
+
+    // The border carries the focus state; the halo from m.focus-ring is left
+    // off here so the recess does not gain a second outline.
+    &:focus-within {
+      outline: none;
+      border-color: t.$primary-border-strong;
+    }
+  }
+
+  .native {
+    @include m.wp-reset-control;
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    margin: 0;
+    padding: 0 t.$space-6 0 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    color: t.$text;
+    @include m.text(14, t.$weight-medium);
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+
+    &:focus {
+      outline: none;
+      box-shadow: none;
+    }
+
+    &:disabled {
+      color: t.$text-soft;
+      cursor: not-allowed;
+    }
+
+    // The caret is drawn by .caret; keep the IE/Edge arrow out of the way.
+    &::-ms-expand {
+      display: none;
+    }
+  }
+
+  // Native-select caret.
+  .caret {
+    position: absolute;
+    right: t.$space-5;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+    color: t.$text-soft;
+
+    svg {
+      display: block;
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  .icon {
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+    margin-left: t.$space-2;
+    color: t.$text-soft;
+  }
+
+  .disabled {
+    background: t.$surface-subtle;
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+}

@@ -1,0 +1,822 @@
+@use "../unit" as *;
+@use "../breakpoints" as *;
+
+.svv-wgt-v2-container {
+  --svv-v2-bg-radius: 20px;
+
+  background: var(--svv-v2-skin-bg, #f6f6f6);
+
+  @include mobile {
+    padding: $svv-mobile-inset 0 16px;
+  }
+}
+
+.svv-wgt-v2 {
+  --pl-fill: rgba(0, 0, 0, 0.05);
+  --pl-fill-hover: rgba(0, 0, 0, 0.08);
+  --pl-fill-active: rgba(0, 0, 0, 0.11);
+  --pl-primary-sheen:
+    radial-gradient(50% 50% at 50% 0%, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%),
+    radial-gradient(49.59% 37.11% at 50.41% 101.56%, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 66.46%);
+  --pl-primary-shadow:
+    0 1px 0.5px -0.5px rgba(0, 0, 0, 0.13),
+    0 1px 2px -0.5px rgba(0, 0, 0, 0.13),
+    0 4px 6px -2px rgba(0, 0, 0, 0.13),
+    0 2px 3px -1.5px rgba(16, 16, 16, 0.2),
+    inset 0 0 4px 1px rgba(255, 255, 255, 0.1),
+    inset 0 0 4px 2px rgba(255, 255, 255, 0.12);
+
+  // every colour, font and size defers to the block settings once the merchant
+  // opts this style in; shape (radius, shadows) stays with the style either way
+  --svv-text: var(--svv-v2-text, #101010);
+  --svv-text-muted: var(--svv-v2-text-muted, #4a4a4a);
+  --svv-border: var(--svv-v2-border, #ebebeb);
+  --svv-border-strong: var(--svv-v2-border-strong, #d4d4d4);
+  --svv-bg: var(--svv-v2-skin-bg, #f6f6f6);
+  --svv-surface: var(--svv-v2-surface, #f6f6f6);
+  --svv-card-bg: var(--svv-v2-card-bg, #ffffff);
+  --svv-card-text: var(--svv-v2-card-text, #101010);
+  --svv-card-text-muted: var(--svv-v2-text-muted, #4a4a4a);
+  --svv-card-shadow: none;
+  --svv-card-shadow-hover: none;
+  --svv-radius: 16px;
+  --svv-info: var(--svv-v2-info, #1650d0);
+  --svv-font: var(
+    --svv-v2-skin-font,
+    Inter,
+    ShopifyInter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif
+  );
+  --svv-heading-font: var(--svv-v2-skin-heading-font, var(--svv-font));
+  --svv-font-size: var(--svv-v2-font-size, 13px);
+  --svv-u: var(--svv-v2-font-size, 14px);
+
+  line-height: 20px;
+  font-weight: 400;
+  letter-spacing: -0.13px;
+
+  :where(a) {
+    color: var(--svv-info);
+  }
+
+  :where(:focus-visible) {
+    outline: 2px solid var(--svv-info);
+    outline-offset: 1px;
+  }
+
+  // Surfaces: flat white sections, hairline border, no shadow
+  .svv-shell {
+    gap: u(0.857);
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    overflow: visible;
+  }
+
+  .svv-shell__header,
+  .svv-shell__aside,
+  .svv-shell__content {
+    background: #fff;
+    border: 1px solid var(--svv-border);
+    border-radius: 20px;
+    box-shadow: none;
+  }
+
+  .svv-shell__header {
+    padding: u(0.714) u(0.857);
+    border-radius: 9999px;
+  }
+
+  .svv-shell__aside {
+    align-self: start;
+    padding: u(1.143);
+    border-bottom: 1px solid var(--svv-border);
+  }
+
+  .svv-shell--with-aside .svv-shell__aside,
+  .svv-shell--with-aside.svv-shell--aside-end .svv-shell__aside {
+    border: 1px solid var(--svv-border);
+  }
+
+  .svv-shell__content {
+    padding: u(1.429);
+  }
+
+  // Type
+  .svv-results__title {
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 600;
+    letter-spacing: -0.4px;
+  }
+
+  .svv-results__meta {
+    font-size: 13px;
+    color: var(--svv-text-muted);
+  }
+
+  .svv-calendar__month {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+  }
+
+  .svv-monthview__month {
+    font-size: 28px;
+    line-height: 1.1;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+  }
+
+  .svv-summary__card {
+    padding: u(0.714) u(0.857);
+    border: 0;
+    border-radius: 12px;
+    background: var(--svv-bg);
+
+    strong {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.4px;
+    }
+
+    span {
+      font-size: 12px;
+      color: var(--svv-text-muted);
+    }
+  }
+
+  .svv-card__title {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+
+    a:hover {
+      color: var(--svv-text);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+  }
+
+  .svv-card__description {
+    font-size: 13px;
+    color: var(--svv-card-text);
+  }
+
+  .svv-card__when,
+  .svv-card__meta,
+  .svv-card__availability {
+    font-size: 12px;
+    line-height: 18px;
+    font-weight: 500;
+    color: var(--svv-text-muted);
+  }
+
+  .svv-card__price {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--svv-card-text);
+  }
+
+  .svv-events__separator {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: -0.12px;
+    text-transform: none;
+    color: var(--svv-text);
+  }
+
+  .svv-calendar__weekday,
+  .svv-monthview__weekday {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: none;
+    color: #8a8a8a;
+  }
+
+  // Badges: Polaris 2.0 filled style
+  .svv-badge {
+    min-height: auto;
+    padding: 1px 6px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 18px;
+  }
+
+  .svv-badge--critical {
+    background: #fecbcb;
+    color: #8e0b21;
+  }
+
+  .svv-badge--accent {
+    background: #ffbf80;
+    color: #6f2e01;
+  }
+
+  // Buttons: pill, 28px
+  .svv-card__cta,
+  .svv-drawer__cta,
+  .svv-submit,
+  .svv-pill,
+  .svv-pagination button,
+  .svv-calendar__clear {
+    min-height: 28px;
+    padding: 6px 12px;
+    border: 0;
+    border-radius: 9999px;
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 500;
+    letter-spacing: -0.12px;
+  }
+
+  .svv-card__cta,
+  .svv-drawer__cta,
+  .svv-submit {
+    color: #fff;
+    background: var(--pl-primary-sheen), var(--svv-primary);
+    box-shadow: var(--pl-primary-shadow);
+
+    &:hover:not(:disabled) {
+      background: var(--pl-primary-sheen), var(--svv-primary-hover);
+    }
+
+    &:active {
+      box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  .svv-card__cta--muted,
+  .svv-drawer__cta--muted {
+    background: #fecbcb;
+    color: #8e0b21;
+    box-shadow: none;
+  }
+
+  .svv-pill,
+  .svv-pagination button,
+  .svv-calendar__clear {
+    background: var(--pl-fill);
+    color: var(--svv-text);
+
+    &:hover:not(:disabled) {
+      background: var(--pl-fill-hover);
+      border: 0;
+      color: var(--svv-text);
+    }
+  }
+
+  .svv-card__share,
+  .svv-drawer__icon,
+  .svv-modal__close {
+    width: 28px;
+    height: 28px;
+    border: 0;
+    border-radius: 9999px;
+    background: var(--pl-fill);
+    color: var(--svv-text);
+    box-shadow: none;
+
+    &:hover {
+      background: var(--pl-fill-hover);
+      border: 0;
+      color: var(--svv-text);
+    }
+  }
+
+  .svv-filters__clear {
+    min-height: 28px;
+    padding: 0 12px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--svv-text);
+
+    &:hover:not(:disabled) {
+      background: var(--pl-fill);
+      color: var(--svv-text);
+    }
+  }
+
+  // Inputs
+  .svv-search {
+    min-height: 32px;
+    border: 1px solid var(--svv-border-strong);
+    border-radius: 9999px;
+    background: #fff;
+
+    &:hover {
+      border-color: #b5b5b5;
+    }
+
+    &:focus-within {
+      border-color: var(--svv-text);
+    }
+
+    input {
+      font-size: 13px;
+
+      &::placeholder {
+        color: var(--svv-text-muted);
+      }
+    }
+  }
+
+  .svv-select {
+    min-height: 28px;
+    border: 0;
+    border-radius: 9999px;
+    background: transparent;
+
+    &:hover {
+      background: var(--pl-fill);
+    }
+
+    select {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--svv-text);
+    }
+  }
+
+  .svv-viewmode {
+    padding: 2px;
+    border: 0;
+    border-radius: 9999px;
+    background: var(--pl-fill);
+
+    button {
+      min-height: 24px;
+      padding: 0 10px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--svv-text-muted);
+
+      &:hover {
+        background: transparent;
+        color: var(--svv-text);
+      }
+
+      &.is-active {
+        background: #fff;
+        color: var(--svv-text);
+        box-shadow:
+          0 1px 2px rgba(0, 0, 0, 0.12),
+          0 0 0 0.5px rgba(0, 0, 0, 0.06);
+      }
+    }
+  }
+
+  // Filters and quick dates become chips
+  .svv-filters {
+    gap: 6px;
+  }
+
+  .svv-filters select,
+  .svv-pagination select {
+    min-height: 24px;
+    padding: 2px 24px 2px 8px;
+    border: 0;
+    border-radius: 8px;
+    background: var(--pl-fill);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 18px;
+    color: var(--svv-text-muted);
+
+    &:hover {
+      background: var(--pl-fill-hover);
+      color: var(--svv-text);
+    }
+  }
+
+  .svv-quick {
+    gap: 6px;
+
+    button {
+      min-height: 24px;
+      padding: 2px 8px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--pl-fill);
+      color: var(--svv-text-muted);
+      font-size: 12px;
+      font-weight: 500;
+
+      &:hover {
+        background: var(--pl-fill-hover);
+        color: var(--svv-text);
+      }
+
+      &.is-active {
+        background: var(--svv-text);
+        color: #fff;
+      }
+    }
+  }
+
+  .svv-filters__toggle {
+    min-height: 32px;
+    border: 0;
+    border-radius: 8px;
+    background: var(--pl-fill);
+    color: var(--svv-text);
+    font-size: 13px;
+    font-weight: 650;
+
+    &:hover {
+      background: var(--pl-fill-hover);
+      color: var(--svv-text);
+    }
+  }
+
+  // Calendar
+  .svv-calendar__day {
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 500;
+
+    &.is-marked:hover {
+      background: var(--pl-fill);
+    }
+
+    &.is-selected {
+      background: var(--svv-text);
+      color: #fff;
+    }
+  }
+
+  .svv-calendar__nav button,
+  .svv-monthview__nav button {
+    width: 28px;
+    height: 28px;
+    border: 0;
+    border-radius: 9999px;
+    background: transparent;
+    color: var(--svv-text);
+
+    &:hover {
+      background: var(--pl-fill);
+      color: var(--svv-text);
+    }
+  }
+
+  .svv-monthview__cell.is-outside {
+    background: #fafafa;
+  }
+
+  .svv-monthview__today {
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: var(--pl-primary-shadow);
+  }
+
+  .svv-monthview__nav button {
+    border-radius: 8px;
+
+    &:hover {
+      background: var(--pl-fill);
+    }
+  }
+
+  .svv-monthview__name {
+    font-weight: 500;
+  }
+
+  // List rows and grid cards
+  .svv-events__items {
+    gap: 0;
+  }
+
+  .svv-card {
+    padding: u(0.857);
+    border: 0;
+    border-top: 1px solid var(--svv-border);
+    border-radius: 12px;
+    background: transparent;
+    box-shadow: none;
+
+    &:hover {
+      border-color: var(--svv-border);
+      transform: none;
+      background: var(--svv-bg);
+    }
+  }
+
+  .svv-card__media {
+    border: 0;
+    border-radius: 10px;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+  }
+
+  .svv-events--grid .svv-events__items {
+    gap: u(0.857);
+  }
+
+  .svv-events--grid .svv-card {
+    padding: 4px;
+    border: 1px solid var(--svv-border);
+    border-radius: 16px;
+    background: #fff;
+
+    &:hover {
+      border-color: var(--svv-border-strong);
+      background: #fff;
+    }
+
+  }
+
+  .svv-events--grid .svv-card__media {
+    width: 100%;
+    min-height: 0;
+    border: 0;
+    border-radius: 12px;
+  }
+
+  .svv-events__state {
+    border: 0;
+    border-radius: 16px;
+    background: var(--svv-bg);
+  }
+
+  .svv-pagination {
+    font-size: 12px;
+    color: var(--svv-text-muted);
+  }
+
+  // Drawer and modal
+  .svv-drawer,
+  .svv-modal {
+    border-radius: 20px;
+    box-shadow:
+      0 20px 40px -12px rgba(0, 0, 0, 0.3),
+      0 0 0 1px rgba(0, 0, 0, 0.06);
+  }
+
+  .svv-drawer {
+    --svv-drawer-inset: 8px;
+
+    height: calc(100dvh - 16px);
+    max-height: calc(100dvh - 16px);
+    margin-block: var(--svv-drawer-inset);
+  }
+
+  .svv-drawer--right {
+    margin-right: var(--svv-drawer-inset);
+  }
+
+  .svv-drawer--left {
+    margin-left: var(--svv-drawer-inset);
+  }
+
+  .svv-drawer::backdrop,
+  .svv-modal::backdrop {
+    background: rgba(0, 0, 0, 0.4);
+  }
+
+  .svv-drawer__head {
+    padding: u(0.857) u(0.857) u(0.857) u(1.429);
+    background: #fff;
+    border-bottom-color: var(--svv-border);
+  }
+
+  .svv-drawer__body {
+    padding: u(1.429);
+  }
+
+  .svv-drawer__foot {
+    padding: u(0.857) u(1.429);
+    background: #fff;
+    border-top-color: var(--svv-border);
+  }
+
+  .svv-drawer__foot .svv-drawer__cta {
+    min-height: 32px;
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+
+  .svv-drawer__total {
+    strong {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
+
+    span {
+      font-size: 12px;
+      font-weight: 500;
+    }
+  }
+
+  .svv-drawer__hero {
+    border-radius: 16px;
+  }
+
+  .svv-drawer__title {
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 600;
+    letter-spacing: -0.4px;
+  }
+
+  .svv-drawer__section {
+    border-radius: 16px;
+
+    h3 {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: -0.13px;
+      text-transform: none;
+      color: var(--svv-text);
+    }
+
+    p,
+    li {
+      font-size: 13px;
+    }
+  }
+
+  .svv-drawer__step-title {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+  }
+
+  // Forms
+  .svv-field__label,
+  .svv-members__legend {
+    color: var(--svv-text);
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .svv-field__input {
+    min-height: 32px;
+    padding: 6px 12px;
+    border: 1px solid var(--svv-border-strong);
+    border-radius: 10px;
+    background-color: #fff;
+    font-size: 13px;
+
+    &:focus,
+    &:focus-visible {
+      border-color: var(--svv-text);
+      outline: 0;
+    }
+  }
+
+  .svv-members__row {
+    border-radius: 16px;
+  }
+
+  .svv-choice input {
+    accent-color: var(--svv-text);
+  }
+
+  .svv-stepper {
+    border: 0;
+    border-radius: 9999px;
+    background: var(--pl-fill);
+
+    button {
+      width: 32px;
+      height: 32px;
+      background: transparent;
+      color: var(--svv-text);
+
+      &:hover:not(:disabled) {
+        background: var(--pl-fill-hover);
+      }
+    }
+  }
+
+  // Share
+  .svv-modal {
+    border-radius: 20px;
+  }
+
+  .svv-modal__head {
+    padding: u(1.143) u(1.429) u(0.857);
+  }
+
+  .svv-modal__title {
+    color: var(--svv-text);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+  }
+
+  .svv-modal__body {
+    padding: 0 u(1.429) u(1.429);
+  }
+
+  .svv-share__target {
+    color: var(--svv-text);
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .svv-share__icon {
+    border: 0;
+    border-radius: 9999px;
+    background: var(--pl-fill);
+    color: var(--svv-text);
+  }
+
+  .svv-share__target:hover .svv-share__icon {
+    background: var(--pl-fill-hover);
+  }
+
+  .svv-share__link {
+    border: 1px solid var(--svv-border-strong);
+    border-radius: 12px;
+    background: #fff;
+    font-size: 12px;
+  }
+
+  @media (min-width: 864px) {
+    .svv-share__link {
+      border-radius: 9999px;
+    }
+  }
+
+  @include mobile {
+    .svv-shell__header {
+      margin: 0 8px 8px;
+      border-radius: 20px;
+    }
+
+    .svv-shell__strip {
+      padding: 0 8px 8px;
+      border-bottom: 0;
+    }
+
+    .svv-datestrip__chip {
+      border: 0;
+      border-radius: 12px;
+      background: var(--svv-card-bg);
+      box-shadow: inset 0 0 0 1px var(--svv-border);
+
+      &.is-selected {
+        background: var(--svv-primary);
+        box-shadow: none;
+      }
+    }
+
+    .svv-shell__content {
+      margin: 0 8px;
+      padding: 16px;
+    }
+
+    .svv-events--list .svv-card {
+      grid-template-columns: 56px minmax(0, 1fr);
+      margin: 0;
+      padding: 12px 0;
+      border-radius: 0;
+
+      &:hover {
+        background: transparent;
+      }
+    }
+
+    .svv-events--grid .svv-card {
+      padding: 4px;
+      border: 1px solid var(--svv-border);
+      border-radius: 16px;
+    }
+
+    .svv-events--grid .svv-card__media {
+      aspect-ratio: var(--svv-image-ratio);
+      border-radius: 12px;
+    }
+
+    .svv-events--grid .svv-card__body {
+      padding: 8px 8px 0;
+    }
+
+    .svv-events--grid .svv-card__action {
+      padding: 8px;
+    }
+  }
+
+  @include phone {
+    .svv-events--list .svv-card {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .svv-card__actions {
+      grid-template-columns: 28px minmax(0, 1fr);
+    }
+  }
+}

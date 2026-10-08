@@ -1,7 +1,8 @@
+import styles from "./SettingsForm.module.scss";
 // components/Settings/TranslationsSettings.jsx
 import BlockStack from "../../Containers/BlockStack";
 import AnnotatedSection from "../../Containers/AnnotatedSection";
-import SelectControl from "../../Controls/SelectControl";
+import NewSelectControl from "../../Controls/NewSelectControl";
 
 const TranslationsSection = ({
   responsiveBlockStack,
@@ -14,38 +15,45 @@ const TranslationsSection = ({
   renderTranslations,
 }) => {
   return (
-    <BlockStack gap={8} cardsLayout={true} className={responsiveBlockStack}>
+    <BlockStack gap={0} cardsLayout={true} className={styles.rows}>
       <AnnotatedSection
+        variant="settings"
         title="Default language for widgets"
         description="Translate text in widgets to any language"
         className={responsiveBlockStack}
       >
-        <SelectControl
+        <NewSelectControl
           label={"Default language"}
-          options={getLangsSelectOptions().map((lang) => lang.label)}
-          onSelectChange={handleDefaultLanguageChange}
-          selected={getDefaultWidgetLanguageName()}
-          className={responsiveInput}
+          options={getLangsSelectOptions().map((lang) => ({
+            value: lang.label,
+            label: lang.label,
+          }))}
+          onChange={handleDefaultLanguageChange}
+          value={getDefaultWidgetLanguageName()}
         />
       </AnnotatedSection>
 
       <AnnotatedSection
+        variant="settings"
         title="Language for translate"
         description="Before choosing the default language, select one from the list. Then, edit the widget fields and save the changes"
         className={responsiveBlockStack}
       >
-        <SelectControl
+        <NewSelectControl
           label="Language"
-          options={getLangsSelectOptions().map((lang) => lang.label)}
-          onSelectChange={handleSelectLanguageforEdit}
-          selected={getLangsSelectOptions()
+          options={getLangsSelectOptions().map((lang) => ({
+            value: lang.label,
+            label: lang.label,
+          }))}
+          onChange={handleSelectLanguageforEdit}
+          value={getLangsSelectOptions()
             .map((lang) => lang.label)
             .find((label) => label.startsWith(langForEdit))}
-          className={responsiveInput}
         />
       </AnnotatedSection>
 
       <AnnotatedSection
+        variant="settings"
         title="Global Widgets Translations"
         className={responsiveBlockStack}
       >
@@ -53,10 +61,27 @@ const TranslationsSection = ({
       </AnnotatedSection>
 
       <AnnotatedSection
+        variant="settings"
         title="Events Widget Translations"
         className={responsiveBlockStack}
       >
         {renderTranslations("mainWidget")}
+      </AnnotatedSection>
+
+      <AnnotatedSection
+        variant="settings"
+        title="Filters Translations"
+        className={responsiveBlockStack}
+      >
+        {renderTranslations("customFilters")}
+      </AnnotatedSection>
+
+      <AnnotatedSection
+        variant="settings"
+        title="Registration Translations"
+        className={responsiveBlockStack}
+      >
+        {renderTranslations("onProductWidget")}
       </AnnotatedSection>
     </BlockStack>
   );

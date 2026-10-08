@@ -1,698 +1,151 @@
-import { Fragment, useEffect, useState, useRef } from "react";
-import PageHeader from "../Containers/PageHeader";
-import PageContent from "../Containers/PageContent";
-import PageActionButton from "../Controls/PageActionButton";
-import BlockStack from "../Containers/BlockStack";
-import InlineStack from "../Containers/InlineStack";
-import SelectControl from "../Controls/SelectControl";
-import axios from "axios";
-import Editor from "../Controls/Editor";
-import InputFieldControl from "../Controls/InputFieldControl";
-import AnnotatedSection from "../Containers/AnnotatedSection";
-import ButtonGroup from "../Controls/ButtonGroup";
-import HTMLEditor from "../Controls/HTMLEditor";
-import Card from "../Containers/Card";
-import PageWrapper from "./PageWrapper";
-import CollapsibleSection from "../Containers/CollapsibleSection";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import {
-  DocumentTextIcon,
-  CodeBracketIcon,
-  EyeIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
-  InformationCircleIcon,
-} from "@heroicons/react/24/outline";
-
+import { DocumentTextIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import BreadCrumbs from "../Menu/BreadCrumbs";
+import Quill from "quill";
+import "quill/dist/quill.snow.css";
+import axios from "../../utilities/adminApi";
 import { useServvStore } from "../../store/useServvStore";
-import SpinnerLoader from "./SpinnerLoader";
+import PageWrapper from "./PageWrapper";
+import PageContent from "../Containers/PageContent";
+import PageHeader from "../Containers/PageHeader";
+import PageActionButton from "../Controls/PageActionButton";
+import styles from "./EmailTemplates.module.scss";
+import { groupEmailTemplates } from "./emailTemplates/groups.mjs";
 
-const EmailTemplates = () => {
-  const [templates, setTemplates] = useState([]);
-  const [selectedTemplate, setSelectedTemplate] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  const [showParameters, setShowParameters] = useState(false);
-  const quillRef = useRef();
-  const settings = useServvStore((s) => s.settings);
-  const navigate = useNavigate();
-  const disabled =
-    templates.length === 0 ||
-    !settings ||
-    (settings && settings.current_plan.id === 1);
-
-  // Store form values to persist across view changes
-  const [formValues, setFormValues] = useState({
-    subject: "",
-    text: "",
-    editMode: "Rich Text",
-  });
-  const [defaultText, setDefaultText] = useState("");
-
-  // Track if we're currently updating from template selection
-  const [isTemplateUpdate, setIsTemplateUpdate] = useState(false);
-
+function RichEditor({ value, disabled, onChange }) {
+  const container = useRef(null);
+  const callback = useRef(onChange);
+  callback.current = onChange;
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  // Fetch templates
-  const getEmailTemplates = async () => {
-    setLoading(true);
-    try {
-      const resp = await axios.get(
-        "/wp-json/servv-plugin/v1/wordpress/templates",
-        { headers: { "X-WP-Nonce": servvData.nonce } },
-      );
-      if (resp.status === 200 && resp.data.templates.length) {
-        let templates = resp.data.templates.sort((a, b) =>
-          a.description.localeCompare(b.description),
-        );
-        setTemplates(templates);
-        const firstTemplate = templates[0];
-        setSelectedTemplate(firstTemplate);
-
-        // Initialize form values with first template
-        setIsTemplateUpdate(true);
-        setFormValues({
-          subject: firstTemplate.subject || "",
-          text: firstTemplate.text || "",
-
-          editMode: "Rich Text",
-        });
-        setDefaultText(firstTemplate.text || "");
-        setIsTemplateUpdate(false);
-      } else {
-        toast("No Email Templates Available");
-      }
-    } catch (e) {
-      console.error(e);
-      toast.error("Failed To Load Email Templates");
-    }
-    setLoading(false);
-  };
-
-  // Save handler
-  const handleTemplateSave = async () => {
-    if (!selectedTemplate) return;
-    setLoading(true);
-    try {
-      const resp = await axios.patch(
-        `/wp-json/servv-plugin/v1/wordpress/templates/${selectedTemplate.id}`,
-        {
-          subject: formValues.subject,
-          text: formValues.text,
-        },
-        { headers: { "X-WP-Nonce": servvData.nonce } },
-      );
-      if (resp.status === 200) {
-        toast.success("Template Saved Successfully");
-        getEmailTemplates();
-      }
-    } catch (e) {
-      console.error(e);
-      toast.error("Failed To Save Template");
-    }
-    setLoading(false);
-  };
-
-  // Change handlers
-  const handleSelectTemplate = (desc) => {
-    const tmpl = templates.find((t) => t.description === desc);
-    setSelectedTemplate(tmpl);
-
-    // Update form values when template changes
-    setIsTemplateUpdate(true);
-    setFormValues({
-      subject: tmpl.subject || "",
-      text: tmpl.text || "",
-      editMode: formValues.editMode, // Keep current edit mode
+    const element = document.createElement("div");
+    container.current.appendChild(element);
+    const editor = new Quill(element, {
+      theme: "snow",
+      modules: { toolbar: [[{ header: [1, 2, false] }], ["bold", "italic", "underline"], [{ list: "ordered" }, { list: "bullet" }], ["link", "clean"]] },
     });
-    setDefaultText(tmpl.text || "");
-    setIsTemplateUpdate(false);
-  };
+    editor.clipboard.dangerouslyPasteHTML(value || "", "silent");
+    editor.enable(!disabled);
+    editor.on("text-change", (_delta, _old, source) => {
+      if (source === "user") callback.current(editor.getSemanticHTML());
+    });
+    const host = container.current;
+    return () => { host.innerHTML = ""; };
+  }, [disabled]);
+  return <div ref={container} />;
+}
+const contentOf = (template) => ({ subject: template?.subject || "", text: template?.text || "" });
+const differs = (draft, template) => draft && (draft.subject !== (template.subject || "") || draft.text !== (template.text || ""));
 
-  const handleTemplateTextChange = (text) => {
-    if (isTemplateUpdate) return; // Prevent updates during template switching
+export default function EmailTemplates() {
+  const navigate = useNavigate();
+  const settings = useServvStore((state) => state.settings);
+  const [templates, setTemplates] = useState([]);
+  const [selectedId, setSelectedId] = useState(null);
+  const [drafts, setDrafts] = useState({});
+  const [mode, setMode] = useState("Rich Text");
+  const [revision, setRevision] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
+  const selected = templates.find((template) => template.id === selectedId);
+  const groups = groupEmailTemplates(templates);
+  const draft = drafts[selectedId] || contentOf(selected);
+  const dirty = selected && differs(draft, selected);
+  const restricted = !settings || Number(settings.current_plan?.id) === 1;
+  const disabled = restricted || saving;
+  const headers = { "X-WP-Nonce": window.servvData.nonce };
 
-    setFormValues((prev) => ({ ...prev, text }));
-    if (selectedTemplate) {
-      setSelectedTemplate({ ...selectedTemplate, text });
-    }
-  };
-
-  const handleCancel = () => {
-    if (selectedTemplate) {
-      const resetText = templates[0].text || "";
-      setFormValues({
-        subject: templates[0].subject || "",
-        text: resetText,
-        editMode: formValues.editMode,
-      });
-      setDefaultText(templates[0].text);
-
-      if (quillRef.current?.clipboard) {
-        quillRef.current.clipboard.dangerouslyPasteHTML(resetText, "api");
-      }
-    }
-  };
-
-  const handleTemplateSubjectChange = (subject) => {
-    if (isTemplateUpdate) return; // Prevent updates during template switching
-
-    setFormValues((prev) => ({ ...prev, subject }));
-    if (selectedTemplate) {
-      setSelectedTemplate({ ...selectedTemplate, subject });
-    }
-  };
-
-  const handleEditModeChange = (mode) => {
-    setFormValues((prev) => ({ ...prev, editMode: mode }));
-  };
-
-  // Function to process content for preview with enhanced overflow prevention
-  const processContentForPreview = (content) => {
-    if (!content) return "";
-
-    // Create a temporary div to process the content
-    const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = content;
-
-    // Find all text nodes and break long continuous strings
-    const processTextNodes = (node) => {
-      if (node.nodeType === Node.TEXT_NODE) {
-        const text = node.textContent;
-        // Break long continuous strings (more than 50 characters without spaces)
-        const processedText = text.replace(/(\S{50,})/g, (match) => {
-          // Insert zero-width spaces every 30 characters to allow breaking
-          return match.replace(/(.{30})/g, "$1\u200B");
-        });
-        node.textContent = processedText;
-      } else if (node.nodeType === Node.ELEMENT_NODE) {
-        // Process child nodes
-        Array.from(node.childNodes).forEach(processTextNodes);
-
-        // Special handling for links and other elements
-        if (node.tagName === "A") {
-          const href = node.getAttribute("href");
-          if (href && href.length > 50) {
-            // Break long URLs
-            node.textContent = href.replace(/(.{30})/g, "$1\u200B");
-          }
-        }
-      }
-    };
-
-    Array.from(tempDiv.childNodes).forEach(processTextNodes);
-    return tempDiv.innerHTML;
-  };
-
-  // Render parameters table
-  const renderParametersTable = () => {
-    if (!selectedTemplate || !selectedTemplate.params) return null;
-
-    const paramEntries = Object.entries(selectedTemplate.params);
-
-    return (
-      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900 border-b border-gray-200">
-                {t("Parameter")}
-              </th>
-              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900 border-b border-gray-200">
-                {t("Description")}
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200">
-            {paramEntries.map(([key, desc], index) => (
-              <tr
-                key={key}
-                className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
-              >
-                <td className="px-4 py-3 text-left align-top">
-                  <code className="text-sm font-mono font-bold text-purple-700 bg-purple-50 px-2 py-1 rounded">
-                    {key}
-                  </code>
-                </td>
-                <td className="px-4 py-3 text-left align-top">
-                  <span className="text-sm text-gray-600">{desc}</span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
-  };
-
-  useEffect(() => {
-    getEmailTemplates();
-    // eslint-disable-next-line
-  }, []);
-  const handleOpenEmails = () => {
-    navigate("/notifications");
-  };
-  return (
-    <PageWrapper loading={false} withBackground={true}>
-      {/* Mobile Layout */}
-      {isMobile ? (
-        <div
-          className="w-full mx-auto bg-white min-h-screen"
-          style={{ fontFamily: "'Inter', sans-serif" }}
-        >
-          {/* Mobile Header */}
-          <div className="sticky top-0 bg-white z-20 border-b border-gray-200 px-4 py-4">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex-1">
-                <h1 className="text-2xl text-gray-900">Email Notifications</h1>
-                {/* <h1 className="text-2xl font-bold text-gray-900">
-                  {t("Email Templates")}
-                </h1> */}
-                <p className="text-sm text-gray-600 mt-1">
-                  {/* {t("Easily View, Create, and Modify Email Templates")} */}
-                  Customize the emails your attendees receive for bookings,
-                  reminders, and updates
-                </p>
-              </div>
+  async function load() {
+    setLoading(true); setError("");
+    try {
+      const response = await axios.get("/wp-json/servv-plugin/v1/wordpress/templates", { headers });
+      const items = response.data?.templates;
+      if (!Array.isArray(items)) throw new Error("Invalid templates response");
+      const sorted = [...items].sort((a, b) => (a.description || "").localeCompare(b.description || ""));
+      setTemplates(sorted); setSelectedId(groupEmailTemplates(sorted)[0]?.templates[0]?.id ?? null); setDrafts({});
+    } catch { setError("Unable to load email templates. Please try again."); }
+    finally { setLoading(false); }
+  }
+  useEffect(() => { load(); }, []);
+  function change(field, value) {
+    setDrafts((current) => ({ ...current, [selectedId]: { ...(current[selectedId] || contentOf(selected)), [field]: value } }));
+    setNotice("");
+  }
+  async function save() {
+    if (!selected || disabled || !dirty) return;
+    if (!draft.subject.trim()) { setError("Enter an email subject before saving."); return; }
+    const id = selectedId;
+    const payload = { ...draft };
+    setSaving(true); setError(""); setNotice("");
+    try {
+      await axios.patch(`/wp-json/servv-plugin/v1/wordpress/templates/${id}`, payload, { headers });
+      setTemplates((current) => current.map((template) => template.id === id ? { ...template, ...payload } : template));
+      setNotice("Email template saved.");
+    } catch { setError("Unable to save this template. Your changes are still available."); }
+    finally { setSaving(false); }
+  }
+  function reset() {
+    setDrafts((current) => ({ ...current, [selectedId]: contentOf(selected) }));
+    setRevision((current) => current + 1); setError(""); setNotice("");
+  }
+  const preview = `<!doctype html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><style>body{margin:0;padding:24px;font:14px/1.6 system-ui,sans-serif;color:#17112d;overflow-wrap:anywhere}img,table{max-width:100%}img{height:auto}a{color:#6224e7}</style></head><body>${draft.text}</body></html>`;
+  return <PageWrapper flush loading={loading}>
+    <PageContent className={styles.page}>
+      <BreadCrumbs
+        breadcrumbs={[
+          { label: t("Settings"), to: "/settings" },
+          { label: t("Email templates") },
+        ]}
+      />
+      <PageHeader eyebrow="WP Super Events by ServvAI" title="Email templates"
+        description="Customize the emails attendees receive for bookings, reminders, and event updates."
+        actions={<div className={styles.actions}>
+          <PageActionButton text="View emails" type="secondary" onAction={() => navigate("/notifications")} />
+          <PageActionButton text={saving ? "Saving…" : "Save template"} onAction={save} disabled={loading || disabled || !dirty} />
+        </div>} />
+      <div className={styles.divider} />
+      {error && <div className={styles.message} role="alert">{error}{!selected && <PageActionButton text="Try again" size="sm" type="secondary" onAction={load} disabled={loading} />}</div>}
+      {notice && <p className={styles.message} role="status">{notice}</p>}
+      {restricted && !loading && <p className={styles.message}>Email template editing is available on a paid plan.</p>}
+      {!loading && !error && !templates.length && <section className={styles.card}><h2>No email templates available</h2><p>Your notification templates will appear here when available.</p></section>}
+      {!!templates.length && <div className={styles.layout}>
+        <nav className={styles.templateList} aria-label="Email templates">
+          <span className={styles.eyebrow}>Templates</span>
+          {groups.map((group, index) => <section key={group.label} className={styles.templateGroup} aria-labelledby={`email-template-group-${index}`}>
+            <h2 id={`email-template-group-${index}`} className={styles.groupHeading}><span>{group.label}</span><small className={styles.groupCount}>{group.templates.length}</small></h2>
+            {group.templates.map((template) => <button type="button" key={template.id} disabled={saving}
+            aria-pressed={selectedId === template.id} className={`${styles.templateItem} ${selectedId === template.id ? styles.active : ""}`}
+            onClick={() => { setSelectedId(template.id); setError(""); setNotice(""); }}>
+            <DocumentTextIcon className={styles.templateIcon} aria-hidden="true" />
+            <span className={styles.templateName}>{template.description || `Template ${template.id}`}</span>
+            {differs(drafts[template.id], template) && <small className={styles.unsavedBadge}>Unsaved</small>}
+            <ChevronRightIcon className={styles.templateArrow} aria-hidden="true" />
+          </button>)}
+          </section>)}
+        </nav>
+        {selected && <div className={styles.workspace}>
+          <section className={styles.card}>
+            <div className={styles.cardHeader}><h2>{selected.description}</h2>{dirty && <span className={styles.eyebrow}>Unsaved changes</span>}</div>
+            <label className={styles.field}><span>Email subject</span><input value={draft.subject} disabled={disabled} onChange={(event) => change("subject", event.target.value)} placeholder="Enter email subject" /></label>
+            <div className={styles.cardHeader}><h3>Email content</h3><div className={styles.modes} aria-label="Editor mode">
+              {["Rich Text", "HTML"].map((item) => <button type="button" key={item} aria-pressed={mode === item} disabled={saving} className={mode === item ? styles.active : ""} onClick={() => setMode(item)}>{item}</button>)}
+            </div></div>
+            <div className={styles.editor}>
+              {mode === "Rich Text" ? <RichEditor key={`${selectedId}-${revision}`} value={draft.text} disabled={disabled} onChange={(value) => change("text", value)} />
+                : <textarea aria-label="Email HTML" value={draft.text} disabled={disabled} onChange={(event) => change("text", event.target.value)} spellCheck={false} rows={16} />}
             </div>
-          </div>
-
-          {/* Content Area */}
-          <div className="p-4 space-y-8 pb-32">
-            {/* Template Selection */}
-            <div className="space-y-5">
-              <div className="flex items-center space-x-2">
-                <DocumentTextIcon className="w-5 h-5 text-purple-600" />
-                <label className="text-base font-semibold text-gray-900">
-                  {t("Template Name")}
-                </label>
-              </div>
-              <SelectControl
-                options={templates.map((t) => t.description)}
-                selected={selectedTemplate?.description || ""}
-                onSelectChange={handleSelectTemplate}
-                // disabled={disabled}
-                className="w-full"
-              />
-            </div>
-
-            {/* Email Subject */}
-            <div className="space-y-5">
-              <label className="text-base font-semibold text-gray-900 mt-6">
-                {t("Email Subject")}
-              </label>
-              <div>
-                <InputFieldControl
-                  value={formValues.subject}
-                  onChange={handleTemplateSubjectChange}
-                  placeholder="Enter Email Subject"
-                  disabled={disabled}
-                  width="100%"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl text-base bg-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                />
-              </div>
-            </div>
-
-            {/* Template Parameters */}
-            {selectedTemplate && (
-              <div className="space-y-5">
-                <button
-                  onClick={() => setShowParameters(!showParameters)}
-                  className="flex items-center justify-between w-full p-4 bg-gray-50 rounded-xl border border-gray-200 hover:bg-gray-100 transition-colors"
-                >
-                  <div className="flex items-center space-x-2">
-                    <InformationCircleIcon className="w-5 h-5 text-purple-600" />
-                    <span className="text-base font-semibold text-gray-900">
-                      Parameters
-                    </span>
-                  </div>
-                  {showParameters ? (
-                    <ChevronUpIcon className="w-5 h-5 text-gray-500" />
-                  ) : (
-                    <ChevronDownIcon className="w-5 h-5 text-gray-500" />
-                  )}
-                </button>
-
-                {showParameters && renderParametersTable()}
-              </div>
-            )}
-
-            {/* Edit Mode Toggle */}
-            <div className="space-y-5">
-              <label className="text-base font-semibold text-gray-900">
-                {t("Edit Mode")}
-              </label>
-              <div className="flex bg-gray-100 rounded-xl p-1">
-                <button
-                  onClick={() => handleEditModeChange("Rich Text")}
-                  className={`
-                    flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-lg font-medium text-sm transition-all duration-200
-                    ${
-                      formValues.editMode === "Rich Text"
-                        ? "bg-white text-purple-700 shadow-sm"
-                        : "text-gray-600 hover:text-gray-900"
-                    }
-                  `}
-                  disabled={disabled}
-                >
-                  <DocumentTextIcon className="w-4 h-4" />
-                  <span>{t("Rich Text")}</span>
-                </button>
-                <button
-                  onClick={() => handleEditModeChange("HTML")}
-                  className={`
-                    flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-lg font-medium text-sm transition-all duration-200
-                    ${
-                      formValues.editMode === "HTML"
-                        ? "bg-white text-purple-700 shadow-sm"
-                        : "text-gray-600 hover:text-gray-900"
-                    }
-                  `}
-                  disabled={disabled}
-                >
-                  <CodeBracketIcon className="w-4 h-4" />
-                  <span>{t("HTML")}</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Editor */}
-            <div className="space-y-5">
-              <label className="text-base font-semibold text-gray-900">
-                {t("Email Content")}
-              </label>
-              <SpinnerLoader isLoading={loading}>
-                <div className="border border-gray-200 rounded-xl overflow-hidden bg-white email-editor-container">
-                  {formValues.editMode === "Rich Text" ? (
-                    <Editor
-                      key={`${selectedTemplate?.id}-${defaultText}`}
-                      ref={quillRef}
-                      defaultValue={defaultText}
-                      onChange={handleTemplateTextChange}
-                      mobileToolbar={[
-                        ["bold", "italic", "underline"],
-                        [{ list: "bullet" }],
-                        ["link"],
-                      ]}
-                      disabled={disabled}
-                    />
-                  ) : (
-                    <HTMLEditor
-                      value={formValues.text}
-                      onChange={handleTemplateTextChange}
-                    />
-                  )}
-                </div>
-              </SpinnerLoader>
-            </div>
-
-            {/* Email Preview */}
-            {selectedTemplate && (
-              <div className="space-y-5">
-                <div className="flex items-center space-x-2">
-                  <EyeIcon className="w-5 h-5 text-purple-600" />
-                  <label className="text-base font-semibold text-gray-900">
-                    {t("Email Preview")}
-                  </label>
-                </div>
-                <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 email-template-preview">
-                  <div className="bg-white rounded-lg p-4 shadow-sm email-template-preview-content">
-                    <div className="border-b border-gray-200 pb-3 mb-4">
-                      <h4 className="text-sm font-semibold text-gray-900">
-                        {t("Subject:")}
-                        {formValues.subject}
-                      </h4>
-                    </div>
-                    <div
-                      className="prose prose-sm max-w-none text-gray-700 email-preview-content"
-                      dangerouslySetInnerHTML={{
-                        __html: processContentForPreview(formValues.text) || "",
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Fixed Mobile Action Buttons */}
-          <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-30">
-            <div className="max-w-md mx-auto">
-              <div
-                className="flex justify-end space-x-4"
-                style={{ marginRight: "24px" }}
-              >
-                <PageActionButton
-                  text="View emails"
-                  type="secondary"
-                  onAction={handleOpenEmails}
-                  disabled={loading}
-                  className="min-w-[120px] h-[40px] px-6 py-2 text-base font-semibold border border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
-                />
-                <PageActionButton
-                  text="Save Template"
-                  type="primary"
-                  onAction={handleTemplateSave}
-                  disabled={disabled || loading}
-                  className="min-w-[120px] h-[40px] px-6 py-2 text-base font-semibold bg-purple-600 text-white hover:bg-purple-700"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : (
-        /* Desktop Layout */
-        <div className="dashboard-card">
-          <div className="servv-dashboard-header">
-            {/* LEFT: title + description */}
-            <div className="dashboard-heading">
-              <div className="flex flex-row items-center justify-between w-full">
-                <h1 className="dashboard-title">{t("Email Notifications")}</h1>
-                <div className="dashboard-actions flex gap-2">
-                  <PageActionButton
-                    text="View emails"
-                    type="secondary"
-                    onAction={handleOpenEmails}
-                    disabled={loading}
-                    className="min-w-[120px] h-[40px] px-6 py-2 text-base font-semibold border border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
-                  />
-
-                  <PageActionButton
-                    text={t("Save")}
-                    type="primary"
-                    disabled={disabled}
-                    onAction={handleTemplateSave}
-                  />
-                </div>
-              </div>
-              <p className="dashboard-description">
-                {t(
-                  "Customize the emails your attendees receive for bookings, reminders, and updates",
-                )}
-              </p>
-            </div>
-
-            {/* RIGHT: actions */}
-          </div>
-
-          <div className="header-line" />
-
-          <PageContent className="py-0 my-0">
-            <div className="w-full">
-              <div className="space-y-4 w-full">
-                {/* Template Selection */}
-                <div className="space-y-5 w-full">
-                  <div className="flex items-center space-x-2 w-full">
-                    <DocumentTextIcon className="w-5 h-5 text-purple-600" />
-                    <label className="text-lg font-semibold text-gray-900 w-full">
-                      {t("Template Name")}
-                    </label>
-                  </div>
-                  <div className="w-full">
-                    <SelectControl
-                      options={templates.map((t) => t.description)}
-                      selected={selectedTemplate?.description || ""}
-                      onSelectChange={handleSelectTemplate}
-                      // disabled={disabled}
-                      className="w-full"
-                    />
-                  </div>
-                </div>
-
-                {/* Email Subject - Fixed width for desktop */}
-                <div className="space-y-5 w-full">
-                  <label className="text-lg font-semibold text-gray-900 w-full">
-                    {t("Email Subject")}
-                  </label>
-                  <div className="w-full">
-                    <InputFieldControl
-                      value={formValues.subject}
-                      onChange={handleTemplateSubjectChange}
-                      placeholder="Enter Email Subject"
-                      disabled={disabled}
-                      width="100%"
-                      align="left"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl text-base bg-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                    />
-                  </div>
-                </div>
-
-                {/* Template Parameters - Fixed width for desktop */}
-                {selectedTemplate && (
-                  <div className="space-y-5">
-                    <button
-                      onClick={() => setShowParameters(!showParameters)}
-                      className="flex items-center justify-between w-full max-w-full p-4 bg-gray-50 rounded-xl border border-gray-200 hover:bg-gray-100 transition-colors"
-                    >
-                      <div className="flex items-center space-x-2">
-                        <InformationCircleIcon className="w-5 h-5 text-purple-600" />
-                        <span className="text-lg font-semibold text-gray-900">
-                          Parameters
-                        </span>
-                      </div>
-                      {showParameters ? (
-                        <ChevronUpIcon className="w-5 h-5 text-gray-500" />
-                      ) : (
-                        <ChevronDownIcon className="w-5 h-5 text-gray-500" />
-                      )}
-                    </button>
-
-                    {showParameters && (
-                      <div className="max-w-full">
-                        {renderParametersTable()}
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* Edit Mode Toggle - Fixed width for desktop */}
-                <div className="space-y-5">
-                  <label className="text-lg font-semibold text-gray-900">
-                    {t("Edit Mode")}
-                  </label>
-                  <div className="flex bg-gray-100 rounded-xl p-1 max-w-md">
-                    <button
-                      onClick={() => handleEditModeChange("Rich Text")}
-                      className={`
-                        flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-lg font-medium text-sm transition-all duration-200
-                        ${
-                          formValues.editMode === "Rich Text"
-                            ? "bg-white text-purple-700 shadow-sm"
-                            : "text-gray-600 hover:text-gray-900"
-                        }
-                      `}
-                      disabled={disabled}
-                    >
-                      <DocumentTextIcon className="w-4 h-4" />
-                      <span>{t("Rich Text")}</span>
-                    </button>
-                    <button
-                      onClick={() => handleEditModeChange("HTML")}
-                      className={`
-                        flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-lg font-medium text-sm transition-all duration-200
-                        ${
-                          formValues.editMode === "HTML"
-                            ? "bg-white text-purple-700 shadow-sm"
-                            : "text-gray-600 hover:text-gray-900"
-                        }
-                      `}
-                      disabled={disabled}
-                    >
-                      <CodeBracketIcon className="w-4 h-4" />
-                      <span>{t("HTML")}</span>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Editor - Fixed width for desktop */}
-                <div className="space-y-5">
-                  <label className="text-lg font-semibold text-gray-900">
-                    {t("Email Content")}
-                  </label>
-                  <SpinnerLoader isLoading={loading}>
-                    <div className="border border-gray-200 rounded-xl overflow-hidden bg-white max-w-full email-editor-container">
-                      {formValues.editMode === "Rich Text" ? (
-                        <Editor
-                          key={`${selectedTemplate?.id}-${defaultText}`}
-                          ref={quillRef}
-                          defaultValue={defaultText}
-                          onChange={handleTemplateTextChange}
-                          disabled={disabled}
-                        />
-                      ) : (
-                        <HTMLEditor
-                          value={formValues.text}
-                          onChange={handleTemplateTextChange}
-                        />
-                      )}
-                    </div>
-                  </SpinnerLoader>
-                </div>
-
-                {/* Email Preview - Fixed width for desktop */}
-                {selectedTemplate && (
-                  <div className="space-y-5">
-                    <div className="flex items-center space-x-2">
-                      <EyeIcon className="w-5 h-5 text-purple-600" />
-                      <label className="text-lg font-semibold text-gray-900">
-                        {t("Preview")}
-                      </label>
-                    </div>
-                    <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 max-w-full email-template-preview">
-                      <div className="bg-white rounded-lg p-4 shadow-sm email-template-preview-content">
-                        <div className="border-b border-gray-200 pb-3 mb-4">
-                          <h4 className="text-sm font-semibold text-gray-900">
-                            {t("Subject:")}
-                            {formValues.subject}
-                          </h4>
-                        </div>
-                        <div
-                          className="prose prose-sm max-w-none text-gray-700 email-preview-content"
-                          dangerouslySetInnerHTML={{
-                            __html:
-                              processContentForPreview(formValues.text) || "",
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Desktop Action Buttons - Removed border-t */}
-                {/* <div className="pt-8">
-                  <div
-                    className="flex justify-end space-x-4"
-                    style={{ marginRight: "24px" }}
-                  >
-                    <PageActionButton
-                      text="Cancel"
-                      type="secondary"
-                      onAction={handleCancel}
-                      disabled={loading}
-                      className="min-w-[120px] h-[40px] px-6 py-2 text-base font-semibold border border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
-                    />
-                    <PageActionButton
-                      text="Save Template"
-                      type="primary"
-                      onAction={handleTemplateSave}
-                      disabled={disabled || loading}
-                      className="min-w-[120px] h-[40px] px-6 py-2 text-base font-semibold bg-purple-600 text-white hover:bg-purple-700"
-                    />
-                  </div>
-                </div> */}
-              </div>
-            </div>
-          </PageContent>
-        </div>
-      )}
-    </PageWrapper>
-  );
-};
-
-export default EmailTemplates;
+            {Object.keys(selected.params || {}).length > 0 && <details className={styles.parameters}><summary>Template parameters</summary><p>Use these placeholders to include event and attendee details in your email.</p><dl>{Object.entries(selected.params).map(([key, description]) => <div key={key}><dt><code>{key}</code></dt><dd>{String(description)}</dd></div>)}</dl></details>}
+            <div className={styles.footer}><PageActionButton text="Discard changes" type="secondary" size="sm" onAction={reset} disabled={disabled || !dirty} /></div>
+          </section>
+          <aside className={`${styles.card} ${styles.preview}`}><div className={styles.cardHeader}><h2>Email preview</h2><span className={styles.eyebrow}>Live preview</span></div>
+            <p>Placeholders are replaced with actual details when the email is sent.</p>
+            <div className={styles.subject}><span>Subject</span><strong>{draft.subject || "No subject"}</strong></div>
+            <iframe title="Email template preview" sandbox="" srcDoc={preview} referrerPolicy="no-referrer" />
+          </aside>
+        </div>}
+      </div>}
+    </PageContent>
+  </PageWrapper>;
+}

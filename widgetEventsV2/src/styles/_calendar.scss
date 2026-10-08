@@ -1,0 +1,408 @@
+@use "unit" as *;
+
+.svv-wgt-v2 {
+  .svv-calendar__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: u(0.75);
+    margin-bottom: u(1.125);
+  }
+
+  .svv-calendar__month {
+    margin: 0;
+    font-size: u(1.125);
+    font-weight: 700;
+  }
+
+  .svv-calendar__nav,
+  .svv-monthview__nav {
+    display: flex;
+    gap: u(0.375);
+
+    button {
+      width: u(2);
+      height: u(2);
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--svv-border);
+      border-radius: var(--svv-pill);
+      background: var(--svv-bg);
+      color: var(--svv-text-muted);
+
+      svg {
+        display: block;
+        width: 1.5em;
+        height: 1.5em;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        transform: translateX(-0.02em);
+      }
+
+      & + button svg {
+        transform: scaleX(-1) translateX(-0.02em);
+      }
+
+      &:hover {
+        border-color: var(--svv-primary);
+        color: var(--svv-primary);
+      }
+    }
+  }
+
+  // Month view header: stepper, Today, then the month set large
+  .svv-monthview__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: u(1);
+    margin-bottom: u(2.125);
+  }
+
+  .svv-monthview__nav {
+    gap: u(0.25);
+
+    button {
+      width: u(1.875);
+      height: u(1.875);
+      border: 0;
+      border-radius: var(--svv-radius);
+      background: transparent;
+      color: color-mix(in srgb, var(--svv-card-text) 30%, var(--svv-card-bg));
+
+      &:hover {
+        background: color-mix(in srgb, var(--svv-surface) 70%, var(--svv-card-bg));
+        color: var(--svv-card-text);
+      }
+    }
+  }
+
+  .svv-monthview__today {
+    min-height: u(2.375);
+    padding: 0 u(1.125);
+    border: 1px solid var(--svv-border);
+    border-radius: var(--svv-radius);
+    background: var(--svv-card-bg);
+    color: color-mix(in srgb, var(--svv-card-text) 78%, var(--svv-card-bg));
+    font-size: u(0.9375);
+
+    &:hover {
+      border-color: var(--svv-border-strong);
+      color: var(--svv-card-text);
+    }
+  }
+
+  .svv-monthview__month {
+    margin: 0 0 0 u(0.5);
+    font-size: u(2.125);
+    font-weight: 600;
+    letter-spacing: -0.018em;
+    line-height: 1.1;
+  }
+
+  @container svv-shell (max-width: 864px) {
+    .svv-monthview__head {
+      margin-bottom: u(1.25);
+    }
+
+    .svv-monthview__month {
+      margin-left: 0;
+      font-size: u(1.625);
+    }
+  }
+
+  .svv-calendar__grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: u(0.4375);
+  }
+
+  .svv-calendar__weekday {
+    padding-bottom: u(0.25);
+    color: var(--svv-text-muted);
+    font-size: u(0.75);
+    font-weight: 800;
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  .svv-calendar__weekday-narrow {
+    display: none;
+  }
+
+  .svv-calendar__pad {
+    aspect-ratio: 1;
+  }
+
+  .svv-calendar__day {
+    position: relative;
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: var(--svv-pill);
+    background: transparent;
+    color: color-mix(in srgb, var(--svv-calendar-text) 42%, var(--svv-bg));
+    font-weight: 750;
+    line-height: 1;
+
+    &:hover {
+      border-color: var(--svv-border-strong);
+      color: var(--svv-calendar-text);
+    }
+
+    &.is-marked {
+      background: var(--svv-calendar-marked-bg);
+      color: var(--svv-primary);
+
+      &::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        bottom: 10%;
+        // margin-bottom: 10%;
+        translate: -50% 0;
+        width: 15%;
+        height: 15%;
+        border-radius: var(--svv-pill);
+        background: var(--svv-accent);
+      }
+    }
+
+    &.is-today {
+      border-color: color-mix(
+        in srgb,
+        var(--svv-calendar-today-border) 70%,
+        var(--svv-bg)
+      );
+    }
+
+    &.is-selected {
+      background: var(--svv-calendar-selected-bg);
+      color: var(--svv-calendar-selected-text);
+
+      &::after {
+        background: var(--svv-calendar-selected-text);
+      }
+    }
+  }
+
+  .svv-calendar__clear {
+    margin-top: u(0.875);
+    min-height: u(2.375);
+    width: 100%;
+    padding: 0 u(0.75);
+    border: 1px solid var(--svv-border);
+    border-radius: var(--svv-pill);
+    background: var(--svv-bg);
+    color: var(--svv-text);
+    font-weight: 900;
+
+    &:hover {
+      border-color: var(--svv-primary);
+      color: var(--svv-primary);
+    }
+  }
+
+  // Month view: a full hairline module grid, dates set large, each event a
+  // two-line entry (time over title) rather than a chip.
+  .svv-monthview__weekdays {
+    display: none;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    padding-bottom: u(0.875);
+  }
+
+  .svv-monthview__weekday {
+    color: var(--svv-text-muted);
+    font-size: u(0.8125);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .svv-monthview__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    border-top: 1px solid var(--svv-border);
+  }
+
+  .svv-monthview__cell {
+    display: flex;
+    flex-direction: column;
+    gap: u(0.875);
+    padding: u(1) 0 u(1.25);
+    border-bottom: 1px solid var(--svv-border);
+
+    &::before {
+      content: attr(data-label);
+      color: var(--svv-text-muted);
+      font-size: u(0.75);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    &.is-empty,
+    &.is-outside {
+      display: none;
+    }
+  }
+
+  .svv-monthview__date {
+    font-size: u(1.625);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1;
+  }
+
+  .svv-monthview__cell.is-outside .svv-monthview__date,
+  .svv-monthview__cell.is-past .svv-monthview__date {
+    color: color-mix(in srgb, var(--svv-card-text) 35%, var(--svv-card-bg));
+  }
+
+  .svv-monthview__cell.is-today .svv-monthview__date {
+    color: var(--svv-primary);
+  }
+
+  .svv-monthview__events {
+    display: flex;
+    flex-direction: column;
+    gap: u(0.875);
+  }
+
+  .svv-monthview__event {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+  }
+
+  .svv-monthview__time {
+    display: flex;
+    align-items: center;
+    gap: u(0.375);
+    color: color-mix(in srgb, var(--svv-card-text) 72%, var(--svv-card-bg));
+    font-size: u(0.8125);
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .svv-monthview__recur {
+    flex: none;
+    width: u(0.8125);
+    height: u(0.8125);
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    color: var(--svv-text-muted);
+  }
+
+  .svv-monthview__name {
+    display: block;
+    margin-top: u(0.1875);
+    color: var(--svv-card-text);
+    font-size: u(0.9375);
+    line-height: 1.32;
+    text-wrap: pretty;
+  }
+
+  .svv-monthview__event:hover .svv-monthview__name {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .svv-monthview__event[data-availability="sold-out"] .svv-monthview__name {
+    color: var(--svv-critical);
+  }
+
+  .svv-monthview__cell.is-past .svv-monthview__time,
+  .svv-monthview__cell.is-past .svv-monthview__name,
+  .svv-monthview__cell.is-outside .svv-monthview__time,
+  .svv-monthview__cell.is-outside .svv-monthview__name {
+    color: color-mix(in srgb, var(--svv-card-text) 58%, var(--svv-card-bg));
+  }
+
+  .svv-monthview__more {
+    margin-top: u(0.125);
+    padding: u(0.875) 0 0;
+    border: 0;
+    border-top: 1px solid var(--svv-border);
+    border-radius: 0;
+    background: transparent;
+    color: var(--svv-card-text);
+    font: inherit;
+    font-size: u(0.9375);
+    text-align: left;
+
+    &:hover {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+  }
+
+  @container svv-shell (min-width: 864px) {
+    .svv-monthview__weekdays {
+      display: grid;
+    }
+
+    .svv-monthview__grid {
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      border-left: 1px solid var(--svv-border);
+    }
+
+    .svv-monthview__cell {
+      min-height: u(10.5);
+      padding: u(1) u(0.875) u(1.25);
+      border-right: 1px solid var(--svv-border);
+
+      &::before {
+        display: none;
+      }
+
+      &.is-empty,
+      &.is-outside {
+        display: flex;
+      }
+
+      &.is-outside {
+        background: color-mix(in srgb, var(--svv-surface) 45%, var(--svv-card-bg));
+      }
+    }
+  }
+
+  // the desktop grid is dense; clamp long titles instead of growing the row
+  @container svv-shell (min-width: 864px) and (max-width: 1248px) {
+    .svv-monthview__cell {
+      padding-inline: u(0.5);
+      overflow: hidden;
+    }
+
+    .svv-monthview__date {
+      font-size: u(1.375);
+    }
+
+    .svv-monthview__time {
+      font-size: u(0.6875);
+      gap: u(0.25);
+    }
+
+    .svv-monthview__name {
+      display: -webkit-box;
+      font-size: u(0.8125);
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  }
+}

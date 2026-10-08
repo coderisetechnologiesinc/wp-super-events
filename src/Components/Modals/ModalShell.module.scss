@@ -1,0 +1,152 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+@use "../../styles/motion" as motion;
+
+@include motion.fade;
+@include motion.pop;
+
+@include m.scoped {
+  // Reference: position:fixed;inset:0;z-index:70;display:flex;
+  // align-items:center;justify-content:center;padding:32px;
+  // background:rgba(16,24,40,.5);animation:svFade .15s ease-out
+  .overlay {
+    position: fixed;
+    inset: 0;
+    z-index: t.$z-overlay;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: t.$space-16;
+    background: rgba(16, 24, 40, 0.5);
+    animation: svFade 0.15s ease-out;
+  }
+
+  // Reference: width:760px;max-width:100%;max-height:100%;radius 18;
+  // box-shadow:18px 18px 44px #D4DBE8,-6px -6px 18px #FBFCFE
+  .dialog {
+    display: flex;
+    flex-direction: column;
+    width: 760px;
+    max-width: 100%;
+    max-height: 100%;
+    overflow: hidden;
+    border: 1px solid t.$border;
+    border-radius: t.$radius-2xl;
+    background: t.$surface;
+    box-shadow: t.$shadow-modal;
+    animation: svPop 0.2s t.$ease;
+  }
+
+  .sm {
+    width: 480px;
+  }
+
+  .md {
+    width: 640px;
+  }
+
+  .lg {
+    width: 760px;
+  }
+
+  .xl {
+    width: 960px;
+  }
+
+  // Reference: padding:20px 24px;border-bottom:1px solid rgba(21,27,43,.09);
+  // display:flex;align-items:flex-start;justify-content:space-between;gap:16px
+  .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: t.$space-8;
+    padding: t.$space-10 t.$space-12;
+    border-bottom: 1px solid rgba(21, 27, 43, 0.09);
+  }
+
+  .eyebrow {
+    @include m.eyebrow;
+    color: t.$primary;
+  }
+
+  .title {
+    margin: t.$space-2 0 0;
+    @include m.text(20, t.$weight-bold);
+    letter-spacing: -0.01em;
+  }
+
+  .description {
+    margin: t.$space-2 0 0;
+    @include m.text(13, t.$weight-medium);
+    color: t.$text-soft;
+  }
+
+  // Reference: a 32px square raised button carrying the dismiss glyph.
+  .close {
+    @include m.button-reset;
+    @include m.wp-reset-button;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 32px;
+    height: 32px;
+    border: 1px solid t.$border-soft;
+    border-radius: t.$radius-sm;
+    background: t.$surface;
+    color: t.$text-soft;
+    box-shadow: t.$shadow-raised-sm;
+    transition: box-shadow t.$duration t.$ease, color t.$duration-fast t.$ease;
+
+    &:hover {
+      color: t.$text-strong;
+      box-shadow: t.$shadow-raised;
+    }
+
+    &:focus-visible {
+      @include m.focus-ring-raised;
+    }
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  // Reference: padding:24px;overflow:auto;display:flex;
+  // flex-direction:column;gap:18px
+  .body {
+    display: flex;
+    flex-direction: column;
+    gap: t.$space-9;
+    padding: t.$space-12;
+    overflow: auto;
+  }
+
+  // Reference: padding:16px 24px;border-top:1px solid rgba(21,27,43,.09);
+  // display:flex;align-items:center;justify-content:space-between;gap:12px
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: t.$space-6;
+    padding: t.$space-8 t.$space-12;
+    border-top: 1px solid rgba(21, 27, 43, 0.09);
+  }
+
+  @media (max-width: 735px) {
+    .overlay {
+      padding: t.$space-6;
+    }
+
+    .header,
+    .footer {
+      padding-left: t.$space-8;
+      padding-right: t.$space-8;
+    }
+
+    .body {
+      padding: t.$space-8;
+    }
+  }
+}

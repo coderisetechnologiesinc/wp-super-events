@@ -1,17 +1,11 @@
-import BlockStack from "../../Containers/BlockStack";
-import InlineStack from "../../Containers/InlineStack";
-import InputFieldControl from "../../Controls/InputFieldControl";
-import PageActionButton from "../../Controls/PageActionButton";
-import PageHeader from "../../Containers/PageHeader";
-import PageContent from "../../Containers/PageContent";
-import AnnotatedSection from "../../Containers/AnnotatedSection";
-import FilterFormSection from "../../Containers/FilterFormSection";
-import MobileFooterActions from "../../Controls/MobileFooterActions";
-import PageWrapper from "../PageWrapper";
-import { Fragment, useState, useEffect } from "react";
+import FilterFormSection, {
+  FilterField,
+  FilterOrdering,
+} from "./FilterFormSection";
+import FilterFormLayout from "./FilterFormLayout";
+import { useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import axios from "axios";
-import SpinnerLoader from "../SpinnerLoader";
+import { saveFilter } from "../../../utilities/filters";
 import { useServvStore } from "../../../store/useServvStore";
 
 const CreateCategoryFilterForm = ({ loading, setLoading = () => {} }) => {
@@ -31,14 +25,6 @@ const CreateCategoryFilterForm = ({ loading, setLoading = () => {} }) => {
       : null;
 
   const [categoryData, setCategoryData] = useState(existingCategory || {});
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-
-  // Track window size changes
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   const onCancel = () => navigate(-1); // Go back
 
@@ -50,25 +36,7 @@ const CreateCategoryFilterForm = ({ loading, setLoading = () => {} }) => {
     if (!categoryData?.name) return;
 
     setLoading(true);
-
-    let url = "/wp-json/servv-plugin/v1/filters/categories";
-    let method = "POST";
-
-    // Editing existing
-    if (existingCategory) {
-      url += `/${existingCategory.id}`;
-      method = "PATCH";
-    }
-
-    await axios({
-      method,
-      url,
-      headers: { "X-WP-Nonce": servvData.nonce },
-      data: {
-        ...categoryData,
-        priority: Number.parseInt(categoryData.priority) || 0,
-      },
-    });
+    await saveFilter("categories", categoryData, existingCategory?.id);
     await syncSingleFilterFromServer("categories");
     navigate(-1);
   };
@@ -76,103 +44,53 @@ const CreateCategoryFilterForm = ({ loading, setLoading = () => {} }) => {
   const isFormValid = categoryData?.name?.length > 0;
 
   return (
-    <PageWrapper widthBackground={true}>
-      <div className="dashboard-card">
-        <div className="servv-dashboard-header">
-          {/* LEFT: title + description */}
-          <div className="dashboard-heading">
-            <h1 className="dashboard-title text-gray-900">
-              {existingCategory
-                ? `Category Filter "${existingCategory.name}"`
-                : "New Category"}
-            </h1>
-
-            <p className="dashboard-description mt-4 text-gray-600">
-              {existingCategory
-                ? `Edit details for ${existingCategory.name}`
-                : "Create a new category filter"}
-            </p>
-          </div>
-
-          {/* RIGHT: desktop actions */}
-          <div className="dashboard-actions hidden md:flex flex-row items-center gap-2 flex-nowrap">
-            <PageActionButton
-              text="Cancel"
-              type="secondary"
-              onAction={onCancel}
-            />
-            <PageActionButton
-              text="Save"
-              type="primary"
-              onAction={handleCategorySave}
-              disabled={!isFormValid}
-            />
-          </div>
-        </div>
-
-        <div className="header-line" />
-
-        <PageContent>
-          <div className="pb-20 md:pb-0 py-0 my-0 w-full">
-            <SpinnerLoader isLoading={loading}>
-              <BlockStack gap={8} cardsLayout>
-                {/* Category Name */}
-                <FilterFormSection
-                  title="Category Name"
-                  className="items-start"
-                >
-                  <InputFieldControl
-                    value={categoryData?.name || ""}
-                    type="text"
-                    align="left"
-                    maxLength={100}
-                    onChange={(val) => handleCategroyChange("name", val)}
-                  />
-                </FilterFormSection>
-
-                {/* Category Details */}
-                <FilterFormSection
-                  title="Category Details"
-                  className="items-start"
-                >
-                  <InputFieldControl
-                    value={categoryData?.details || ""}
-                    type="text"
-                    align="left"
-                    maxLength={200}
-                    onChange={(val) => handleCategroyChange("details", val)}
-                  />
-                </FilterFormSection>
-
-                {/* Order field - only if editing */}
-                {existingCategory && (
-                  <FilterFormSection title="Order" className="items-start">
-                    <InputFieldControl
-                      value={categoryData.priority || ""}
-                      type="text"
-                      align="left"
-                      maxLength={10}
-                      onChange={(val) => handleCategroyChange("priority", val)}
-                    />
-                  </FilterFormSection>
-                )}
-              </BlockStack>
-            </SpinnerLoader>
-          </div>
-        </PageContent>
-
-        {/* Mobile Footer */}
-        {isMobile && (
-          <MobileFooterActions
-            onSave={handleCategorySave}
-            onCancel={onCancel}
-            saveText="Save"
-            cancelText="Cancel"
-            saveDisabled={!isFormValid}
-          />
-        )}
-      </div>
-    </PageWrapper>
+    <FilterFormLayout
+      title={existingCategory ? `Edit category` : "New category"}
+      description={
+        existingCategory
+          ? `Edit details for ${existingCategory.name}`
+          : "Create a new category filter"
+      }
+      editing={Boolean(existingCategory)}
+      onSave={handleCategorySave}
+      onCancel={onCancel}
+      saveDisabled={!isFormValid}
+      loading={loading}
+    >
+      <FilterFormSection
+        title="Details"
+        description="Add the information for this filter value."
+        grid
+      >
+        <FilterField
+          label="Category name"
+          value={categoryData?.name || ""}
+          type="text"
+          maxLength={100}
+          required
+          fullWidth
+          hint="This name identifies the value in your event filters."
+          disabled={loading}
+          onChange={(value) => handleCategroyChange("name", value)}
+        />
+        <FilterField
+          label="Description"
+          value={categoryData?.details || ""}
+          type="text"
+          maxLength={200}
+          textarea
+          rows={3}
+          fullWidth
+          disabled={loading}
+          onChange={(value) => handleCategroyChange("details", value)}
+        />
+      </FilterFormSection>
+      <FilterOrdering
+        editing={Boolean(existingCategory)}
+        value={categoryData.priority}
+        onChange={(value) => handleCategroyChange("priority", value)}
+      />
+    </FilterFormLayout>
   );
 };
 

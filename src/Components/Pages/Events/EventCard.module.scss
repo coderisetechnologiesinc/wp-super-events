@@ -1,0 +1,243 @@
+@use "../../../styles/tokens" as t;
+@use "../../../styles/mixins" as m;
+
+// Reference: svStagger — cards arrive one after another on first paint.
+@keyframes svStagger {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+// Reference: the live dot pulses twice, then settles.
+@keyframes svDot {
+  0% {
+    box-shadow: 0 0 0 0 currentColor;
+  }
+  70% {
+    box-shadow: 0 0 0 5px transparent;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+@include m.scoped {
+  .card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid t.$border;
+    border-radius: t.$radius-2xl;
+    background: t.$surface;
+    box-shadow: t.$shadow-card;
+    transition: box-shadow 0.24s ease, transform t.$duration t.$ease;
+    // See PageContent: `backwards` so the finished animation leaves no
+    // transform behind on the card.
+    animation: svStagger 0.5s t.$ease backwards;
+
+    &:hover {
+      box-shadow: t.$shadow-card-hover;
+      transform: translateY(-3px);
+    }
+
+    // Reference: animationDelay 0.06 + i*0.07s. Driven off the grid position
+    // so the component needs no index prop.
+    @for $i from 1 through 8 {
+      &:nth-child(#{$i}) {
+        animation-delay: 0.06s + ($i - 1) * 0.07s;
+      }
+    }
+
+    @include m.reduced-motion {
+      animation: none;
+    }
+  }
+
+  // --- Thumbnail -----------------------------------------------------------
+
+  // Reference: a 108px band with the controls floated over its top-right.
+  .thumb {
+    position: relative;
+    height: 108px;
+    flex: 0 0 108px;
+    border-bottom: 1px solid t.$border;
+    background: linear-gradient(
+      135deg,
+      rgba(100, 54, 201, 0.12),
+      rgba(100, 54, 201, 0.04)
+    );
+    overflow: hidden;
+  }
+
+  .image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .actions {
+    position: absolute;
+    top: t.$space-6;
+    right: t.$space-6;
+    display: flex;
+    gap: t.$space-3;
+  }
+
+  // Reference: 30px square, radius 7, on a near-opaque white plate.
+  .action {
+    @include m.button-reset;
+    @include m.wp-reset-button;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgba(16, 24, 40, 0.08);
+    border-radius: t.$radius-sm;
+    background: rgba(255, 255, 255, 0.92);
+    color: t.$text-strong;
+    transition: background t.$duration-fast t.$ease,
+      box-shadow t.$duration t.$ease, transform t.$duration-fast t.$ease;
+
+    &:hover {
+      background: t.$surface;
+      box-shadow: t.$shadow-raised-sm;
+      transform: translateY(-1px);
+    }
+
+    &:focus-visible {
+      @include m.focus-ring-raised;
+    }
+
+    svg {
+      width: 15px;
+      height: 15px;
+      stroke-width: 1.8;
+    }
+  }
+
+  // --- Body ----------------------------------------------------------------
+
+  // Reference: padding:14px 16px 16px;gap:10px;flex:1
+  .body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: t.$space-5;
+    padding: t.$space-7 t.$space-8 t.$space-8;
+  }
+
+  .title {
+    margin: 0;
+    @include m.text(16, t.$weight-bold);
+    letter-spacing: -0.01em;
+    color: t.$text;
+  }
+
+  .meta {
+    display: flex;
+    align-items: center;
+    gap: t.$space-3;
+    margin-top: 5px;
+    @include m.text(13, t.$weight-medium);
+    color: t.$text-secondary;
+
+    svg {
+      flex: 0 0 14px;
+      width: 14px;
+      height: 14px;
+      color: t.$text-soft;
+    }
+  }
+
+  // Reference: the footer is pushed down and separated by a hairline.
+  .badges {
+    display: flex;
+    align-items: center;
+    gap: t.$space-3;
+    flex-wrap: wrap;
+    margin-top: auto;
+    padding-top: t.$space-6;
+    border-top: 1px solid rgba(21, 27, 43, 0.07);
+  }
+
+  // --- Status pill ---------------------------------------------------------
+
+  // Reference: height 26, radius 99, 12/700, raised — a lit chip, not a label.
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    height: 26px;
+    padding: 0 11px;
+    border: 1px solid transparent;
+    border-radius: t.$radius-pill;
+    @include m.text(12, t.$weight-bold);
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    box-shadow: t.$shadow-raised-sm;
+  }
+
+  .dot {
+    width: 7px;
+    height: 7px;
+    flex: 0 0 7px;
+    border-radius: t.$radius-pill;
+    background: currentColor;
+    animation: svDot 1.9s ease-out 0.35s 2;
+
+    @include m.reduced-motion {
+      animation: none;
+    }
+  }
+
+  .success {
+    background: t.$success-surface;
+    border-color: t.$success-border;
+    color: t.$success-text;
+
+    .dot {
+      background: t.$success;
+      color: t.$success;
+    }
+  }
+
+  .muted {
+    background: t.$surface-subtle;
+    border-color: rgba(21, 27, 43, 0.09);
+    color: t.$text-strong;
+
+    .dot {
+      background: t.$text-placeholder;
+      color: t.$text-placeholder;
+    }
+  }
+
+  .brand {
+    background: t.$primary-surface;
+    border-color: t.$primary-border;
+    color: t.$primary-strong;
+
+    .dot {
+      background: t.$primary;
+      color: t.$primary;
+    }
+  }
+
+  .warning {
+    background: t.$warning-surface;
+    border-color: t.$warning-border;
+    color: t.$warning-text;
+
+    .dot {
+      background: t.$warning;
+      color: t.$warning;
+    }
+  }
+}

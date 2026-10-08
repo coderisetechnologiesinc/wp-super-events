@@ -1,19 +1,12 @@
-import BlockStack from "../../Containers/BlockStack";
-import InlineStack from "../../Containers/InlineStack";
-import InputFieldControl from "../../Controls/InputFieldControl";
-import PageActionButton from "../../Controls/PageActionButton";
-import PageHeader from "../../Containers/PageHeader";
-import PageContent from "../../Containers/PageContent";
-import AnnotatedSection from "../../Containers/AnnotatedSection";
-import MobileFooterActions from "../../Controls/MobileFooterActions";
-import FilterFormSection from "../../Containers/FilterFormSection";
-import PageWrapper from "../PageWrapper";
-import { useState, Fragment, useEffect } from "react";
+import FilterFormSection, {
+  FilterField,
+  FilterOrdering,
+} from "./FilterFormSection";
+import FilterFormLayout from "./FilterFormLayout";
+import { useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import axios from "axios";
-
+import { saveFilter } from "../../../utilities/filters";
 import { useServvStore } from "../../../store/useServvStore";
-import SpinnerLoader from "../SpinnerLoader";
 
 const CreateLanguageFilterForm = ({ loading, setLoading = () => {} }) => {
   const navigate = useNavigate();
@@ -33,14 +26,6 @@ const CreateLanguageFilterForm = ({ loading, setLoading = () => {} }) => {
       : null;
 
   const [languageData, setLanguageData] = useState(existingLanguage || {});
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-
-  // Track window size changes
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   const onCancel = () => navigate(-1); // Return to previous page
 
@@ -52,25 +37,7 @@ const CreateLanguageFilterForm = ({ loading, setLoading = () => {} }) => {
     if (!languageData?.name) return;
 
     setLoading(true);
-
-    let url = "/wp-json/servv-plugin/v1/filters/languages";
-    let method = "POST";
-
-    // Editing existing
-    if (existingLanguage) {
-      url += `/${existingLanguage.id}`;
-      method = "PATCH";
-    }
-
-    await axios({
-      method,
-      url,
-      headers: { "X-WP-Nonce": servvData.nonce },
-      data: {
-        ...languageData,
-        priority: Number.parseInt(languageData.priority) || 0,
-      },
-    });
+    await saveFilter("languages", languageData, existingLanguage?.id);
     await syncSingleFilterFromServer("languages");
     navigate(-1);
   };
@@ -78,89 +45,42 @@ const CreateLanguageFilterForm = ({ loading, setLoading = () => {} }) => {
   const isFormValid = languageData?.name?.length > 0;
 
   return (
-    <PageWrapper withBackground={true}>
-      <div className="dashboard-card">
-        <div className="servv-dashboard-header">
-          {/* LEFT: title + description */}
-          <div className="dashboard-heading">
-            <h1 className="dashboard-title text-gray-900">
-              {existingLanguage
-                ? `Language Filter "${existingLanguage.name}"`
-                : "New Language"}
-            </h1>
-
-            <p className="dashboard-description text-gray-600 text-base leading-relaxed">
-              {existingLanguage
-                ? `Edit details for ${existingLanguage.name}`
-                : "Create a new language filter"}
-            </p>
-          </div>
-
-          {/* RIGHT: desktop actions */}
-          <div className="dashboard-actions hidden md:flex flex-row items-center gap-2 flex-nowrap">
-            <PageActionButton
-              text="Cancel"
-              type="secondary"
-              onAction={onCancel}
-            />
-            <PageActionButton
-              text="Save"
-              type="primary"
-              onAction={handleLanguageSave}
-              disabled={!isFormValid || loading}
-            />
-          </div>
-        </div>
-
-        <div className="header-line" />
-
-        <PageContent className="py-0 my-0">
-          <div className="pb-20 md:pb-0 w-full">
-            <SpinnerLoader isLoading={loading}>
-              <BlockStack gap={8} cardsLayout>
-                {/* Language Name */}
-                <FilterFormSection
-                  title="Language Name"
-                  className="items-start"
-                >
-                  <InputFieldControl
-                    value={languageData?.name || ""}
-                    type="text"
-                    align="left"
-                    maxLength={100}
-                    onChange={(val) => handleLanguageChange("name", val)}
-                  />
-                </FilterFormSection>
-
-                {/* Order (only if editing) */}
-                {existingLanguage && (
-                  <FilterFormSection title="Order" className="items-start">
-                    <InputFieldControl
-                      value={languageData.priority || ""}
-                      type="text"
-                      align="left"
-                      maxLength={10}
-                      onChange={(val) => handleLanguageChange("priority", val)}
-                    />
-                  </FilterFormSection>
-                )}
-              </BlockStack>
-            </SpinnerLoader>
-          </div>
-        </PageContent>
-
-        {/* Mobile Footer */}
-        {isMobile && (
-          <MobileFooterActions
-            onSave={handleLanguageSave}
-            onCancel={onCancel}
-            saveText="Save"
-            cancelText="Cancel"
-            saveDisabled={!isFormValid}
-          />
-        )}
-      </div>
-    </PageWrapper>
+    <FilterFormLayout
+      title={existingLanguage ? `Edit language` : "New language"}
+      description={
+        existingLanguage
+          ? `Edit details for ${existingLanguage.name}`
+          : "Create a new language filter"
+      }
+      editing={Boolean(existingLanguage)}
+      onSave={handleLanguageSave}
+      onCancel={onCancel}
+      saveDisabled={!isFormValid}
+      loading={loading}
+    >
+      <FilterFormSection
+        title="Details"
+        description="Add the information for this filter value."
+        grid
+      >
+        <FilterField
+          label="Language name"
+          value={languageData?.name || ""}
+          type="text"
+          maxLength={100}
+          required
+          fullWidth
+          hint="This name identifies the value in your event filters."
+          disabled={loading}
+          onChange={(value) => handleLanguageChange("name", value)}
+        />
+      </FilterFormSection>
+      <FilterOrdering
+        editing={Boolean(existingLanguage)}
+        value={languageData.priority}
+        onChange={(value) => handleLanguageChange("priority", value)}
+      />
+    </FilterFormLayout>
   );
 };
 

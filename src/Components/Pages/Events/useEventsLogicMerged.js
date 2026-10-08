@@ -1,5 +1,7 @@
+import { resourceVersion } from "../../../utilities/requestCache";
+import useCacheRefresh from "../../../hooks/useCacheRefresh";
 import { useEffect, useMemo, useState, useRef, useCallback } from "react";
-import axios from "axios";
+import axios from "../../../utilities/adminApi";
 import moment from "moment-timezone";
 import { toast } from "react-toastify";
 import { timezonesList } from "../../../utilities/timezones";
@@ -24,6 +26,12 @@ export const useEventsLogic = (settings, filtersList, zoomAccount) => {
   const [firstFetchDone, setFirstFetchDone] = useState(false);
   const [selectedEvents, setSelectedEvents] = useState([]);
   const [isPast, setIsPast] = useState(false);
+
+  // A calendar shows a window of time, not a page of results: while this is on
+  // the merged fetch asks for everything inside the date range instead of one
+  // PAGE_SIZE page, or a busy month would silently stop at ten events.
+  const [wholeRange, setWholeRange] = useState(false);
+  const WHOLE_RANGE_SIZE = 200;
   const [eventType, setEventType] = useState("all");
   const [dateSelected, setDateSelected] = useState(false);
   const [dates, setDates] = useState({ startDate: null, endDate: null });
@@ -166,6 +174,21 @@ export const useEventsLogic = (settings, filtersList, zoomAccount) => {
     setDates({ startDate, endDate });
   };
 
+  // A range preset is the window AND which side of now it is on. Both have to
+  // land in one render: `applyDatePreset` fetches immediately with whatever
+  // `isPast` the closure captured, so flipping to Past through it would fire a
+  // request with the old flag and race the corrected one. This only sets
+  // state — the FILTER CHANGES effect below sees both and fetches once.
+  const applyRangePreset = ({
+    past = false,
+    startDate = null,
+    endDate = null,
+  }) => {
+    setIsPast(past);
+    setDatePreset.current = 2;
+    handleSetDates({ startDate, endDate });
+  };
+
   const applyDatePreset = (dates) => {
     handleSetDates(dates);
     setDatePreset.current = 2;
@@ -305,6 +328,7 @@ export const useEventsLogic = (settings, filtersList, zoomAccount) => {
   stateRef.current = {
     eventType,
     isPast,
+    wholeRange,
     searchString,
     dates,
     selectedFilters,
@@ -366,17 +390,22 @@ export const useEventsLogic = (settings, filtersList, zoomAccount) => {
   // =====================================================================
 
   const getMergedEventsList = useCallback(
-    async ({ page = 1, is_Past, search, datesObj, filtersObj } = {}) => {
+    async ({ page = 1, is_Past, search, datesObj, filtersObj, pageSize } = {}) => {
       const s = stateRef.current;
       is_Past = is_Past ?? s.isPast;
       search = search ?? s.searchString;
       datesObj = datesObj ?? s.dates;
       filtersObj = filtersObj ?? s.selectedFilters;
       if (!s.settings) return;
+      const version = resourceVersion("events");
       setMergedLoading(true);
       const headers = { "X-WP-Nonce": servvData.nonce };
-      const ITEMS_PER_TYPE = 5;
-      const TARGET = PAGE_SIZE; // 10 total
+
+      // Whole-range mode asks both endpoints for the full window, so there is
+      // nothing to balance between them and nothing to page through.
+      const unpaged = Boolean(pageSize);
+      const TARGET = pageSize ?? PAGE_SIZE; // 10 total
+      const ITEMS_PER_TYPE = unpaged ? TARGET : 5;
 
       try {
         // ── STEP 1: fetch from both endpoints ─────────────────────────────────
@@ -418,7 +447,7 @@ export const useEventsLogic = (settings, filtersList, zoomAccount) => {
         const zoomTotal = zoomRes ? zoomRes.data.total_records ?? 0 : 0;
 
         // ── STEP 2: balance — only needed when zoom is connected ───────────────
-        if (s.isZoomConnected) {
+        if (s.isZoomConnected && !unpaged) {
           const offlineGot = offlineMeetings.length;
           const zoomGot = zoomMeetings.length;
           const deficit = TARGET - (offlineGot + zoomGot);
@@ -465,15 +494,63 @@ export const useEventsLogic = (settings, filtersList, zoomAccount) => {
         const allOffline = mapEventRows(offlineMeetings, "offline", is_Past);
         const allZoom = mapEventRows(zoomMeetings, "zoom", is_Past);
 
-        const merged = [...allOffline, ...allZoom].sort((a, b) =>
+        let merged = [...allOffline, ...allZoom].sort((a, b) =>
           is_Past ? b._sortKey - a._sortKey : a._sortKey - b._sortKey,
         );
 
+        // ── STEP 3b: the past half of a calendar window ───────────────────────
+        // The endpoint cannot answer "events inside a past window": a window
+        // that has already passed comes back empty whether or not is_past is
+        // set, and is_past=1 ignores the window (and the search and filters)
+        // and returns every past event. So a calendar month that reaches into
+        // the past is topped up from that list and trimmed here.
+        const windowStartsInPast =
+          unpaged &&
+          datesObj?.startDate &&
+          moment(datesObj.startDate).isBefore(moment());
+
+        if (windowStartsInPast) {
+          const pastArgs = { page: 1, pageSize: TARGET, is_Past: true };
+          const [pastOffline, pastZoom] = await Promise.all([
+            axios.get(buildEventsUrl({ type: "offline", ...pastArgs }), {
+              headers,
+            }),
+            s.isZoomConnected
+              ? axios.get(buildEventsUrl({ type: "zoom", ...pastArgs }), {
+                  headers,
+                })
+              : Promise.resolve(null),
+          ]);
+
+          const from = moment(datesObj.startDate).valueOf();
+          const to = datesObj.endDate
+            ? moment(datesObj.endDate).valueOf()
+            : Infinity;
+
+          const past = [
+            ...mapEventRows(pastOffline.data.meetings ?? [], "offline", true),
+            ...mapEventRows(pastZoom?.data.meetings ?? [], "zoom", true),
+          ].filter((row) => row._sortKey >= from && row._sortKey <= to);
+
+          const seen = new Set(merged.map((row) => `${row.id}${row.occurrence_id || ""}`));
+          merged = [
+            ...merged,
+            ...past.filter(
+              (row) => !seen.has(`${row.id}${row.occurrence_id || ""}`),
+            ),
+          ].sort((a, b) => a._sortKey - b._sortKey);
+        }
+
         // ── STEP 4: pagination — based on server totals ────────────────────────
         const totalItems = offlineTotal + zoomTotal;
-        const totalPages = Math.max(1, Math.ceil(totalItems / TARGET));
+        const totalPages = unpaged
+          ? 1
+          : Math.max(1, Math.ceil(totalItems / TARGET));
         const safePage = Math.min(Math.max(1, page), totalPages);
 
+        if (version !== resourceVersion("events")) {
+          return await getMergedEventsList({ page, is_Past, search, datesObj, filtersObj, pageSize });
+        }
         setMergedList(merged);
         setMergedPagination({
           pageNumber: safePage,
@@ -614,6 +691,7 @@ export const useEventsLogic = (settings, filtersList, zoomAccount) => {
       endDate: s.dates.endDate?.valueOf() ?? null,
       filters: JSON.stringify(s.selectedFilters),
       isZoomConnected: s.isZoomConnected, // re-fetch if zoom connection changes
+      wholeRange: s.wholeRange, // a calendar needs the window, not a page
     };
 
     const prev = lastFetchedRef.current;
@@ -624,7 +702,8 @@ export const useEventsLogic = (settings, filtersList, zoomAccount) => {
       prev.startDate === next.startDate &&
       prev.endDate === next.endDate &&
       prev.filters === next.filters &&
-      prev.isZoomConnected === next.isZoomConnected
+      prev.isZoomConnected === next.isZoomConnected &&
+      prev.wholeRange === next.wholeRange
     )
       return false;
 
@@ -640,6 +719,7 @@ export const useEventsLogic = (settings, filtersList, zoomAccount) => {
         search: s.searchString,
         datesObj: s.dates,
         filtersObj: s.selectedFilters,
+        pageSize: s.wholeRange ? WHOLE_RANGE_SIZE : undefined,
       });
     } else {
       getEventsList({
@@ -652,8 +732,20 @@ export const useEventsLogic = (settings, filtersList, zoomAccount) => {
     }
   }, [getMergedEventsList, getEventsList]);
 
-  // 1) INITIAL LOAD
   const initialLoadDoneRef = useRef(false);
+
+  useCacheRefresh(["events"], () => {
+    if (!initialLoadDoneRef.current) return;
+    if (view === "occurrences" && selectedEventForOccurrences) {
+      return getEventOccurrencess(selectedEventForOccurrences, occurrencesPagination.pageNumber || 1);
+    }
+    if (stateRef.current.eventType === "all") {
+      return getMergedEventsList({ page: mergedPagination.pageNumber || 1, pageSize: stateRef.current.wholeRange ? WHOLE_RANGE_SIZE : undefined });
+    }
+    return getEventsList({ page: pagination.pageNumber || 1 });
+  });
+
+  // 1) INITIAL LOAD
   useEffect(() => {
     if (!settings || initialLoadDoneRef.current) return;
     initialLoadDoneRef.current = true;
@@ -668,6 +760,7 @@ export const useEventsLogic = (settings, filtersList, zoomAccount) => {
     doFetch();
   }, [
     isPast,
+    wholeRange,
     eventType,
     dates.startDate?.valueOf(),
     dates.endDate?.valueOf(),
@@ -731,10 +824,14 @@ export const useEventsLogic = (settings, filtersList, zoomAccount) => {
     setAttributes,
     setShowGuide,
     handleOpenEvent,
-    handleIsPastChange: () => setIsPast((p) => !p),
+    // A boolean sets the side explicitly; no argument keeps the old toggle.
+    handleIsPastChange: (value) =>
+      setIsPast((p) => (typeof value === "boolean" ? value : !p)),
     handleTypeChange: (t) => setEventType(t),
     handleSetDates,
     applyDatePreset,
+    applyRangePreset,
+    setWholeRange,
     handleSearchChange: setSearchString,
     handleSearchSubmit,
     handleFilterSelect,

@@ -1,0 +1,310 @@
+@use "unit" as *;
+
+.svv-wgt-v2 {
+  .svv-badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: u(1.5);
+    padding: 0 u(0.5625);
+    border-radius: var(--svv-pill);
+    background: var(--svv-primary-subtle);
+    color: var(--svv-primary-hover);
+    font-size: u(0.75);
+    font-weight: 900;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .svv-badge--success {
+    background: var(--svv-success-subtle);
+    color: var(--svv-success);
+  }
+
+  .svv-badge--critical {
+    background: var(--svv-critical-subtle);
+    color: var(--svv-critical);
+  }
+
+  .svv-badge--info {
+    background: var(--svv-info-subtle);
+    color: var(--svv-info);
+  }
+
+  .svv-badge--accent {
+    background: var(--svv-accent-subtle);
+    color: var(--svv-accent-strong);
+  }
+
+  .svv-card {
+    display: grid;
+    gap: u(1.5);
+    padding: u(1.25) u(1);
+    border: 1px solid var(--svv-border);
+    border-radius: var(--svv-radius);
+    background: var(--svv-card-bg);
+    color: var(--svv-card-text);
+    box-shadow: var(--svv-card-shadow);
+    transition:
+      border-color 0.18s ease,
+      box-shadow 0.18s ease,
+      transform 0.18s ease;
+
+    &:hover {
+      border-color: color-mix(in srgb, var(--svv-primary) 35%, var(--svv-border));
+      box-shadow: var(--svv-card-shadow-hover);
+      transform: translateY(-1px);
+    }
+  }
+
+  .svv-card__media {
+    display: block;
+    align-self: start;
+    width: 100%;
+    aspect-ratio: var(--svv-image-ratio);
+    border: 1px solid color-mix(in srgb, var(--svv-border) 60%, var(--svv-card-bg));
+    border-radius: var(--svv-radius);
+    background-position: center;
+    background-size: cover;
+  }
+
+  .svv-card__body {
+    display: grid;
+    align-content: start;
+    gap: u(0.625);
+    min-width: 0;
+  }
+
+  .svv-card__when {
+    display: flex;
+    flex-wrap: wrap;
+    gap: u(0.375);
+    color: var(--svv-card-text-muted);
+    font-size: u(0.875);
+    font-weight: 850;
+  }
+
+  .svv-card__title {
+    margin: 0;
+    font-size: u(1.3125);
+    font-weight: 700;
+    line-height: 1.15;
+
+    a {
+      color: inherit;
+
+      &:hover {
+        color: var(--svv-primary);
+      }
+    }
+  }
+
+  .svv-card__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: u(0.375);
+  }
+
+  .svv-card__description {
+    color: var(--svv-card-text-muted);
+    font-size: u(0.875);
+    line-height: 1.45;
+  }
+
+  .svv-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: u(0.25) u(0.5);
+    margin-top: u(0.125);
+    color: var(--svv-card-text-muted);
+    font-size: u(0.8125);
+
+    li {
+      white-space: nowrap;
+    }
+
+    li + li::before {
+      content: "·";
+      margin-right: u(0.5);
+      color: color-mix(in srgb, var(--svv-card-text) 35%, var(--svv-card-bg));
+    }
+  }
+
+  .svv-card__share {
+    display: inline-grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: u(2.375);
+    height: u(2.375);
+    border: 1px solid color-mix(in srgb, var(--svv-info) 35%, var(--svv-card-bg));
+    border-radius: var(--svv-pill);
+    background: var(--svv-card-bg);
+    color: var(--svv-info);
+    font-size: u(1.125);
+    font-weight: 950;
+    line-height: 1;
+
+    &:hover {
+      border-color: var(--svv-info);
+      background: var(--svv-info-subtle);
+    }
+
+    svg {
+      display: block;
+      width: 1em;
+      height: 1em;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+  }
+
+  .svv-card__action {
+    display: grid;
+    align-content: space-between;
+    justify-items: end;
+    gap: u(0.875);
+  }
+
+  .svv-card__pricing {
+    display: grid;
+    gap: u(0.125);
+    min-width: 0;
+    text-align: right;
+  }
+
+  .svv-card__actions {
+    display: flex;
+    align-items: center;
+    gap: u(0.5);
+  }
+
+  .svv-card__price {
+    font-size: u(1.5);
+    font-weight: 700;
+    color: color-mix(in srgb, var(--svv-card-text) 88%, var(--svv-card-bg));
+  }
+
+  .svv-card__availability {
+    color: var(--svv-card-text-muted);
+    font-size: u(0.8125);
+    font-weight: 800;
+  }
+
+  .svv-card__cta,
+  .svv-drawer__cta,
+  .svv-submit {
+    min-height: u(2.625);
+    padding: 0 u(1.125);
+    border: 1px solid transparent;
+    border-radius: var(--svv-pill);
+    background: var(--svv-primary);
+    color: var(--svv-primary-text);
+    font-weight: 900;
+    white-space: nowrap;
+
+    &:hover:not(:disabled) {
+      background: var(--svv-primary-hover);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+  }
+
+  .svv-card__cta--muted,
+  .svv-drawer__cta--muted {
+    border-color: color-mix(in srgb, var(--svv-critical) 35%, var(--svv-card-bg));
+    background: var(--svv-critical-subtle);
+    color: var(--svv-critical);
+
+    &:hover:not(:disabled) {
+      background: color-mix(in srgb, var(--svv-critical) 18%, var(--svv-card-bg));
+    }
+  }
+
+  @container svv-card (min-width: 30em) {
+    .svv-card {
+      grid-template-columns: u(7) minmax(0, 1fr);
+      gap: u(0.75);
+    }
+
+    .svv-card:not(:has(.svv-card__media)) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .svv-card__action {
+      grid-column: 1 / -1;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      justify-items: start;
+    }
+
+    .svv-card__pricing {
+      text-align: left;
+    }
+  }
+
+  @container svv-card (min-width: 44em) {
+    .svv-card {
+      grid-template-columns: u(13) minmax(0, 1fr) minmax(u(9.375), auto);
+      gap: u(1.125);
+    }
+
+    .svv-card:not(:has(.svv-card__media)) {
+      grid-template-columns: minmax(0, 1fr) minmax(u(9.375), auto);
+
+      .svv-card__action {
+        grid-column: 2;
+      }
+    }
+
+    .svv-card__action {
+      grid-column: 3;
+      grid-template-columns: minmax(0, 1fr);
+      justify-items: end;
+      align-content: space-between;
+    }
+
+    .svv-card__pricing {
+      text-align: right;
+    }
+
+    .svv-card__actions {
+      justify-content: flex-end;
+    }
+  }
+
+  .svv-events--grid .svv-card {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    height: 100%;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .svv-events--grid .svv-card__media {
+    border: 0;
+    border-bottom: 1px solid var(--svv-border);
+    border-radius: 0;
+  }
+
+  .svv-events--grid .svv-card__body {
+    padding: 0 u(0.875);
+  }
+
+  .svv-events--grid .svv-card__action {
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 1fr) auto;
+    justify-items: start;
+    align-items: end;
+    padding: 0 u(0.875) u(0.875);
+  }
+
+  .svv-events--grid .svv-card__pricing {
+    text-align: left;
+  }
+}

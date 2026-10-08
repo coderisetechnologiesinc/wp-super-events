@@ -1,0 +1,82 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+
+@include m.scoped {
+  .stack {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    min-width: 0;
+  }
+
+  .gap0 {
+    gap: 0;
+  }
+
+  .gap1 {
+    gap: t.$space-2;
+  }
+
+  .gap2 {
+    gap: t.$space-4;
+  }
+
+  .gap3 {
+    gap: t.$space-6;
+  }
+
+  .gap4 {
+    gap: t.$space-8;
+  }
+
+  .gap5 {
+    gap: t.$space-10;
+  }
+
+  .gap6 {
+    gap: t.$space-12;
+  }
+
+  .gap8 {
+    gap: t.$space-16;
+  }
+
+  // --- Alignment ---------------------------------------------------------
+
+  .left {
+    width: 100%;
+    flex-grow: 1;
+    justify-content: flex-start;
+  }
+
+  .right {
+    justify-content: flex-end;
+  }
+
+  .center {
+    justify-content: center;
+  }
+
+  .between {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  // --- Modifiers ---------------------------------------------------------
+
+  .cards {
+    flex: 1 1 0;
+    align-items: baseline;
+  }
+
+  .wrap {
+    flex-wrap: wrap;
+  }
+
+  // The reference wraps action rows rather than letting them overflow.
+  @media (max-width: 735px) {
+    .stack {
+      flex-wrap: wrap;
+    }
+  }
+}

@@ -13,10 +13,31 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./BlockStack.module.scss */ "./src/Components/Containers/BlockStack.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
 
 
+
+// Vertical layout primitive. `gap` keeps the historic numeric scale
+// (4 → 16px); the token names are accepted too for new code.
+
+const GAPS = {
+  0: _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].gap0,
+  1: _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].gap1,
+  2: _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].gap2,
+  3: _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].gap3,
+  4: _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].gap4,
+  5: _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].gap5,
+  6: _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].gap6,
+  8: _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].gap8,
+  none: _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].gap0,
+  xs: _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].gap1,
+  sm: _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].gap2,
+  md: _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].gap4,
+  lg: _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].gap6,
+  xl: _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].gap8
+};
 const BlockStack = ({
   gap = 4,
   cardsLayout,
@@ -26,13 +47,177 @@ const BlockStack = ({
   className = "",
   children,
   ...rest
-}) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-  ...rest,
-  onClick: onAction ? () => onAction() : undefined,
-  className: `${className} flex flex-col ${gap ? `space-y-${gap}` : ""} ${cardsLayout ? "flex-[1_1_0]" : ""} ${action ? "cursor-pointer" : ""} ${disabled ? "filter grayscale" : ""}`,
-  children: children
-});
+}) => {
+  var _GAPS$gap;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+    ...rest,
+    onClick: onAction ? () => onAction() : undefined,
+    className: [_BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].stack, (_GAPS$gap = GAPS[gap]) !== null && _GAPS$gap !== void 0 ? _GAPS$gap : GAPS[4], cardsLayout ? _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].cards : "", action || onAction ? _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].clickable : "", disabled ? _BlockStack_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].disabled : "", className].filter(Boolean).join(" "),
+    children: children
+  });
+};
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (BlockStack);
+
+/***/ }),
+
+/***/ "./src/Components/Containers/Dropdown.jsx":
+/*!************************************************!*\
+  !*** ./src/Components/Containers/Dropdown.jsx ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Dropdown_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Dropdown.module.scss */ "./src/Components/Containers/Dropdown.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+// `surface` draws the white card around the menu. Pass false when the child is
+// already a surface of its own (CalendarInline) so it isn't framed twice.
+
+const Dropdown = ({
+  activator,
+  status,
+  children,
+  onClose,
+  align = "right",
+  surface = true,
+  className = "",
+  dropdownClassName = "",
+  ...rest
+}) => {
+  const dropdownRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const [dropdownStyle, setDropdownStyle] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
+    minWidth: 240
+  });
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (!status) return;
+    const handleClickOutside = event => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        if (onClose) onClose();
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [status, onClose]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (status && dropdownRef.current) {
+      const dropdown = dropdownRef.current.querySelector(".dropdown-content-fix");
+      if (dropdown) {
+        const rect = dropdown.getBoundingClientRect();
+        const viewportWidth = window.innerWidth;
+        let newStyle = {
+          minWidth: 240
+        };
+        if (rect.right > viewportWidth) {
+          newStyle.right = 0;
+          newStyle.left = "auto";
+        }
+        if (rect.left < 0) {
+          newStyle.left = 0;
+          newStyle.right = "auto";
+        }
+        setDropdownStyle({
+          ...newStyle
+        });
+      }
+    }
+  }, [status, children]);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+    ref: dropdownRef,
+    className: [_Dropdown_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].root, className].filter(Boolean).join(" "),
+    ...rest,
+    children: [activator, status && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+      className: [_Dropdown_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].menu, dropdownClassName].filter(Boolean).join(" "),
+      style: align === "left" ? {
+        minWidth: 240,
+        left: 0,
+        right: "auto"
+      } : {
+        minWidth: 240,
+        right: 0,
+        left: "auto"
+      },
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+        className: ["dropdown-content-fix", surface ? _Dropdown_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].surface : ""].filter(Boolean).join(" "),
+        style: dropdownStyle,
+        children: children
+      })
+    })]
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Dropdown);
+
+/***/ }),
+
+/***/ "./src/Components/Controls/CalendarInline.jsx":
+/*!****************************************************!*\
+  !*** ./src/Components/Controls/CalendarInline.jsx ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react_day_picker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-day-picker */ "./node_modules/react-day-picker/dist/esm/DayPicker.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
+
+
+// The calendar surface shared by every date control: a DayPicker in servv
+// chrome. Render it directly when the surrounding markup is already a panel
+// (a modal, a form block); wrap it in NewDatePickerControl for a popover.
+//
+// react-day-picker speaks { from, to } for ranges while the admin pages store
+// { startDate, endDate }; the translation lives here so no call site has to
+// know about either shape.
+
+const CalendarInline = ({
+  mode = "single",
+  value,
+  onChange = () => {},
+  disabled,
+  defaultMonth
+}) => {
+  var _value$startDate, _value$endDate;
+  const isRange = mode === "range";
+  const selected = isRange ? value?.startDate || value?.endDate ? {
+    from: (_value$startDate = value.startDate) !== null && _value$startDate !== void 0 ? _value$startDate : undefined,
+    to: (_value$endDate = value.endDate) !== null && _value$endDate !== void 0 ? _value$endDate : undefined
+  } : undefined : value !== null && value !== void 0 ? value : undefined;
+  const handleSelect = next => {
+    var _next$from, _ref, _next$to;
+    if (!isRange) {
+      onChange(next);
+      return;
+    }
+    onChange({
+      startDate: (_next$from = next?.from) !== null && _next$from !== void 0 ? _next$from : null,
+      endDate: (_ref = (_next$to = next?.to) !== null && _next$to !== void 0 ? _next$to : next?.from) !== null && _ref !== void 0 ? _ref : null
+    });
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+    className: "date-picker-menu",
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_day_picker__WEBPACK_IMPORTED_MODULE_1__.DayPicker, {
+      mode: mode,
+      selected: selected,
+      defaultMonth: defaultMonth !== null && defaultMonth !== void 0 ? defaultMonth : isRange ? selected?.from : selected,
+      onSelect: handleSelect,
+      disabled: disabled,
+      weekStartsOn: 1 // Mo → Su
+      ,
+      showOutsideDays: true
+    })
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (CalendarInline);
 
 /***/ }),
 
@@ -48,44 +233,57 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _CheckboxItem_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CheckboxItem.module.scss */ "./src/Components/Controls/CheckboxItem.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
 
+
+
+// `indeterminate` is the select-all's third state: some rows picked, not all.
+// It fills the box like a checked one but draws a dash instead of a tick.
 
 const CheckboxItem = ({
   label = "",
   name,
   checked = false,
+  indeterminate = false,
   disabled = false,
+  ariaLabel,
   onChange = () => {}
 }) => {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("label", {
-    className: `checkbox-item ${disabled ? "is-disabled" : ""}`,
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("label", {
+    className: `${_CheckboxItem_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].item} ${disabled ? _CheckboxItem_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].disabled : ""}`,
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
       type: "checkbox",
       name: name,
       checked: checked,
       disabled: disabled,
       onChange: onChange,
-      className: "checkbox-item__input"
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-      className: "checkbox-item__box",
-      children: checked && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("svg", {
-        className: "checkbox-item__check",
+      className: _CheckboxItem_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].input,
+      "aria-label": ariaLabel || undefined,
+      ref: node => {
+        if (node) node.indeterminate = !checked && indeterminate;
+      }
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("span", {
+      className: `${_CheckboxItem_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].box} ${!checked && indeterminate ? _CheckboxItem_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].mixed : ""}`,
+      children: [!checked && indeterminate && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+        className: _CheckboxItem_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].dash
+      }), checked && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("svg", {
+        className: _CheckboxItem_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].check,
         width: "12",
         height: "12",
         viewBox: "0 0 12 12",
         fill: "none",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("path", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("path", {
           d: "M2.5 6.5L5 9L9.5 3",
           stroke: "currentColor",
           strokeWidth: "2",
           strokeLinecap: "round",
           strokeLinejoin: "round"
         })
-      })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-      className: "checkbox-item__label",
+      })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+      className: _CheckboxItem_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].label,
       children: label
     })]
   });
@@ -106,42 +304,211 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _NewButtonGroup_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./NewButtonGroup.module.scss */ "./src/Components/Controls/NewButtonGroup.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
 
 
+
+// A segment is either a plain string (its own label and value) or an object:
+// { value, label, icon, title }. An entry with an icon and no label renders as
+// a square icon segment — that is how the dashboard's view switcher is built.
+
+const normalize = button => {
+  var _button$value, _button$title;
+  return typeof button === "object" && button !== null ? {
+    value: (_button$value = button.value) !== null && _button$value !== void 0 ? _button$value : button.label,
+    label: button.label,
+    icon: button.icon,
+    title: (_button$title = button.title) !== null && _button$title !== void 0 ? _button$title : button.label
+  } : {
+    value: button,
+    label: button,
+    icon: null,
+    title: button
+  };
+};
 const NewButtonGroup = ({
   title = "",
   buttons = [],
   active = null,
   onChange = () => {},
   disabled = false,
-  view
+  view,
+  ariaLabel,
+  // Fill the container and split it evenly — how a labelled group reads in a
+  // stacked form such as the Filters drawer.
+  fullWidth = false
 }) => {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-    className: "tabs-wrapper",
-    children: [title && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-      className: "section-description",
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+    className: [_NewButtonGroup_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].wrapper, fullWidth ? _NewButtonGroup_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].wrapperFull : ""].filter(Boolean).join(" "),
+    children: [title && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+      className: _NewButtonGroup_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].title,
       children: title
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-      className: "tabs-container",
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+      className: [_NewButtonGroup_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].track, fullWidth ? _NewButtonGroup_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].trackFull : ""].filter(Boolean).join(" "),
+      role: "tablist",
+      "aria-label": ariaLabel,
       children: buttons.map(button => {
-        const isActive = active === button;
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
+        const segment = normalize(button);
+        const isActive = active === segment.value;
+        const iconOnly = Boolean(segment.icon) && !segment.label;
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("button", {
           type: "button",
+          role: "tab",
+          "aria-selected": isActive,
+          "aria-label": iconOnly ? segment.title : undefined,
+          title: segment.title,
           disabled: disabled,
-          onClick: () => onChange(button),
-          className: `tab-button ${isActive ? "tab-button--active" : "tab-button--inactive"} ${view ? "tab-compact" : ""}`,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-            className: "tab-button-text",
-            children: button
-          })
-        }, button);
+          onClick: () => onChange(segment.value),
+          className: [_NewButtonGroup_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].segment, isActive ? _NewButtonGroup_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].active : _NewButtonGroup_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].inactive, view ? _NewButtonGroup_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].compact : "", iconOnly ? _NewButtonGroup_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].iconOnly : ""].filter(Boolean).join(" "),
+          children: [segment.icon && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+            className: _NewButtonGroup_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].icon,
+            children: segment.icon
+          }), segment.label && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+            className: _NewButtonGroup_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].text,
+            children: segment.label
+          })]
+        }, segment.value);
       })
     })]
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (NewButtonGroup);
+
+/***/ }),
+
+/***/ "./src/Components/Controls/NewDatePickerControl.jsx":
+/*!**********************************************************!*\
+  !*** ./src/Components/Controls/NewDatePickerControl.jsx ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment */ "moment");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _Containers_Dropdown__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Containers/Dropdown */ "./src/Components/Containers/Dropdown.jsx");
+/* harmony import */ var _CalendarInline__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./CalendarInline */ "./src/Components/Controls/CalendarInline.jsx");
+/* harmony import */ var _NewDatePickerControl_module_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./NewDatePickerControl.module.scss */ "./src/Components/Controls/NewDatePickerControl.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__);
+
+
+
+
+
+
+const DEFAULT_FORMAT = "MMM DD, YYYY";
+const toDate = value => {
+  if (!value) return null;
+  const parsed = moment__WEBPACK_IMPORTED_MODULE_1___default().isMoment(value) ? value : moment__WEBPACK_IMPORTED_MODULE_1___default()(value);
+  return parsed.isValid() ? parsed.startOf("day").toDate() : null;
+};
+
+// A calendar icon button that opens CalendarInline in a popover.
+//
+// mode="range" takes and emits { startDate, endDate } as Dates — the shape the
+// filter pages already keep in state. mode="single" takes anything
+// moment-parsable and emits a moment, matching the event form's handlers.
+const NewDatePickerControl = ({
+  mode = "range",
+  value,
+  onChange = () => {},
+  label = "Select dates",
+  displayFormat = DEFAULT_FORMAT,
+  minDate,
+  maxDate,
+  disabled = false,
+  fullWidth = false,
+  className = ""
+}) => {
+  const [open, setOpen] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const isRange = mode === "range";
+  const selected = isRange ? {
+    startDate: toDate(value?.startDate),
+    endDate: toDate(value?.endDate)
+  } : toDate(value);
+  const before = toDate(minDate);
+  const after = toDate(maxDate);
+  const disabledDays = before || after ? {
+    ...(before ? {
+      before
+    } : {}),
+    ...(after ? {
+      after
+    } : {})
+  } : undefined;
+  const triggerLabel = () => {
+    if (!isRange) {
+      return selected ? moment__WEBPACK_IMPORTED_MODULE_1___default()(selected).format(displayFormat) : label;
+    }
+    if (!selected.startDate) return label;
+    const from = moment__WEBPACK_IMPORTED_MODULE_1___default()(selected.startDate).format(displayFormat);
+    if (!selected.endDate || selected.endDate.valueOf() === selected.startDate.valueOf()) {
+      return from;
+    }
+    return `${from} – ${moment__WEBPACK_IMPORTED_MODULE_1___default()(selected.endDate).format(displayFormat)}`;
+  };
+  const handleSelect = next => {
+    if (!isRange) {
+      if (!next) return;
+      onChange(moment__WEBPACK_IMPORTED_MODULE_1___default()(next));
+      setOpen(false);
+      return;
+    }
+    onChange(next);
+    // Hold the popover open until both ends of the range are picked.
+    if (next?.startDate && next?.endDate) setOpen(false);
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_Containers_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    className: [_NewDatePickerControl_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].root, fullWidth ? _NewDatePickerControl_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].block : "", className].filter(Boolean).join(" "),
+    align: "left",
+    surface: false,
+    status: open && !disabled,
+    onClose: () => setOpen(false),
+    activator: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("button", {
+      type: "button",
+      className: _NewDatePickerControl_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].button,
+      disabled: disabled,
+      onClick: () => setOpen(prev => !prev),
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("svg", {
+        className: _NewDatePickerControl_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].icon,
+        xmlns: "http://www.w3.org/2000/svg",
+        viewBox: "0 0 24 24",
+        fill: "none",
+        "aria-hidden": "true",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("rect", {
+          x: "3",
+          y: "5",
+          width: "18",
+          height: "16",
+          rx: "3",
+          stroke: "currentColor",
+          strokeWidth: "1.9"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
+          d: "M8 3v4M16 3v4M3 11h18",
+          stroke: "currentColor",
+          strokeWidth: "1.9"
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+        className: _NewDatePickerControl_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].label,
+        children: triggerLabel()
+      })]
+    }),
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_CalendarInline__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      mode: mode,
+      value: selected,
+      onChange: handleSelect,
+      disabled: disabledDays
+    })
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (NewDatePickerControl);
 
 /***/ }),
 
@@ -157,47 +524,69 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _NewInputFieldControl_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./NewInputFieldControl.module.scss */ "./src/Components/Controls/NewInputFieldControl.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
 
 
+
+// The single text-entry primitive: a bare input (or textarea) in the recessed
+// field chrome. NewInputControl wraps this with a label and error text; use
+// this directly when the surrounding markup already supplies them.
+
+const ALIGN = {
+  left: _NewInputFieldControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].left,
+  center: _NewInputFieldControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].center,
+  right: _NewInputFieldControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].right
+};
 const NewInputFieldControl = ({
   placeholder = "",
   value = "",
   type = "text",
+  inputMode,
   disabled = false,
   onChange = () => {},
   onBlur = () => {},
+  onKeyDown = () => {},
   maxLength,
   minValue,
   maxValue,
   align = "left",
+  step,
   width,
+  textarea = false,
+  rows = 4,
   className = "",
+  style,
   error = false
 }) => {
-  const handleChange = e => {
-    let val = e.target.value;
-    onChange(val);
-  };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-    className: `servv-input ${className} ${error ? "servv-input__native--error" : ""}`,
+  const InputTag = textarea ? "textarea" : "input";
+  const wrapperClasses = [_NewInputFieldControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].field, error ? _NewInputFieldControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].error : "", disabled ? _NewInputFieldControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].disabled : "", className].filter(Boolean).join(" ");
+  const contentClasses = [_NewInputFieldControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].content, textarea ? _NewInputFieldControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].textarea : ""].filter(Boolean).join(" ");
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+    className: wrapperClasses,
     style: {
-      width: width || "384px"
+      width: width || "384px",
+      ...style
     },
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-      className: "servv-input__content",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
-        type: type,
-        className: `servv-input__native servv-input__native--${align}`,
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+      className: contentClasses,
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(InputTag, {
+        type: textarea ? undefined : type,
+        inputMode: inputMode,
+        rows: textarea ? rows : undefined,
+        className: `${_NewInputFieldControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].native} ${ALIGN[align] || ALIGN.left}`,
         placeholder: placeholder,
         value: value,
         disabled: disabled,
+        "aria-invalid": Boolean(error),
         maxLength: maxLength,
         min: minValue,
         max: maxValue,
-        onChange: handleChange,
+        step: step,
+        onChange: e => onChange(e.target.value),
         onBlur: onBlur,
+        onKeyDown: onKeyDown,
         autoComplete: "off"
       })
     })
@@ -223,7 +612,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Containers_InlineStack__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Containers/InlineStack */ "./src/Components/Containers/InlineStack.jsx");
 /* harmony import */ var _Containers_BlockStack__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Containers/BlockStack */ "./src/Components/Containers/BlockStack.jsx");
 /* harmony import */ var _CheckboxItem__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./CheckboxItem */ "./src/Components/Controls/CheckboxItem.jsx");
-/* harmony import */ var _RecurrenceRadioGroup__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./RecurrenceRadioGroup */ "./src/Components/Controls/RecurrenceRadioGroup.jsx");
+/* harmony import */ var _RadioGroup__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./RadioGroup */ "./src/Components/Controls/RadioGroup.jsx");
 /* harmony import */ var _Controls_NewButtonGroup__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Controls/NewButtonGroup */ "./src/Components/Controls/NewButtonGroup.jsx");
 /* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/ChevronDownIcon.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
@@ -440,7 +829,7 @@ const NewRecurringControl = ({
           style: {
             width: "100%"
           }
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_RecurrenceRadioGroup__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_RadioGroup__WEBPACK_IMPORTED_MODULE_5__["default"], {
           name: "monthly-type",
           value: monthlyType ? "day" : "week",
           onChange: v => setMonthlyType(v === "day"),
@@ -508,28 +897,129 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_select__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-select */ "./node_modules/react-select/dist/index-641ee5b8.esm.js");
-/* harmony import */ var react_select__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-select */ "./node_modules/react-select/dist/react-select.esm.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_select__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-select */ "./node_modules/react-select/dist/index-641ee5b8.esm.js");
+/* harmony import */ var react_select__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-select */ "./node_modules/react-select/dist/react-select.esm.js");
+/* harmony import */ var _NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./NewSelectControl.module.scss */ "./src/Components/Controls/NewSelectControl.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
 
 
 
-const DropdownIndicator = props => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(react_select__WEBPACK_IMPORTED_MODULE_2__.c.DropdownIndicator, {
+
+const Caret = () => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("svg", {
+  xmlns: "http://www.w3.org/2000/svg",
+  fill: "none",
+  viewBox: "0 0 24 24",
+  strokeWidth: 1.8,
+  stroke: "currentColor",
+  width: 18,
+  height: 18,
+  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("path", {
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    d: "m19.5 8.25-7.5 7.5-7.5-7.5"
+  })
+});
+const DropdownIndicator = props => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_select__WEBPACK_IMPORTED_MODULE_3__.c.DropdownIndicator, {
   ...props,
-  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("svg", {
-    xmlns: "http://www.w3.org/2000/svg",
-    fill: "none",
-    viewBox: "0 0 24 24",
-    strokeWidth: 1.5,
-    stroke: "currentColor",
-    width: 20,
-    height: 20,
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("path", {
-      strokeLinecap: "round",
-      strokeLinejoin: "round",
-      d: "m19.5 8.25-7.5 7.5-7.5-7.5"
-    })
+  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(Caret, {})
+});
+
+// react-select renders its own DOM, so it is styled through the same tokens
+// exposed as custom properties on #servv-wrap (see src/styles/base.scss).
+const reactSelectStyles = style => ({
+  container: base => ({
+    ...base,
+    width: "100%",
+    ...style
+  }),
+  control: (base, state) => ({
+    ...base,
+    minHeight: "40px",
+    border: `1px solid ${state.isFocused ? "var(--sv-primary-border)" : "var(--sv-border-field)"}`,
+    borderRadius: "var(--sv-radius-lg)",
+    backgroundColor: "var(--sv-surface)",
+    // No halo on focus: the border colour already says which select is
+    // active, and the ring sat heavily on a control this wide.
+    boxShadow: "var(--sv-shadow-field)",
+    paddingLeft: "6px",
+    paddingRight: "4px",
+    fontSize: "14px",
+    fontWeight: 500,
+    "&:hover": {
+      borderColor: "var(--sv-primary-border)"
+    }
+  }),
+  valueContainer: base => ({
+    ...base,
+    padding: "0 6px"
+  }),
+  placeholder: base => ({
+    ...base,
+    color: "var(--sv-text-placeholder)"
+  }),
+  singleValue: base => ({
+    ...base,
+    color: "var(--sv-text)"
+  }),
+  input: base => ({
+    ...base,
+    color: "var(--sv-text)"
+  }),
+  multiValue: base => ({
+    ...base,
+    borderRadius: "99px",
+    backgroundColor: "var(--sv-primary-surface)",
+    border: "1px solid var(--sv-primary-border)"
+  }),
+  multiValueLabel: base => ({
+    ...base,
+    color: "var(--sv-primary-strong)",
+    fontSize: "12px",
+    fontWeight: 600
+  }),
+  multiValueRemove: base => ({
+    ...base,
+    color: "var(--sv-primary-strong)",
+    borderRadius: "0 99px 99px 0",
+    ":hover": {
+      backgroundColor: "var(--sv-primary-border)",
+      color: "var(--sv-primary-strong)"
+    }
+  }),
+  dropdownIndicator: base => ({
+    ...base,
+    padding: "0 6px",
+    color: "var(--sv-text-soft)",
+    ":hover": {
+      color: "var(--sv-primary)"
+    }
+  }),
+  menu: base => ({
+    ...base,
+    overflow: "hidden",
+    marginTop: "6px",
+    borderRadius: "var(--sv-radius-2xl)",
+    border: "1px solid var(--sv-border)",
+    boxShadow: "0 12px 32px rgba(16, 24, 40, 0.14)",
+    zIndex: 40
+  }),
+  menuList: base => ({
+    ...base,
+    padding: "6px"
+  }),
+  option: (base, state) => ({
+    ...base,
+    borderRadius: "7px",
+    padding: "8px 10px",
+    fontSize: "13px",
+    fontWeight: 500,
+    color: state.isSelected ? "var(--sv-primary-strong)" : "var(--sv-text-strong)",
+    backgroundColor: state.isSelected ? "var(--sv-primary-surface)" : state.isFocused ? "var(--sv-primary-surface)" : "transparent",
+    cursor: "pointer",
+    ":active": {
+      backgroundColor: "var(--sv-primary-surface)"
+    }
   })
 });
 const NewSelectControl = ({
@@ -543,19 +1033,18 @@ const NewSelectControl = ({
   iconRight = null,
   style = {}
 }) => {
-  // const options = [{ value: null, label: "" }, ...options];
+  // A native <select> can only render text, so options carrying JSX labels
+  // (badges, icons) go through react-select as well.
+  const hasRichLabels = options.some(option => option && typeof option.label !== "string");
   if (multiple) {
     const selected = Array.isArray(value) ? value.map(String) : [];
     const selectedOptions = options.filter(o => selected.includes(o.value));
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-      className: "servv-select",
-      style: {
-        width: "100%"
-      },
-      children: [label && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("label", {
-        className: "step__content_title",
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      className: _NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].wrapper,
+      children: [label && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+        className: _NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].label,
         children: label
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(react_select__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_select__WEBPACK_IMPORTED_MODULE_4__["default"], {
         isMulti: true,
         options: options,
         value: selectedOptions,
@@ -566,74 +1055,60 @@ const NewSelectControl = ({
           IndicatorSeparator: null,
           DropdownIndicator
         },
-        styles: {
-          container: base => ({
-            ...base,
-            ...style
-          }),
-          control: base => ({
-            ...base,
-            border: "1px solid #d5d7da",
-            borderRadius: "8px",
-            boxShadow: "0px 1px 2px rgba(10, 13, 18, 0.05)",
-            paddingLeft: "12px",
-            paddingRight: "10px",
-            fontSize: "14px",
-            "&:hover": {
-              borderColor: "#d5d7da"
-            }
-          }),
-          placeholder: base => ({
-            ...base,
-            color: "#182230"
-          }),
-          option: base => ({
-            ...base,
-            color: "#182230"
-          }),
-          multiValueLabel: base => ({
-            ...base,
-            color: "#182230"
-          }),
-          input: base => ({
-            ...base,
-            color: "#182230"
-          }),
-          dropdownIndicator: base => ({
-            ...base,
-            padding: "0 4px"
-          })
-        }
+        styles: reactSelectStyles(style)
       })]
     });
   }
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-    className: "servv-select",
-    style: {
-      width: "100%"
-    },
-    children: [label && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("label", {
-      className: "step__content_title",
+  if (hasRichLabels) {
+    var _options$find;
+    const selectedOption = (_options$find = options.find(o => String(o.value) === String(value))) !== null && _options$find !== void 0 ? _options$find : null;
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      className: _NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].wrapper,
+      children: [label && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+        className: _NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].label,
+        children: label
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_select__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        options: options,
+        value: selectedOption,
+        onChange: picked => onChange(picked ? picked.value : ""),
+        isDisabled: disabled,
+        isSearchable: false,
+        placeholder: helpText || "Select...",
+        components: {
+          IndicatorSeparator: null,
+          DropdownIndicator
+        },
+        styles: reactSelectStyles(style)
+      })]
+    });
+  }
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+    className: _NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].wrapper,
+    children: [label && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+      className: _NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].label,
       children: label
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-      className: `servv-select__control ${disabled ? "servv-select--disabled" : ""}`,
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      className: `${_NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].control} ${disabled ? _NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].disabled : ""}`,
       style: style,
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("select", {
-        className: "servv-select__native",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("select", {
+        className: _NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].native,
         value: value !== null && value !== void 0 ? value : "",
         onChange: e => onChange(e.target.value),
         disabled: disabled,
-        children: [helpText && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("option", {
+        children: [helpText && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
           value: "",
           disabled: true,
           children: helpText
-        }), options.map(option => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("option", {
+        }), options.map(option => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
           value: option.value,
           children: option.label
         }, option.value))]
-      }), iconRight && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-        className: "servv-select__icon",
+      }), iconRight ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+        className: _NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].icon,
         children: iconRight
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+        className: _NewSelectControl_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].caret,
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(Caret, {})
       })]
     })]
   });
@@ -803,10 +1278,10 @@ const NewTimePeriodControl = ({
 
 /***/ }),
 
-/***/ "./src/Components/Controls/RecurrenceRadioGroup.jsx":
-/*!**********************************************************!*\
-  !*** ./src/Components/Controls/RecurrenceRadioGroup.jsx ***!
-  \**********************************************************/
+/***/ "./src/Components/Controls/RadioGroup.jsx":
+/*!************************************************!*\
+  !*** ./src/Components/Controls/RadioGroup.jsx ***!
+  \************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -815,9 +1290,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _RadioGroup_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./RadioGroup.module.scss */ "./src/Components/Controls/RadioGroup.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
 
+
+
+// The admin shell's radio group: one control per set of options rather than
+// one per button.
 
 const RadioGroup = ({
   name,
@@ -826,146 +1306,31 @@ const RadioGroup = ({
   // [{ value, label }]
   onChange,
   disabled = false,
+  direction = "row",
+  // row | column
   className = ""
 }) => {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-    className: `servv-recurrence-group ${className}`,
-    children: options.map(opt => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("label", {
-      className: "servv-radio",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+    className: [_RadioGroup_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].group, direction === "column" ? _RadioGroup_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].column : "", className].filter(Boolean).join(" "),
+    children: options.map(opt => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("label", {
+      className: _RadioGroup_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].option,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
         type: "radio",
         name: name,
         value: opt.value,
         checked: value === opt.value,
         onChange: () => onChange(opt.value),
         disabled: disabled || opt.disabled
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-        className: "servv-radio__control"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-        className: "servv-radio__label",
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+        className: _RadioGroup_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].control
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+        className: _RadioGroup_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].label,
         children: opt.label
       })]
     }, opt.value))
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (RadioGroup);
-
-/***/ }),
-
-/***/ "./src/Components/CreateEvent/CalendarInline.jsx":
-/*!*******************************************************!*\
-  !*** ./src/Components/CreateEvent/CalendarInline.jsx ***!
-  \*******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react_day_picker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-day-picker */ "./node_modules/react-day-picker/dist/esm/DayPicker.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
-
-
-const CalendarInline = ({
-  value,
-  onChange
-}) => {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-    className: "date-picker-menu",
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_day_picker__WEBPACK_IMPORTED_MODULE_1__.DayPicker, {
-      mode: "single",
-      selected: value,
-      defaultMonth: value,
-      onSelect: onChange,
-      weekStartsOn: 1 // Mo → Su
-      ,
-      showOutsideDays: true
-    })
-  });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (CalendarInline);
-
-/***/ }),
-
-/***/ "./src/Components/CreateEvent/DatePickerControl.jsx":
-/*!**********************************************************!*\
-  !*** ./src/Components/CreateEvent/DatePickerControl.jsx ***!
-  \**********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment */ "moment");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var react_tailwindcss_datepicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-tailwindcss-datepicker */ "./node_modules/react-tailwindcss-datepicker/dist/index.esm.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__);
-
-
-
-
-const DatePickerControl = ({
-  date = null,
-  onChange = () => {},
-  label = "Select a Date",
-  variant = "button",
-  adminSection = false
-}) => {
-  const [open, setOpen] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  const wrapperRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  const [value, setValue] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
-    startDate: date ? moment__WEBPACK_IMPORTED_MODULE_1___default()(date).startOf("day").toDate() : null,
-    endDate: null
-  });
-
-  // useEffect(() => {
-  //   const editor = document.querySelector(".block-editor__container");
-
-  //   function handleClickOutside(event) {
-  //     if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
-  //       setOpen(false);
-  //     }
-  //   }
-  //   editor.addEventListener("mousedown", handleClickOutside);
-  //   return () => editor.removeEventListener("mousedown", handleClickOutside);
-  // }, []);
-
-  const minDate = moment__WEBPACK_IMPORTED_MODULE_1___default()().startOf("day").toDate();
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    setValue({
-      startDate: date ? moment__WEBPACK_IMPORTED_MODULE_1___default()(date).startOf("day").toDate() : null,
-      endDate: null
-    });
-  }, [date]);
-  const handleDateChange = val => {
-    setValue(val);
-    if (val?.startDate) {
-      const newDate = moment__WEBPACK_IMPORTED_MODULE_1___default()(val.startDate);
-      onChange(newDate);
-    } else {
-      onChange(null);
-    }
-  };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_tailwindcss_datepicker__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    ref: wrapperRef,
-    minDate: minDate,
-    asSingle: true,
-    useRange: false,
-    displayFormat: "MMM DD, YYYY",
-    selected: value,
-    value: value,
-    placeholder: value?.startDate && moment__WEBPACK_IMPORTED_MODULE_1___default()(value.startDate, (moment__WEBPACK_IMPORTED_MODULE_1___default().ISO_8601), true).isValid() ? moment__WEBPACK_IMPORTED_MODULE_1___default()(value.startDate).format("MMM DD, YYYY") : "Select dates",
-    inputClassName: `input-control section-description text-left w-full ${variant === "button" ? adminSection ? "max-w-full" : "max-w-[10rem]" : "w-full"} ${adminSection ? "min-w-[8rem]" : "min-w-[10rem]"} min-w-8 shadow-sm border-solid border border-gray-300 bg-white placeholder-gray-700 max-sm:w-full`,
-    onChange: handleDateChange,
-    show: open
-  });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (DatePickerControl);
 
 /***/ }),
 
@@ -980,21 +1345,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _assets_icons__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../assets/icons */ "./src/assets/icons/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-4WY6JWTD.mjs");
-/* harmony import */ var _CalendarInline__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CalendarInline */ "./src/Components/CreateEvent/CalendarInline.jsx");
-/* harmony import */ var _Controls_NewSelectControl__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Controls/NewSelectControl */ "./src/Components/Controls/NewSelectControl.jsx");
-/* harmony import */ var _Controls_NewTimeInputControl__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Controls/NewTimeInputControl */ "./src/Components/Controls/NewTimeInputControl.jsx");
-/* harmony import */ var moment_timezone__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! moment-timezone */ "./node_modules/moment-timezone/index.js");
-/* harmony import */ var moment_timezone__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(moment_timezone__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _utilities_timezones__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../utilities/timezones */ "./src/utilities/timezones.js");
-/* harmony import */ var _Controls_RecurrenceRadioGroup__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Controls/RecurrenceRadioGroup */ "./src/Components/Controls/RecurrenceRadioGroup.jsx");
-/* harmony import */ var _Controls_NewRecurringControl__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Controls/NewRecurringControl */ "./src/Components/Controls/NewRecurringControl.jsx");
-/* harmony import */ var _NewEndDateControl__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./NewEndDateControl */ "./src/Components/CreateEvent/NewEndDateControl.jsx");
-/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/index.mjs");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var _StepActions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./StepActions */ "./src/Components/CreateEvent/StepActions.jsx");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-4WY6JWTD.mjs");
+/* harmony import */ var _Controls_CalendarInline__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Controls/CalendarInline */ "./src/Components/Controls/CalendarInline.jsx");
+/* harmony import */ var _Controls_NewSelectControl__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Controls/NewSelectControl */ "./src/Components/Controls/NewSelectControl.jsx");
+/* harmony import */ var _Controls_NewTimeInputControl__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Controls/NewTimeInputControl */ "./src/Components/Controls/NewTimeInputControl.jsx");
+/* harmony import */ var moment_timezone__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! moment-timezone */ "./node_modules/moment-timezone/index.js");
+/* harmony import */ var moment_timezone__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(moment_timezone__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _utilities_timezones__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../utilities/timezones */ "./src/utilities/timezones.js");
+/* harmony import */ var _Controls_RadioGroup__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Controls/RadioGroup */ "./src/Components/Controls/RadioGroup.jsx");
+/* harmony import */ var _Controls_NewRecurringControl__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../Controls/NewRecurringControl */ "./src/Components/Controls/NewRecurringControl.jsx");
+/* harmony import */ var _NewEndDateControl__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./NewEndDateControl */ "./src/Components/CreateEvent/NewEndDateControl.jsx");
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/index.mjs");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__);
 
 
 
@@ -1021,56 +1387,56 @@ const DateStep = ({
   handleFormSubmit,
   isOnboarding
 }) => {
-  const navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_12__.useNavigate)();
+  const navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_13__.useNavigate)();
   const {
     startTime,
     duration,
     timezone,
     recurrence
   } = attributes.meeting || {};
-  const [timeFormat, setTimeFormat] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)("hh:mm a");
-  const [userTimezone, setUserTimezone] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
-  const [internalEndTime, setInternalEndTime] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
-  const [hasInvalidDuration, setHasInvalidDuration] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
-  const [hasInvalidStartTime, setHasInvalidStartTime] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
+  const [timeFormat, setTimeFormat] = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)("hh:mm a");
+  const [userTimezone, setUserTimezone] = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)(null);
+  const [internalEndTime, setInternalEndTime] = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)(null);
+  const [hasInvalidDuration, setHasInvalidDuration] = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)(false);
+  const [hasInvalidStartTime, setHasInvalidStartTime] = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)(false);
   /* ---------- moments ---------- */
 
-  const startMoment = startTime ? moment_timezone__WEBPACK_IMPORTED_MODULE_5___default()(startTime) : moment_timezone__WEBPACK_IMPORTED_MODULE_5___default()();
-  const endMoment = internalEndTime ? moment_timezone__WEBPACK_IMPORTED_MODULE_5___default()(internalEndTime) : startMoment.clone().add(duration !== null && duration !== void 0 ? duration : 0, "minutes");
+  const startMoment = startTime ? moment_timezone__WEBPACK_IMPORTED_MODULE_6___default()(startTime) : moment_timezone__WEBPACK_IMPORTED_MODULE_6___default()();
+  const endMoment = internalEndTime ? moment_timezone__WEBPACK_IMPORTED_MODULE_6___default()(internalEndTime) : startMoment.clone().add(duration !== null && duration !== void 0 ? duration : 0, "minutes");
 
   /* ---------- timezone options ---------- */
 
-  const timezones = Object.keys(_utilities_timezones__WEBPACK_IMPORTED_MODULE_6__.timezonesList).map(zone => ({
+  const timezones = Object.keys(_utilities_timezones__WEBPACK_IMPORTED_MODULE_7__.timezonesList).map(zone => ({
     value: zone,
-    label: _utilities_timezones__WEBPACK_IMPORTED_MODULE_6__.timezonesList[zone]
+    label: _utilities_timezones__WEBPACK_IMPORTED_MODULE_7__.timezonesList[zone]
   }));
 
   /* ---------- timezone init from settings ---------- */
-  const [searchParams] = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_12__.useSearchParams)();
+  const [searchParams] = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_13__.useSearchParams)();
   const timezonFromOnboarding = searchParams.get("timezone");
   const getDefaultTimezoneFromSettings = () => {
     const hardDefault = "America/Los_Angeles";
     if (timezonFromOnboarding && timezonFromOnboarding.length > 0) {
       return timezonFromOnboarding;
     }
-    const guessed = moment_timezone__WEBPACK_IMPORTED_MODULE_5___default().tz.guess();
+    const guessed = moment_timezone__WEBPACK_IMPORTED_MODULE_6___default().tz.guess();
     const raw = settings?.settings?.admin_dashboard;
     if (!raw) {
-      return moment_timezone__WEBPACK_IMPORTED_MODULE_5___default().tz.zone(guessed) ? guessed : hardDefault;
+      return moment_timezone__WEBPACK_IMPORTED_MODULE_6___default().tz.zone(guessed) ? guessed : hardDefault;
     }
     try {
       const parsed = typeof raw === "string" ? JSON.parse(raw.trim()) : raw;
       const savedTz = parsed?.default_timezone;
-      if (savedTz && moment_timezone__WEBPACK_IMPORTED_MODULE_5___default().tz.zone(savedTz)) {
+      if (savedTz && moment_timezone__WEBPACK_IMPORTED_MODULE_6___default().tz.zone(savedTz)) {
         return savedTz;
       }
-      return moment_timezone__WEBPACK_IMPORTED_MODULE_5___default().tz.zone(guessed) ? guessed : hardDefault;
+      return moment_timezone__WEBPACK_IMPORTED_MODULE_6___default().tz.zone(guessed) ? guessed : hardDefault;
     } catch (err) {
       console.warn("Invalid admin_dashboard JSON:", err);
-      return moment_timezone__WEBPACK_IMPORTED_MODULE_5___default().tz.zone(guessed) ? guessed : hardDefault;
+      return moment_timezone__WEBPACK_IMPORTED_MODULE_6___default().tz.zone(guessed) ? guessed : hardDefault;
     }
   };
-  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+  (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
     if (!settings) return;
     if (timezone) {
       setUserTimezone(timezone);
@@ -1084,7 +1450,7 @@ const DateStep = ({
       }
     });
   }, [settings?.settings]);
-  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+  (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
     if (!userTimezone) return;
     if (userTimezone === timezone) return;
     setAttributes({
@@ -1093,9 +1459,9 @@ const DateStep = ({
       }
     });
   }, [userTimezone]);
-  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+  (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
     if (startTime && duration !== undefined) {
-      setInternalEndTime(moment_timezone__WEBPACK_IMPORTED_MODULE_5___default()(startTime).add(duration, "minutes").format("YYYY-MM-DDTHH:mm:ss"));
+      setInternalEndTime(moment_timezone__WEBPACK_IMPORTED_MODULE_6___default()(startTime).add(duration, "minutes").format("YYYY-MM-DDTHH:mm:ss"));
     }
   }, [startTime, duration]);
 
@@ -1103,12 +1469,12 @@ const DateStep = ({
 
   const handleDateChange = selectedDate => {
     if (!selectedDate) return;
-    const newDate = moment_timezone__WEBPACK_IMPORTED_MODULE_5___default()(selectedDate);
+    const newDate = moment_timezone__WEBPACK_IMPORTED_MODULE_6___default()(selectedDate);
     if (newDate.isSame(startMoment, "day")) return;
     const updated = newDate.hour(startMoment.hour()).minute(startMoment.minute());
     const timezone = attributes?.meeting?.timezone;
-    const now = moment_timezone__WEBPACK_IMPORTED_MODULE_5___default()().tz(timezone);
-    const userSelection = moment_timezone__WEBPACK_IMPORTED_MODULE_5___default().tz(updated.format("YYYY-MM-DD HH:mm"), timezone);
+    const now = moment_timezone__WEBPACK_IMPORTED_MODULE_6___default()().tz(timezone);
+    const userSelection = moment_timezone__WEBPACK_IMPORTED_MODULE_6___default().tz(updated.format("YYYY-MM-DD HH:mm"), timezone);
     setHasInvalidStartTime(userSelection.isBefore(now));
     setAttributes({
       meeting: {
@@ -1120,8 +1486,8 @@ const DateStep = ({
     if (!newMoment) return;
     const updated = startMoment.clone().hour(newMoment.hour()).minute(newMoment.minute()).second(0);
     const timezone = attributes?.meeting?.timezone;
-    const userSelection = moment_timezone__WEBPACK_IMPORTED_MODULE_5___default().tz(updated.format("YYYY-MM-DD HH:mm"), timezone);
-    const now = moment_timezone__WEBPACK_IMPORTED_MODULE_5___default()().tz(timezone);
+    const userSelection = moment_timezone__WEBPACK_IMPORTED_MODULE_6___default().tz(updated.format("YYYY-MM-DD HH:mm"), timezone);
+    const now = moment_timezone__WEBPACK_IMPORTED_MODULE_6___default()().tz(timezone);
     setHasInvalidStartTime(userSelection.isBefore(now));
     if (!updated.isSame(startMoment)) {
       setAttributes({
@@ -1134,12 +1500,12 @@ const DateStep = ({
   const validateStartTime = () => {
     const updated = startMoment.clone();
     const timezone = attributes?.meeting?.timezone;
-    const userSelection = moment_timezone__WEBPACK_IMPORTED_MODULE_5___default().tz(updated.format("YYYY-MM-DD HH:mm"), timezone);
-    const now = moment_timezone__WEBPACK_IMPORTED_MODULE_5___default()().tz(timezone);
+    const userSelection = moment_timezone__WEBPACK_IMPORTED_MODULE_6___default().tz(updated.format("YYYY-MM-DD HH:mm"), timezone);
+    const now = moment_timezone__WEBPACK_IMPORTED_MODULE_6___default()().tz(timezone);
     const isInPast = userSelection.isBefore(now);
     if (isInPast) {
       setHasInvalidStartTime(true);
-      react_toastify__WEBPACK_IMPORTED_MODULE_10__.toast.warning("Date and time must be in the future.");
+      react_toastify__WEBPACK_IMPORTED_MODULE_11__.toast.warning("Date and time must be in the future.");
       return;
     }
     setHasInvalidStartTime(false);
@@ -1178,88 +1544,88 @@ const DateStep = ({
 
   /* ---------- time format ---------- */
 
-  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+  (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
     setTimeFormat(settings?.settings?.time_format_24_hours ? "HH:mm" : "hh:mm a");
   }, [settings]);
 
   /* ---------- initial start ---------- */
 
-  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+  (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
     if (!startTime) {
       setAttributes({
         meeting: {
-          startTime: moment_timezone__WEBPACK_IMPORTED_MODULE_5___default()().toISOString(),
+          startTime: moment_timezone__WEBPACK_IMPORTED_MODULE_6___default()().toISOString(),
           duration: duration !== null && duration !== void 0 ? duration : 60
         }
       });
     }
   }, []);
   const isRecurringAvailable = settings?.current_plan?.features?.find(f => f.title === "Recurring")?.value === "true" || false;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
     className: "step__wrapper",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
       className: "step__header",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_assets_icons__WEBPACK_IMPORTED_MODULE_0__.CalendarIcon, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_assets_icons__WEBPACK_IMPORTED_MODULE_0__.CalendarIcon, {
         className: "step__header_icon"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
         className: "step__heading",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("h4", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("h4", {
           className: "step__header_title",
           children: "Date and time"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("p", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("p", {
           className: "step__description",
           children: "Select the event's date, time, and frequency."
         })]
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
       className: "step__content_date",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
         className: "flex flex-col gap-y-[24px]",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
           className: "step__content_block",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
             className: "step__content_title",
             children: "Calendar"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_CalendarInline__WEBPACK_IMPORTED_MODULE_2__["default"], {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Controls_CalendarInline__WEBPACK_IMPORTED_MODULE_3__["default"], {
             value: startMoment.toDate(),
             onChange: handleDateChange
           })]
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
         className: "step__content_block",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
           className: "step__content_title",
           children: "Time"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
           className: "step__time_control",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Controls_NewTimeInputControl__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Controls_NewTimeInputControl__WEBPACK_IMPORTED_MODULE_5__["default"], {
             time: startMoment,
             timeFormat: timeFormat,
             onChange: handleStartTimeChange,
             align: "start",
             validationError: hasInvalidDuration || hasInvalidStartTime
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
             className: "self-center",
             children: "to"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Controls_NewTimeInputControl__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Controls_NewTimeInputControl__WEBPACK_IMPORTED_MODULE_5__["default"], {
             time: endMoment,
             timeFormat: timeFormat,
             onChange: handleEndTimeChange,
             align: "end",
             validationError: hasInvalidDuration
           })]
-        }), hasInvalidStartTime && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+        }), hasInvalidStartTime && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
           className: "step__description",
           children: "Start time cannot be in the past"
-        }), hasInvalidDuration && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+        }), hasInvalidDuration && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
           className: "step__description",
           children: "End time must be after start time"
-        }), !isOccurrence && !isOnboarding && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+        }), !isOccurrence && !isOnboarding && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
           className: "mt-8",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
             className: "step__content_title",
             children: "Recurrence"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Controls_RecurrenceRadioGroup__WEBPACK_IMPORTED_MODULE_7__["default"], {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Controls_RadioGroup__WEBPACK_IMPORTED_MODULE_8__["default"], {
             name: "recurrence-mode",
             value: recurrence ? "recurring" : "one-time",
             options: [{
@@ -1271,7 +1637,7 @@ const DateStep = ({
             }],
             onChange: handleRecurrenceModeChange,
             disabled: !isRecurringAvailable
-          }), recurrence && isRecurringAvailable && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Controls_NewRecurringControl__WEBPACK_IMPORTED_MODULE_8__["default"], {
+          }), recurrence && isRecurringAvailable && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Controls_NewRecurringControl__WEBPACK_IMPORTED_MODULE_9__["default"], {
             recurrence: recurrence,
             onChange: updatedRecurrence => {
               setAttributes({
@@ -1281,9 +1647,9 @@ const DateStep = ({
               });
             },
             meetingType: "offline"
-          }), recurrence && isRecurringAvailable && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+          }), recurrence && isRecurringAvailable && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
             className: "my-8",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_NewEndDateControl__WEBPACK_IMPORTED_MODULE_9__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_NewEndDateControl__WEBPACK_IMPORTED_MODULE_10__["default"], {
               recurrence: recurrence,
               onChange: updatedRecurrence => setAttributes({
                 meeting: {
@@ -1293,27 +1659,12 @@ const DateStep = ({
               meetingType: "offline"
             })
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
-          className: "servv_actions",
-          children: [!isNew && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("button", {
-            type: "button",
-            className: "servv_button servv_button--secondary",
-            onClick: () => handleFormSubmit(true),
-            children: "Save and Exit"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("button", {
-            type: "button",
-            className: "servv_button servv_button--secondary",
-            onClick: () => changeStep("branding"),
-            children: "Previous"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("button", {
-            type: "button",
-            className: "servv_button servv_button--primary",
-            onClick: () => {
-              validateStartTime();
-            },
-            disabled: hasInvalidStartTime,
-            children: "Continue"
-          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_StepActions__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          className: "",
+          onSaveAndExit: isNew ? undefined : () => handleFormSubmit(true),
+          onPrevious: () => changeStep("branding"),
+          onPrimary: () => validateStartTime(),
+          primaryDisabled: hasInvalidStartTime
         })]
       })]
     })]
@@ -1337,7 +1688,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment */ "moment");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _DatePickerControl__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./DatePickerControl */ "./src/Components/CreateEvent/DatePickerControl.jsx");
+/* harmony import */ var _Controls_NewDatePickerControl__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Controls/NewDatePickerControl */ "./src/Components/Controls/NewDatePickerControl.jsx");
 /* harmony import */ var _Controls_NewSelectControl__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Controls/NewSelectControl */ "./src/Components/Controls/NewSelectControl.jsx");
 /* harmony import */ var _Controls_NewButtonGroup__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Controls/NewButtonGroup */ "./src/Components/Controls/NewButtonGroup.jsx");
 /* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/ChevronDownIcon.js");
@@ -1420,10 +1771,12 @@ const NewEndDateControl = ({
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
           className: "step__content_title",
           children: "Select end date"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_DatePickerControl__WEBPACK_IMPORTED_MODULE_2__["default"], {
-          date: endDate,
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_Controls_NewDatePickerControl__WEBPACK_IMPORTED_MODULE_2__["default"], {
+          mode: "single",
+          value: endDate,
           onChange: handleEndDateChange,
-          variant: "field",
+          label: "Select end date",
+          fullWidth: true,
           minDate: minDate,
           maxDate: maxDate
         })]
@@ -1454,6 +1807,62 @@ const NewEndDateControl = ({
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (NewEndDateControl);
+
+/***/ }),
+
+/***/ "./src/Components/CreateEvent/StepActions.jsx":
+/*!****************************************************!*\
+  !*** ./src/Components/CreateEvent/StepActions.jsx ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+
+
+// The footer every event-form and onboarding step ends with: an optional
+// Save and Exit, an optional Previous, and the step's primary action.
+//
+// A handler left undefined drops its button, which is how the steps express
+// "no Save and Exit while creating" or "nothing to continue to yet" — the call
+// sites used to wrap each button in its own conditional for that.
+
+const StepActions = ({
+  onSaveAndExit,
+  onPrevious,
+  onPrimary,
+  primaryText = "Continue",
+  previousText = "Previous",
+  saveAndExitText = "Save and Exit",
+  primaryDisabled = false,
+  className = "mt-auto"
+}) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+  className: `servv_actions ${className}`,
+  children: [onSaveAndExit && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
+    type: "button",
+    className: "servv_button servv_button--secondary",
+    onClick: onSaveAndExit,
+    children: saveAndExitText
+  }), onPrevious && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
+    type: "button",
+    className: "servv_button servv_button--secondary",
+    onClick: onPrevious,
+    children: previousText
+  }), onPrimary && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
+    type: "button",
+    className: "servv_button servv_button--primary",
+    onClick: onPrimary,
+    disabled: primaryDisabled,
+    children: primaryText
+  })]
+});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (StepActions);
 
 /***/ }),
 
@@ -2056,7 +2465,167 @@ const timezonesList = {
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (timezones);
 
+/***/ }),
+
+/***/ "./src/Components/Containers/BlockStack.module.scss":
+/*!**********************************************************!*\
+  !*** ./src/Components/Containers/BlockStack.module.scss ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"stack":"BPxl7EaYWsRh7ulfBRlP","gap0":"iHAu1B_JyfMfzopelk7G","gap1":"MPGwAetEBvL5qxks8LEG","gap2":"KC6IjJkKRI0difjD0oeO","gap3":"jnK0kdrHyrYJj1z7GueZ","gap4":"u9lpBKp4FKgoAkLNt4AQ","gap5":"BEAfcY241WK8Iyzh0jk5","gap6":"Lp7N990cJKUntJoSsx2x","gap8":"w6Wo8QgbUcpEo0UgT0TH","cards":"v9VWwyQPOnpoDYvndXeA","clickable":"JFAMNDkfsbkA7c8w_VNu","disabled":"synf7uPQnXFYnDRxibS3"});
+
+/***/ }),
+
+/***/ "./src/Components/Containers/Dropdown.module.scss":
+/*!********************************************************!*\
+  !*** ./src/Components/Containers/Dropdown.module.scss ***!
+  \********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"root":"Q6YwFze7pNwAmhdBzAGO","menu":"lY9gKiKMaPORXMiAcGOK","surface":"seqzcz7VZqZZnhfbs0wM"});
+
+/***/ }),
+
+/***/ "./src/Components/Controls/CheckboxItem.module.scss":
+/*!**********************************************************!*\
+  !*** ./src/Components/Controls/CheckboxItem.module.scss ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"item":"L5QmqxV1Bu2rNw8DJeSB","input":"q8SEsQe7l63aMna9ck0i","box":"yem57zYUvpvi38MwhqOw","mixed":"GcjwpLI0WN2rVhrMlIQ9","dash":"SeY4qpLx7n1s3uZWp_Mk","check":"q8SHrYV01jys1Mf5huSK","label":"ebOb4aWbE8HyJh2PDpkO","disabled":"X9ZmoZnvOZHQ8fApo7kh"});
+
+/***/ }),
+
+/***/ "./src/Components/Controls/NewButtonGroup.module.scss":
+/*!************************************************************!*\
+  !*** ./src/Components/Controls/NewButtonGroup.module.scss ***!
+  \************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"wrapper":"JYs_3UJOiQFZ5_Ezkeeo","wrapperFull":"UAo90UATGeQRmc30vP33","title":"UjbXHfOe0TBrHLwf0Knb","track":"mAjfcVBL7MyaMYdJ9cWA","segment":"t0D_ZPrlgfZLrhryiCAp","active":"Wb0ziMZTJjqXvYgnqtYh","inactive":"XoWoUSevPmu1zPubCh1_","trackFull":"TZTstZOXbFiFgIOfEQ8q","iconOnly":"DpB4oocu7lvFMLpQ5Qhs","compact":"px78WAZRdXjUlT8FfGQ6","icon":"P7ggfyTePFEQFoR84lEO","text":"c28p99_lcFX9oVKhjAST"});
+
+/***/ }),
+
+/***/ "./src/Components/Controls/NewDatePickerControl.module.scss":
+/*!******************************************************************!*\
+  !*** ./src/Components/Controls/NewDatePickerControl.module.scss ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"root":"HwtSSogopbnUP9_7iCDB","button":"F2l5K1tOxIJTh0jK3Kpp","icon":"x9Ei7o54rk9kgx3hWQh3","label":"GHYx3uCSPULDwTUL_kND","block":"due974qaf_ShRcdQYcxi"});
+
+/***/ }),
+
+/***/ "./src/Components/Controls/NewInputFieldControl.module.scss":
+/*!******************************************************************!*\
+  !*** ./src/Components/Controls/NewInputFieldControl.module.scss ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"field":"mnkZ919trJuW2iv63ypl","content":"_FGd5GJTpG4M_jEm0TPQ","disabled":"qdwYYi7sJT_cRtD8ZXMF","textarea":"fx0sZxO2auf836gJwJSc","native":"EWAiYY_5e6MWQVZT0nkg","left":"BY4ZYyoot9eqQrv6a85U","center":"dAdXU7WqEMXyVrL4Ixvj","right":"jbHOWMLsSp0Wmi85kDYz","error":"D1cdINycMkHcDXE1A7an"});
+
+/***/ }),
+
+/***/ "./src/Components/Controls/NewSelectControl.module.scss":
+/*!**************************************************************!*\
+  !*** ./src/Components/Controls/NewSelectControl.module.scss ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"wrapper":"Rn5YIp3pNNjfTZfs0Hun","label":"tILluilS7Kg08Ty_wuDz","control":"i0ovci9B8ZljxNo0kHsG","disabled":"PWKaKx8kbAa85Q7B8UNO","native":"_cngarf9_pEgPKjdzZgR","caret":"YeLk6FzAtgYmHZ3hiWy5","icon":"WIeIIcBBdl2AgJCO8Yws"});
+
+/***/ }),
+
+/***/ "./src/Components/Controls/RadioGroup.module.scss":
+/*!********************************************************!*\
+  !*** ./src/Components/Controls/RadioGroup.module.scss ***!
+  \********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"group":"P9Kl2Un9_qsfvLsb3uXn","column":"R5Y7DlKBt9H_cGkGvei3","option":"y18GMs3wGuRXYbLPwafV","control":"B1dtgsinuS367twlIF3E","label":"pZKmCR2CTakFEnYqYww8"});
+
+/***/ }),
+
+/***/ "./node_modules/@heroicons/react/24/outline/esm/ChevronDownIcon.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/@heroicons/react/24/outline/esm/ChevronDownIcon.js ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+
+function ChevronDownIcon({
+  title,
+  titleId,
+  ...props
+}, svgRef) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("svg", Object.assign({
+    xmlns: "http://www.w3.org/2000/svg",
+    fill: "none",
+    viewBox: "0 0 24 24",
+    strokeWidth: 1.5,
+    stroke: "currentColor",
+    "aria-hidden": "true",
+    "data-slot": "icon",
+    ref: svgRef,
+    "aria-labelledby": titleId
+  }, props), title ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("title", {
+    id: titleId
+  }, title) : null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("path", {
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    d: "m19.5 8.25-7.5 7.5-7.5-7.5"
+  }));
+}
+const ForwardRef = /*#__PURE__*/ react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(ChevronDownIcon);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ForwardRef);
+
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_CreateEvent_DateStep_jsx.js.map?ver=6c3a04a6cfd71c68db99
+//# sourceMappingURL=src_Components_CreateEvent_DateStep_jsx.js.map?ver=876fe1805198dd23e906

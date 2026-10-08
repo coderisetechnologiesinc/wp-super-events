@@ -81,7 +81,10 @@ function servv_get_event_info()
 
 function servv_get_shop_settings()
 {
-    check_ajax_referer('payment_nonce', 'security');
+    $security = sanitize_text_field(wp_unslash($_POST['security'] ?? ''));
+    if (!wp_verify_nonce($security, 'payment_nonce') && !wp_verify_nonce($security, 'servv_platform_nonce')) {
+        wp_send_json_error(['message' => 'Invalid widget nonce.'], 403);
+    }
 
     $apiRoute = '/wordpress/widget/shop/settings';
     try {
@@ -115,6 +118,7 @@ function servv_create_payment_intent() {
     $occurrenceId = sanitize_text_field(wp_unslash($_POST['occurrence_id'] ?? ''));
     $email = sanitize_email(wp_unslash($_POST['email'] ?? ''));
     $additionalRegistrants = sanitize_text_field(wp_unslash($_POST['additional_registrants'] ?? ''));
+    $additionalRegistrantsArr = [];
     $quantity = 1;
     if(!empty($additionalRegistrants)) {
         $additionalRegistrantsArr = explode(';', $additionalRegistrants);
@@ -391,6 +395,7 @@ function servv_process_free_order() {
     $donationAmount = isset($_POST['donation_amount']) ? abs(floatval($_POST['donation_amount'])) : 0;
     $additionalRegistrants = sanitize_text_field(wp_unslash($_POST['additional_registrants'] ?? ''));
     $sameForAll = isset($_POST['same_for_all']) && filter_var(wp_unslash($_POST['same_for_all']), FILTER_VALIDATE_BOOLEAN);
+    $additionalRegistrantsArr = [];
     $quantity = 1;
     if(!empty($additionalRegistrants)) {
         $additionalRegistrantsArr = explode(';', $additionalRegistrants);
@@ -690,7 +695,11 @@ function servv_add_event_answer()
     // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- input is sanitized. False warning
     $raw_answers = wp_unslash( $_POST['answers'] ?? [] );
     $answers = is_array( $raw_answers )
-        ? array_map( 'sanitize_text_field', $raw_answers )
+        ? array_map(function ($answer) {
+            return is_array($answer)
+                ? ['id' => absint($answer['id'] ?? 0), 'text' => sanitize_text_field($answer['text'] ?? '')]
+                : sanitize_text_field($answer);
+        }, $raw_answers )
         : [];
     $occurrenceId = sanitize_text_field(wp_unslash($_POST['occurrence_id'] ?? ''));
     $post = get_post($postId);

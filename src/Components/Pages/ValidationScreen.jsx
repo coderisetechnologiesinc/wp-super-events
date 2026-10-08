@@ -1,69 +1,12 @@
 import { useState, useEffect } from "react";
-import {
-  EnvelopeIcon,
-  ChatBubbleLeftRightIcon,
-} from "@heroicons/react/16/solid";
+import { EnvelopeIcon } from "@heroicons/react/16/solid";
+import LiveChatButton from "../Controls/LiveChatButton";
+import { injectIntercom } from "../../utilities/intercom";
 const ValidationScreen = ({ message, troubleshoot }) => {
   const [intercomLaded, setIntercomLoaded] = useState(false);
   useEffect(() => {
-    handleIntercomClick();
+    setIntercomLoaded(injectIntercom());
   }, []);
-  const handleIntercomClick = () => {
-    // Avoid injecting multiple times
-    if (window.IntercomInjected) return;
-    window.IntercomInjected = true;
-
-    // Set Intercom settings
-    window.intercomSettings = {
-      api_base: "https://api-iam.intercom.io",
-      app_id: "peztdh9y",
-      custom_launcher_selector: "#servv_live_chat",
-    };
-
-    // Inject main Intercom loader script
-    const script = document.createElement("script");
-    script.type = "text/javascript";
-    script.async = true;
-    script.innerHTML = `
-      (function () { 
-        var w = window; 
-        var ic = w.Intercom; 
-        if (typeof ic === "function") { 
-          ic('reattach_activator'); 
-          ic('update', w.intercomSettings); 
-        } else { 
-          var d = document; 
-          var i = function () { i.c(arguments); }; 
-          i.q = []; 
-          i.c = function (args) { i.q.push(args); }; 
-          w.Intercom = i; 
-          var l = function () { 
-            var s = d.createElement('script'); 
-            s.type = 'text/javascript'; 
-            s.async = true; 
-            s.src = 'https://widget.intercom.io/widget/peztdh9y'; 
-            var x = d.getElementsByTagName('script')[0]; 
-            x.parentNode.insertBefore(s, x); 
-          }; 
-          if (document.readyState === 'complete') { 
-            l(); 
-          } else if (w.attachEvent) { 
-            w.attachEvent('onload', l); 
-          } else { 
-            w.addEventListener('load', l, false); 
-          } 
-        } 
-      })();
-    `;
-    document.body.appendChild(script);
-
-    script.onload = () => {
-      if (window.Intercom) {
-        window.Intercom("boot");
-      }
-    };
-    setIntercomLoaded(true);
-  };
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center bg-gradient-to-b from-transparent to-[#ECE4F6] border-brand-800 gap-4">
       <div className="flex flex-col justify-center items-center gap-4">
@@ -121,14 +64,7 @@ const ValidationScreen = ({ message, troubleshoot }) => {
         </a>
 
         {intercomLaded && (
-          <button
-            id="servv_live_chat"
-            className="rounded-[0.625rem] border border-white bg-brand-600 shadow-sm flex flex-row gap-2 justify-between px-[14px] py-[10px]"
-            // onClick={handleIntercomClick}
-          >
-            <ChatBubbleLeftRightIcon className="w-[20px] fill-white" />
-            <span className="text-sm text-white font-semibold">Live Chat</span>
-          </button>
+          <LiveChatButton />
         )}
       </div>
     </div>

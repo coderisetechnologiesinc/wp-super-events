@@ -1,0 +1,24 @@
+{
+  "name": "servv-wordpress-events-v2",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build && npm run build:skins",
+    "dev": "vite build --watch",
+    "test": "vitest run",
+    "build:skins": "node scripts/build-skins.mjs"
+  },
+  "dependencies": {
+    "@stripe/stripe-js": "^6.1.0",
+    "pinia": "^3.0.4",
+    "vue": "^3.5.32"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.1",
+    "oxlint": "^1.24.0",
+    "sass": "^1.104.1",
+    "vite": "^7.1.7",
+    "vitest": "^5.0.1"
+  }
+}

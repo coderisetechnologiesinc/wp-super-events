@@ -1,0 +1,61 @@
+.svv-wgt-v2-container {
+  --svv-v2-bg: #000000;
+}
+
+.svv-wgt-v2 {
+  --svv-poster-ink: #f4f1e8;
+  --svv-poster-acid: #ccff00;
+  --svv-poster-ultra: #5a5cff;
+  --svv-poster-on-acid: #0b0b0f;
+  --svv-poster-sand: #101016;
+  --svv-poster-paper: #15151c;
+
+  --svv-text: #dcd8cc;
+  --svv-text-muted: #aeaaa0;
+  --svv-border: #282830;
+
+  --svv-primary: #ccff00;
+  --svv-primary-hover: #5a5cff;
+  --svv-primary-text: #0b0b0f;
+
+  --svv-success: #4fd39b;
+  --svv-warning: #ffc46b;
+  --svv-critical: #ff6b6b;
+
+  --svv-calendar-selected-bg: #ccff00;
+  --svv-calendar-selected-text: #0b0b0f;
+  --svv-drawer-backdrop: rgba(0, 0, 0, 0.7);
+
+  .svv-shell__header {
+    background: var(--svv-poster-paper);
+  }
+
+  .svv-card__media {
+    mix-blend-mode: screen;
+  }
+
+  .svv-viewmode button:hover,
+  .svv-viewmode button.is-active,
+  .svv-quick button:hover,
+  .svv-quick button.is-active,
+  .svv-filters__toggle:hover,
+  .svv-card__share:hover,
+  .svv-card__cta,
+  .svv-drawer__cta,
+  .svv-submit,
+  .svv-drawer__head,
+  .svv-share__icon {
+    background: var(--svv-poster-acid);
+    color: #0b0b0f;
+  }
+
+  .svv-drawer__head .svv-drawer__icon,
+  .svv-drawer__head .svv-badge {
+    color: #0b0b0f;
+  }
+
+  .svv-drawer__head .svv-drawer__icon:hover {
+    background: #0b0b0f;
+    color: var(--svv-poster-acid);
+  }
+}

@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "./adminApi";
 
 const wpGet = async (endpoint) => {
   try {
@@ -15,6 +15,27 @@ const wpGet = async (endpoint) => {
     console.error(`Error fetching ${endpoint}:`, err);
     return { data: null, error: err.message };
   }
+};
+
+// Fetches a service's OAuth URL and hands the browser to the Shopify app, which
+// completes the handshake and returns here. The connect path matches the API
+// service name everywhere except gmail, whose app route is /mail/connect.
+export const openServiceConnectURL = async (service, connectPath = service) => {
+  const response = await axios(`/wp-json/servv-plugin/v1/${service}/url`, {
+    method: "GET",
+    headers: { "X-WP-Nonce": servvData.nonce },
+    redirect: "manual",
+  });
+
+  if (response?.status !== 200) return;
+
+  open(
+    `${servvData.shopify_app}/${connectPath}/connect` +
+      `?wordpress_url=${encodeURIComponent(response.data.auth_url)}` +
+      `&wordpress_return_url=${encodeURIComponent(window.location.origin)}` +
+      `&servv_nonce=${response.data.nonce}`,
+    "_top",
+  );
 };
 
 export const getZoomAccount = async () => {
@@ -36,68 +57,13 @@ export const disconnectGmailAccount = async () => {
   return response;
 };
 
-export const getGmailConnectURL = async () => {
-  const response = await axios.get("/wp-json/servv-plugin/v1/gmail/url", {
-    headers: { "X-WP-Nonce": servvData.nonce },
-  });
-  if (response?.status === 200) {
-    open(
-      `${servvData.shopify_app}/mail/connect?wordpress_url=${encodeURIComponent(
-        response.data.auth_url,
-      )}&wordpress_return_url=${encodeURIComponent(
-        window.location.origin,
-      )}&servv_nonce=${response.data.nonce}`,
-      "_top",
-    );
-  }
-};
+export const getGmailConnectURL = async () => openServiceConnectURL("gmail", "mail");
 
 export const getCalendarAccount = async () => {
   return wpGet("calendar/account");
 };
 
-export const getCalendarConnectURL = async () => {
-  const getAuthURLResponse = await axios(
-    "/wp-json/servv-plugin/v1/calendar/url",
-    {
-      method: "GET",
-      headers: {
-        "X-WP-Nonce": servvData.nonce,
-      },
-      redirect: "manual",
-    },
-  );
+export const getCalendarConnectURL = async () =>
+  openServiceConnectURL("calendar");
 
-  if (getAuthURLResponse && getAuthURLResponse.status === 200) {
-    open(
-      `${
-        servvData.shopify_app
-      }/calendar/connect?wordpress_url=${encodeURIComponent(
-        getAuthURLResponse.data.auth_url,
-      )}&wordpress_return_url=${encodeURIComponent(
-        window.location.origin,
-      )}&servv_nonce=${getAuthURLResponse.data.nonce}`,
-      "_top",
-    );
-  }
-};
-
-export const getZoomConnectURL = async () => {
-  const getAuthURLResponse = await axios("/wp-json/servv-plugin/v1/zoom/url", {
-    method: "GET",
-    headers: {
-      "X-WP-Nonce": servvData.nonce,
-    },
-    redirect: "manual",
-  });
-  if (getAuthURLResponse && getAuthURLResponse.status === 200) {
-    open(
-      `${servvData.shopify_app}/zoom/connect?wordpress_url=${encodeURIComponent(
-        getAuthURLResponse.data.auth_url,
-      )}&wordpress_return_url=${encodeURIComponent(
-        window.location.origin,
-      )}&servv_nonce=${getAuthURLResponse.data.nonce}`,
-      "_top",
-    );
-  }
-};
+export const getZoomConnectURL = async () => openServiceConnectURL("zoom");

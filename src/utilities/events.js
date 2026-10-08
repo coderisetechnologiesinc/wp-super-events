@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "./adminApi";
 
 const headers = () => ({ "X-WP-Nonce": servvData.nonce });
 
@@ -43,3 +43,28 @@ export const getFeaturedImage = async (postId, signal = null) => {
   const post = await res.json();
   return post?._embedded?.["wp:featuredmedia"]?.[0]?.source_url || null;
 };
+
+// Opens the public post an event is published as. The events endpoint only
+// knows the post id, so the permalink has to come from WordPress itself.
+export const openEventPost = (postId) => {
+  if (!postId) return;
+
+  fetch(`/wp-json/wp/v2/posts/${postId}`)
+    .then((res) => res.json())
+    .then((post) => {
+      if (post?.link) open(post.link, "_blank");
+    })
+    .catch((e) => console.log(e));
+};
+
+// One event can appear as its series and as a single occurrence, so neither id
+// alone identifies a row.
+export const eventKey = (event) => `${event.id}${event.occurrence_id || ""}`;
+
+// The shape Dashboard's handleOpenEvent expects. Kept in one place so every
+// view — cards, rows, rail — navigates identically.
+export const eventRoutePayload = (event, { registrants = false } = {}) => ({
+  id: event.post_id,
+  occurrence_id: event.occurrence_id,
+  ...(registrants ? { registrants_view: true } : {}),
+});

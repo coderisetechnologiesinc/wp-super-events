@@ -1,0 +1,300 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+
+@include m.scoped {
+  .planCard {
+    display: flex;
+    flex-direction: column;
+    min-height: 474px;
+  }
+  .planHeading {
+    text-align: center;
+  }
+  .card .planLabel {
+    color: t.$primary;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .price span {
+    font-size: 16px;
+    font-weight: 500;
+  }
+  .planActions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 24px;
+  }
+  .card.premium {
+    background: #462986;
+    border-color: #462986;
+    h2,
+    p,
+    .features li {
+      color: #fff;
+    }
+    .planLabel {
+      color: #e3e1f2;
+    }
+    .fee {
+      color: rgba(255, 255, 255, 0.6);
+    }
+    .features {
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+    .features svg {
+      color: #e3e1f2;
+    }
+    .unavailable svg {
+      color: rgba(255, 255, 255, 0.3);
+    }
+    .badge {
+      background: #fff;
+      color: #462986;
+    }
+  }
+  .features .unavailable svg {
+    color: t.$text-placeholder;
+  }
+  .plansHeader p {
+    max-width: 640px;
+    white-space: normal;
+    overflow: visible;
+  }
+  .divider {
+    height: 3px;
+    border-radius: t.$radius-pill;
+    background: t.$surface;
+    box-shadow: t.$shadow-track;
+  }
+  .card {
+    min-width: 0;
+    padding: 24px;
+    border: 1px solid t.$border;
+    border-radius: t.$radius-2xl;
+    background: t.$surface;
+    box-shadow: t.$shadow-card;
+    h2 {
+      margin: 0;
+      @include m.text(18, t.$weight-bold);
+      color: t.$text;
+    }
+    p {
+      margin: 8px 0 0;
+      @include m.text(13, t.$weight-medium);
+      color: t.$text-secondary;
+      line-height: 21px;
+    }
+  }
+  .current {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .eyebrow {
+    @include m.eyebrow;
+    color: t.$text-soft;
+  }
+  .card .planName {
+    margin-top: 8px;
+    @include m.text(24, t.$weight-bold);
+  }
+  .badge {
+    display: inline-flex;
+    padding: 4px 10px;
+    border: 1px solid t.$primary-border;
+    border-radius: t.$radius-pill;
+    background: t.$primary-surface;
+    color: t.$primary-strong;
+    @include m.text(12, t.$weight-semibold);
+  }
+  .button {
+    @include m.control-base;
+    text-decoration: none;
+    border: 1px solid t.$border;
+    background: t.$surface;
+    color: t.$text;
+    box-shadow: t.$shadow-raised-sm;
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+    &:hover {
+      color: t.$primary;
+    }
+    &:focus-visible {
+      @include m.focus-ring-raised;
+    }
+  }
+  .planGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 20px;
+  }
+  .featured {
+    border-color: t.$primary-border;
+  }
+  .cardTitle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .card .price {
+    margin: 20px 0 12px;
+    @include m.text(32, t.$weight-bold);
+    color: t.$text;
+  }
+  .features {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 24px 0 0;
+    padding: 20px 0 0;
+    border-top: 1px solid t.$border;
+    list-style: none;
+    li {
+      display: flex;
+      gap: 10px;
+      @include m.text(13, t.$weight-medium);
+      color: t.$text-secondary;
+      overflow-wrap: anywhere;
+    }
+    svg {
+      width: 16px;
+      height: 16px;
+      flex: 0 0 16px;
+      color: t.$primary;
+    }
+  }
+  .notice {
+    padding: 14px 18px;
+    margin: 0;
+    border: 1px solid t.$warning-border;
+    border-radius: t.$radius-lg;
+    background: t.$warning-surface;
+    color: t.$warning-text;
+    @include m.text(13, t.$weight-medium);
+  }
+  .supportLayout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 24px;
+    align-items: start;
+  }
+  .stack {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    min-width: 0;
+  }
+  .linkGrid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .resource {
+    position: relative;
+    display: block;
+    text-decoration: none;
+    transition: box-shadow t.$duration t.$ease;
+    &:hover {
+      box-shadow: t.$shadow-raised-sm;
+    }
+    &:focus-visible {
+      @include m.focus-ring-raised;
+    }
+  }
+  .resourceIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin-bottom: 18px;
+    border: 1px solid t.$border;
+    border-radius: t.$radius-lg;
+    box-shadow: t.$shadow-raised-sm;
+    color: t.$primary;
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+  .external {
+    position: absolute;
+    top: 24px;
+    right: 20px;
+    width: 16px;
+    height: 16px;
+    color: t.$text-soft;
+  }
+  .system h2 {
+    margin-top: 8px;
+  }
+  .facts {
+    margin: 20px 0 0;
+    > div {
+      padding: 12px 0;
+      border-bottom: 1px solid t.$border;
+    }
+    > div:last-child {
+      padding-bottom: 0;
+      border-bottom: 0;
+    }
+    dt {
+      @include m.text(12, t.$weight-medium);
+      color: t.$text-soft;
+    }
+    dd {
+      margin: 4px 0 0;
+      @include m.text(13, t.$weight-semibold);
+      color: t.$text;
+      overflow-wrap: anywhere;
+    }
+  }
+  .report {
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    margin: 20px 0 16px;
+    padding: 14px;
+    border: 1px solid t.$border-field;
+    border-radius: t.$radius-lg;
+    background: t.$surface;
+    color: t.$text-secondary;
+    box-shadow: t.$shadow-field;
+    font: 12px/20px monospace;
+    resize: vertical;
+    &:focus-visible {
+      @include m.focus-ring-raised;
+    }
+  }
+  .reportActions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    @include m.text(12, t.$weight-medium);
+    color: t.$text-soft;
+  }
+  @media (max-width: 1100px) {
+    .linkGrid {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 735px) {
+    .supportLayout {
+      grid-template-columns: 1fr;
+    }
+    .card {
+      padding: 20px;
+    }
+  }
+}

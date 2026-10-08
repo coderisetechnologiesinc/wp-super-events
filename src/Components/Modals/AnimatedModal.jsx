@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import styles from "./AnimatedModal.module.scss";
 
 const AnimatedModal = ({ open, onClose, children }) => {
   const [visible, setVisible] = useState(open);
@@ -26,11 +27,11 @@ const AnimatedModal = ({ open, onClose, children }) => {
 
   return (
     <div
-      className={`servv-modal-overlay ${closing ? "closing" : ""}`}
+      className={`${styles.overlay} ${closing ? styles.closing : ""}`}
       onClick={close}
     >
       <div
-        className={`servv-modal ${closing ? "closing" : ""}`}
+        className={`${styles.panel} ${closing ? styles.closing : ""}`}
         onClick={(e) => e.stopPropagation()}
       >
         {typeof children === "function" ? children({ close }) : children}

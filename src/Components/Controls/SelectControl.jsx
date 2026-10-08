@@ -1,3 +1,7 @@
+// Legacy control, kept only for the public widget entry points
+// (src/checkout.js, src/view.js). The admin shell uses NewSelectControl instead; do not
+// reach for this one from anything under src/Components/Pages or
+// src/Components/CreateEvent.
 import React, { Fragment, useState, useRef, useEffect } from "react";
 
 const SelectControl = ({

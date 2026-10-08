@@ -1,0 +1,102 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+
+@include m.scoped {
+  // Reference: <div style="display:flex;gap:14px;align-items:flex-start;
+  // background:#FFFFFF;border:1px solid #EDF1F7;border-radius:18px;
+  // box-shadow:9px 9px 22px #DCE2EC,-4px -4px 12px #FBFCFE;padding:16px 18px">
+  .card {
+    @include m.card-surface;
+    display: flex;
+    align-items: flex-start;
+    gap: t.$space-7;
+    padding: t.$space-8 t.$space-9;
+  }
+
+  // The 36px tinted tile that carries the alert glyph.
+  .mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 36px;
+    width: 36px;
+    height: 36px;
+    border: 1px solid t.$primary-border;
+    border-radius: t.$radius-md;
+    background: t.$primary-surface;
+    color: t.$primary;
+
+    svg {
+      display: block;
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  .body {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .title {
+    margin-bottom: t.$space-1;
+    @include m.text(14, t.$weight-semibold);
+    color: t.$text;
+  }
+
+  .text {
+    margin: 0;
+    @include m.text(13, t.$weight-medium);
+    color: t.$text-secondary;
+  }
+
+  // Reference: five 52x5 pills — brand when the step is done, $primary-border
+  // when it is still open.
+  .progress {
+    display: flex;
+    gap: t.$space-3;
+    margin-top: t.$space-6;
+  }
+
+  .bar {
+    width: 52px;
+    max-width: 100%;
+    height: 5px;
+    border-radius: t.$radius-pill;
+    background: t.$primary-border;
+    transition: background t.$duration t.$ease;
+  }
+
+  .barDone {
+    background: t.$primary;
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: t.$space-4;
+    flex: 0 0 auto;
+  }
+
+  @media (max-width: 735px) {
+    .card {
+      flex-wrap: wrap;
+    }
+
+    .body {
+      flex: 1 1 100%;
+      order: 2;
+    }
+
+    // Keep the five steps readable instead of overflowing the card.
+    .bar {
+      flex: 1 1 0;
+      width: auto;
+    }
+
+    .actions {
+      flex: 1 1 100%;
+      order: 3;
+    }
+  }
+}

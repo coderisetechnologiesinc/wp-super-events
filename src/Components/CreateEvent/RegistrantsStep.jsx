@@ -1,4 +1,5 @@
 import { Contacts } from "../../assets/icons";
+import StepActions from "./StepActions";
 import NewInputControl from "../Controls/NewInputControl";
 import DashboardPagination from "../Shared/DashboardPagination";
 import Registrant from "./Registrant";
@@ -543,32 +544,20 @@ const RegistrantsStep = ({
       </div>
 
       {/* Actions */}
-      <div className="servv_actions mt-auto">
-        {!registrantsView && (
-          <button
-            type="button"
-            className="servv_button servv_button--secondary"
-            onClick={() => changeStep("branding")}
-          >
-            Previous
-          </button>
-        )}
-
-        <button
-          type="button"
-          className="servv_button servv_button--primary"
-          onClick={handleRegistransSave}
-          disabled={
-            registrants.filter(
-              (reg) =>
-                reg.status &&
-                (reg.status === "create" || reg.status === "delete"),
-            ).length === 0
-          }
-        >
-          Save
-        </button>
-      </div>
+      <StepActions
+        onPrevious={
+          registrantsView ? undefined : () => changeStep("branding")
+        }
+        onPrimary={handleRegistransSave}
+        primaryText="Save"
+        primaryDisabled={
+          registrants.filter(
+            (reg) =>
+              reg.status &&
+              (reg.status === "create" || reg.status === "delete"),
+          ).length === 0
+        }
+      />
     </div>
   );
 };

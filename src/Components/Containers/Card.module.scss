@@ -1,0 +1,104 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+
+@include m.scoped {
+  .card {
+    @include m.card-surface;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0;
+
+    // Transitional bridge: the card's inner regions are still plain global class
+    // names at the call sites. They move to <Card.Header> & co. in a later pass;
+    // until then they take their styling from here.
+    :global(.card-header) {
+      display: flex;
+      flex-direction: column;
+      gap: t.$space-3;
+      width: 100%;
+      padding: t.$space-8 t.$space-9;
+      border-bottom: 1px solid t.$border;
+    }
+
+    :global(.card-header .card-heading) {
+      display: flex;
+      flex: 1;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      gap: t.$space-7;
+
+      span {
+        @include m.text(18, t.$weight-semibold);
+        color: t.$text;
+      }
+
+      span:global(.pagination-control-text) {
+        @include m.text(12, t.$weight-medium);
+        color: t.$text-soft;
+      }
+    }
+
+    :global(.card-description) {
+      display: flex;
+      flex-direction: row;
+      gap: t.$space-2;
+      @include m.text(14, t.$weight-medium);
+      color: t.$text-secondary;
+    }
+
+    :global(.card-content) {
+      display: flex;
+      flex-direction: column;
+      gap: t.$space-8;
+      padding: t.$space-9;
+    }
+  }
+
+  // --- Padding ---------------------------------------------------------------
+
+  .padNone {
+    padding: 0;
+  }
+
+  .padSm {
+    padding: t.$space-6;
+  }
+
+  .padMd {
+    padding: t.$space-9;
+  }
+
+  .padLg {
+    padding: t.$space-12;
+  }
+
+  // --- Modifiers -------------------------------------------------------------
+
+  .center {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .clip {
+    overflow: hidden;
+  }
+
+  // Opt-in lift for cards that are themselves clickable.
+  .interactive {
+    cursor: pointer;
+    transition: box-shadow t.$duration t.$ease, transform t.$duration-fast t.$ease;
+
+    &:hover {
+      box-shadow: t.$shadow-card-hover;
+      transform: translateY(-3px);
+    }
+  }
+
+  // A recessed panel — empty states, read-only summaries.
+  .well {
+    border-color: #ebeff6;
+    box-shadow: t.$shadow-well;
+  }
+}

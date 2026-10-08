@@ -1,4 +1,5 @@
 import React from "react";
+import { mergeAttributesPatch } from "../../utilities/attributes";
 import {
   CalendarIcon,
   MapMarkIcon,
@@ -486,26 +487,7 @@ const CreateEventForm = () => {
   }, [routeId, occurrenceIdFromQuery]);
 
   const mergeAttributes = (patch) => {
-    setAttributes((prev) => {
-      const next = { ...prev };
-
-      Object.keys(patch).forEach((key) => {
-        if (
-          typeof patch[key] === "object" &&
-          patch[key] !== null &&
-          !Array.isArray(patch[key])
-        ) {
-          next[key] = {
-            ...(prev[key] || {}),
-            ...patch[key],
-          };
-        } else {
-          next[key] = patch[key];
-        }
-      });
-
-      return next;
-    });
+    setAttributes((prev) => mergeAttributesPatch(prev, patch));
   };
 
   const updateTickets = async () => {
@@ -565,14 +547,12 @@ const CreateEventForm = () => {
         postId: routeId,
         token: servvData.nonce,
         ticket: toUpdate[0],
-        occurrenceId: occurrenceIdFromQuery,
       });
     } else if (toUpdate.length > 1) {
       await multipleTicketsUpdate({
         postId: routeId,
         token: servvData.nonce,
         tickets: toUpdate,
-        occurrenceId: occurrenceIdFromQuery,
       });
     }
 

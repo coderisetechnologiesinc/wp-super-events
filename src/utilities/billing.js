@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "./adminApi";
 
 const headers = () => ({ "X-WP-Nonce": servvData.nonce });
 

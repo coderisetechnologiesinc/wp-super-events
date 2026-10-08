@@ -1,15 +1,16 @@
 import React from "react";
 import Spinner from "../Menu/Spinner";
+import styles from "./SpinnerLoader.module.scss";
 
-const SpinnerLoader = ({ isLoading, children, customStyling }) => {
+// `customStyling` is a pass-through for the overlay's box — call sites use it
+// to give the spinner a height when there are no children to cover.
+const SpinnerLoader = ({ isLoading, children, customStyling = "" }) => {
   return (
-    <div className="relative">
-      <div className={isLoading ? "blur-sm pointer-events-none" : ""}>
-        {children}
-      </div>
+    <div className={styles.root}>
+      <div className={isLoading ? styles.blurred : ""}>{children}</div>
       {isLoading && (
         <div
-          className={`absolute inset-0 flex items-center justify-center ${customStyling}`}
+          className={[styles.overlay, customStyling].filter(Boolean).join(" ")}
         >
           <Spinner loading={true} />
         </div>

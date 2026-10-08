@@ -1,0 +1,321 @@
+@use "../../../styles/tokens" as t;
+@use "../../../styles/mixins" as m;
+
+// The calendar as a view of the events list. Same soft-UI language as the
+// other views: a raised sheet, grooved rules, brand-tinted event chips.
+@include m.scoped {
+  .calendar {
+    display: flex;
+    flex-direction: column;
+    gap: t.$space-8;
+    min-width: 0;
+    font-family: t.$font-sans;
+  }
+  .calendar,
+  .calendar * {
+    box-sizing: border-box;
+  }
+
+  // Month navigation + period switcher, on the row the range switcher would
+  // otherwise occupy.
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: t.$space-8;
+    flex-wrap: wrap;
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: t.$space-5;
+  }
+
+  .navButton {
+    @include m.button-reset;
+    @include m.wp-reset-button;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: t.$control-md;
+    height: t.$control-md;
+    border: 1px solid t.$border-soft;
+    border-radius: t.$radius-lg;
+    background: t.$surface;
+    color: t.$text-strong;
+    box-shadow: t.$shadow-raised;
+    transition:
+      box-shadow t.$duration t.$ease,
+      transform t.$duration-fast t.$ease;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    &:hover {
+      box-shadow: t.$shadow-raised-hover;
+      transform: translateY(-1px);
+    }
+
+    &:focus-visible {
+      @include m.focus-ring-raised;
+    }
+  }
+
+  .title {
+    min-width: 190px;
+    text-align: center;
+    @include m.text(16, t.$weight-bold);
+    letter-spacing: -0.01em;
+  }
+
+  // --- The sheet ------------------------------------------------------------
+
+  .sheet {
+    @include m.card-surface;
+    overflow: auto;
+  }
+
+  // Fetching a new month dims the sheet in place rather than replacing it.
+  .busy {
+    opacity: 0.6;
+    pointer-events: none;
+    transition: opacity t.$duration-fast t.$ease;
+  }
+
+  .monthGrid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    min-width: 640px;
+  }
+
+  .weekday {
+    padding: t.$space-5 t.$space-6;
+    border-bottom: 1px solid t.$border-hairline;
+    background: t.$surface-subtle;
+    text-align: center;
+    color: t.$text-soft;
+    @include m.eyebrow;
+    letter-spacing: t.$tracking-wide;
+  }
+
+  .day {
+    display: flex;
+    flex-direction: column;
+    gap: t.$space-2;
+    min-width: 0;
+    min-height: 148px;
+    padding: t.$space-4;
+    border-right: 1px solid t.$border-hairline;
+    border-bottom: 1px solid t.$border-hairline;
+    transition: background t.$duration-fast t.$ease;
+
+    &:hover {
+      background: t.$surface-subtle;
+    }
+
+    // The sheet's own rounded edge does the trimming on the last column.
+    &:nth-child(7n) {
+      border-right: 0;
+    }
+  }
+
+  // Days spilling in from the neighbouring months.
+  .outside {
+    background: t.$surface-subtle;
+    opacity: 0.55;
+  }
+
+  .dayNumber {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: t.$radius-pill;
+    @include m.text(12, t.$weight-semibold);
+    color: t.$text-strong;
+  }
+
+  .today {
+    background: t.$primary;
+    color: t.$text-on-primary;
+    box-shadow: t.$shadow-raised-sm;
+  }
+
+  .events {
+    display: flex;
+    flex-direction: column;
+    gap: t.$space-1;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    max-height: 130px;
+  }
+
+  // An event inside a day: a tinted chip, coloured by format.
+  .chip {
+    @include m.button-reset;
+    @include m.wp-reset-button;
+    @include m.truncate;
+    display: block;
+    width: 100%;
+    padding: 6px t.$space-3;
+    border-radius: t.$radius-sm - 1px;
+    text-align: left;
+    @include m.text(11, t.$weight-semibold);
+    line-height: 16px;
+    transition: transform t.$duration-fast t.$ease;
+
+    &:hover {
+      transform: translateX(1px);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px t.$primary-border-strong;
+    }
+  }
+
+  .chipOffline {
+    background: t.$primary-surface;
+    color: t.$primary-strong;
+  }
+
+  .chipOnline {
+    background: t.$info-surface;
+    color: t.$info;
+  }
+
+  .chipPast {
+    background: t.$surface-subtle;
+    color: t.$text-soft;
+  }
+
+  .dayTop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .dayCount {
+    color: t.$text-placeholder;
+    @include m.text(11, t.$weight-medium);
+  }
+  .eventTitle {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .eventMeta {
+    display: block;
+    margin-top: 2px;
+    font-size: 10px;
+    font-weight: t.$weight-medium;
+  }
+  .legend {
+    display: flex;
+    gap: 20px;
+    color: t.$text-soft;
+    @include m.text(12, t.$weight-medium);
+  }
+  .legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .legend i {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+  .offlineDot {
+    background: t.$primary;
+  }
+  .onlineDot {
+    background: t.$info;
+  }
+  .scheduleScroll {
+    max-height: 640px;
+    overflow: auto;
+  }
+  .weekSchedule {
+    min-width: 780px;
+    --calendar-columns: 7;
+  }
+  .daySchedule {
+    --calendar-columns: 1;
+  }
+  .scheduleHeader,
+  .hourRow {
+    display: grid;
+    grid-template-columns: 64px repeat(var(--calendar-columns), minmax(0, 1fr));
+  }
+  .scheduleHeader {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: t.$surface;
+  }
+  .scheduleHeader .weekday {
+    border-left: 1px solid t.$border-hairline;
+  }
+  .timeHeading {
+    padding: 16px 8px;
+    border-bottom: 1px solid t.$border-hairline;
+    color: t.$text-soft;
+    @include m.text(11, t.$weight-medium);
+  }
+  .dateHeading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .hourLabel {
+    padding: 12px 8px;
+    color: t.$text-soft;
+    @include m.text(11, t.$weight-medium);
+    text-align: right;
+    border-bottom: 1px solid t.$border-hairline;
+  }
+  .hourCell {
+    min-width: 0;
+    min-height: 64px;
+    padding: 6px;
+    border-left: 1px solid t.$border-hairline;
+    border-bottom: 1px solid t.$border-hairline;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .eventCard {
+    white-space: normal;
+    border-left: 3px solid currentColor;
+  }
+  .eventCard .eventTitle {
+    overflow-wrap: anywhere;
+  }
+
+  .dayEmpty {
+    padding: t.$space-10 0;
+    text-align: center;
+    @include m.text(13, t.$weight-medium);
+    color: t.$text-placeholder;
+  }
+
+  // In week and day view a cell is a column, so it gets the room to be one.
+  .tall {
+    min-height: 420px;
+  }
+
+  @media (max-width: 735px) {
+    .title {
+      min-width: 0;
+    }
+
+    .day {
+      min-height: 84px;
+    }
+  }
+}

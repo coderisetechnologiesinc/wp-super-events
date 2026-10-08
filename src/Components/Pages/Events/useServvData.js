@@ -1,5 +1,5 @@
-import axios from "axios";
-import apiFetch from "@wordpress/api-fetch";
+import axios from "../../../utilities/adminApi";
+import apiFetch from "../../../utilities/adminApiFetch";
 import { useServvStore } from "../../../store/useServvStore";
 import moment from "moment-timezone";
 const getNonceHeaders = () => {

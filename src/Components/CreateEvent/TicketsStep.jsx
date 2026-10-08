@@ -1,11 +1,12 @@
-import { TicketIcon, PlusIcon, MinusIcon, CheckMark } from "../../assets/icons";
+import { TicketIcon, PlusIcon, MinusIcon } from "../../assets/icons";
+import StepActions from "./StepActions";
 import { useState, useEffect, Fragment } from "react";
 import { v4 as uuidv4 } from "uuid";
 import InteractiveCard from "../Containers/InteractiveCard";
-import RadioGroup from "../Controls/RecurrenceRadioGroup";
+import RadioGroup from "../Controls/RadioGroup";
 import NewInputControl from "../Controls/NewInputControl";
 import NewTimeInputControl from "../Controls/NewTimeInputControl";
-import DatePickerControl from "./DatePickerControl";
+import NewDatePickerControl from "../Controls/NewDatePickerControl";
 import moment from "moment";
 const TicketsStep = ({
   attributes,
@@ -595,25 +596,12 @@ const TicketsStep = ({
             </div>
           )}
 
-          <div className="servv_actions mt-auto">
-            <button
-              type="button"
-              className="servv_button servv_button--secondary"
-              onClick={() => changeStep("venue")}
-            >
-              Previous
-            </button>
-            {activeTicket && (
-              <button
-                type="button"
-                className="servv_button servv_button--primary"
-                onClick={() => handleFormSubmit(true)}
-                disabled={isError}
-              >
-                Create
-              </button>
-            )}
-          </div>
+          <StepActions
+            onPrevious={() => changeStep("venue")}
+            onPrimary={activeTicket ? () => handleFormSubmit(true) : undefined}
+            primaryText="Create"
+            primaryDisabled={isError}
+          />
         </div>
       ) : isProductMode ? (
         <div className="step__content">
@@ -953,11 +941,13 @@ const TicketsStep = ({
                         <label className="step__content_title">
                           Start date
                         </label>
-                        <DatePickerControl
-                          variant="field"
+                        <NewDatePickerControl
+                          mode="single"
                           label={getSaleStartDate().label}
-                          date={getSaleStartDate().date}
+                          value={getSaleStartDate().date}
                           onChange={handleSaleStartDateChange}
+                          fullWidth
+                          minDate={new Date()}
                         />
                       </div>
 
@@ -976,11 +966,13 @@ const TicketsStep = ({
                     <div className="servv_datetime_row">
                       <div className="servv_datetime_col">
                         <label className="step__content_title">End date</label>
-                        <DatePickerControl
-                          variant="field"
+                        <NewDatePickerControl
+                          mode="single"
                           label={getSaleEndDate().label}
-                          date={getSaleEndDate().date}
+                          value={getSaleEndDate().date}
                           onChange={handleSaleEndDateChange}
+                          fullWidth
+                          minDate={new Date()}
                         />
                       </div>
 
@@ -1000,35 +992,14 @@ const TicketsStep = ({
         </Fragment>
       )}
       {!isOnboarding && (
-        <div className="servv_actions mt-auto">
-          {!isNew && (
-            <button
-              type="button"
-              className="servv_button servv_button--secondary"
-              onClick={() => handleFormSubmit(true)}
-            >
-              Save and Exit
-            </button>
-          )}
-          <button
-            type="button"
-            className="servv_button servv_button--secondary"
-            onClick={() => changeStep("venue")}
-          >
-            Previous
-          </button>
-
-          <button
-            type="button"
-            className="servv_button servv_button--primary"
-            onClick={() =>
-              isOnboarding ? handleFormSubmit(true) : changeStep("filters")
-            }
-            disabled={isError}
-          >
-            Continue
-          </button>
-        </div>
+        <StepActions
+          onSaveAndExit={isNew ? undefined : () => handleFormSubmit(true)}
+          onPrevious={() => changeStep("venue")}
+          onPrimary={() =>
+            isOnboarding ? handleFormSubmit(true) : changeStep("filters")
+          }
+          primaryDisabled={isError}
+        />
       )}
     </div>
   );

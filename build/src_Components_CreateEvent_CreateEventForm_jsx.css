@@ -1,0 +1,58 @@
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/@wordpress/scripts/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/Components/Pages/PageWrapper.module.scss ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************/
+:is(#servv-wrap, .servv-ui) .GwbBdwO7UxUbci6wtyds {
+  position: fixed;
+  inset: 0;
+  background: #f5f5f5;
+}
+:is(#servv-wrap, .servv-ui) .whZeFIc454jkDbuWw6zj {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 0;
+}
+:is(#servv-wrap, .servv-ui) .nH2l6oxNCJ28ihBOUf7w {
+  padding-left: 16px;
+}
+:is(#servv-wrap, .servv-ui) .KKg_qLS4gdJXh4u6HnvG {
+  padding-right: 16px;
+}
+:is(#servv-wrap, .servv-ui) .Al4EqMTkXH8MiW77lCyS {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+:is(#servv-wrap, .servv-ui) .DhHmGpnbQlurQkapo8Ei {
+  display: flex;
+  flex: 1 1 0%;
+  flex-direction: column;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: visible;
+}
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/@wordpress/scripts/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/Components/Pages/SpinnerLoader.module.scss ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************************/
+:is(#servv-wrap, .servv-ui) .NvXIBF17sKtsJ5DppGj6 {
+  position: relative;
+}
+:is(#servv-wrap, .servv-ui) .s8xU0aT_Upum9VaMUtFv {
+  filter: blur(4px);
+  pointer-events: none;
+}
+:is(#servv-wrap, .servv-ui) .rwBQn7Ep0HRpuD73wvEE {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/*# sourceMappingURL=src_Components_CreateEvent_CreateEventForm_jsx.css.map*/

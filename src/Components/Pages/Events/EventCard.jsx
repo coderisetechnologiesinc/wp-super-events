@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import { useEventsLogic } from "./useEventsLogic";
 import {
+  ClockIcon,
   EyeIcon,
+  MapPinIcon,
   PencilSquareIcon,
   UserCircleIcon,
 } from "@heroicons/react/24/outline";
+import styles from "./EventCard.module.scss";
 
 const PLACEHOLDER_IMAGE = `${window.servvData.pluginUrl}public/assets/images/placeholder.png`;
 
@@ -64,108 +66,108 @@ const EventCard = ({ meeting, handleOpenEvent }) => {
   }, [postId]);
 
   return (
-    <div className="event-card">
-      <div className="event-image-wrapper">
-        <div className="event-image-container">
-          <div className="event-card-actions">
-            <button
-              className="event-action-btn view"
-              title="View event"
-              onClick={(e) => {
-                e.stopPropagation();
-                getMeetingURL();
-              }}
-            >
-              <EyeIcon className="event-action-icon" />
-            </button>
+    <div className={styles.card}>
+      <div className={styles.thumb}>
+        <img
+          src={imageSrc}
+          alt={meeting?.title || "Event image"}
+          className={styles.image}
+          loading="lazy"
+          onError={(e) => {
+            e.currentTarget.src = PLACEHOLDER_IMAGE;
+          }}
+        />
 
-            <button
-              className="event-action-btn edit"
-              title="Edit event"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleOpenEvent({
-                  id: meeting.post_id,
-                  occurrence_id: meeting.occurrence_id,
-                  registrants_view: true,
-                });
-              }}
-            >
-              <UserCircleIcon className="event-action-icon" />
-            </button>
-            <button
-              className="event-action-btn edit"
-              title="Edit event"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleOpenEvent({
-                  id: meeting.post_id,
-                  occurrence_id: meeting.occurrence_id,
-                });
-              }}
-            >
-              <PencilSquareIcon className="event-action-icon" />
-            </button>
-          </div>
-
-          <img
-            src={imageSrc}
-            alt={meeting?.title || "Event image"}
-            className="event-image"
-            loading="lazy"
-            // onClick={() => {
-            //   handleOpenEvent({
-            //     id: meeting.post_id,
-            //     occurrence_id: meeting.occurrence_id,
-            //   });
-            // }}
-            onError={(e) => {
-              e.currentTarget.src = PLACEHOLDER_IMAGE;
-            }}
-          />
-        </div>
-      </div>
-
-      <div className="event-description">
-        <h4 className="event-title">{meeting.title}</h4>
-        {/* <a
-            className="hover-badge"
-            href=""
+        <div className={styles.actions}>
+          <button
+            type="button"
+            className={styles.action}
+            title="View event"
             onClick={(e) => {
-              e.preventDefault();
+              e.stopPropagation();
               getMeetingURL();
             }}
           >
-            View
-          </a> */}
+            <EyeIcon />
+          </button>
 
-        {meeting.date ? (
-          <p className="event-datetime">
-            {meeting.date} | {meeting.time} | {meeting.timezone}
-          </p>
-        ) : (
-          <p className="event-datetime">Recurring event</p>
-        )}
+          <button
+            type="button"
+            className={styles.action}
+            title="Registrants"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleOpenEvent({
+                id: meeting.post_id,
+                occurrence_id: meeting.occurrence_id,
+                registrants_view: true,
+              });
+            }}
+          >
+            <UserCircleIcon />
+          </button>
+
+          <button
+            type="button"
+            className={styles.action}
+            title="Edit event"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleOpenEvent({
+                id: meeting.post_id,
+                occurrence_id: meeting.occurrence_id,
+              });
+            }}
+          >
+            <PencilSquareIcon />
+          </button>
+        </div>
       </div>
-      <div className="event-badges">
-        {!meeting.is_hidden ? (
-          <div className="servv-event-badge badge-success">
-            <span>On sale</span>
+
+      <div className={styles.body}>
+        <div>
+          <h3 className={styles.title}>{meeting.title}</h3>
+
+          <div className={styles.meta}>
+            <ClockIcon />
+            {meeting.date
+              ? `${meeting.date} · ${meeting.time}`
+              : "Recurring event"}
           </div>
-        ) : (
-          <div className="servv-event-badge badge-info">
-            <span>Unlisted</span>
-          </div>
-        )}
-        {meeting.recurrence !== "Recurring" ? (
-          <div className="servv-event-badge badge-warning">
-            <span>One-time</span>
-          </div>
-        ) : (
-          <div className="servv-event-badge badge-brand">
-            <span>Recurring</span>
-          </div>
-        )}
+
+          {meeting.timezone && (
+            <div className={styles.meta}>
+              <MapPinIcon />
+              {meeting.timezone}
+            </div>
+          )}
+        </div>
+
+        <div className={styles.badges}>
+          {!meeting.is_hidden ? (
+            <span className={`${styles.status} ${styles.success}`}>
+              <span className={styles.dot} />
+              On sale
+            </span>
+          ) : (
+            <span className={`${styles.status} ${styles.muted}`}>
+              <span className={styles.dot} />
+              Unlisted
+            </span>
+          )}
+
+          {meeting.recurrence !== "Recurring" ? (
+            <span className={`${styles.status} ${styles.warning}`}>
+              <span className={styles.dot} />
+              One-time
+            </span>
+          ) : (
+            <span className={`${styles.status} ${styles.brand}`}>
+              <span className={styles.dot} />
+              Recurring
+            </span>
+          )}
+        </div>
       </div>
     </div>
   );
