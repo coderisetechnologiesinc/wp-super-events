@@ -554,4 +554,4 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Onboarding_BrandingStep_jsx.js.map?ver=e1ba360b1ffef048d506
+//# sourceMappingURL=src_Components_Onboarding_BrandingStep_jsx.js.map?ver=576ba46b7855f9333a78

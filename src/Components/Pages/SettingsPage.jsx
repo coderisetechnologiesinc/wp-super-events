@@ -9,7 +9,6 @@ import capitalize from "lodash.capitalize";
 import {
   Cog6ToothIcon,
   BellIcon,
-  Square3Stack3DIcon,
   LanguageIcon,
   CommandLineIcon,
   ShoppingCartIcon,
@@ -36,7 +35,6 @@ import SettingsSection from "./Settings/SettingsSection";
 import GeneralSettings from "./Settings/GeneralSettings";
 import RemindersSettings from "./Settings/RemindersSettings";
 import CheckoutSettings from "./Settings/CheckoutSettings";
-import WidgetSettings from "./Settings/WidgetSettings";
 import TranslationsSection from "./Settings/TranslationsSection";
 import WorkflowSettings from "./Settings/WorkflowSettings";
 import SpinnerLoader from "./SpinnerLoader";
@@ -208,8 +206,7 @@ const SettingsPage = () => {
       { label: "Reminders", value: 1 },
     ];
 
-    const widgetTabs = [
-      { label: "Widget", value: 5 },
+    const translationTabs = [
       { label: "Translations", value: 6 },
     ];
 
@@ -219,10 +216,10 @@ const SettingsPage = () => {
 
     if (planId) {
       if (!newSettings.is_wp_marketplace) {
-        tabs.push(...widgetTabs);
+        tabs.push(...translationTabs);
       }
     } else {
-      tabs.push(...widgetTabs);
+      tabs.push(...translationTabs);
     }
 
     setTabsList(tabs);
@@ -1000,17 +997,6 @@ const SettingsPage = () => {
                   </SpinnerLoader>
                 </SettingsSection>
               )}
-
-            {/* Widget appearance is configured on its dedicated page. */}
-            {(!activeSection || activeSection === "widget") && (
-              <SettingsSection icon={Square3Stack3DIcon} title="Widget"
-                description="Display mode, filters, appearance, and embedding"
-                statusText="Open widget settings" status="available" showActions={false}
-                sectionId="widget" activeSection={activeSection} setActiveSection={setActiveSection}>
-                <p>Choose your widget layout and appearance, preview events, and generate a shortcode.</p>
-                <a href={window.servvData?.adminPages?.widget || "#/widget"}>Open widget settings</a>
-              </SettingsSection>
-            )}
 
             {/* Translations Settings */}
             {(!activeSection || activeSection === "translations") &&

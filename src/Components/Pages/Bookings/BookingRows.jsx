@@ -17,8 +17,7 @@ export const BOOKING_COLUMNS = [
   { value: "registrant", label: "Registrant", width: "minmax(0, 1.3fr)" },
   { value: "title", label: "Title", width: "minmax(0, 1.7fr)" },
   { value: "occurrence", label: "Occurrence", width: "148px" },
-  { value: "paid", label: "Mode", width: "104px" },
-  { value: "status", label: "Status", width: "118px" },
+  { value: "paid", label: "Payment & status", width: "132px" },
 ];
 
 // Three 32px icon buttons with 4px between them.
@@ -64,7 +63,29 @@ const BookingRows = ({
     .filter(Boolean)
     .join(" ");
 
-  const gridStyle = { "--booking-cols": template };
+  const hasColumn = (value) => visible.some((column) => column.value === value);
+  const mergeDates = hasColumn("date") && hasColumn("occurrence");
+  const isMergedColumn = (column) =>
+    (column.value === "occurrence" && mergeDates);
+  const compactWidths = {
+    order: "minmax(72px, .6fr)",
+    date: mergeDates ? "minmax(180px, 1.1fr)" : "minmax(120px, 1fr)",
+    registrant: "minmax(0, 1.3fr)",
+    title: "minmax(0, 1.4fr)",
+    occurrence: "minmax(120px, 1fr)",
+    paid: "112px",
+    status: "minmax(104px, .8fr)",
+  };
+  const compactTemplate = [
+    onToggleSelect ? "18px" : null,
+    ...visible.filter((column) => !isMergedColumn(column))
+      .map((column) => compactWidths[column.value]),
+    "68px",
+  ].filter(Boolean).join(" ");
+  const gridStyle = {
+    "--booking-cols": template,
+    "--booking-compact-cols": compactTemplate,
+  };
 
   const renderCell = (column, row) => {
     const ordered = moment(row.created_datetime).tz(row.timezone);
@@ -72,20 +93,39 @@ const BookingRows = ({
 
     switch (column.value) {
       case "order":
-        return <div className={styles.strong}>#{row.id}</div>;
+        return (
+          <div>
+            <div className={styles.strong}>#{row.id}</div>
+          </div>
+        );
 
       case "date":
         return (
           <div>
-            <div className={styles.strong}>{ordered.format("MMM DD YYYY")}</div>
-            <div className={styles.sub}>{ordered.format(timeFormat)}</div>
+            <div className={mergeDates ? styles.regularDates : undefined}>
+              <div className={styles.strong}>{ordered.format("MMM DD YYYY")}</div>
+              <div className={styles.sub}>{ordered.format(timeFormat)}</div>
+            </div>
+            {mergeDates && (
+              <div className={styles.compactDates}>
+                {[["Ordered", ordered], ["Event", starts]].map(([label, date]) => (
+                  <div key={label}>
+                    <span className={styles.dateLabel}>{t(label)}</span>
+                    <div className={styles.dateLine} title={date.format(`MMM DD YYYY ${timeFormat}`)}>
+                      <span>{date.format("MMM DD YYYY")}</span>{" "}
+                      <span className={styles.dateTime}>{date.format(timeFormat)}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         );
 
       case "registrant":
         return (
-          <div className={styles.text} title={row.email}>
-            {row.email}
+          <div>
+            <div className={styles.text} title={row.email}>{row.email}</div>
           </div>
         );
 
@@ -105,12 +145,13 @@ const BookingRows = ({
         );
 
       case "paid":
-        return Number(row.price) > 0 ? (
-          <div className={styles.money}>
-            {Number(row.price)} {currency?.toUpperCase()}
+        return (
+          <div className={styles.payment}>
+            {Number(row.price) > 0 ? (
+              <div className={styles.money}>{Number(row.price)} {currency?.toUpperCase()}</div>
+            ) : <div className={styles.free}>{t("Free")}</div>}
+            {renderCell({ value: "status" }, row)}
           </div>
-        ) : (
-          <div className={styles.free}>{t("Free")}</div>
         );
 
       case "status": {
@@ -151,7 +192,11 @@ const BookingRows = ({
       <div className={styles.head} style={gridStyle}>
         {onToggleSelect && <div />}
         {visible.map((column) => (
-          <div key={column.value}>{t(column.label)}</div>
+          <div key={column.value} className={isMergedColumn(column) ? styles.mergedColumn : undefined}>
+            {column.value === "date" && mergeDates ? (
+              <><span className={styles.regularDates}>{t(column.label)}</span><span className={styles.compactDatesHeading}>{t("Dates")}</span></>
+            ) : t(column.label)}
+          </div>
         ))}
         <div />
       </div>
@@ -183,7 +228,10 @@ const BookingRows = ({
             )}
 
             {visible.map((column) => (
-              <div key={column.value}>{renderCell(column, row)}</div>
+              <div key={column.value} className={[styles.cell, column.value === "title" ? styles.eventCell : "", isMergedColumn(column) ? styles.mergedColumn : ""].filter(Boolean).join(" ")}>
+                <span className={styles.cellLabel}>{t(column.label)}</span>
+                {renderCell(column, row)}
+              </div>
             ))}
 
             <div className={styles.actions}>

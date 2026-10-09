@@ -37,15 +37,6 @@ const FilterFormLayout = ({
           ]}
         />
         <div>
-          <div className={styles.chips}>
-            <span className={styles.kindChip}>
-              {kind && <kind.Icon />}
-              {kind?.label || type}
-            </span>
-            <span className={styles.modeChip}>
-              {editing ? "Editing" : "New filter"}
-            </span>
-          </div>
           <PageHeader
             title={title}
             description={description}

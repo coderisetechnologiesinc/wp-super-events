@@ -29,7 +29,9 @@ $text-on-primary: #ffffff;
 
 // --- Surfaces --------------------------------------------------------------
 $surface: #ffffff;
-$canvas: #ffffff;
+$canvas: var(--servv-admin-canvas, #ffffff);
+$hover-surface: var(--servv-hover-surface, #fafbfd);
+$hover-border: var(--servv-hover-border, #c3a8f3);
 $surface-subtle: #fafbfd; // table row hover
 $surface-raised-tint: #fcfdfe;
 
@@ -173,7 +175,7 @@ $shadow-brand-hover: $shadow-raised-hover,
 $shadow-danger: $shadow-raised, inset 0 1px 0 rgba(255, 255, 255, 0.18);
 $shadow-card: 9px 9px 22px $shade, -4px -4px 12px $light;
 $shadow-card-hover: 14px 14px 30px $shade-strong, -6px -6px 16px $light;
-$shadow-modal: 18px 18px 44px $shade-strong, -6px -6px 18px $light;
+$shadow-modal: 18px 18px 44px $shade-strong, -6px -6px 18px rgba($light, 0.25);
 $shadow-field: inset 4px 4px 9px $shade, inset -2px -2px 6px $light;
 $shadow-field-focus: inset 4px 4px 10px $shade, inset -2px -2px 7px $light;
 $shadow-well: inset 6px 6px 14px $shade, inset -3px -3px 9px $light;

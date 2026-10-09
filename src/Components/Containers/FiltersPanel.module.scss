@@ -80,11 +80,10 @@
     background: t.$surface;
     color: t.$text-soft;
     box-shadow: t.$shadow-raised-chip;
-    transition: box-shadow t.$duration t.$ease, color t.$duration-fast t.$ease;
+    transition: color t.$duration-fast t.$ease, background-color t.$duration t.$ease, border-color t.$duration-fast t.$ease;
 
     &:hover {
       color: t.$text-strong;
-      box-shadow: t.$shadow-raised;
     }
 
     &:focus-visible {
@@ -150,8 +149,8 @@
     font-size: t.$text-13;
 
     &:hover:not(:disabled) {
-      box-shadow: t.$shadow-raised-hover;
-      transform: translateY(-1px);
+      background-color: t.$hover-surface;
+      border-color: t.$hover-border;
     }
 
     &:focus-visible {
@@ -166,8 +165,8 @@
     box-shadow: t.$shadow-chip-pressed;
 
     &:hover:not(:disabled) {
-      box-shadow: t.$shadow-chip-pressed;
-      transform: none;
+      background-color: t.$hover-surface;
+      border-color: t.$hover-border;
     }
   }
 

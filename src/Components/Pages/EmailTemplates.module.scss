@@ -66,7 +66,7 @@
     @include m.text(12, t.$weight-medium);
     text-align: left;
     transition: background t.$duration t.$ease, color t.$duration t.$ease, border-color t.$duration t.$ease;
-    &:hover:not(:disabled) { background: t.$surface-subtle; color: t.$text; }
+    &:hover:not(:disabled) { background: t.$hover-surface; border-color: t.$hover-border; color: t.$text; }
     &.active { background: t.$primary-surface; border-color: t.$primary-border; color: t.$primary-strong; font-weight: t.$weight-semibold; }
     &:focus-visible { @include m.focus-ring; }
     &:disabled { cursor: default; opacity: .6; }

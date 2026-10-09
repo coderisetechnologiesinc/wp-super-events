@@ -4,14 +4,16 @@
 :is(#servv-wrap, .servv-ui) .GwbBdwO7UxUbci6wtyds {
   position: fixed;
   inset: 0;
-  background: #f5f5f5;
+  background: var(--servv-admin-canvas, #ffffff);
 }
 :is(#servv-wrap, .servv-ui) .whZeFIc454jkDbuWw6zj {
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: var(--servv-page-width, 100%);
+  height: var(--servv-page-height, 100%);
   min-height: 0;
+  flex: 1 1 auto;
 }
 :is(#servv-wrap, .servv-ui) .nH2l6oxNCJ28ihBOUf7w {
   padding-left: 16px;
@@ -29,13 +31,584 @@
 }
 :is(#servv-wrap, .servv-ui) .DhHmGpnbQlurQkapo8Ei {
   display: flex;
-  flex: 1 1 0%;
+  flex: 1 1 auto;
   flex-direction: column;
-  width: 100%;
+  width: var(--servv-page-width, 100%);
+  height: var(--servv-page-height, 100%);
   max-width: 100%;
   min-width: 0;
   min-height: 0;
   overflow: visible;
+}
+/*!**********************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/@wordpress/scripts/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/Components/Containers/PageContent.module.scss ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************************************************/
+@keyframes hEL4_Hi3yhmLC95m6Gv9 {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+:is(#servv-wrap, .servv-ui) .hYf27RiwlyFWwm5KClLO {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
+  width: var(--servv-page-width, 100%);
+  height: var(--servv-page-height, 100%);
+  padding: 28px 32px 64px;
+}
+:is(#servv-wrap, .servv-ui) .a6Ch_fJZ7nWrwzrktMXT {
+  padding: 0;
+}
+:is(#servv-wrap, .servv-ui) .t_beMJmTHY9tOuVGYINQ {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: var(--servv-page-width, 100%);
+  height: var(--servv-page-height, 100%);
+  max-width: 100%;
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  animation: hEL4_Hi3yhmLC95m6Gv9 0.42s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+@media (max-width: 782px) {
+  :is(#servv-wrap, .servv-ui) .hYf27RiwlyFWwm5KClLO {
+    padding: 16px 14px 32px;
+  }
+}
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/@wordpress/scripts/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/Components/Containers/PageHeader.module.scss ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************************/
+:is(#servv-wrap, .servv-ui) .UJKBfoKQX0ArollQPz1S {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+:is(#servv-wrap, .servv-ui) .EPa4Qs8Sg0DGkgQqTqgN {
+  padding-bottom: 16px;
+  border-bottom: 1px solid #edf1f7;
+}
+:is(#servv-wrap, .servv-ui) .OUo7N4uA10rjSEMICOeL {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+:is(#servv-wrap, .servv-ui) .sgJsCMx9FF0yFMt2kZ3Z {
+  min-width: 0;
+}
+:is(#servv-wrap, .servv-ui) .ktHdDumXPTPovEbmrc1M {
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  color: #6436c9;
+}
+:is(#servv-wrap, .servv-ui) .yq9VS55_ovalh9J5Nb6w {
+  margin: 0;
+  font-size: 32px;
+  line-height: 40px;
+  letter-spacing: -0.03em;
+  font-weight: 800;
+}
+:is(#servv-wrap, .servv-ui) .sj2HMNvNWGjuE5qbOg9r {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 6px 0 0;
+  font-size: 15px;
+  line-height: 23px;
+  font-weight: 500;
+  color: #414b63;
+}
+:is(#servv-wrap, .servv-ui) .PUXWCGzj1cI1x1_j3IoJ {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+@media (max-width: 735px) {
+  :is(#servv-wrap, .servv-ui) .yq9VS55_ovalh9J5Nb6w {
+    font-size: 24px;
+    line-height: 32px;
+    font-weight: 800;
+  }
+  :is(#servv-wrap, .servv-ui) .sgJsCMx9FF0yFMt2kZ3Z {
+    width: 100%;
+  }
+  :is(#servv-wrap, .servv-ui) .sj2HMNvNWGjuE5qbOg9r {
+    overflow: visible;
+    white-space: normal;
+  }
+  :is(#servv-wrap, .servv-ui) .PUXWCGzj1cI1x1_j3IoJ {
+    width: 100%;
+  }
+}
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/@wordpress/scripts/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/Components/Modals/ModalShell.module.scss ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************/
+@keyframes lQqxKZGLcAKV1Jn8Vt2F {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes DdditGgnQd2jVs8QrqsH {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+:is(#servv-wrap, .servv-ui) .zaqd_YWTGq9h9BrDhnml {
+  position: fixed;
+  inset: 0;
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  background: rgba(16, 24, 40, 0.5);
+  animation: lQqxKZGLcAKV1Jn8Vt2F 0.15s ease-out;
+}
+:is(#servv-wrap, .servv-ui) .XXcDzcz01ytVnY3hpKJj {
+  display: flex;
+  flex-direction: column;
+  width: 760px;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  border: 1px solid #edf1f7;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 18px 18px 44px #d4dbe8, -6px -6px 18px rgba(251, 252, 254, 0.25);
+  animation: DdditGgnQd2jVs8QrqsH 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+:is(#servv-wrap, .servv-ui) .HW1Ittu6VG1nOuS1qg32 {
+  width: 480px;
+}
+:is(#servv-wrap, .servv-ui) .vJ0FZD6KHZ4i9D5apaFY {
+  width: 640px;
+}
+:is(#servv-wrap, .servv-ui) .YHKB1jznvv4OseMsi_Az {
+  width: 760px;
+}
+:is(#servv-wrap, .servv-ui) .Efc0HlnFAqkwM15HiCNa {
+  width: 960px;
+}
+:is(#servv-wrap, .servv-ui) .R3wk4fdBZ02XilBUvvKA {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 24px;
+  border-bottom: 1px solid rgba(21, 27, 43, 0.09);
+}
+:is(#servv-wrap, .servv-ui) .WERcf127A0gFANECWp8h {
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #6436c9;
+}
+:is(#servv-wrap, .servv-ui) .iXgumjbKr876OyoPtlx9 {
+  margin: 4px 0 0;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+:is(#servv-wrap, .servv-ui) .MPu8eTML6zZvnQl6CbB4 {
+  margin: 4px 0 0;
+  font-size: 13px;
+  line-height: 19px;
+  font-weight: 500;
+  color: #5b6680;
+}
+:is(#servv-wrap, .servv-ui) .MV0wlpfgIbnXq6oksmES {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  cursor: pointer;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  box-sizing: border-box;
+  min-height: 0;
+  margin: 0;
+  background: none;
+  box-shadow: none;
+  text-decoration: none;
+  text-shadow: none;
+  vertical-align: baseline;
+  appearance: none;
+}
+:is(#servv-wrap, .servv-ui) .MV0wlpfgIbnXq6oksmES:focus {
+  outline: 0;
+}
+:is(#servv-wrap, .servv-ui) .MV0wlpfgIbnXq6oksmES {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  border: 1px solid #eff2f8;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #5b6680;
+  box-shadow: 3px 3px 7px #dce2ec, -2px -2px 5px #fbfcfe;
+  transition: color 0.18s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.22s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+}
+:is(#servv-wrap, .servv-ui) .MV0wlpfgIbnXq6oksmES:hover {
+  color: #39415a;
+}
+:is(#servv-wrap, .servv-ui) .MV0wlpfgIbnXq6oksmES:focus-visible {
+  outline: none;
+  box-shadow: 5px 5px 12px #dce2ec, -2px -2px 8px #fbfcfe, 0 0 0 3px rgba(234, 226, 251, 0.85);
+}
+:is(#servv-wrap, .servv-ui) .MV0wlpfgIbnXq6oksmES svg {
+  width: 16px;
+  height: 16px;
+}
+:is(#servv-wrap, .servv-ui) .EySeA5xUa9n4fl1YJ9vW {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 24px;
+  overflow: auto;
+}
+:is(#servv-wrap, .servv-ui) .uM3hTqX_1dotCASYgHwQ {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 24px;
+  border-top: 1px solid rgba(21, 27, 43, 0.09);
+}
+@media (max-width: 735px) {
+  :is(#servv-wrap, .servv-ui) .zaqd_YWTGq9h9BrDhnml {
+    padding: 12px;
+  }
+  :is(#servv-wrap, .servv-ui) .R3wk4fdBZ02XilBUvvKA,
+  :is(#servv-wrap, .servv-ui) .uM3hTqX_1dotCASYgHwQ {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  :is(#servv-wrap, .servv-ui) .EySeA5xUa9n4fl1YJ9vW {
+    padding: 16px;
+  }
+}
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/@wordpress/scripts/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/Components/Pages/SentEmails.module.scss ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************/
+:is(#servv-wrap, .servv-ui) .X5TMzaWcWPL3LHsHTVwk {
+  height: 3px;
+  border-radius: 99px;
+  background: #ffffff;
+  box-shadow: inset 2px 2px 4px #dce2ec, inset -1px -1px 3px #fcfdfe;
+}
+:is(#servv-wrap, .servv-ui) .wRskmmkYuQLO7wLMeV6z, :is(#servv-wrap, .servv-ui) .aU__70iDj7I0mDtMN2yn {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+:is(#servv-wrap, .servv-ui) .FY5Yb8kUmsNOyNILVP7t {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+:is(#servv-wrap, .servv-ui) .AyFLgKp2Q6gXt7OoiLwR {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+:is(#servv-wrap, .servv-ui) .AyFLgKp2Q6gXt7OoiLwR h2 {
+  margin: 0;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 700;
+}
+:is(#servv-wrap, .servv-ui) .TV9hX0hoAEUk3gzaskel {
+  padding: 2px 8px;
+  border: 1px solid #d7c8f7;
+  border-radius: 99px;
+  background: #eae2fb;
+  color: #4d2aa3;
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 600;
+}
+:is(#servv-wrap, .servv-ui) .GxlIUHo0RlV0IsZzE8fB {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+  min-width: 0;
+}
+:is(#servv-wrap, .servv-ui) .pUX5aU29UsdGgSwvhVB8 {
+  flex: 0 1 240px;
+  min-width: 0;
+}
+:is(#servv-wrap, .servv-ui) .nzlq_N4ZPnwBjNKiriut {
+  width: 160px;
+}
+:is(#servv-wrap, .servv-ui) .muXwfH0PvX8laZvxM4El {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+:is(#servv-wrap, .servv-ui) .FywjYOo6EQwsdJOi5mZD {
+  border: 1px solid #edf1f7;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 9px 9px 22px #dce2ec, -4px -4px 12px #fbfcfe;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+:is(#servv-wrap, .servv-ui) .FywjYOo6EQwsdJOi5mZD strong {
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 700;
+  color: #6436c9;
+}
+:is(#servv-wrap, .servv-ui) .FywjYOo6EQwsdJOi5mZD span {
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 500;
+  color: #5b6680;
+}
+:is(#servv-wrap, .servv-ui) .XhktE8ojPKDwNlHKqCn0, :is(#servv-wrap, .servv-ui) .HjE3Rmrj9mMsMHsnorvt {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1.8fr) minmax(90px, 0.8fr) minmax(90px, 0.8fr) minmax(160px, 1.2fr);
+  align-items: center;
+  gap: 20px;
+  padding: 0 20px;
+  border: 1px solid transparent;
+}
+:is(#servv-wrap, .servv-ui) .XhktE8ojPKDwNlHKqCn0 > div, :is(#servv-wrap, .servv-ui) .HjE3Rmrj9mMsMHsnorvt > div {
+  min-width: 0;
+}
+:is(#servv-wrap, .servv-ui) .XhktE8ojPKDwNlHKqCn0 {
+  color: #8e97ab;
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+:is(#servv-wrap, .servv-ui) .HjE3Rmrj9mMsMHsnorvt {
+  padding-top: 18px;
+  padding-bottom: 18px;
+  border-color: #edf1f7;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 8px 8px 20px #dce2ec, -4px -4px 12px #fbfcfe;
+  font-size: 13px;
+  line-height: 19px;
+  font-weight: 500;
+  transition: background-color 0.22s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+}
+:is(#servv-wrap, .servv-ui) .HjE3Rmrj9mMsMHsnorvt:hover {
+  background: var(--servv-hover-surface, #fafbfd);
+  border-color: var(--servv-hover-border, #c3a8f3);
+}
+:is(#servv-wrap, .servv-ui) .WBkYNW80PEV6HbtGQd6p {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+:is(#servv-wrap, .servv-ui) .exMwoEOB74NEeC7FDaVa {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: #eae2fb;
+  color: #6436c9;
+}
+:is(#servv-wrap, .servv-ui) .exMwoEOB74NEeC7FDaVa svg {
+  width: 18px;
+  height: 18px;
+}
+:is(#servv-wrap, .servv-ui) .UaIQP7eYYQmtvsDWWU51 {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  cursor: pointer;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  box-sizing: border-box;
+  min-height: 0;
+  margin: 0;
+  background: none;
+  box-shadow: none;
+  text-decoration: none;
+  text-shadow: none;
+  vertical-align: baseline;
+  appearance: none;
+}
+:is(#servv-wrap, .servv-ui) .UaIQP7eYYQmtvsDWWU51:focus {
+  outline: 0;
+}
+:is(#servv-wrap, .servv-ui) .UaIQP7eYYQmtvsDWWU51 {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 700;
+  color: #151b2b;
+}
+:is(#servv-wrap, .servv-ui) .UaIQP7eYYQmtvsDWWU51:hover {
+  color: #6436c9;
+}
+:is(#servv-wrap, .servv-ui) .UaIQP7eYYQmtvsDWWU51:focus-visible {
+  outline: none;
+  border-color: #c3a8f3;
+  box-shadow: inset 4px 4px 10px #dce2ec, inset -2px -2px 7px #fbfcfe, 0 0 0 3px rgba(234, 226, 251, 0.85);
+}
+:is(#servv-wrap, .servv-ui) .Cwp8VcO90iKGJouisrN_ {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #5b6680;
+}
+:is(#servv-wrap, .servv-ui) .M5r82qIKrhlUnr9MvS2o {
+  display: inline-flex;
+  padding: 3px 8px;
+  border: 1px solid #edf1f7;
+  border-radius: 99px;
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 600;
+}
+:is(#servv-wrap, .servv-ui) .cSO_pswWKJf8MmgXwHki {
+  color: #5b6680;
+}
+:is(#servv-wrap, .servv-ui) .h4pwqsbRulFyDaivZUpy {
+  min-height: 50vh;
+}
+:is(#servv-wrap, .servv-ui) .x8sfiC4a4HB4OOBVa3Q0 {
+  min-height: 120px;
+}
+:is(#servv-wrap, .servv-ui) .AVKBM89SP677ZlPpT7gt {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+:is(#servv-wrap, .servv-ui) .ACg1F9WzW0ZDWdI94cgz {
+  min-width: 0;
+  overflow: auto;
+  overflow-wrap: anywhere;
+}
+:is(#servv-wrap, .servv-ui) .ACg1F9WzW0ZDWdI94cgz img {
+  max-width: 100%;
+  height: auto;
+}
+:is(#servv-wrap, .servv-ui) .vmHb6cQO2hEhLF1PDI9u {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 36px;
+  border: 1px solid #edf1f7;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: inset 6px 6px 14px #dce2ec, inset -3px -3px 9px #fbfcfe;
+  text-align: center;
+}
+:is(#servv-wrap, .servv-ui) .vmHb6cQO2hEhLF1PDI9u > svg {
+  width: 36px;
+  height: 36px;
+  color: #6436c9;
+}
+:is(#servv-wrap, .servv-ui) .vmHb6cQO2hEhLF1PDI9u h3, :is(#servv-wrap, .servv-ui) .vmHb6cQO2hEhLF1PDI9u p {
+  margin: 0;
+}
+:is(#servv-wrap, .servv-ui) .vmHb6cQO2hEhLF1PDI9u p {
+  color: #5b6680;
+}
+@media (max-width: 900px) {
+  :is(#servv-wrap, .servv-ui) .XhktE8ojPKDwNlHKqCn0 {
+    display: none;
+  }
+  :is(#servv-wrap, .servv-ui) .HjE3Rmrj9mMsMHsnorvt {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 14px;
+  }
+  :is(#servv-wrap, .servv-ui) .HjE3Rmrj9mMsMHsnorvt > div:not(.WBkYNW80PEV6HbtGQd6p)::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 4px;
+    font-size: 11px;
+    line-height: 16px;
+    font-weight: 600;
+    color: #8e97ab;
+  }
+  :is(#servv-wrap, .servv-ui) .WBkYNW80PEV6HbtGQd6p, :is(#servv-wrap, .servv-ui) .Cwp8VcO90iKGJouisrN_ {
+    grid-column: 1/-1;
+  }
+  :is(#servv-wrap, .servv-ui) .GxlIUHo0RlV0IsZzE8fB {
+    justify-content: flex-start;
+    width: 100%;
+  }
+  :is(#servv-wrap, .servv-ui) .pUX5aU29UsdGgSwvhVB8 {
+    flex: 1 1 200px;
+  }
+}
+@media (max-width: 480px) {
+  :is(#servv-wrap, .servv-ui) .muXwfH0PvX8laZvxM4El {
+    gap: 8px;
+  }
+  :is(#servv-wrap, .servv-ui) .FywjYOo6EQwsdJOi5mZD {
+    padding: 12px;
+  }
+  :is(#servv-wrap, .servv-ui) .FywjYOo6EQwsdJOi5mZD strong {
+    font-size: 20px;
+  }
+  :is(#servv-wrap, .servv-ui) .cSO_pswWKJf8MmgXwHki {
+    grid-column: 1/-1;
+  }
 }
 /*!*****************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/@wordpress/scripts/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/Components/Controls/NewInputFieldControl.module.scss ***!
@@ -50,7 +623,7 @@
   border-radius: 12px;
   background: #ffffff;
   box-shadow: inset 4px 4px 9px #dce2ec, inset -2px -2px 6px #fbfcfe;
-  transition: box-shadow 0.22s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: border-color 0.18s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.22s cubic-bezier(0.22, 1, 0.36, 1), color 0.18s cubic-bezier(0.22, 1, 0.36, 1);
   display: flex;
   align-items: center;
   width: 100%;
@@ -299,93 +872,6 @@
   width: 14px;
   height: 14px;
 }
-/*!***************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/@wordpress/scripts/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/Components/Containers/Card.module.scss ***!
-  \***************************************************************************************************************************************************************************************************************************************************************************************************/
-:is(#servv-wrap, .servv-ui) .hhz3ZM59zSOVPNGf89Yu {
-  border: 1px solid #edf1f7;
-  border-radius: 18px;
-  background: #ffffff;
-  box-shadow: 9px 9px 22px #dce2ec, -4px -4px 12px #fbfcfe;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  margin: 0;
-}
-:is(#servv-wrap, .servv-ui) .hhz3ZM59zSOVPNGf89Yu .card-header {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  width: 100%;
-  padding: 16px 18px;
-  border-bottom: 1px solid #edf1f7;
-}
-:is(#servv-wrap, .servv-ui) .hhz3ZM59zSOVPNGf89Yu .card-header .card-heading {
-  display: flex;
-  flex: 1;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 14px;
-}
-:is(#servv-wrap, .servv-ui) .hhz3ZM59zSOVPNGf89Yu .card-header .card-heading span {
-  font-size: 18px;
-  line-height: 24px;
-  font-weight: 600;
-  color: #151b2b;
-}
-:is(#servv-wrap, .servv-ui) .hhz3ZM59zSOVPNGf89Yu .card-header .card-heading span.pagination-control-text {
-  font-size: 12px;
-  line-height: 18px;
-  font-weight: 500;
-  color: #5b6680;
-}
-:is(#servv-wrap, .servv-ui) .hhz3ZM59zSOVPNGf89Yu .card-description {
-  display: flex;
-  flex-direction: row;
-  gap: 4px;
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 500;
-  color: #414b63;
-}
-:is(#servv-wrap, .servv-ui) .hhz3ZM59zSOVPNGf89Yu .card-content {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 18px;
-}
-:is(#servv-wrap, .servv-ui) .SYcTir7cyNYB5U6LGAJm {
-  padding: 0;
-}
-:is(#servv-wrap, .servv-ui) .vdFi2W_f9kpfNyQmjpD7 {
-  padding: 12px;
-}
-:is(#servv-wrap, .servv-ui) .zIbRsvjNFogoE1vELCug {
-  padding: 18px;
-}
-:is(#servv-wrap, .servv-ui) .Xgx0sM20kBOMumHGAfIZ {
-  padding: 24px;
-}
-:is(#servv-wrap, .servv-ui) .eOoIxM3ykcegIFT8Ercg {
-  margin-left: auto;
-  margin-right: auto;
-}
-:is(#servv-wrap, .servv-ui) .IjhYVg0BRCz99AqeDBgH {
-  overflow: hidden;
-}
-:is(#servv-wrap, .servv-ui) .zGSV7tXpvxeWlG3XFEIK {
-  cursor: pointer;
-  transition: box-shadow 0.22s cubic-bezier(0.22, 1, 0.36, 1), transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);
-}
-:is(#servv-wrap, .servv-ui) .zGSV7tXpvxeWlG3XFEIK:hover {
-  box-shadow: 14px 14px 30px #d4dbe8, -6px -6px 16px #fbfcfe;
-  transform: translateY(-3px);
-}
-:is(#servv-wrap, .servv-ui) .uANu_i5X9CswfAF62dKr {
-  border-color: #ebeff6;
-  box-shadow: inset 6px 6px 14px #dce2ec, inset -3px -3px 9px #fbfcfe;
-}
 /*!*************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/@wordpress/scripts/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/Components/Controls/NewSelectControl.module.scss ***!
   \*************************************************************************************************************************************************************************************************************************************************************************************************************/
@@ -408,7 +894,7 @@
   border-radius: 12px;
   background: #ffffff;
   box-shadow: inset 4px 4px 9px #dce2ec, inset -2px -2px 6px #fbfcfe;
-  transition: box-shadow 0.22s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: border-color 0.18s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.22s cubic-bezier(0.22, 1, 0.36, 1), color 0.18s cubic-bezier(0.22, 1, 0.36, 1);
   position: relative;
   display: flex;
   align-items: center;
@@ -610,7 +1096,6 @@
 :is(#servv-wrap, .servv-ui) .auHDDkDXjHxTPLfjeqp2 .rdp-day_button:hover {
   background: #eae2fb;
   color: #4d2aa3;
-  box-shadow: inset 4px 4px 9px #dfd6f3, inset -2px -2px 6px #fbfcfe;
 }
 :is(#servv-wrap, .servv-ui) .auHDDkDXjHxTPLfjeqp2 .rdp-day_button:focus-visible {
   outline: 2px solid #6436c9;
@@ -689,10 +1174,10 @@
   line-height: 1.4;
   white-space: nowrap;
   cursor: pointer;
-  transition: box-shadow 0.22s cubic-bezier(0.22, 1, 0.36, 1), transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), background 0.22s cubic-bezier(0.22, 1, 0.36, 1), color 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: background 0.22s cubic-bezier(0.22, 1, 0.36, 1), color 0.18s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.18s cubic-bezier(0.22, 1, 0.36, 1);
 }
 :is(#servv-wrap, .servv-ui) .F2l5K1tOxIJTh0jK3Kpp:active:not(:disabled) {
-  transform: translateY(1px) scale(0.994);
+  border-color: #c3a8f3;
 }
 :is(#servv-wrap, .servv-ui) .F2l5K1tOxIJTh0jK3Kpp:disabled {
   opacity: 0.5;
@@ -706,8 +1191,8 @@
   box-shadow: 5px 5px 12px #dce2ec, -2px -2px 8px #fbfcfe;
 }
 :is(#servv-wrap, .servv-ui) .F2l5K1tOxIJTh0jK3Kpp:hover:not(:disabled) {
-  box-shadow: 7px 7px 16px #dce2ec, -3px -3px 10px #fbfcfe;
-  transform: translateY(-1px);
+  background-color: var(--servv-hover-surface, #fafbfd);
+  border-color: var(--servv-hover-border, #c3a8f3);
 }
 :is(#servv-wrap, .servv-ui) .F2l5K1tOxIJTh0jK3Kpp {
   gap: 8px;
@@ -790,10 +1275,10 @@
   line-height: 1.4;
   white-space: nowrap;
   cursor: pointer;
-  transition: box-shadow 0.22s cubic-bezier(0.22, 1, 0.36, 1), transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), background 0.22s cubic-bezier(0.22, 1, 0.36, 1), color 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: background 0.22s cubic-bezier(0.22, 1, 0.36, 1), color 0.18s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.18s cubic-bezier(0.22, 1, 0.36, 1);
 }
 :is(#servv-wrap, .servv-ui) .KdySr5oFULfrhKhic35V:active:not(:disabled) {
-  transform: translateY(1px) scale(0.994);
+  border-color: #c3a8f3;
 }
 :is(#servv-wrap, .servv-ui) .KdySr5oFULfrhKhic35V:disabled {
   opacity: 0.5;
@@ -806,13 +1291,12 @@
 }
 :is(#servv-wrap, .servv-ui) .NU3RVqc5Fk7DJ5c4GHf_ {
   border: 1px solid #4d2aa3;
-  background: linear-gradient(145deg, #7b4fdb, #5730b4);
+  background-color: #6436c9;
   color: #ffffff;
   box-shadow: 5px 5px 12px #dce2ec, -2px -2px 8px #fbfcfe, inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 :is(#servv-wrap, .servv-ui) .NU3RVqc5Fk7DJ5c4GHf_:hover:not(:disabled) {
-  box-shadow: 7px 7px 16px #dce2ec, -3px -3px 10px #fbfcfe, inset 0 1px 0 rgba(255, 255, 255, 0.24);
-  transform: translateY(-1px);
+  background-color: #4d2aa3;
 }
 :is(#servv-wrap, .servv-ui) .NU3RVqc5Fk7DJ5c4GHf_:focus-visible {
   outline: none;
@@ -825,18 +1309,17 @@
   box-shadow: 5px 5px 12px #dce2ec, -2px -2px 8px #fbfcfe;
 }
 :is(#servv-wrap, .servv-ui) .B48RwPm9xmg1M2dE2g6Q:hover:not(:disabled) {
-  box-shadow: 7px 7px 16px #dce2ec, -3px -3px 10px #fbfcfe;
-  transform: translateY(-1px);
+  background-color: var(--servv-hover-surface, #fafbfd);
+  border-color: var(--servv-hover-border, #c3a8f3);
 }
 :is(#servv-wrap, .servv-ui) .q2iOAa3m1ACyQeXOmJaO {
   border: 1px solid #b42318;
-  background: linear-gradient(145deg, #e8554a, #c12b1f);
+  background-color: #d92d20;
   color: #ffffff;
   box-shadow: 5px 5px 12px #dce2ec, -2px -2px 8px #fbfcfe, inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 :is(#servv-wrap, .servv-ui) .q2iOAa3m1ACyQeXOmJaO:hover:not(:disabled) {
-  box-shadow: 7px 7px 16px #dce2ec, -3px -3px 10px #fbfcfe, inset 0 1px 0 rgba(255, 255, 255, 0.24);
-  transform: translateY(-1px);
+  background-color: #b42318;
 }
 :is(#servv-wrap, .servv-ui) .q2iOAa3m1ACyQeXOmJaO:focus-visible {
   outline: none;
@@ -850,8 +1333,6 @@
 }
 :is(#servv-wrap, .servv-ui) .YQXykqk_8YtO85727teT:hover:not(:disabled) {
   background: #fef3f2;
-  box-shadow: 7px 7px 16px #dce2ec, -3px -3px 10px #fbfcfe;
-  transform: translateY(-1px);
 }
 :is(#servv-wrap, .servv-ui) .fxXHJtT4abc9Wa4LMvVL {
   border: 0;
@@ -919,10 +1400,10 @@
   display: block;
   width: 16px;
   height: 16px;
-  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: background-color 0.22s cubic-bezier(0.22, 1, 0.36, 1), color 0.18s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.18s cubic-bezier(0.22, 1, 0.36, 1);
 }
 :is(#servv-wrap, .servv-ui) .KdySr5oFULfrhKhic35V:hover:not(:disabled) .M_1pjyLi4tiOcq2_oiwe svg {
-  transform: scale(1.1);
+  color: inherit;
 }
 :is(#servv-wrap, .servv-ui) .lcGbrWicMbKyunggF77J {
   min-width: 0;

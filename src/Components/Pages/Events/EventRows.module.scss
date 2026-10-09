@@ -1,20 +1,18 @@
 @use "../../../styles/tokens" as t;
 @use "../../../styles/mixins" as m;
 
-// "Option A · Floating rows" from the events-list reference: no rules and no
-// cells — each event is a soft slab that lifts on hover, and the columns stay
-// aligned because the header and every row share one grid template.
-// From events-views.html, which is the fuller spec: a leading 18px checkbox
-// column, then elastic columns. The reference's last column is a single
-// overflow button; ours carries the same three actions the cards do, so it is
-// as wide as they are — the header and the rows must share the whole template
-// or the columns stop lining up.
-$columns-tail: minmax(0, 2.2fr) minmax(118px, 150px) minmax(96px, 130px)
-  minmax(88px, 110px) minmax(92px, 108px) auto;
+// Every independent row grid reserves the same space for all five actions.
+// An auto track would size itself from each row's buttons (and the empty head).
+$actions-width: 5 * 32px + 4 * 4px;
+// Share the remaining space proportionally instead of giving it all to title.
+$columns-tail: minmax(0, 2fr) minmax(160px, 1.6fr) minmax(96px, 1fr)
+  minmax(88px, 1fr) minmax(108px, 1.1fr) $actions-width;
 $columns: 18px $columns-tail;
 
 @include m.scoped {
   .list {
+    container-type: inline-size;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     gap: t.$space-6;
@@ -25,12 +23,15 @@ $columns: 18px $columns-tail;
     grid-template-columns: $columns;
     gap: t.$space-7;
     padding: 0 t.$space-10;
+    border: 1px solid transparent;
     color: t.$text-placeholder;
     @include m.eyebrow;
     letter-spacing: t.$tracking-wide;
   }
 
   .row {
+    min-width: 0;
+    > div { min-width: 0; }
     display: grid;
     grid-template-columns: $columns;
     gap: t.$space-7;
@@ -43,11 +44,11 @@ $columns: 18px $columns-tail;
     box-shadow: 8px 8px 20px t.$shade, -4px -4px 12px t.$light;
     text-align: left;
     cursor: pointer;
-    transition: box-shadow t.$duration t.$ease, transform t.$duration t.$ease;
+    transition: background-color t.$duration t.$ease, color t.$duration-fast t.$ease, border-color t.$duration-fast t.$ease;
 
     &:hover {
-      box-shadow: 12px 12px 28px t.$shade-strong, -5px -5px 14px t.$light;
-      transform: translateY(-3px);
+      background-color: t.$hover-surface;
+      border-color: t.$hover-border;
     }
 
     &:focus-visible {
@@ -80,6 +81,10 @@ $columns: 18px $columns-tail;
     display: flex;
     align-items: center;
     gap: t.$space-7;
+    min-width: 0;
+  }
+
+  .eventText {
     min-width: 0;
   }
 
@@ -178,6 +183,7 @@ $columns: 18px $columns-tail;
   }
 
   .actions {
+    flex-wrap: wrap;
     display: flex;
     justify-content: flex-end;
     gap: t.$space-2;
@@ -186,14 +192,16 @@ $columns: 18px $columns-tail;
   .action {
     @include m.button-reset;
     @include m.wp-reset-button;
+    border: 1px solid transparent;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex: 0 0 32px;
     width: 32px;
     height: 32px;
     border-radius: t.$radius-sm;
     color: t.$text-soft;
-    transition: background t.$duration t.$ease, box-shadow t.$duration t.$ease;
+    transition: background t.$duration t.$ease, color t.$duration-fast t.$ease, border-color t.$duration-fast t.$ease;
 
     svg {
       width: 16px;
@@ -201,8 +209,8 @@ $columns: 18px $columns-tail;
     }
 
     &:hover {
-      background: t.$surface-subtle;
-      box-shadow: t.$shadow-raised-sm;
+      background: t.$hover-surface;
+      border-color: t.$hover-border;
       color: t.$primary;
     }
   }
@@ -218,30 +226,77 @@ $columns: 18px $columns-tail;
     color: t.$text-soft;
   }
 
-  // Below the column widths the grid stops being honest — the row becomes a
-  // stacked card and the header is dropped.
-  @media (max-width: 1100px) {
-    .head {
-      display: none;
-    }
+  .cellLabel {
+    display: none;
+  }
 
-    .row {
-      grid-template-columns: 18px minmax(0, 1fr) auto;
-      gap: t.$space-5 t.$space-8;
+  // Switch according to the available list width, including WordPress sidebar.
+  @container (max-width: 1050px) {
+    .head { display: none; }
+    .row, .row.noPick {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: start;
+      gap: 16px;
+      padding: 18px;
     }
-
-    .event {
-      grid-column: 2 / -1;
+    .cellLabel {
+      display: block;
+      margin-bottom: 6px;
+      @include m.text(11, t.$weight-semibold);
+      color: t.$text-placeholder;
     }
-
+    .pick, .actions, .event, .schedule, .visibility {
+      grid-column: 1 / -1;
+    }
     .actions {
-      grid-column: 2;
-      grid-row: 2;
+      justify-content: flex-start;
+      border-top: 1px solid t.$border;
+      padding-top: 12px;
+      gap: 8px;
     }
+    .action { flex-basis: 44px; width: 44px; height: 44px; }
+    .title, .venue, .time {
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+    .date, .status { max-width: 100%; height: auto; min-height: 26px; overflow-wrap: anywhere; }
+  }
 
-    .recurrence,
-    .format {
-      display: none;
+  @container (max-width: 480px) {
+    .row, .row.noPick {
+      grid-template-columns: minmax(0, 1fr);
+      padding: 16px;
     }
   }
+  .compactVisibility, .compactRecurrence { display: none; }
+
+  // Tablet/laptop viewport: retain a compact table within the WordPress shell.
+  @media (min-width: 1024px) and (max-width: 1280px) {
+    @container (min-width: 600px) {
+      .head, .head.noPick, .row, .row.noPick {
+        grid-template-columns: 18px minmax(0, 2fr) minmax(150px, 1.6fr) minmax(0, 1.5fr) $actions-width;
+        gap: t.$space-7;
+        align-items: center;
+      }
+      .head.noPick, .row.noPick {
+        grid-template-columns: minmax(0, 2fr) minmax(150px, 1.6fr) minmax(0, 1.5fr) $actions-width;
+      }
+      .head { display: grid; }
+      .row, .row.noPick { padding: t.$space-9 t.$space-10; }
+      .pick, .event, .schedule, .actions { grid-column: auto; }
+      .cellLabel, .recurrence, .visibility { display: none; }
+      .compactVisibility { display: block; margin-top: 6px; }
+      .compactRecurrence { display: inline; }
+      .format { overflow-wrap: anywhere; }
+      .title, .venue { white-space: nowrap; }
+      .actions {
+        justify-content: flex-end;
+        border-top: 0;
+        padding-top: 0;
+        gap: t.$space-2;
+      }
+      .action { flex-basis: 32px; width: 32px; height: 32px; }
+    }
+  }
+
 }

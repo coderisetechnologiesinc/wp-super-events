@@ -74,9 +74,20 @@ const BookingsPage = () => {
   const [loading, setLoading] = useState(false);
   const [timezone, setTimezone] = useState("US/Pacific");
   // Lazy initializer reads from localStorage once on mount
-  const [headings, setHeadings] = useState(() =>
-    loadHeadings(HEADINGS_STORAGE_KEY, defaultHeadings),
-  );
+  const [headings, setHeadings] = useState(() => {
+    const loaded = loadHeadings(HEADINGS_STORAGE_KEY, defaultHeadings);
+    try {
+      const saved = JSON.parse(localStorage.getItem(HEADINGS_STORAGE_KEY) || "null");
+      if (saved && "status" in saved) {
+        const migrated = loaded.map((heading) => heading.value === "paid"
+          ? { ...heading, visible: heading.visible || Boolean(saved.status) }
+          : heading);
+        saveHeadings(HEADINGS_STORAGE_KEY, migrated);
+        return migrated;
+      }
+    } catch { /* unavailable storage uses the loaded defaults */ }
+    return loaded;
+  });
 
   const timeIntervals = [
     { label: "All time", value: "all" },

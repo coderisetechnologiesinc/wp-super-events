@@ -29,13 +29,12 @@
 
   .danger {
     border: 1px solid t.$danger-text;
-    background: linear-gradient(145deg, t.$danger-grad-from, t.$danger-grad-to);
+    background-color: t.$danger-strong;
     color: t.$text-on-primary;
     box-shadow: t.$shadow-danger;
 
     &:hover:not(:disabled) {
-      box-shadow: t.$shadow-brand-hover;
-      transform: translateY(-1px);
+      background-color: t.$danger-text;
     }
 
     &:focus-visible {
@@ -53,8 +52,6 @@
 
     &:hover:not(:disabled) {
       background: t.$danger-surface;
-      box-shadow: t.$shadow-raised-hover;
-      transform: translateY(-1px);
     }
   }
 
@@ -144,12 +141,12 @@
       display: block;
       width: 16px;
       height: 16px;
-      transition: transform t.$duration t.$ease;
+      transition: background-color t.$duration t.$ease, color t.$duration-fast t.$ease, border-color t.$duration-fast t.$ease;
     }
   }
 
   .button:hover:not(:disabled) .icon svg {
-    transform: scale(1.1);
+    color: inherit;
   }
 
   .label {

@@ -38,8 +38,8 @@ const EventRows = ({
       <div>{t("Event")}</div>
       <div>{t("Schedule")}</div>
       <div>{t("Format")}</div>
-      <div>{t("Recurrence")}</div>
-      <div>{t("Visibility")}</div>
+      <div className={styles.recurrence}>{t("Recurrence")}</div>
+      <div className={styles.visibility}>{t("Visibility")}</div>
       <div />
     </div>
 
@@ -47,6 +47,20 @@ const EventRows = ({
       const online = event.type === "Zoom";
       const live = event.status === "On sale";
       const picked = selectedKeys.has(eventKey(event));
+      const statusBadge = (
+        <span
+              className={[styles.status, live ? styles.statusLive : ""]
+                .filter(Boolean)
+                .join(" ")}
+            >
+              <span
+                className={[styles.dot, live ? styles.dotLive : ""]
+                  .filter(Boolean)
+                  .join(" ")}
+              />
+              {t(event.status)}
+            </span>
+      );
 
       return (
         <div
@@ -104,14 +118,16 @@ const EventRows = ({
             </span>
 
             <div className={styles.eventText}>
-              <div className={styles.title}>{event.title}</div>
-              <div className={styles.venue}>
-                {event.location || event.timezone || "—"}
-              </div>
+              <div className={styles.title} title={event.title}>{event.title}</div>
+              <div className={styles.compactVisibility}>{statusBadge}</div>
+              {event.location && (
+                <div className={styles.venue}>{event.location}</div>
+              )}
             </div>
           </div>
 
-          <div>
+          <div className={styles.schedule}>
+            <span className={styles.cellLabel}>{t("Schedule")}</span>
             <div className={styles.date}>{event.date || t("Recurring")}</div>
             <div className={styles.time}>
               {event.time ? `${event.time} · ${event.timezone || ""}` : "—"}
@@ -119,24 +135,19 @@ const EventRows = ({
           </div>
 
           <div className={styles.format}>
+            <span className={styles.cellLabel}>{t("Format")}</span>
             {online ? t("Online") : t("In-person")}
+            <span className={styles.compactRecurrence}> / {t(event.recurrence)}</span>
           </div>
 
-          <div className={styles.recurrence}>{t(event.recurrence)}</div>
+          <div className={styles.recurrence}>
+            <span className={styles.cellLabel}>{t("Recurrence")}</span>
+            {t(event.recurrence)}
+          </div>
 
-          <div>
-            <span
-              className={[styles.status, live ? styles.statusLive : ""]
-                .filter(Boolean)
-                .join(" ")}
-            >
-              <span
-                className={[styles.dot, live ? styles.dotLive : ""]
-                  .filter(Boolean)
-                  .join(" ")}
-              />
-              {t(event.status)}
-            </span>
+          <div className={styles.visibility}>
+            <span className={styles.cellLabel}>{t("Visibility")}</span>
+            {statusBadge}
           </div>
 
           <div className={styles.actions}>

@@ -3,7 +3,7 @@
  * Plugin Name: WP Super Events – Event Booking & Tickets
  * Plugin URI: https://wpsuperevents.com
  * Description: Create event calendars, registrations, recurring events, tickets, and online or in-person events directly in WordPress.
- * Version: 2.1.0
+ * Version: 2.0.0
  * Author: ServvAI
  * Author URI: https://wpsuperevents.com
  * License: GPL2
@@ -494,6 +494,7 @@ function servv_recover_integration_return_page() {
     exit;
 }
 add_action('admin_enqueue_scripts', 'servv_admin_enqueue_scripts');
+add_action('admin_head', 'servv_hide_external_admin_notices', PHP_INT_MAX);
 add_action('admin_init', 'servv_maybe_redirect_to_onboarding');
 add_action('admin_post_servv_dismiss_onboarding', 'servv_handle_dismiss_onboarding');
 
@@ -568,6 +569,21 @@ function servv_get_admin_screens() {
             'type'        => 'react',
         ],
     ];
+}
+
+// Suppress standard notices only on registered WP Super Events pages.
+// Our own notices are rendered directly by servv_render_admin_page().
+function servv_hide_external_admin_notices() {
+    if (!isset($_GET['page'])) {
+        return;
+    }
+    $page = servv_get_current_admin_page();
+    if (!isset(servv_get_admin_screens()[$page])) {
+        return;
+    }
+    foreach (['admin_notices', 'all_admin_notices', 'user_admin_notices', 'network_admin_notices'] as $hook) {
+        remove_all_actions($hook);
+    }
 }
 
 function servv_get_admin_screen($page = null) {

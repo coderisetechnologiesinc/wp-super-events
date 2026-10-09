@@ -90,7 +90,6 @@
       &:hover {
         background: t.$primary-surface;
         color: t.$primary-strong;
-        box-shadow: t.$shadow-chip-pressed;
       }
       &:focus-visible {
         outline: 2px solid t.$primary;

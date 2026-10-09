@@ -544,8 +544,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-// The page shell from the design reference: a padded frame around a centred
-// 1180px column whose children are spaced 24px apart.
+// A full-size page shell with responsive gutters and 24px content spacing.
 // `className` lands on the column, where the call sites have always put it.
 
 const PageContent = ({
@@ -1730,7 +1729,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var react_spinners__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-spinners */ "./node_modules/react-spinners/esm/ClipLoader.js");
+/* harmony import */ var react_spinners__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-spinners */ "./node_modules/react-spinners/esm/BarLoader.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
 
@@ -2883,14 +2882,22 @@ const EventRows = ({
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
       children: t("Format")
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+      className: _EventRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].recurrence,
       children: t("Recurrence")
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+      className: _EventRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].visibility,
       children: t("Visibility")
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {})]
   }), events.map(event => {
     const online = event.type === "Zoom";
     const live = event.status === "On sale";
     const picked = selectedKeys.has((0,_utilities_events__WEBPACK_IMPORTED_MODULE_2__.eventKey)(event));
+    const statusBadge = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("span", {
+      className: [_EventRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].status, live ? _EventRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].statusLive : ""].filter(Boolean).join(" "),
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+        className: [_EventRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].dot, live ? _EventRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].dotLive : ""].filter(Boolean).join(" ")
+      }), t(event.status)]
+    });
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
       role: "button",
       tabIndex: 0,
@@ -2931,33 +2938,49 @@ const EventRows = ({
           className: _EventRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].eventText,
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
             className: _EventRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].title,
+            title: event.title,
             children: event.title
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+            className: _EventRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].compactVisibility,
+            children: statusBadge
+          }), event.location && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
             className: _EventRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].venue,
-            children: event.location || event.timezone || "—"
+            children: event.location
           })]
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+        className: _EventRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].schedule,
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+          className: _EventRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].cellLabel,
+          children: t("Schedule")
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
           className: _EventRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].date,
           children: event.date || t("Recurring")
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
           className: _EventRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].time,
           children: event.time ? `${event.time} · ${event.timezone || ""}` : "—"
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         className: _EventRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].format,
-        children: online ? t("Online") : t("In-person")
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+          className: _EventRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].cellLabel,
+          children: t("Format")
+        }), online ? t("Online") : t("In-person"), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("span", {
+          className: _EventRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].compactRecurrence,
+          children: [" / ", t(event.recurrence)]
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         className: _EventRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].recurrence,
-        children: t(event.recurrence)
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("span", {
-          className: [_EventRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].status, live ? _EventRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].statusLive : ""].filter(Boolean).join(" "),
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
-            className: [_EventRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].dot, live ? _EventRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].dotLive : ""].filter(Boolean).join(" ")
-          }), t(event.status)]
-        })
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+          className: _EventRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].cellLabel,
+          children: t("Recurrence")
+        }), t(event.recurrence)]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        className: _EventRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].visibility,
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+          className: _EventRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].cellLabel,
+          children: t("Visibility")
+        }), statusBadge]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         className: _EventRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].actions,
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
@@ -5816,7 +5839,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 // extracted by mini-css-extract-plugin
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"list":"bT2y2YfGfeqPjCG_XCvA","head":"OMb2SVusWF1ijKtYAbEm","row":"Pct4BLj6aECgPCTHaSMq","muted":"eWImglZOeueCiioPeXew","picked":"FSjbnCfNFz36MynuEPJg","pick":"C9u7VuLY7n6VFN6gpipz","noPick":"s0MqfKieaHPbbtAHvRJd","event":"mERsKVfYjfxRzRL8gywm","mark":"kOhs_asjAQD2jXK4KRIP","markOffline":"Y8hTLp1pFbzTDSC7RLNv","markOnline":"LFsZ0olJ8fLRLtVi8ONw","title":"FpuqTokb5ZH4zm7oinZ1","venue":"jE0JR0NvYn1kIqBUD1sH","date":"eYmFroAeXZLOla2sLp4j","time":"TJLhw_o5y9D9jeUOVq13","format":"RhZWGhD7c6CjfAOrmOvT","recurrence":"VWhKN08X9LbWsWYoAMF3","status":"_OMA0cTMEzntkzGpXXtX","statusLive":"WPXfbkf33yvtEeHwB2nt","dot":"kxBrXJOhnSw8LHFIAVBU","dotLive":"KbW7UMWrpk2lIPVq9pGv","actions":"bgWjbutZR4A6T9uEUNiO","action":"KYOVDykWWkCGttCaLCXs","actionDanger":"rEAhIydUIPIhXwb4DkJQ","count":"Irz0Y0ZBHLk2IZeIBntT"});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"list":"bT2y2YfGfeqPjCG_XCvA","head":"OMb2SVusWF1ijKtYAbEm","row":"Pct4BLj6aECgPCTHaSMq","muted":"eWImglZOeueCiioPeXew","picked":"FSjbnCfNFz36MynuEPJg","pick":"C9u7VuLY7n6VFN6gpipz","noPick":"s0MqfKieaHPbbtAHvRJd","event":"mERsKVfYjfxRzRL8gywm","eventText":"R2wGjJOyChetM_ReEgd2","mark":"kOhs_asjAQD2jXK4KRIP","markOffline":"Y8hTLp1pFbzTDSC7RLNv","markOnline":"LFsZ0olJ8fLRLtVi8ONw","title":"FpuqTokb5ZH4zm7oinZ1","venue":"jE0JR0NvYn1kIqBUD1sH","date":"eYmFroAeXZLOla2sLp4j","time":"TJLhw_o5y9D9jeUOVq13","format":"RhZWGhD7c6CjfAOrmOvT","recurrence":"VWhKN08X9LbWsWYoAMF3","status":"_OMA0cTMEzntkzGpXXtX","statusLive":"WPXfbkf33yvtEeHwB2nt","dot":"kxBrXJOhnSw8LHFIAVBU","dotLive":"KbW7UMWrpk2lIPVq9pGv","actions":"bgWjbutZR4A6T9uEUNiO","action":"KYOVDykWWkCGttCaLCXs","actionDanger":"rEAhIydUIPIhXwb4DkJQ","count":"Irz0Y0ZBHLk2IZeIBntT","cellLabel":"k8OS9PR1Y8SvqZepc1jv","schedule":"AU9YFjb5clgWyJr4fWxZ","visibility":"Y0XUHews_ApYlfPXw52A","compactVisibility":"YShRhTCfGwPCvyWesQZP","compactRecurrence":"IkCLiWrcJD7XwqkAbXBb"});
 
 /***/ }),
 
@@ -5866,4 +5889,4 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_Dashboard_jsx.js.map?ver=ed0f32842452596a929c
+//# sourceMappingURL=src_Components_Pages_Dashboard_jsx.js.map?ver=dcb8c7ae9a24aef2efdb
