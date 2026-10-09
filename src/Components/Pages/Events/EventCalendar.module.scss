@@ -45,9 +45,7 @@
     background: t.$surface;
     color: t.$text-strong;
     box-shadow: t.$shadow-raised;
-    transition:
-      box-shadow t.$duration t.$ease,
-      transform t.$duration-fast t.$ease;
+    transition: background-color t.$duration t.$ease, color t.$duration-fast t.$ease, border-color t.$duration-fast t.$ease;
 
     svg {
       width: 16px;
@@ -55,8 +53,8 @@
     }
 
     &:hover {
-      box-shadow: t.$shadow-raised-hover;
-      transform: translateY(-1px);
+      background-color: t.$hover-surface;
+      border-color: t.$hover-border;
     }
 
     &:focus-visible {
@@ -82,7 +80,7 @@
   .busy {
     opacity: 0.6;
     pointer-events: none;
-    transition: opacity t.$duration-fast t.$ease;
+    transition: opacity t.$duration-fast t.$ease, background-color t.$duration t.$ease, color t.$duration-fast t.$ease, border-color t.$duration-fast t.$ease;
   }
 
   .monthGrid {
@@ -110,10 +108,11 @@
     padding: t.$space-4;
     border-right: 1px solid t.$border-hairline;
     border-bottom: 1px solid t.$border-hairline;
-    transition: background t.$duration-fast t.$ease;
+    transition: background t.$duration-fast t.$ease, color t.$duration-fast t.$ease, border-color t.$duration-fast t.$ease;
 
     &:hover {
-      background: t.$surface-subtle;
+      background: t.$hover-surface;
+      border-color: t.$hover-border;
     }
 
     // The sheet's own rounded edge does the trimming on the last column.
@@ -158,6 +157,7 @@
   .chip {
     @include m.button-reset;
     @include m.wp-reset-button;
+    border: 1px solid transparent;
     @include m.truncate;
     display: block;
     width: 100%;
@@ -166,10 +166,11 @@
     text-align: left;
     @include m.text(11, t.$weight-semibold);
     line-height: 16px;
-    transition: transform t.$duration-fast t.$ease;
+    transition: background-color t.$duration t.$ease, color t.$duration-fast t.$ease, border-color t.$duration-fast t.$ease;
 
     &:hover {
-      transform: translateX(1px);
+      background-color: t.$hover-surface;
+      border-color: t.$hover-border;
     }
 
     &:focus-visible {

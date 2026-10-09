@@ -8,7 +8,6 @@ import LogRocket from 'logrocket';
 import Layout from './Components/Layout/Layout.jsx';
 import WordPressNavigation from './Components/Layout/WordPressNavigation.jsx';
 import useCacheRefresh from './hooks/useCacheRefresh';
-import { refreshExpiredRequests } from './utilities/requestCache';
 // Global base for the admin app (tokens, typography, resets).
 // Compiled into build/admin.css, which servv.php enqueues.
 import './styles/base.scss';
@@ -116,17 +115,6 @@ const AppRouter = ( { restAPIAvailable } ) => {
 		if ( changed.includes( 'accounts' ) ) await store.syncAccountsAfterEvents();
 	} );
 
-	useEffect( () => {
-		const refresh = () => {
-			if ( document.visibilityState !== 'hidden' ) refreshExpiredRequests();
-		};
-		window.addEventListener( 'focus', refresh );
-		document.addEventListener( 'visibilitychange', refresh );
-		return () => {
-			window.removeEventListener( 'focus', refresh );
-			document.removeEventListener( 'visibilitychange', refresh );
-		};
-	}, [] );
 
 	useEffect( () => {
 		const initializeData = async () => {

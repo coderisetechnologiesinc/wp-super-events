@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkservv_plugin=self.webpackChunkservv_plugin||[]).push([[521],{2521:(e,s,l)=>{l.r(s),l.d(s,{default:()=>t});var n=l(1609),c=l(5052);const t=()=>{const{pathname:e}=(0,c.zy)();return(0,n.useEffect)((()=>{try{window.scrollTo(0,0)}catch(e){console.log(e)}}),[e]),null}}}]);
+//# sourceMappingURL=521.js.map?ver=131418c5375f753b36a4

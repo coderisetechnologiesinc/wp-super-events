@@ -1,4 +1,4 @@
-import { ClipLoader } from "react-spinners";
+import { BarLoader } from "react-spinners";
 
 const override = {
   display: "block",
@@ -9,7 +9,7 @@ const override = {
 const Spinner = ({ loading, color = "#7319C6" }) => {
   return (
     <div className="svv-sweet-loading">
-      <ClipLoader
+      <BarLoader
         color={color}
         loading={loading}
         cssOverride={override}

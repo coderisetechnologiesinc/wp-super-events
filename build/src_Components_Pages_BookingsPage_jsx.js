@@ -544,8 +544,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-// The page shell from the design reference: a padded frame around a centred
-// 1180px column whose children are spaced 24px apart.
+// A full-size page shell with responsive gutters and 24px content spacing.
 // `className` lands on the column, where the call sites have always put it.
 
 const PageContent = ({
@@ -1552,7 +1551,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var react_spinners__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-spinners */ "./node_modules/react-spinners/esm/ClipLoader.js");
+/* harmony import */ var react_spinners__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-spinners */ "./node_modules/react-spinners/esm/BarLoader.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
 
@@ -1718,12 +1717,8 @@ const BOOKING_COLUMNS = [{
   width: "148px"
 }, {
   value: "paid",
-  label: "Mode",
-  width: "104px"
-}, {
-  value: "status",
-  label: "Status",
-  width: "118px"
+  label: "Payment & status",
+  width: "132px"
 }];
 
 // Three 32px icon buttons with 4px between them.
@@ -1757,33 +1752,71 @@ const BookingRows = ({
   // taken out of the flexible columns — which slides every column after them
   // out of line with its heading.
   const template = [onToggleSelect ? "18px" : null, ...visible.map(column => column.width), ACTIONS_WIDTH].filter(Boolean).join(" ");
+  const hasColumn = value => visible.some(column => column.value === value);
+  const mergeDates = hasColumn("date") && hasColumn("occurrence");
+  const isMergedColumn = column => column.value === "occurrence" && mergeDates;
+  const compactWidths = {
+    order: "minmax(72px, .6fr)",
+    date: mergeDates ? "minmax(180px, 1.1fr)" : "minmax(120px, 1fr)",
+    registrant: "minmax(0, 1.3fr)",
+    title: "minmax(0, 1.4fr)",
+    occurrence: "minmax(120px, 1fr)",
+    paid: "112px",
+    status: "minmax(104px, .8fr)"
+  };
+  const compactTemplate = [onToggleSelect ? "18px" : null, ...visible.filter(column => !isMergedColumn(column)).map(column => compactWidths[column.value]), "68px"].filter(Boolean).join(" ");
   const gridStyle = {
-    "--booking-cols": template
+    "--booking-cols": template,
+    "--booking-compact-cols": compactTemplate
   };
   const renderCell = (column, row) => {
     const ordered = moment_timezone__WEBPACK_IMPORTED_MODULE_1___default()(row.created_datetime).tz(row.timezone);
     const starts = moment_timezone__WEBPACK_IMPORTED_MODULE_1___default()(row.start_datetime).tz(row.timezone);
     switch (column.value) {
       case "order":
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-          className: _BookingRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].strong,
-          children: ["#", row.id]
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+            className: _BookingRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].strong,
+            children: ["#", row.id]
+          })
         });
       case "date":
         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-            className: _BookingRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].strong,
-            children: ordered.format("MMM DD YYYY")
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-            className: _BookingRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].sub,
-            children: ordered.format(timeFormat)
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+            className: mergeDates ? _BookingRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].regularDates : undefined,
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+              className: _BookingRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].strong,
+              children: ordered.format("MMM DD YYYY")
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+              className: _BookingRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].sub,
+              children: ordered.format(timeFormat)
+            })]
+          }), mergeDates && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+            className: _BookingRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].compactDates,
+            children: [["Ordered", ordered], ["Event", starts]].map(([label, date]) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+                className: _BookingRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].dateLabel,
+                children: t(label)
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+                className: _BookingRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].dateLine,
+                title: date.format(`MMM DD YYYY ${timeFormat}`),
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+                  children: date.format("MMM DD YYYY")
+                }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+                  className: _BookingRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].dateTime,
+                  children: date.format(timeFormat)
+                })]
+              })]
+            }, label))
           })]
         });
       case "registrant":
         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-          className: _BookingRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].text,
-          title: row.email,
-          children: row.email
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+            className: _BookingRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].text,
+            title: row.email,
+            children: row.email
+          })
         });
       case "title":
         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
@@ -1802,12 +1835,17 @@ const BookingRows = ({
           })]
         });
       case "paid":
-        return Number(row.price) > 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-          className: _BookingRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].money,
-          children: [Number(row.price), " ", currency?.toUpperCase()]
-        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-          className: _BookingRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].free,
-          children: t("Free")
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          className: _BookingRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].payment,
+          children: [Number(row.price) > 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+            className: _BookingRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].money,
+            children: [Number(row.price), " ", currency?.toUpperCase()]
+          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+            className: _BookingRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].free,
+            children: t("Free")
+          }), renderCell({
+            value: "status"
+          }, row)]
         });
       case "status":
         {
@@ -1829,7 +1867,16 @@ const BookingRows = ({
       className: _BookingRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].head,
       style: gridStyle,
       children: [onToggleSelect && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {}), visible.map(column => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-        children: t(column.label)
+        className: isMergedColumn(column) ? _BookingRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].mergedColumn : undefined,
+        children: column.value === "date" && mergeDates ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.Fragment, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+            className: _BookingRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].regularDates,
+            children: t(column.label)
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+            className: _BookingRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].compactDatesHeading,
+            children: t("Dates")
+          })]
+        }) : t(column.label)
       }, column.value)), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {})]
     }), bookings.map(row => {
       const picked = selectedIds.includes(row.id);
@@ -1844,8 +1891,12 @@ const BookingRows = ({
             ariaLabel: `${t("Select order")} #${row.id}`,
             onChange: () => onToggleSelect(row.id)
           })
-        }), visible.map(column => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-          children: renderCell(column, row)
+        }), visible.map(column => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          className: [_BookingRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].cell, column.value === "title" ? _BookingRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].eventCell : "", isMergedColumn(column) ? _BookingRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].mergedColumn : ""].filter(Boolean).join(" "),
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+            className: _BookingRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].cellLabel,
+            children: t(column.label)
+          }), renderCell(column, row)]
         }, column.value)), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
           className: _BookingRows_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].actions,
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
@@ -1992,7 +2043,21 @@ const BookingsPage = () => {
   const [loading, setLoading] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
   const [timezone, setTimezone] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)("US/Pacific");
   // Lazy initializer reads from localStorage once on mount
-  const [headings, setHeadings] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(() => (0,_utilities_tableHeadings__WEBPACK_IMPORTED_MODULE_5__.loadHeadings)(HEADINGS_STORAGE_KEY, defaultHeadings));
+  const [headings, setHeadings] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(() => {
+    const loaded = (0,_utilities_tableHeadings__WEBPACK_IMPORTED_MODULE_5__.loadHeadings)(HEADINGS_STORAGE_KEY, defaultHeadings);
+    try {
+      const saved = JSON.parse(localStorage.getItem(HEADINGS_STORAGE_KEY) || "null");
+      if (saved && "status" in saved) {
+        const migrated = loaded.map(heading => heading.value === "paid" ? {
+          ...heading,
+          visible: heading.visible || Boolean(saved.status)
+        } : heading);
+        (0,_utilities_tableHeadings__WEBPACK_IMPORTED_MODULE_5__.saveHeadings)(HEADINGS_STORAGE_KEY, migrated);
+        return migrated;
+      }
+    } catch {/* unavailable storage uses the loaded defaults */}
+    return loaded;
+  });
   const timeIntervals = [{
     label: "All time",
     value: "all"
@@ -3817,7 +3882,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 // extracted by mini-css-extract-plugin
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"list":"PkcUGXTq9X4fs_HQgfID","head":"llsbPtumTdgXsVHlbyAA","row":"v7rGz2RRcLLCCzIfjwHC","muted":"i_qC5iGGKtqutGcFqfUJ","picked":"ewxxPxbDhoWfOaeo_33S","pick":"lxWgzuujFNK6Tzg8mIXK","strong":"pHZz5dsNmK3nZbmRRusm","title":"KM1ukraOSMOE54YMt8EA","text":"QJakbZa14NNRoLYrZWSB","sub":"tNGJgEtRbdtmaYiN77Tm","money":"FjGtPwUImqemaK0Yxduf","free":"qrMs4mHSQScBPGutYsJs","status":"kdqMrc4WRgNic_7uaf29","statusActive":"mjlds6JKDGDpjz1hDf1X","statusRefunded":"BVIfoxJxn5tkE3ap3yGF","statusCanceled":"g1V1qqpC0JwaSpW7O8cg","dot":"UftJ3HYwMLjv8vmLoe09","dotActive":"O_HqUTRMvJ9UUFIbCGks","dotRefunded":"MLN33YuqyJcFl7dXuA9A","dotCanceled":"A57InzGiIEHuvCvV8ArF","actions":"cVrAcM8kWRBFXASTFvAr","action":"Q39DG8D3I01AHPlYA5u5","actionDanger":"BEEMzboM0GEJfukQIKjP"});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"list":"PkcUGXTq9X4fs_HQgfID","head":"llsbPtumTdgXsVHlbyAA","row":"v7rGz2RRcLLCCzIfjwHC","muted":"i_qC5iGGKtqutGcFqfUJ","picked":"ewxxPxbDhoWfOaeo_33S","pick":"lxWgzuujFNK6Tzg8mIXK","strong":"pHZz5dsNmK3nZbmRRusm","title":"KM1ukraOSMOE54YMt8EA","text":"QJakbZa14NNRoLYrZWSB","sub":"tNGJgEtRbdtmaYiN77Tm","money":"FjGtPwUImqemaK0Yxduf","free":"qrMs4mHSQScBPGutYsJs","status":"kdqMrc4WRgNic_7uaf29","statusActive":"mjlds6JKDGDpjz1hDf1X","statusRefunded":"BVIfoxJxn5tkE3ap3yGF","statusCanceled":"g1V1qqpC0JwaSpW7O8cg","dot":"UftJ3HYwMLjv8vmLoe09","dotActive":"O_HqUTRMvJ9UUFIbCGks","dotRefunded":"MLN33YuqyJcFl7dXuA9A","dotCanceled":"A57InzGiIEHuvCvV8ArF","actions":"cVrAcM8kWRBFXASTFvAr","action":"Q39DG8D3I01AHPlYA5u5","actionDanger":"BEEMzboM0GEJfukQIKjP","cellLabel":"ruAW6taAyCisZ47twvLM","eventCell":"sxGDfm1txaOoRGiFxyWW","payment":"MTmwICrgk_atVIxYb6GL","compactDates":"_NnvCfEtv8lnv4N2k_S4","compactDatesHeading":"R6T5lkYyl4hbFJppVx5U","mergedColumn":"WbeUaURIoXNw7w2u98yy","regularDates":"ZYLLwkls21s5vBBcx8zW","dateLabel":"Rhlw7HxuEiIw_cz2qrOw","dateLine":"yWoXu3StIvZii6qT304Q","dateTime":"nKzX7zlnzG6GVJ0wW2U3"});
 
 /***/ }),
 
@@ -4027,4 +4092,4 @@ const ForwardRef = /*#__PURE__*/ react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(X
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_BookingsPage_jsx.js.map?ver=0f36b276f2aee190c25a
+//# sourceMappingURL=src_Components_Pages_BookingsPage_jsx.js.map?ver=2767ea6a4276cce8e097

@@ -1,0 +1,42 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+
+$columns: minmax(0, 2fr) minmax(0, 1.8fr) minmax(90px, .8fr) minmax(90px, .8fr) minmax(160px, 1.2fr);
+@include m.scoped {
+  .divider { height: 3px; border-radius: t.$radius-pill; background: t.$surface; box-shadow: t.$shadow-track; }
+  .browser, .list { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+  .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .toolbarTitle { display: flex; align-items: center; gap: 10px; h2 { margin: 0; @include m.text(18, t.$weight-bold); } }
+  .count { padding: 2px 8px; border: 1px solid t.$primary-border; border-radius: t.$radius-pill; background: t.$primary-surface; color: t.$primary-strong; @include m.text(12, t.$weight-semibold); }
+  .controls { display: flex; flex: 1 1 auto; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 10px; min-width: 0; }
+  .search { flex: 0 1 240px; min-width: 0; }
+  .statusFilter { width: 160px; }
+  .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .stat { @include m.card-surface; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px; strong { @include m.text(24, t.$weight-bold); color: t.$primary; } span { @include m.text(12, t.$weight-medium); color: t.$text-soft; } }
+  .head, .row { display: grid; grid-template-columns: $columns; align-items: center; gap: 20px; padding: 0 20px; border: 1px solid transparent; > div { min-width: 0; } }
+  .head { color: t.$text-placeholder; @include m.text(11, t.$weight-extrabold); text-transform: uppercase; letter-spacing: .08em; }
+  .row { padding-top: 18px; padding-bottom: 18px; border-color: t.$border; border-radius: t.$radius-2xl; background: t.$surface; box-shadow: 8px 8px 20px t.$shade, -4px -4px 12px t.$light; @include m.text(13, t.$weight-medium); transition: background-color t.$duration t.$ease, border-color t.$duration-fast t.$ease; &:hover { background: t.$hover-surface; border-color: t.$hover-border; } }
+  .event { display: flex; align-items: center; gap: 12px; }
+  .mark { flex-shrink: 0; width: 36px; height: 36px; display: grid; place-items: center; border-radius: t.$radius-lg; background: t.$primary-surface; color: t.$primary; svg { width: 18px; height: 18px; } }
+  .title { @include m.button-reset; @include m.wp-reset-button; @include m.truncate; min-width: 0; @include m.text(14, t.$weight-bold); color: t.$text; &:hover { color: t.$primary; } &:focus-visible { @include m.focus-ring; } }
+  .recipient { @include m.truncate; color: t.$text-soft; }
+  .provider { display: inline-flex; padding: 3px 8px; border: 1px solid t.$border; border-radius: t.$radius-pill; @include m.text(11, t.$weight-semibold); }
+  .date { color: t.$text-soft; }
+  .loader { min-height: 50vh; }
+  .contentLoader { min-height: 120px; }
+  .metadata { display: flex; align-items: center; gap: 12px; }
+  .emailContent { min-width: 0; overflow: auto; overflow-wrap: anywhere; img { max-width: 100%; height: auto; } }
+  .empty { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 36px; border: 1px solid t.$border; border-radius: t.$radius-2xl; background: t.$surface; box-shadow: t.$shadow-well; text-align: center; > svg { width: 36px; height: 36px; color: t.$primary; } h3, p { margin: 0; } p { color: t.$text-soft; } }
+  @media (max-width: 900px) {
+    .head { display: none; }
+    .row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; > div:not(.event)::before { content: attr(data-label); display: block; margin-bottom: 4px; @include m.text(11, t.$weight-semibold); color: t.$text-placeholder; } }
+    .event, .recipient { grid-column: 1 / -1; }
+    .controls { justify-content: flex-start; width: 100%; }
+    .search { flex: 1 1 200px; }
+  }
+  @media (max-width: 480px) {
+    .stats { gap: 8px; }
+    .stat { padding: 12px; strong { font-size: 20px; } }
+    .date { grid-column: 1 / -1; }
+  }
+}

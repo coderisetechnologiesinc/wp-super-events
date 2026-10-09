@@ -79,9 +79,10 @@ const forgetStore = () => {
 
 let hydrated = false;
 const hydrate = () => {
-  if (hydrated) return;
+  // A disabled installation state must not consume the first storage read.
+  // Once setup finishes, the next enabled request can still hydrate the cache.
+  if (hydrated || !adminCacheEnabled()) return;
   hydrated = true;
-  if (!adminCacheEnabled()) return;
 
   const store = dataStore();
   if (!store) return;
@@ -168,6 +169,16 @@ export const invalidateRequests = (tags) => {
     pendingTags = new Set();
     listeners.forEach((listener) => listener(changed));
   });
+};
+
+// Clear this site's data before a full admin reload. View preferences are kept.
+export const clearRequestCache = () => {
+  hydrate();
+  const tags = new Set([...versions.keys()]);
+  entries.forEach((entry) => entry.tags.forEach((tag) => tags.add(tag)));
+  tags.forEach((tag) => versions.set(tag, (versions.get(tag) || 0) + 1));
+  entries.clear();
+  forgetStore();
 };
 
 export const refreshExpiredRequests = () => {

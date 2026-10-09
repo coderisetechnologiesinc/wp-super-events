@@ -64,15 +64,16 @@
     align-items: flex-start;
     width: 100%;
     padding: t.$space-8 t.$space-9;
-    border: 0;
+    border: 1px solid transparent;
     border-radius: t.$radius-xl;
     background: transparent;
     text-align: left;
     cursor: pointer;
-    transition: background t.$duration-fast t.$ease;
+    transition: background t.$duration-fast t.$ease, color t.$duration-fast t.$ease, border-color t.$duration-fast t.$ease;
 
     &:hover {
-      background: t.$surface-subtle;
+      background: t.$hover-surface;
+      border-color: t.$hover-border;
     }
 
     &:focus-visible {
@@ -240,7 +241,7 @@
     height: 34px;
     border-radius: 11px;
     color: t.$text-soft;
-    transition: background t.$duration t.$ease, box-shadow t.$duration t.$ease;
+    transition: background t.$duration t.$ease, color t.$duration-fast t.$ease, border-color t.$duration-fast t.$ease;
 
     svg {
       width: 16px;
@@ -249,7 +250,6 @@
 
     &:hover {
       background: t.$surface;
-      box-shadow: 4px 4px 10px t.$shade, -2px -2px 7px t.$light;
       color: t.$primary;
     }
   }

@@ -124,14 +124,10 @@
     box-shadow:
       8px 8px 20px t.$shade,
       -4px -4px 12px t.$light;
-    transition:
-      box-shadow t.$duration t.$ease,
-      transform t.$duration t.$ease;
+    transition: background-color t.$duration t.$ease, color t.$duration-fast t.$ease, border-color t.$duration-fast t.$ease;
     &:hover {
-      box-shadow:
-        12px 12px 28px t.$shade-strong,
-        -5px -5px 14px t.$light;
-      transform: translateY(-3px);
+      background-color: t.$hover-surface;
+      border-color: t.$hover-border;
     }
   }
   .picked {
@@ -230,8 +226,8 @@
       height: 16px;
     }
     &:hover {
-      background: t.$surface-subtle;
-      box-shadow: t.$shadow-raised-sm;
+      background: t.$hover-surface;
+      border-color: t.$hover-border;
       color: t.$primary;
     }
     &:focus-visible {

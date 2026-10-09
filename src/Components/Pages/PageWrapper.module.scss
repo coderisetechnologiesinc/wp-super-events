@@ -6,15 +6,17 @@
   .backdrop {
     position: fixed;
     inset: 0;
-    background: #f5f5f5;
+    background: t.$canvas;
   }
 
   .root {
     position: relative;
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: var(--servv-page-width, 100%);
+    height: var(--servv-page-height, 100%);
     min-height: 0;
+    flex: 1 1 auto;
   }
 
   // Pages that do not frame themselves with <PageContent> keep the old gutter.
@@ -37,9 +39,10 @@
 
   .content {
     display: flex;
-    flex: 1 1 0%;
+    flex: 1 1 auto;
     flex-direction: column;
-    width: 100%;
+    width: var(--servv-page-width, 100%);
+    height: var(--servv-page-height, 100%);
     max-width: 100%;
     min-width: 0;
     min-height: 0;

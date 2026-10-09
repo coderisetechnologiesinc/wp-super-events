@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import {
   ArrowTopRightOnSquareIcon,
+  ArrowPathIcon,
   BookOpenIcon,
   ChatBubbleLeftRightIcon,
   CodeBracketIcon,
@@ -11,6 +12,8 @@ import PageContent from "../Containers/PageContent";
 import PageHeader from "../Containers/PageHeader";
 import PageActionButton from "../Controls/PageActionButton";
 import styles from "./PlansSupport.module.scss";
+import { clearRequestCache } from "../../utilities/requestCache";
+import { openIntercomChat } from "../../utilities/intercom";
 
 const links = [
   {
@@ -39,6 +42,13 @@ export default function SupportPage() {
   const report = JSON.stringify(diagnostics, null, 2);
   const [message, setMessage] = useState("");
   const reportField = useRef(null);
+  const [refreshing, setRefreshing] = useState(false);
+  function refreshData() {
+    if (refreshing) return;
+    setRefreshing(true);
+    clearRequestCache();
+    window.location.reload();
+  }
   async function copy() {
     try {
       await navigator.clipboard.writeText(report);
@@ -77,6 +87,34 @@ export default function SupportPage() {
                 </a>
               ))}
             </div>
+            <section className={styles.card}>
+              <h2>Chat with support</h2>
+              <p>Contact our support team through live chat.</p>
+              <div className={styles.reportActions}>
+                <PageActionButton
+                  text="Live Chat"
+                  icon={<ChatBubbleLeftRightIcon />}
+                  size="sm"
+                  onAction={openIntercomChat}
+                />
+              </div>
+            </section>
+            <section className={styles.card}>
+              <h2>Refresh data</h2>
+              <p>
+                Get the latest data for this site. This page will reload;
+                your display preferences will be kept.
+              </p>
+              <div className={styles.reportActions}>
+                <PageActionButton
+                  text={refreshing ? "Refreshing…" : "Refresh data"}
+                  icon={<ArrowPathIcon />}
+                  size="sm"
+                  disabled={refreshing}
+                  onAction={refreshData}
+                />
+              </div>
+            </section>
             <section className={styles.card}>
               <h2>Safe diagnostics</h2>
               <p>

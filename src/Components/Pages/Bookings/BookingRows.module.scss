@@ -6,6 +6,8 @@
 // arrives as an inline style and only the chrome lives here.
 @include m.scoped {
   .list {
+    container-type: inline-size;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     gap: t.$space-6;
@@ -28,6 +30,8 @@
   }
 
   .row {
+    min-width: 0;
+    > div { min-width: 0; }
     display: grid;
     grid-template-columns: var(--booking-cols);
     gap: t.$space-7;
@@ -39,11 +43,11 @@
     background: t.$surface;
     box-shadow: 8px 8px 20px t.$shade, -4px -4px 12px t.$light;
     text-align: left;
-    transition: box-shadow t.$duration t.$ease, transform t.$duration t.$ease;
+    transition: background-color t.$duration t.$ease, color t.$duration-fast t.$ease, border-color t.$duration-fast t.$ease;
 
     &:hover {
-      box-shadow: 12px 12px 28px t.$shade-strong, -5px -5px 14px t.$light;
-      transform: translateY(-3px);
+      background-color: t.$hover-surface;
+      border-color: t.$hover-border;
     }
   }
 
@@ -157,6 +161,7 @@
   // --- Actions --------------------------------------------------------------
 
   .actions {
+    flex-wrap: wrap;
     display: flex;
     justify-content: flex-end;
     gap: t.$space-2;
@@ -165,14 +170,16 @@
   .action {
     @include m.button-reset;
     @include m.wp-reset-button;
+    border: 1px solid transparent;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex: 0 0 32px;
     width: 32px;
     height: 32px;
     border-radius: t.$radius-sm;
     color: t.$text-soft;
-    transition: background t.$duration t.$ease, box-shadow t.$duration t.$ease;
+    transition: background t.$duration t.$ease, color t.$duration-fast t.$ease, border-color t.$duration-fast t.$ease;
 
     svg {
       width: 16px;
@@ -180,8 +187,8 @@
     }
 
     &:hover:not(:disabled) {
-      background: t.$surface-subtle;
-      box-shadow: t.$shadow-raised-sm;
+      background: t.$hover-surface;
+      border-color: t.$hover-border;
       color: t.$primary;
     }
 
@@ -196,20 +203,89 @@
     background: t.$danger-surface;
   }
 
-  // Below the column widths the grid stops being honest: the row becomes a
-  // stacked card and the header is dropped.
-  @media (max-width: 1100px) {
-    .head {
-      display: none;
-    }
+  .cellLabel {
+    display: none;
+  }
 
+  // Switch according to the available list width, including WordPress sidebar.
+  @container (max-width: 1050px) {
+    .head { display: none; }
     .row {
-      grid-template-columns: 18px minmax(0, 1fr) auto;
-      gap: t.$space-5 t.$space-8;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: start;
+      gap: 16px;
+      padding: 18px;
     }
-
+    .cellLabel {
+      display: block;
+      margin-bottom: 6px;
+      @include m.text(11, t.$weight-semibold);
+      color: t.$text-placeholder;
+    }
+    .pick, .actions, .eventCell {
+      grid-column: 1 / -1;
+    }
     .actions {
-      grid-column: 2;
+      justify-content: flex-start;
+      border-top: 1px solid t.$border;
+      padding-top: 12px;
+      gap: 8px;
+    }
+    .action { flex-basis: 44px; width: 44px; height: 44px; }
+    .title, .strong, .text, .sub {
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+    .money, .status { max-width: 100%; height: auto; min-height: 26px; overflow-wrap: anywhere; }
+  }
+
+  @container (max-width: 480px) {
+    .row {
+      grid-template-columns: minmax(0, 1fr);
+      padding: 16px;
     }
   }
+  .payment { display: flex; flex-direction: column; align-items: center; width: max-content; max-width: 100%; gap: 6px; text-align: center; }
+  .compactDates, .compactDatesHeading { display: none; }
+
+  @media (min-width: 1024px) and (max-width: 1280px) {
+    @container (min-width: 600px) {
+      .head, .row {
+        grid-template-columns: var(--booking-compact-cols);
+        gap: 10px;
+        align-items: center;
+      }
+      .head { display: grid; }
+      .row { height: 114px; padding: t.$space-9 t.$space-10; }
+      .pick, .actions, .eventCell { grid-column: auto; }
+      .cellLabel, .mergedColumn { display: none; }
+      .title, .text {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        white-space: normal;
+        overflow: hidden;
+        overflow-wrap: anywhere;
+        text-overflow: ellipsis;
+      }
+      .title { height: 40px; line-height: 20px; }
+      .text { height: 36px; line-height: 18px; }
+      .regularDates { display: none; }
+      .compactDatesHeading { display: inline; }
+      .compactDates { display: flex; flex-direction: column; gap: 8px; height: 76px; }
+      .dateLabel { display: block; @include m.text(11, t.$weight-semibold); line-height: 16px; color: t.$text-placeholder; }
+      .dateLine { @include m.truncate; @include m.text(12, t.$weight-bold); line-height: 18px; }
+      .dateTime { color: t.$text-soft; font-weight: t.$weight-medium; }
+      .actions {
+        display: grid;
+        grid-template-columns: repeat(2, 32px);
+        justify-content: end;
+        border-top: 0;
+        padding-top: 0;
+        gap: t.$space-2;
+      }
+      .action { flex-basis: 32px; width: 32px; height: 32px; }
+    }
+  }
+
 }

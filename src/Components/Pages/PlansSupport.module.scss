@@ -203,9 +203,10 @@
     position: relative;
     display: block;
     text-decoration: none;
-    transition: box-shadow t.$duration t.$ease;
+    transition: background-color t.$duration t.$ease, color t.$duration-fast t.$ease, border-color t.$duration-fast t.$ease;
     &:hover {
-      box-shadow: t.$shadow-raised-sm;
+      background-color: t.$hover-surface;
+      border-color: t.$hover-border;
     }
     &:focus-visible {
       @include m.focus-ring-raised;
@@ -275,6 +276,9 @@
     &:focus-visible {
       @include m.focus-ring-raised;
     }
+  }
+  .card p + .reportActions {
+    margin-top: 16px;
   }
   .reportActions {
     display: flex;

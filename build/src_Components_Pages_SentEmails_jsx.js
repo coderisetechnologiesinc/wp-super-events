@@ -119,62 +119,6 @@ const BadgeImage = ({
 
 /***/ }),
 
-/***/ "./src/Components/Containers/Card.jsx":
-/*!********************************************!*\
-  !*** ./src/Components/Containers/Card.jsx ***!
-  \********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Card_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Card.module.scss */ "./src/Components/Containers/Card.module.scss");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
-
-
-
-const PADDING = {
-  none: _Card_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].padNone,
-  0: _Card_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].padNone,
-  sm: _Card_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].padSm,
-  md: _Card_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].padMd,
-  lg: _Card_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].padLg
-};
-
-// A surface panel. `padding` takes a token name (none | sm | md | lg); the
-// legacy numeric 0 is still accepted. `className` remains a pass-through for
-// layout-only tweaks from the call site.
-const Card = ({
-  className = "",
-  padding = "none",
-  align,
-  maxWidth,
-  variant,
-  // undefined | "well"
-  interactive = false,
-  clip = false,
-  children,
-  ...rest
-}) => {
-  var _PADDING$padding;
-  const classes = [_Card_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].card, (_PADDING$padding = PADDING[padding]) !== null && _PADDING$padding !== void 0 ? _PADDING$padding : _Card_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].padNone, align === "center" ? _Card_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].center : "", clip ? _Card_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].clip : "", interactive ? _Card_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].interactive : "", variant === "well" ? _Card_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].well : "", className].filter(Boolean).join(" ");
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-    ...rest,
-    className: classes,
-    style: {
-      maxWidth: maxWidth || "100%"
-    },
-    children: children
-  });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Card);
-
-/***/ }),
-
 /***/ "./src/Components/Containers/Dropdown.jsx":
 /*!************************************************!*\
   !*** ./src/Components/Containers/Dropdown.jsx ***!
@@ -271,9 +215,9 @@ const Dropdown = ({
 
 /***/ }),
 
-/***/ "./src/Components/Containers/FilterTable.jsx":
+/***/ "./src/Components/Containers/PageContent.jsx":
 /*!***************************************************!*\
-  !*** ./src/Components/Containers/FilterTable.jsx ***!
+  !*** ./src/Components/Containers/PageContent.jsx ***!
   \***************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -283,40 +227,106 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _PageContent_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PageContent.module.scss */ "./src/Components/Containers/PageContent.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
 
 
-const FilterTable = ({
-  headings,
-  rows,
-  loading = false,
+
+// A full-size page shell with responsive gutters and 24px content spacing.
+// `className` lands on the column, where the call sites have always put it.
+
+const PageContent = ({
   className = "",
-  tableClassName = "",
+  maxWidth,
+  flush = false,
+  children,
+  ...rest
+}) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+  className: `${_PageContent_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].shell} ${flush ? _PageContent_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].flush : ""}`.trim(),
+  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+    ...rest,
+    className: `${_PageContent_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].container} ${className}`.trim(),
+    style: maxWidth ? {
+      maxWidth
+    } : undefined,
+    children: children
+  })
+});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PageContent);
+
+/***/ }),
+
+/***/ "./src/Components/Containers/PageHeader.jsx":
+/*!**************************************************!*\
+  !*** ./src/Components/Containers/PageHeader.jsx ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _PageHeader_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PageHeader.module.scss */ "./src/Components/Containers/PageHeader.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+// The page header from the design reference: eyebrow, title, description on the
+// left, actions on the right.
+//
+// Passing `title` renders that structure. Without it the children are laid out
+// in the same row, which is how the existing call sites use the component.
+
+const PageHeader = ({
+  className = "",
+  bottomLine,
+  eyebrow,
+  title,
+  description,
+  actions,
+  children,
   ...rest
 }) => {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-    className: `table-container w-full ${className}`,
+  const classes = [_PageHeader_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].header, bottomLine ? _PageHeader_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].bottomLine : "", className].filter(Boolean).join(" ");
+  if (!title) {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+      ...rest,
+      className: classes,
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+        className: _PageHeader_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].row,
+        children: children
+      })
+    });
+  }
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("header", {
     ...rest,
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("table", {
-      className: `filter-table w-full ${tableClassName}`,
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("thead", {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("tr", {
-          className: "filter-table-headings",
-          children: headings
-        })
-      }), loading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("tbody", {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-          className: loading ? "flex flex-col flex-1 h-full w-full pl-4 md:pl-6 lg:pl-8 pr-4 max-w-full min-w-0 overflow-visible loading" : "",
-          children: rows
-        })
-      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("tbody", {
-        children: rows
+    className: classes,
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      className: _PageHeader_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].row,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        className: _PageHeader_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].text,
+        children: [eyebrow && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+          className: _PageHeader_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].eyebrow,
+          children: eyebrow
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h1", {
+          className: _PageHeader_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].title,
+          children: title
+        }), description && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+          className: _PageHeader_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].description,
+          children: description
+        })]
+      }), actions && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+        className: _PageHeader_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].actions,
+        children: actions
       })]
-    })
+    }), children]
   });
 };
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (FilterTable);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PageHeader);
 
 /***/ }),
 
@@ -992,7 +1002,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var react_spinners__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-spinners */ "./node_modules/react-spinners/esm/ClipLoader.js");
+/* harmony import */ var react_spinners__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-spinners */ "./node_modules/react-spinners/esm/BarLoader.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
 
@@ -1019,6 +1029,88 @@ const Spinner = ({
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Spinner);
+
+/***/ }),
+
+/***/ "./src/Components/Modals/ModalShell.jsx":
+/*!**********************************************!*\
+  !*** ./src/Components/Modals/ModalShell.jsx ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/XMarkIcon.js");
+/* harmony import */ var _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ModalShell.module.scss */ "./src/Components/Modals/ModalShell.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+
+const SIZES = {
+  sm: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].sm,
+  md: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].md,
+  lg: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].lg,
+  xl: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].xl
+};
+
+// The centred dialog from the design reference.
+const ModalShell = ({
+  title,
+  eyebrow,
+  description,
+  footer,
+  size = "lg",
+  // Opt-in: the existing call sites close through their own controls only, so
+  // the default keeps their behaviour unchanged.
+  closeOnOverlay = false,
+  children,
+  onClose
+}) => {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+    className: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].overlay,
+    onClick: closeOnOverlay ? onClose : undefined,
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      className: `${_ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].dialog} ${SIZES[size] || SIZES.lg}`,
+      role: "dialog",
+      "aria-modal": "true",
+      "aria-label": typeof title === "string" ? title : undefined,
+      onClick: e => e.stopPropagation(),
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        className: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].header,
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+          children: [eyebrow && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+            className: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].eyebrow,
+            children: eyebrow
+          }), title && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h2", {
+            className: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].title,
+            children: title
+          }), description && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+            className: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].description,
+            children: description
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+          type: "button",
+          className: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].close,
+          onClick: onClose,
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_3__["default"], {})
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+        className: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].body,
+        children: children
+      }), footer && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+        className: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].footer,
+        children: footer
+      })]
+    })
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ModalShell);
 
 /***/ }),
 
@@ -1094,26 +1186,29 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _hooks_useCacheRefresh__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../hooks/useCacheRefresh */ "./src/hooks/useCacheRefresh.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/ChevronDownIcon.js");
-/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/XMarkIcon.js");
-/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/EnvelopeIcon.js");
+/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/MagnifyingGlassIcon.js");
+/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/EnvelopeIcon.js");
 /* harmony import */ var _PageWrapper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./PageWrapper */ "./src/Components/Pages/PageWrapper.jsx");
-/* harmony import */ var _Containers_FilterTable__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Containers/FilterTable */ "./src/Components/Containers/FilterTable.jsx");
-/* harmony import */ var _Controls_ListPagination__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Controls/ListPagination */ "./src/Components/Controls/ListPagination.jsx");
-/* harmony import */ var _Controls_NewInputFieldControl__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Controls/NewInputFieldControl */ "./src/Components/Controls/NewInputFieldControl.jsx");
-/* harmony import */ var _SpinnerLoader__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./SpinnerLoader */ "./src/Components/Pages/SpinnerLoader.jsx");
-/* harmony import */ var _Containers_Badge__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Containers/Badge */ "./src/Components/Containers/Badge.jsx");
-/* harmony import */ var _Containers_Card__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Containers/Card */ "./src/Components/Containers/Card.jsx");
-/* harmony import */ var _Controls_NewSelectControl__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../Controls/NewSelectControl */ "./src/Components/Controls/NewSelectControl.jsx");
-/* harmony import */ var _utilities_mails__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../utilities/mails */ "./src/utilities/mails.js");
-/* harmony import */ var moment_timezone__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! moment-timezone */ "./node_modules/moment-timezone/index.js");
-/* harmony import */ var moment_timezone__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(moment_timezone__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var _Controls_NewDatePickerControl__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../Controls/NewDatePickerControl */ "./src/Components/Controls/NewDatePickerControl.jsx");
-/* harmony import */ var _Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../Controls/PageActionButton */ "./src/Components/Controls/PageActionButton.jsx");
-/* harmony import */ var _store_useServvStore__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../../store/useServvStore */ "./src/store/useServvStore.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-4WY6JWTD.mjs");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var _Containers_PageContent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Containers/PageContent */ "./src/Components/Containers/PageContent.jsx");
+/* harmony import */ var _Containers_PageHeader__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Containers/PageHeader */ "./src/Components/Containers/PageHeader.jsx");
+/* harmony import */ var _Modals_ModalShell__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Modals/ModalShell */ "./src/Components/Modals/ModalShell.jsx");
+/* harmony import */ var _SentEmails_module_scss__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./SentEmails.module.scss */ "./src/Components/Pages/SentEmails.module.scss");
+/* harmony import */ var _Controls_ListPagination__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Controls/ListPagination */ "./src/Components/Controls/ListPagination.jsx");
+/* harmony import */ var _Controls_NewInputFieldControl__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Controls/NewInputFieldControl */ "./src/Components/Controls/NewInputFieldControl.jsx");
+/* harmony import */ var _SpinnerLoader__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./SpinnerLoader */ "./src/Components/Pages/SpinnerLoader.jsx");
+/* harmony import */ var _Containers_Badge__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../Containers/Badge */ "./src/Components/Containers/Badge.jsx");
+/* harmony import */ var _Controls_NewSelectControl__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../Controls/NewSelectControl */ "./src/Components/Controls/NewSelectControl.jsx");
+/* harmony import */ var _utilities_mails__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../utilities/mails */ "./src/utilities/mails.js");
+/* harmony import */ var moment_timezone__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! moment-timezone */ "./node_modules/moment-timezone/index.js");
+/* harmony import */ var moment_timezone__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(moment_timezone__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var _Controls_NewDatePickerControl__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../Controls/NewDatePickerControl */ "./src/Components/Controls/NewDatePickerControl.jsx");
+/* harmony import */ var _Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../Controls/PageActionButton */ "./src/Components/Controls/PageActionButton.jsx");
+/* harmony import */ var _store_useServvStore__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../../store/useServvStore */ "./src/store/useServvStore.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-4WY6JWTD.mjs");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__);
+
+
 
 
 
@@ -1147,6 +1242,7 @@ const STATUS_OPTIONS = [{
   label: "Pending"
 }];
 const STATUS_COLOR = {
+  accepted: "success",
   sent: "success",
   delivered: "success",
   failed: "critical",
@@ -1155,21 +1251,21 @@ const STATUS_COLOR = {
 };
 const HARD_TZ_DEFAULT = "America/Los_Angeles";
 const getTimezoneFromSettings = settings => {
-  const guessed = moment_timezone__WEBPACK_IMPORTED_MODULE_11___default().tz.guess();
+  const guessed = moment_timezone__WEBPACK_IMPORTED_MODULE_13___default().tz.guess();
   const raw = settings?.settings?.admin_dashboard;
-  if (!raw) return moment_timezone__WEBPACK_IMPORTED_MODULE_11___default().tz.zone(guessed) ? guessed : HARD_TZ_DEFAULT;
+  if (!raw) return moment_timezone__WEBPACK_IMPORTED_MODULE_13___default().tz.zone(guessed) ? guessed : HARD_TZ_DEFAULT;
   try {
     const parsed = typeof raw === "string" ? JSON.parse(raw.trim()) : raw;
     const savedTz = parsed?.default_timezone;
-    if (savedTz && moment_timezone__WEBPACK_IMPORTED_MODULE_11___default().tz.zone(savedTz)) return savedTz;
-    return moment_timezone__WEBPACK_IMPORTED_MODULE_11___default().tz.zone(guessed) ? guessed : HARD_TZ_DEFAULT;
+    if (savedTz && moment_timezone__WEBPACK_IMPORTED_MODULE_13___default().tz.zone(savedTz)) return savedTz;
+    return moment_timezone__WEBPACK_IMPORTED_MODULE_13___default().tz.zone(guessed) ? guessed : HARD_TZ_DEFAULT;
   } catch {
-    return moment_timezone__WEBPACK_IMPORTED_MODULE_11___default().tz.zone(guessed) ? guessed : HARD_TZ_DEFAULT;
+    return moment_timezone__WEBPACK_IMPORTED_MODULE_13___default().tz.zone(guessed) ? guessed : HARD_TZ_DEFAULT;
   }
 };
 const SentEmails = () => {
-  var _stats$last_24_hours, _stats$last_week, _stats$last_month, _selectedEmail$provid, _STATUS_COLOR$selecte, _ref, _ref2, _emailContent$html_co;
-  const settings = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_14__.useServvStore)(s => s.settings);
+  var _ref, _ref2, _emailContent$html_co;
+  const settings = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_16__.useServvStore)(s => s.settings);
   const timezone = (0,react__WEBPACK_IMPORTED_MODULE_1__.useMemo)(() => getTimezoneFromSettings(settings), [settings]);
   const isFreePlan = settings?.current_plan?.id === 1;
   const [loading, setLoading] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
@@ -1190,18 +1286,18 @@ const SentEmails = () => {
   const [status, setStatus] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)("");
   const PAGE_SIZE = 20;
   const initialFetchDone = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(false);
-  const navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_16__.useNavigate)();
+  const navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_18__.useNavigate)();
   const fetchEmails = async (pageNum = 1, overrides = {}) => {
     setLoading(true);
     const q = "search" in overrides ? overrides.search : search;
     const d = "dates" in overrides ? overrides.dates : dates;
     const st = "status" in overrides ? overrides.status : status;
-    const res = await (0,_utilities_mails__WEBPACK_IMPORTED_MODULE_10__.getSentEmails)({
+    const res = await (0,_utilities_mails__WEBPACK_IMPORTED_MODULE_12__.getSentEmails)({
       page: pageNum,
       page_size: PAGE_SIZE,
       q: q || undefined,
-      date_from: d?.startDate ? moment_timezone__WEBPACK_IMPORTED_MODULE_11___default()(d.startDate).format("YYYY-MM-DD") : undefined,
-      date_to: d?.endDate ? moment_timezone__WEBPACK_IMPORTED_MODULE_11___default()(d.endDate).format("YYYY-MM-DD") : undefined,
+      date_from: d?.startDate ? moment_timezone__WEBPACK_IMPORTED_MODULE_13___default()(d.startDate).format("YYYY-MM-DD") : undefined,
+      date_to: d?.endDate ? moment_timezone__WEBPACK_IMPORTED_MODULE_13___default()(d.endDate).format("YYYY-MM-DD") : undefined,
       email_status: st || undefined
     });
     if (res) {
@@ -1246,7 +1342,7 @@ const SentEmails = () => {
     setSelectedEmail(email);
     setEmailContent(null);
     setContentLoading(true);
-    const content = await (0,_utilities_mails__WEBPACK_IMPORTED_MODULE_10__.getEmailContent)({
+    const content = await (0,_utilities_mails__WEBPACK_IMPORTED_MODULE_12__.getEmailContent)({
       id: email.id
     });
     setEmailContent(content);
@@ -1266,219 +1362,153 @@ const SentEmails = () => {
     setPage(next);
     fetchEmails(next);
   };
-  const renderHeadings = () => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("th", {
-      children: "Event"
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("th", {
-      children: "Recipient"
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("th", {
-      children: "Provider"
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("th", {
-      children: "Status"
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("th", {
-      children: "Date"
-    })]
-  });
-  const renderRows = () => emails.map(row => {
-    var _row$provider$toUpper, _STATUS_COLOR$row$sta;
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tr", {
-      className: "table-row",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("a", {
-          className: "filter-table-link",
-          onClick: e => {
-            e.preventDefault();
-            handleOpenEmail(row);
-          },
-          children: row.event_name || `Event #${row.event_id}`
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
-        children: row.to || row.recipient || "—"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Containers_Badge__WEBPACK_IMPORTED_MODULE_7__["default"], {
-          text: (_row$provider$toUpper = row.provider.toUpperCase()) !== null && _row$provider$toUpper !== void 0 ? _row$provider$toUpper : "—",
-          size: "small",
-          align: "center",
-          additionalType: "badge-short"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
-        children: row.status ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Containers_Badge__WEBPACK_IMPORTED_MODULE_7__["default"], {
-          text: row.status?.charAt(0).toUpperCase() + row.status?.slice(1),
-          type: "pill-colour",
-          color: (_STATUS_COLOR$row$sta = STATUS_COLOR[row.status?.toLowerCase()]) !== null && _STATUS_COLOR$row$sta !== void 0 ? _STATUS_COLOR$row$sta : "",
-          size: "small",
-          align: "center",
-          additionalType: "badge-short"
-        }) : "—"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
-        children: row.status_updated_datetime ? moment_timezone__WEBPACK_IMPORTED_MODULE_11___default()(row.status_updated_datetime).tz(timezone).format("MMM DD, YYYY HH:mm") : "—"
-      })]
-    }, row.id);
-  });
-  const renderMobileCards = () => emails.map(row => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-    className: "mobile-event-row flex items-center justify-between px-4 py-3 mb-3 bg-white rounded-xl shadow-sm cursor-pointer",
-    onClick: () => handleOpenEmail(row),
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
-        className: "mobile-event-title font-semibold text-base text-gray-900",
-        children: row.event_name || `Event #${row.event_id}`
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
-        className: "mobile-event-date text-sm text-purple-700",
-        children: row.to || row.recipient || "—"
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_17__["default"], {
-      className: "w-5 h-5 text-gray-400 ml-2 shrink-0"
-    })]
-  }, row.id));
-  const handleOpenTemaplates = () => {
-    navigate("/templates");
-  };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_PageWrapper__WEBPACK_IMPORTED_MODULE_2__["default"], {
-      loading: false,
-      withBackground: true,
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-        className: "dashboard-card",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
-          className: "servv-dashboard-header",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-            className: "dashboard-heading flex flex-row justify-between",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("h1", {
-                className: "dashboard-title",
-                children: "Sent Emails"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("p", {
-                className: "dashboard-description",
-                children: "History of all outgoing email notifications"
-              })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_13__["default"], {
-              type: "primary whitespace-nowrap text-[12px] md:text-[16px]",
-              size: "md"
-              // icon={<PlusIcon className="w-5 h-5" />}
-              ,
-              text: "Templates",
-              onAction: handleOpenTemaplates,
-              disabled: isFreePlan
-            })]
+  const eventName = email => email.event_name || `Event #${email.event_id}`;
+  const providerName = email => email.provider?.toUpperCase() || "—";
+  const statusBadge = email => email.status ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_Containers_Badge__WEBPACK_IMPORTED_MODULE_10__["default"], {
+    text: email.status.charAt(0).toUpperCase() + email.status.slice(1),
+    type: "pill-colour",
+    color: STATUS_COLOR[email.status.toLowerCase()] || "",
+    size: "small",
+    additionalType: "badge-short"
+  }) : "—";
+  const sentDate = email => email.status_updated_datetime ? moment_timezone__WEBPACK_IMPORTED_MODULE_13___default()(email.status_updated_datetime).tz(timezone).format("MMM DD, YYYY HH:mm") : "—";
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_PageWrapper__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      flush: true,
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)(_Containers_PageContent__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_Containers_PageHeader__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          eyebrow: "WP Super Events by ServvAI",
+          title: "Notifications",
+          description: "History of all outgoing email notifications",
+          actions: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_15__["default"], {
+            text: "Templates",
+            onAction: () => navigate("/templates"),
+            disabled: isFreePlan
+          }),
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+            className: _SentEmails_module_scss__WEBPACK_IMPORTED_MODULE_6__["default"].divider
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
-          className: "header-line"
-        }), stats && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-          className: "flex flex-row gap-4 pr-4 py-3 flex-wrap",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-            className: "flex flex-col items-center bg-gray-50 rounded-xl px-5 py-3 min-w-[100px]",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
-              className: "text-2xl font-bold text-purple-700",
-              children: (_stats$last_24_hours = stats.last_24_hours) !== null && _stats$last_24_hours !== void 0 ? _stats$last_24_hours : 0
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
-              className: "text-xs text-gray-500 mt-1",
-              children: "Last 24h"
+        }), stats && !isFreePlan && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+          className: _SentEmails_module_scss__WEBPACK_IMPORTED_MODULE_6__["default"].stats,
+          children: [["Last 24h", stats.last_24_hours], ["Last 7 days", stats.last_week], ["Last 30 days", stats.last_month]].map(([label, value]) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+            className: _SentEmails_module_scss__WEBPACK_IMPORTED_MODULE_6__["default"].stat,
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("strong", {
+              children: value !== null && value !== void 0 ? value : 0
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("span", {
+              children: label
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-            className: "flex flex-col items-center bg-gray-50 rounded-xl px-5 py-3 min-w-[100px]",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
-              className: "text-2xl font-bold text-purple-700",
-              children: (_stats$last_week = stats.last_week) !== null && _stats$last_week !== void 0 ? _stats$last_week : 0
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
-              className: "text-xs text-gray-500 mt-1",
-              children: "Last 7 days"
-            })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-            className: "flex flex-col items-center bg-gray-50 rounded-xl px-5 py-3 min-w-[100px]",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
-              className: "text-2xl font-bold text-purple-700",
-              children: (_stats$last_month = stats.last_month) !== null && _stats$last_month !== void 0 ? _stats$last_month : 0
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
-              className: "text-xs text-gray-500 mt-1",
-              children: "Last 30 days"
-            })]
-          })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_SpinnerLoader__WEBPACK_IMPORTED_MODULE_6__["default"], {
-          isLoading: !settings,
-          customStyling: "h-[50vh]",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(_Containers_Card__WEBPACK_IMPORTED_MODULE_8__["default"], {
-            className: "w-full max-w-none px-0 mt-1",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-              className: "hidden md:flex items-center gap-3 px-4 py-3 flex-wrap",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
-                className: "flex-1 min-w-[180px]",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Controls_NewInputFieldControl__WEBPACK_IMPORTED_MODULE_5__["default"], {
+          }, label))
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+          className: _SentEmails_module_scss__WEBPACK_IMPORTED_MODULE_6__["default"].browser,
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+            className: _SentEmails_module_scss__WEBPACK_IMPORTED_MODULE_6__["default"].toolbar,
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+              className: _SentEmails_module_scss__WEBPACK_IMPORTED_MODULE_6__["default"].toolbarTitle,
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("h2", {
+                children: "All notifications"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("span", {
+                className: _SentEmails_module_scss__WEBPACK_IMPORTED_MODULE_6__["default"].count,
+                children: totalRecords
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+              className: _SentEmails_module_scss__WEBPACK_IMPORTED_MODULE_6__["default"].controls,
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+                className: _SentEmails_module_scss__WEBPACK_IMPORTED_MODULE_6__["default"].search,
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_Controls_NewInputFieldControl__WEBPACK_IMPORTED_MODULE_8__["default"], {
                   value: localSearch,
                   placeholder: "Search by event or recipient",
                   onChange: setLocalSearch,
                   onKeyDown: handleSearchKeyPress,
                   width: "100%",
-                  align: "left",
                   disabled: isFreePlan
                 })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
-                className: "min-w-[265px]",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Controls_NewDatePickerControl__WEBPACK_IMPORTED_MODULE_12__["default"], {
-                  value: dates,
-                  label: "Select dates",
-                  fullWidth: true,
-                  onChange: handleDatesChange,
-                  disabled: isFreePlan
-                })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
-                className: "min-w-[160px]",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Controls_NewSelectControl__WEBPACK_IMPORTED_MODULE_9__["default"], {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_15__["default"], {
+                text: "Search",
+                icon: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_19__["default"], {}),
+                type: "secondary",
+                onAction: handleSearchSubmit,
+                disabled: isFreePlan || loading
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_Controls_NewDatePickerControl__WEBPACK_IMPORTED_MODULE_14__["default"], {
+                value: dates,
+                label: "Select dates",
+                onChange: handleDatesChange,
+                disabled: isFreePlan
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+                className: _SentEmails_module_scss__WEBPACK_IMPORTED_MODULE_6__["default"].statusFilter,
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_Controls_NewSelectControl__WEBPACK_IMPORTED_MODULE_11__["default"], {
                   options: STATUS_OPTIONS,
                   value: status,
                   onChange: handleStatusChange,
-                  iconRight: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_18__["default"], {}),
                   disabled: isFreePlan
                 })
               })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
-              className: "hidden md:block w-full",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(_SpinnerLoader__WEBPACK_IMPORTED_MODULE_6__["default"], {
-                isLoading: loading,
-                customStyling: "h-[50vh]",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Containers_FilterTable__WEBPACK_IMPORTED_MODULE_3__["default"], {
-                  tableClassName: "events-table emails-table",
-                  headings: renderHeadings(),
-                  rows: renderRows()
-                }), !loading && emails.length === 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-                  className: "flex flex-col items-center justify-center py-16 text-gray-400",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_17__["default"], {
-                    className: "w-10 h-10 mb-3"
-                  }), isFreePlan ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("span", {
-                    className: "text-sm text-center",
-                    children: ["Email history is not available on the free plan.", " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("a", {
-                      onClick: e => {
-                        e.preventDefault();
-                        navigate("/settings");
-                      },
-                      href: "/settings",
-                      className: "text-purple-600 hover:underline",
-                      children: "Upgrade your plan"
-                    }), " ", "to view sent emails."]
-                  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
-                    className: "text-sm",
-                    children: "No sent emails found"
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)(_SpinnerLoader__WEBPACK_IMPORTED_MODULE_9__["default"], {
+            isLoading: !settings || loading,
+            customStyling: _SentEmails_module_scss__WEBPACK_IMPORTED_MODULE_6__["default"].loader,
+            children: [emails.length > 0 && !isFreePlan ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+              className: _SentEmails_module_scss__WEBPACK_IMPORTED_MODULE_6__["default"].list,
+              role: "table",
+              "aria-label": "Notifications",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+                className: _SentEmails_module_scss__WEBPACK_IMPORTED_MODULE_6__["default"].head,
+                role: "row",
+                children: ["Event", "Recipient", "Provider", "Status", "Date"].map(label => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+                  role: "columnheader",
+                  children: label
+                }, label))
+              }), emails.map(email => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+                className: _SentEmails_module_scss__WEBPACK_IMPORTED_MODULE_6__["default"].row,
+                role: "row",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+                  className: _SentEmails_module_scss__WEBPACK_IMPORTED_MODULE_6__["default"].event,
+                  role: "cell",
+                  "data-label": "Event",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("span", {
+                    className: _SentEmails_module_scss__WEBPACK_IMPORTED_MODULE_6__["default"].mark,
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_20__["default"], {})
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("button", {
+                    type: "button",
+                    className: _SentEmails_module_scss__WEBPACK_IMPORTED_MODULE_6__["default"].title,
+                    title: eventName(email),
+                    onClick: () => handleOpenEmail(email),
+                    children: eventName(email)
                   })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+                  className: _SentEmails_module_scss__WEBPACK_IMPORTED_MODULE_6__["default"].recipient,
+                  role: "cell",
+                  "data-label": "Recipient",
+                  title: email.to || email.recipient,
+                  children: email.to || email.recipient || "—"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+                  role: "cell",
+                  "data-label": "Provider",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("span", {
+                    className: _SentEmails_module_scss__WEBPACK_IMPORTED_MODULE_6__["default"].provider,
+                    children: providerName(email)
+                  })
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+                  role: "cell",
+                  "data-label": "Status",
+                  children: statusBadge(email)
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+                  className: _SentEmails_module_scss__WEBPACK_IMPORTED_MODULE_6__["default"].date,
+                  role: "cell",
+                  "data-label": "Date",
+                  children: sentDate(email)
                 })]
-              })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
-              className: "mobile-cards-container",
-              children: loading ? null : emails.length === 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-                className: "flex flex-col items-center justify-center py-12 text-gray-400",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_17__["default"], {
-                  className: "w-8 h-8 mb-2"
-                }), isFreePlan ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("span", {
-                  className: "text-sm text-center px-4",
-                  children: ["Email history is not available on the free plan.", " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("a", {
-                    href: "/upgrade",
-                    className: "text-purple-600 hover:underline",
-                    children: "Upgrade your plan"
-                  }), " ", "to view sent emails."]
-                }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
-                  className: "text-sm",
-                  children: "No sent emails found"
-                })]
-              }) : renderMobileCards()
-            }), pageCount > 1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Controls_ListPagination__WEBPACK_IMPORTED_MODULE_4__["default"], {
+              }, email.id))]
+            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+              className: _SentEmails_module_scss__WEBPACK_IMPORTED_MODULE_6__["default"].empty,
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_20__["default"], {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("h3", {
+                children: isFreePlan ? "Email history requires a paid plan" : "No notifications found"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("p", {
+                children: isFreePlan ? "Upgrade your plan to view sent emails." : "Try another search, date range, or status."
+              }), isFreePlan && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_15__["default"], {
+                text: "View plans",
+                onAction: () => navigate("/plans")
+              })]
+            }), !isFreePlan && pageCount > 1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_Controls_ListPagination__WEBPACK_IMPORTED_MODULE_7__["default"], {
               hasPrev: page > 1,
               hasNext: page < pageCount,
               pageNumber: page,
@@ -1488,65 +1518,32 @@ const SentEmails = () => {
               onPrev: handlePrev,
               onNext: handleNext
             })]
-          })
+          })]
         })]
       })
-    }), selectedEmail && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
-      className: "fixed inset-0 z-50 bg-black/40 flex justify-center items-center px-4",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-        className: "bg-white w-full max-w-[720px] rounded-2xl shadow-xl flex flex-col max-h-[90vh]",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-          className: "flex justify-between items-center px-6 py-4 border-b border-gray-100 shrink-0",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("h2", {
-              className: "text-lg font-semibold text-gray-900",
-              children: selectedEmail.subject || selectedEmail.event_name || "Email"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("p", {
-              className: "text-sm text-gray-500 mt-0.5",
-              children: [selectedEmail.to || selectedEmail.recipient || "", selectedEmail.status_updated_datetime && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
-                className: "ml-3 text-gray-400",
-                children: moment_timezone__WEBPACK_IMPORTED_MODULE_11___default()(selectedEmail.status_updated_datetime).tz(timezone).format("MMM DD, YYYY HH:mm")
-              })]
-            })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("button", {
-            onClick: handleCloseModal,
-            className: "p-2 rounded-lg hover:bg-gray-100 transition ml-4 shrink-0",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_19__["default"], {
-              className: "w-5 h-5 text-gray-500"
-            })
-          })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-          className: "flex flex-row gap-3 px-6 py-3 border-b border-gray-100 shrink-0 flex-wrap",
-          children: [selectedEmail.event_name && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("span", {
-            className: "text-sm text-gray-500",
-            children: ["Event: ", selectedEmail.event_name]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Containers_Badge__WEBPACK_IMPORTED_MODULE_7__["default"], {
-            text: (_selectedEmail$provid = selectedEmail.provider) !== null && _selectedEmail$provid !== void 0 ? _selectedEmail$provid : "—",
-            size: "small",
-            additionalType: "badge-short"
-          }), selectedEmail.status && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Containers_Badge__WEBPACK_IMPORTED_MODULE_7__["default"], {
-            text: selectedEmail.status,
-            type: "pill-colour",
-            color: (_STATUS_COLOR$selecte = STATUS_COLOR[selectedEmail.status?.toLowerCase()]) !== null && _STATUS_COLOR$selecte !== void 0 ? _STATUS_COLOR$selecte : "",
-            size: "small",
-            additionalType: "badge-short"
-          })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
-          className: "overflow-y-auto flex-1 px-6 py-4",
-          children: contentLoading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
-            className: "flex items-center justify-center h-32 text-gray-400 text-sm",
-            children: "Loading\u2026"
-          }) : emailContent ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
-            className: "prose max-w-none text-sm",
-            dangerouslySetInnerHTML: {
-              __html: (_ref = (_ref2 = (_emailContent$html_co = emailContent.html_content) !== null && _emailContent$html_co !== void 0 ? _emailContent$html_co : emailContent.content) !== null && _ref2 !== void 0 ? _ref2 : emailContent.body) !== null && _ref !== void 0 ? _ref : "<p>No content available.</p>"
-            }
-          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
-            className: "text-sm text-gray-400 text-center py-8",
-            children: "No content available."
-          })
-        })]
-      })
+    }), selectedEmail && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)(_Modals_ModalShell__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      title: selectedEmail.subject || eventName(selectedEmail),
+      eyebrow: "Notification",
+      description: `${selectedEmail.to || selectedEmail.recipient || ""} · ${sentDate(selectedEmail)}`,
+      onClose: handleCloseModal,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+        className: _SentEmails_module_scss__WEBPACK_IMPORTED_MODULE_6__["default"].metadata,
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("span", {
+          className: _SentEmails_module_scss__WEBPACK_IMPORTED_MODULE_6__["default"].provider,
+          children: providerName(selectedEmail)
+        }), statusBadge(selectedEmail)]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_SpinnerLoader__WEBPACK_IMPORTED_MODULE_9__["default"], {
+        isLoading: contentLoading,
+        customStyling: _SentEmails_module_scss__WEBPACK_IMPORTED_MODULE_6__["default"].contentLoader,
+        children: emailContent ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+          className: _SentEmails_module_scss__WEBPACK_IMPORTED_MODULE_6__["default"].emailContent,
+          dangerouslySetInnerHTML: {
+            __html: (_ref = (_ref2 = (_emailContent$html_co = emailContent.html_content) !== null && _emailContent$html_co !== void 0 ? _emailContent$html_co : emailContent.content) !== null && _ref2 !== void 0 ? _ref2 : emailContent.body) !== null && _ref !== void 0 ? _ref : "<p>No content available.</p>"
+          }
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("p", {
+          children: "No content available."
+        })
+      })]
     })]
   });
 };
@@ -1767,21 +1764,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/Components/Containers/Card.module.scss":
-/*!****************************************************!*\
-  !*** ./src/Components/Containers/Card.module.scss ***!
-  \****************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-// extracted by mini-css-extract-plugin
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"card":"hhz3ZM59zSOVPNGf89Yu","padNone":"SYcTir7cyNYB5U6LGAJm","padSm":"vdFi2W_f9kpfNyQmjpD7","padMd":"zIbRsvjNFogoE1vELCug","padLg":"Xgx0sM20kBOMumHGAfIZ","center":"eOoIxM3ykcegIFT8Ercg","clip":"IjhYVg0BRCz99AqeDBgH","interactive":"zGSV7tXpvxeWlG3XFEIK","well":"uANu_i5X9CswfAF62dKr"});
-
-/***/ }),
-
 /***/ "./src/Components/Containers/Dropdown.module.scss":
 /*!********************************************************!*\
   !*** ./src/Components/Containers/Dropdown.module.scss ***!
@@ -1794,6 +1776,36 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 // extracted by mini-css-extract-plugin
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"root":"Q6YwFze7pNwAmhdBzAGO","menu":"lY9gKiKMaPORXMiAcGOK","surface":"seqzcz7VZqZZnhfbs0wM"});
+
+/***/ }),
+
+/***/ "./src/Components/Containers/PageContent.module.scss":
+/*!***********************************************************!*\
+  !*** ./src/Components/Containers/PageContent.module.scss ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"shell":"hYf27RiwlyFWwm5KClLO","flush":"a6Ch_fJZ7nWrwzrktMXT","container":"t_beMJmTHY9tOuVGYINQ","svRise":"hEL4_Hi3yhmLC95m6Gv9"});
+
+/***/ }),
+
+/***/ "./src/Components/Containers/PageHeader.module.scss":
+/*!**********************************************************!*\
+  !*** ./src/Components/Containers/PageHeader.module.scss ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"header":"UJKBfoKQX0ArollQPz1S","bottomLine":"EPa4Qs8Sg0DGkgQqTqgN","row":"OUo7N4uA10rjSEMICOeL","text":"sgJsCMx9FF0yFMt2kZ3Z","eyebrow":"ktHdDumXPTPovEbmrc1M","title":"yq9VS55_ovalh9J5Nb6w","description":"sj2HMNvNWGjuE5qbOg9r","actions":"PUXWCGzj1cI1x1_j3IoJ"});
 
 /***/ }),
 
@@ -1872,6 +1884,21 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./src/Components/Modals/ModalShell.module.scss":
+/*!******************************************************!*\
+  !*** ./src/Components/Modals/ModalShell.module.scss ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"overlay":"zaqd_YWTGq9h9BrDhnml","svFade":"lQqxKZGLcAKV1Jn8Vt2F","dialog":"XXcDzcz01ytVnY3hpKJj","svPop":"DdditGgnQd2jVs8QrqsH","sm":"HW1Ittu6VG1nOuS1qg32","md":"vJ0FZD6KHZ4i9D5apaFY","lg":"YHKB1jznvv4OseMsi_Az","xl":"Efc0HlnFAqkwM15HiCNa","header":"R3wk4fdBZ02XilBUvvKA","eyebrow":"WERcf127A0gFANECWp8h","title":"iXgumjbKr876OyoPtlx9","description":"MPu8eTML6zZvnQl6CbB4","close":"MV0wlpfgIbnXq6oksmES","body":"EySeA5xUa9n4fl1YJ9vW","footer":"uM3hTqX_1dotCASYgHwQ"});
+
+/***/ }),
+
 /***/ "./src/Components/Pages/PageWrapper.module.scss":
 /*!******************************************************!*\
   !*** ./src/Components/Pages/PageWrapper.module.scss ***!
@@ -1884,6 +1911,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 // extracted by mini-css-extract-plugin
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"backdrop":"GwbBdwO7UxUbci6wtyds","root":"whZeFIc454jkDbuWw6zj","gutterLeft":"nH2l6oxNCJ28ihBOUf7w","gutterRight":"KKg_qLS4gdJXh4u6HnvG","spinner":"Al4EqMTkXH8MiW77lCyS","content":"DhHmGpnbQlurQkapo8Ei"});
+
+/***/ }),
+
+/***/ "./src/Components/Pages/SentEmails.module.scss":
+/*!*****************************************************!*\
+  !*** ./src/Components/Pages/SentEmails.module.scss ***!
+  \*****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"divider":"X5TMzaWcWPL3LHsHTVwk","browser":"wRskmmkYuQLO7wLMeV6z","list":"aU__70iDj7I0mDtMN2yn","toolbar":"FY5Yb8kUmsNOyNILVP7t","toolbarTitle":"AyFLgKp2Q6gXt7OoiLwR","count":"TV9hX0hoAEUk3gzaskel","controls":"GxlIUHo0RlV0IsZzE8fB","search":"pUX5aU29UsdGgSwvhVB8","statusFilter":"nzlq_N4ZPnwBjNKiriut","stats":"muXwfH0PvX8laZvxM4El","stat":"FywjYOo6EQwsdJOi5mZD","head":"XhktE8ojPKDwNlHKqCn0","row":"HjE3Rmrj9mMsMHsnorvt","event":"WBkYNW80PEV6HbtGQd6p","mark":"exMwoEOB74NEeC7FDaVa","title":"UaIQP7eYYQmtvsDWWU51","recipient":"Cwp8VcO90iKGJouisrN_","provider":"M5r82qIKrhlUnr9MvS2o","date":"cSO_pswWKJf8MmgXwHki","loader":"h4pwqsbRulFyDaivZUpy","contentLoader":"x8sfiC4a4HB4OOBVa3Q0","metadata":"AVKBM89SP677ZlPpT7gt","emailContent":"ACg1F9WzW0ZDWdI94cgz","empty":"vmHb6cQO2hEhLF1PDI9u"});
 
 /***/ }),
 
@@ -1978,46 +2020,6 @@ const ForwardRef = /*#__PURE__*/ react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(A
 
 /***/ }),
 
-/***/ "./node_modules/@heroicons/react/24/outline/esm/ChevronDownIcon.js":
-/*!*************************************************************************!*\
-  !*** ./node_modules/@heroicons/react/24/outline/esm/ChevronDownIcon.js ***!
-  \*************************************************************************/
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-
-function ChevronDownIcon({
-  title,
-  titleId,
-  ...props
-}, svgRef) {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("svg", Object.assign({
-    xmlns: "http://www.w3.org/2000/svg",
-    fill: "none",
-    viewBox: "0 0 24 24",
-    strokeWidth: 1.5,
-    stroke: "currentColor",
-    "aria-hidden": "true",
-    "data-slot": "icon",
-    ref: svgRef,
-    "aria-labelledby": titleId
-  }, props), title ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("title", {
-    id: titleId
-  }, title) : null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("path", {
-    strokeLinecap: "round",
-    strokeLinejoin: "round",
-    d: "m19.5 8.25-7.5 7.5-7.5-7.5"
-  }));
-}
-const ForwardRef = /*#__PURE__*/ react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(ChevronDownIcon);
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ForwardRef);
-
-/***/ }),
-
 /***/ "./node_modules/@heroicons/react/24/outline/esm/EnvelopeIcon.js":
 /*!**********************************************************************!*\
   !*** ./node_modules/@heroicons/react/24/outline/esm/EnvelopeIcon.js ***!
@@ -2056,7 +2058,47 @@ function EnvelopeIcon({
 const ForwardRef = /*#__PURE__*/ react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(EnvelopeIcon);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ForwardRef);
 
+/***/ }),
+
+/***/ "./node_modules/@heroicons/react/24/outline/esm/MagnifyingGlassIcon.js":
+/*!*****************************************************************************!*\
+  !*** ./node_modules/@heroicons/react/24/outline/esm/MagnifyingGlassIcon.js ***!
+  \*****************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+
+function MagnifyingGlassIcon({
+  title,
+  titleId,
+  ...props
+}, svgRef) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("svg", Object.assign({
+    xmlns: "http://www.w3.org/2000/svg",
+    fill: "none",
+    viewBox: "0 0 24 24",
+    strokeWidth: 1.5,
+    stroke: "currentColor",
+    "aria-hidden": "true",
+    "data-slot": "icon",
+    ref: svgRef,
+    "aria-labelledby": titleId
+  }, props), title ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("title", {
+    id: titleId
+  }, title) : null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("path", {
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    d: "m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+  }));
+}
+const ForwardRef = /*#__PURE__*/ react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(MagnifyingGlassIcon);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ForwardRef);
+
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_SentEmails_jsx.js.map?ver=b655509f00e1af2fa42a
+//# sourceMappingURL=src_Components_Pages_SentEmails_jsx.js.map?ver=e67694729cb2741573b6

@@ -8,6 +8,60 @@
 @use "tokens" as t;
 @use "mixins" as m;
 
+.wp-admin {
+  --servv-admin-hover-transform: none;
+  --servv-admin-canvas: #e4e9f373;
+  --servv-hover-surface: color-mix(in srgb, #{t.$primary} 8%, white);
+  --servv-hover-border: color-mix(in srgb, #{t.$primary} 60%, white);
+  --servv-canvas: var(--servv-admin-canvas);
+  --servv-page-width: 100%;
+  --servv-page-height: 100%;
+}
+
+.wp-admin:has(#servv-wrap) {
+  #wpcontent {
+    padding-left: 0;
+  }
+
+  #wpbody-content {
+    padding-bottom: 0;
+  }
+
+  #wpfooter {
+    display: none;
+  }
+
+  .wrap.servv-native-admin-wrap {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    width: 100%;
+    min-width: 0;
+    min-height: calc(100vh - var(--wp-admin--admin-bar--height, 32px));
+    min-height: calc(100dvh - var(--wp-admin--admin-bar--height, 32px));
+    background: var(--servv-admin-canvas);
+  }
+
+  @media (max-width: 782px) {
+    .wrap.servv-native-admin-wrap {
+      min-height: calc(100vh - 46px);
+      min-height: calc(100dvh - 46px);
+    }
+  }
+}
+
+.wp-admin #servv-wrap {
+  // The transparent canvas is painted once by the outer page wrapper.
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: var(--servv-page-width);
+  height: var(--servv-page-height);
+  min-width: 0;
+  min-height: 0;
+}
+
 :is(#servv-wrap, .servv-ui) {
   // Exposed as custom properties for the few places that still need to reach
   // tokens from inline styles or third-party widgets (react-select, Quill).
@@ -103,4 +157,14 @@
       transition-duration: 0.01ms !important;
     }
   }
+}
+
+// Legacy controls share the color-only hover timing of the module controls.
+.wp-admin #servv-wrap :is(.sv-crumbs__back, .event-action-btn, .servv-create-form-close) {
+  transition-property: background-color, color, border-color;
+}
+
+.wp-admin #servv-wrap :is(.event-action-btn.view, .event-action-btn.edit):hover {
+  background-color: var(--servv-hover-surface);
+  border-color: var(--servv-hover-border);
 }

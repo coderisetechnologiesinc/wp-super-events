@@ -529,6 +529,21 @@ test("keeps separate stores per site, user and plugin version", async () => {
   window.servvData.cacheScope = "site-a";
 });
 
+test("reads persisted data when installation becomes ready after an early invalidation", async () => {
+  await api.get(url + "shop/settings");
+  await Promise.resolve();
+
+  window.servvData.install_status = "pending";
+  const reloaded = reloadPage();
+  const reloadedCache = require("../src/utilities/requestCache");
+  reloadedCache.invalidateRequests(["events"]);
+  await Promise.resolve();
+
+  window.servvData.install_status = "ok";
+  await reloaded.get(url + "shop/settings");
+  assert.equal(calls.length, 1, "The first enabled read must still hydrate localStorage");
+});
+
 test("never persists while the cache is disabled", async () => {
   window.servvData.install_status = "pending";
   const reloaded = reloadPage();
@@ -557,4 +572,25 @@ test("an integration return refuses the stored accounts until re-read", async ()
     calls.map((config) => config.url),
     [url + "zoom/account", url + "shop/settings", url + "zoom/account"],
   );
+});
+
+
+test("manual refresh clears memory and persisted site data but keeps preferences and other sites", async () => {
+  let reads = 0;
+  const request = {
+    key: "manual-refresh-settings",
+    tags: ["settings"],
+    ttl: 1800000,
+    load: async () => ({ value: ++reads }),
+  };
+  await cache.cachedRequest(request);
+  await Promise.resolve();
+  window.localStorage.setItem("servvUi:eventsView", "rail");
+  window.localStorage.setItem("servv:cache:2:another-site", "other site data");
+  cache.clearRequestCache();
+  await Promise.resolve();
+  assert.equal(window.localStorage.getItem("servv:cache:2:site-a"), null);
+  assert.equal(window.localStorage.getItem("servvUi:eventsView"), "rail");
+  assert.equal(window.localStorage.getItem("servv:cache:2:another-site"), "other site data");
+  assert.deepEqual(await cache.cachedRequest(request), { value: 2 });
 });

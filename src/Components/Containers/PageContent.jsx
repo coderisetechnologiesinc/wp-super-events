@@ -1,8 +1,7 @@
 import React from "react";
 import styles from "./PageContent.module.scss";
 
-// The page shell from the design reference: a padded frame around a centred
-// 1180px column whose children are spaced 24px apart.
+// A full-size page shell with responsive gutters and 24px content spacing.
 // `className` lands on the column, where the call sites have always put it.
 const PageContent = ({
   className = "",

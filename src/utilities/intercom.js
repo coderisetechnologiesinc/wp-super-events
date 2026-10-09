@@ -61,3 +61,14 @@ export const shutdownIntercom = () => {
   if (window.Intercom) window.Intercom("shutdown");
   window.IntercomInjected = false;
 };
+
+// Explicit launcher: queue boot/show while the remote widget is loading.
+export const openIntercomChat = () => {
+  const alreadyInjected = Boolean(window.IntercomInjected);
+  injectIntercom();
+  window.Intercom(alreadyInjected ? "update" : "boot", {
+    ...window.intercomSettings,
+    hide_default_launcher: true,
+  });
+  window.Intercom("show");
+};

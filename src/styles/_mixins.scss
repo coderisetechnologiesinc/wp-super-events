@@ -38,11 +38,10 @@
   line-height: 1.4;
   white-space: nowrap;
   cursor: pointer;
-  transition: box-shadow t.$duration t.$ease, transform t.$duration-fast t.$ease,
-    background t.$duration t.$ease, color t.$duration-fast t.$ease;
+  transition: background t.$duration t.$ease, color t.$duration-fast t.$ease, border-color t.$duration-fast t.$ease;
 
   &:active:not(:disabled) {
-    transform: translateY(1px) scale(0.994);
+    border-color: t.$primary-border-strong;
   }
 
   &:disabled {
@@ -61,8 +60,8 @@
 
   @if $hoverable {
     &:hover:not(:disabled) {
-      box-shadow: t.$shadow-raised-hover;
-      transform: translateY(-1px);
+      background-color: t.$hover-surface;
+      border-color: t.$hover-border;
     }
   }
 }
@@ -70,14 +69,13 @@
 // The brand gradient fill — primary buttons.
 @mixin brand-fill {
   border: 1px solid t.$primary-strong;
-  background: linear-gradient(145deg, t.$primary-grad-from, t.$primary-grad-to);
+  background-color: t.$primary;
   color: t.$text-on-primary;
   box-shadow: t.$shadow-brand;
 
   &:hover:not(:disabled) {
-    box-shadow: t.$shadow-brand-hover;
-    transform: translateY(-1px);
-  }
+      background-color: t.$primary-strong;
+    }
 }
 
 // A toolbar trigger — the date button and the Filters button on a list screen.
@@ -121,7 +119,7 @@
   border-radius: t.$radius-lg;
   background: t.$surface;
   box-shadow: t.$shadow-field;
-  transition: box-shadow t.$duration t.$ease, border-color t.$duration-fast t.$ease;
+  transition: border-color t.$duration-fast t.$ease, background-color t.$duration t.$ease, color t.$duration-fast t.$ease;
 }
 
 // Keyboard focus. Applied to the element that carries the field chrome.

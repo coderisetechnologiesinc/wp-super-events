@@ -61,16 +61,15 @@
     box-shadow: t.$shadow-raised-sm;
     color: t.$text;
     text-align: left;
-    transition: box-shadow t.$duration t.$ease, transform t.$duration-fast t.$ease,
-      background t.$duration t.$ease;
+    transition: background t.$duration t.$ease, color t.$duration-fast t.$ease, border-color t.$duration-fast t.$ease;
 
     & + .opt {
       margin-top: t.$space-4;
     }
 
     &:hover {
-      transform: translateY(-1px);
-      box-shadow: t.$shadow-raised-hover;
+      background-color: t.$hover-surface;
+      border-color: t.$hover-border;
     }
 
     &:focus-visible {
@@ -85,8 +84,8 @@
     transform: none;
 
     &:hover {
-      transform: none;
-      box-shadow: t.$shadow-chip-pressed;
+      background-color: t.$hover-surface;
+      border-color: t.$hover-border;
     }
   }
 
@@ -101,8 +100,7 @@
     border-radius: t.$radius-pill;
     background: t.$surface;
     box-shadow: t.$shadow-field;
-    transition: border-color t.$duration-fast t.$ease,
-      box-shadow t.$duration t.$ease;
+    transition: border-color t.$duration-fast t.$ease, background-color t.$duration t.$ease, color t.$duration-fast t.$ease;
   }
 
   .optActive .mark {

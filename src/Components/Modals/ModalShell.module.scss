@@ -96,11 +96,10 @@
     background: t.$surface;
     color: t.$text-soft;
     box-shadow: t.$shadow-raised-sm;
-    transition: box-shadow t.$duration t.$ease, color t.$duration-fast t.$ease;
+    transition: color t.$duration-fast t.$ease, background-color t.$duration t.$ease, border-color t.$duration-fast t.$ease;
 
     &:hover {
       color: t.$text-strong;
-      box-shadow: t.$shadow-raised;
     }
 
     &:focus-visible {

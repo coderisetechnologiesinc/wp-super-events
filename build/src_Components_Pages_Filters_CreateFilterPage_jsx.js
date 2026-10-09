@@ -115,8 +115,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-// The page shell from the design reference: a padded frame around a centred
-// 1180px column whose children are spaced 24px apart.
+// A full-size page shell with responsive gutters and 24px content spacing.
 // `className` lands on the column, where the call sites have always put it.
 
 const PageContent = ({
@@ -648,7 +647,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var react_spinners__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-spinners */ "./node_modules/react-spinners/esm/ClipLoader.js");
+/* harmony import */ var react_spinners__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-spinners */ "./node_modules/react-spinners/esm/BarLoader.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
 
@@ -1397,17 +1396,8 @@ const FilterFormLayout = ({
         }, {
           label: title
         }]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
-          className: _FilterForm_module_scss__WEBPACK_IMPORTED_MODULE_8__["default"].chips,
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("span", {
-            className: _FilterForm_module_scss__WEBPACK_IMPORTED_MODULE_8__["default"].kindChip,
-            children: [kind && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(kind.Icon, {}), kind?.label || type]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
-            className: _FilterForm_module_scss__WEBPACK_IMPORTED_MODULE_8__["default"].modeChip,
-            children: editing ? "Editing" : "New filter"
-          })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Containers_PageHeader__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Containers_PageHeader__WEBPACK_IMPORTED_MODULE_2__["default"], {
           title: title,
           description: description,
           actions: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.Fragment, {
@@ -1422,7 +1412,7 @@ const FilterFormLayout = ({
               disabled: saveDisabled || loading
             })]
           })
-        })]
+        })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
         className: _FiltersPage_module_scss__WEBPACK_IMPORTED_MODULE_7__["default"].divider
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
@@ -1989,4 +1979,4 @@ const ForwardRef = /*#__PURE__*/ react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(U
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_Filters_CreateFilterPage_jsx.js.map?ver=319f187409d80861cdf9
+//# sourceMappingURL=src_Components_Pages_Filters_CreateFilterPage_jsx.js.map?ver=d85407b48a5fcf20c5a4

@@ -292,8 +292,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-// The page shell from the design reference: a padded frame around a centred
-// 1180px column whose children are spaced 24px apart.
+// A full-size page shell with responsive gutters and 24px content spacing.
 // `className` lands on the column, where the call sites have always put it.
 
 const PageContent = ({
@@ -3841,7 +3840,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var react_spinners__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-spinners */ "./node_modules/react-spinners/esm/ClipLoader.js");
+/* harmony import */ var react_spinners__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-spinners */ "./node_modules/react-spinners/esm/BarLoader.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
 
@@ -5532,4 +5531,4 @@ function validate(uuid) {
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_CreateEvent_UnifiedEventForm_jsx.js.map?ver=ce81931d8e0cb9deda3a
+//# sourceMappingURL=src_Components_CreateEvent_UnifiedEventForm_jsx.js.map?ver=25ef77f7744ce078af02
