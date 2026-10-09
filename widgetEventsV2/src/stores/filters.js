@@ -11,6 +11,7 @@ import {
   isFilterActive,
   resolveDefaultsByName,
 } from "@/api/filters";
+import { rangeFilters } from "@/utilities/dateRanges";
 
 const EMPTY_TYPES = {
   categories: [],
@@ -30,6 +31,7 @@ export const useFiltersStore = defineStore("filters", () => {
   const hideOtherFilters = ref(false);
   const enabledKeys = ref([]);
   const typesLoading = ref(false);
+  const typesLoaded = ref(false);
   const typesError = ref(null);
 
   let changeHandler = null;
@@ -45,6 +47,15 @@ export const useFiltersStore = defineStore("filters", () => {
     hideOtherFilters.value && themeDefaults.value[key] !== undefined;
 
   const activeKeys = computed(() => activeFilterKeys(selected.value));
+  // A date choice of any shape: the calendar picks a single day, the quick
+  // ranges pick a window. Whoever offers to clear it has to see both.
+  const hasDateFilter = computed(() =>
+    Boolean(
+      selected.value.date ||
+        selected.value.startDate ||
+        selected.value.endDate,
+    ),
+  );
   const hasActiveFilters = computed(() => activeKeys.value.length > 0);
   const hasActiveServerFilters = computed(() =>
     SERVER_FILTER_KEYS.some((key) => isFilterActive(selected.value, key)),
@@ -61,8 +72,20 @@ export const useFiltersStore = defineStore("filters", () => {
     ),
   );
 
+  // A filter kind the shop has no values for is a select with nothing but
+  // "All" in it, so it is dropped. Client-side kinds (format, availability)
+  // have no values to fetch and are judged only by what the block enabled.
+  const hasOptions = (key) =>
+    !FILTER_SCHEMA[key]?.typesKey || optionsFor(key).length > 0;
+
+  // Nothing is shown before the types answer: which kinds have values is
+  // unknown until then, and a bar that appears and then loses half its selects
+  // reads as broken. A failed request counts as answered — the type-based
+  // kinds stay hidden, the rest still work.
   const visibleKeys = computed(() =>
-    enabledKeys.value.filter((key) => !isHidden(key)),
+    typesLoaded.value
+      ? enabledKeys.value.filter((key) => !isHidden(key) && hasOptions(key))
+      : [],
   );
 
   const hasFields = computed(() =>
@@ -84,6 +107,10 @@ export const useFiltersStore = defineStore("filters", () => {
   function clear() {
     selected.value = emptyFilters();
     changeHandler?.();
+  }
+
+  function clearDates() {
+    patch(rangeFilters(null));
   }
 
   function applyBlockSettings({ defaults = {}, enabled = [] } = {}) {
@@ -112,6 +139,7 @@ export const useFiltersStore = defineStore("filters", () => {
       typesError.value = e;
     } finally {
       typesLoading.value = false;
+      typesLoaded.value = true;
     }
 
     return eventTypes.value;
@@ -125,17 +153,21 @@ export const useFiltersStore = defineStore("filters", () => {
     enabledKeys,
     visibleKeys,
     typesLoading,
+    typesLoaded,
     typesError,
     activeKeys,
+    hasDateFilter,
     hasActiveFilters,
     hasFields,
     hasActiveServerFilters,
     clientFilters,
     optionsFor,
+    hasOptions,
     isHidden,
     set,
     patch,
     clear,
+    clearDates,
     onChange,
     applyBlockSettings,
     fetchTypes,

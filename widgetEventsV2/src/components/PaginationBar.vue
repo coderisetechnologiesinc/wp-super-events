@@ -31,8 +31,7 @@ const canNext = computed(() => events.page < events.pageCount);
     </template>
 
     <span class="svv-pagination__count">
-      {{ events.totalRecords }}
-      {{ i18n.t("mainWidget.itemsCounterLabel", { fallback: "items" }) }}
+      {{ i18n.itemsCount(events.totalRecords) }}
     </span>
 
     <label v-if="shop.controls.pageSizeSelector" class="svv-pagination__size">

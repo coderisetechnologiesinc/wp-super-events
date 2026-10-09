@@ -16,6 +16,7 @@ import NewSelectControl from "../../Controls/NewSelectControl";
 import { currenciesList } from "../../../utilities/currencies";
 import PageActionButton from "../../Controls/PageActionButton";
 import he from "he";
+import { toast } from "react-toastify";
 const StripeIntegrationsPage = (props) => {
   const [account, setAccount] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -26,41 +27,43 @@ const StripeIntegrationsPage = (props) => {
   const [selectedCurrency, setSelectedCurrency] = useState(null);
   const fetchAccount = async () => {
     const account = await getStripeAccount(servvData.nonce);
-    if (account && account.id) {
-      setAccount(account);
-    }
+    // Always assigned: a disconnected account reads as null, and keeping the
+    // previous one would hide the Connect button.
+    setAccount(account?.id ? account : null);
     setAccountFetched(true);
     const settings = await getStripeSettings(servvData.nonce);
     if (settings) {
       setSelectedCurrency(settings.currency);
     }
   };
+  // Stripe sends the merchant back to wordpress_return_url, so it has to be an
+  // admin screen that still exists: a stale target lands on WordPress's
+  // "not allowed to access this page" wall instead of the integration.
+  const openStripeConnect = (authUrl) => {
+    if (!authUrl) {
+      toast.error("Stripe did not return a connection link. Please try again.");
+      return;
+    }
+    const returnUrl = `${
+      servvData.adminPages?.integrations || window.location.href.split("#")[0]
+    }#/integrations/stripe`;
+    open(
+      `${servvData.shopify_app}/payments/stripe/connect` +
+        `?wordpress_url=${encodeURIComponent(authUrl)}` +
+        `&wordpress_return_url=${encodeURIComponent(returnUrl)}`,
+      "_top",
+    );
+  };
+
   const handleConnectExistingAccount = async (account_id) => {
     const url = await getStripeConnectURL(servvData.nonce, account_id);
-    if (url) {
-      const returnURL = encodeURIComponent(window.location.origin);
-      const connectURL = encodeURIComponent(url.auth_url);
-      setLoading(false);
-
-      open(
-        `${servvData.shopify_app}/payments/stripe/connect?wordpress_url=${connectURL}&wordpress_return_url=${returnURL}`,
-        "_top",
-      );
-    }
+    setLoading(false);
+    openStripeConnect(url?.auth_url);
   };
 
   const connectNewAccount = async () => {
-    const connectUrl = await getStripeConnectURL(servvData.nonce);
-    const returnURL = encodeURIComponent(window.location.origin);
-    const connectURL = encodeURIComponent(connectUrl.auth_url);
-    open(
-      `${
-        servvData.shopify_app
-      }/payments/stripe/connect?wordpress_url=${encodeURIComponent(
-        connectURL,
-      )}&wordpress_return_url=${returnURL}`,
-      "_top",
-    );
+    const url = await getStripeConnectURL(servvData.nonce);
+    openStripeConnect(url?.auth_url);
   };
 
   const renderExistingAccounts = () =>
@@ -82,37 +85,31 @@ const StripeIntegrationsPage = (props) => {
     const existingAccounts = await getDisconnectedStripeAccounts(
       servvData.nonce,
     );
-    // const url = await getStripeConnectURL(servvData.nonce);
-    // setConnectUrl(url.auth_url);
     setLoading(false);
     if (existingAccounts?.length > 0) {
       setConnectedAccounts(existingAccounts);
       setConnectedAccountsFetched(true);
-    } else {
-      setLoading(true);
-      const url = await getStripeConnectURL(servvData.nonce);
-      setConnectUrl(url.auth_url);
-      if (url)
-        open(
-          `${
-            servvData.shopify_app
-          }/stripe/connect?wordpress_url=${encodeURIComponent(
-            url.auth_url,
-          )}&wordpress_return_url=${encodeURIComponent(
-            window.location.origin,
-          )}`,
-          "_top",
-        );
+      return;
     }
+    setLoading(true);
+    const url = await getStripeConnectURL(servvData.nonce);
+    setLoading(false);
+    openStripeConnect(url?.auth_url);
   };
 
   const handleRemoveAccount = async () => {
     setLoading(true);
     const res = await disconnectStripeAccount(servvData.nonce);
-    if (res === 200) {
-      setAccount(null);
-    }
     setLoading(false);
+    if (res !== 200) {
+      toast.error("Unable to disconnect Stripe. Please try again.");
+      return;
+    }
+    setAccount(null);
+    // The account just disconnected joins the reconnectable ones, so the next
+    // Connect press has to ask for that list again.
+    setConnectedAccounts([]);
+    setConnectedAccountsFetched(false);
   };
 
   useEffect(() => {

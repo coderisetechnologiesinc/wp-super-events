@@ -247,6 +247,13 @@
         color: var(--svv-primary-text);
       }
     }
+
+    // Spans the row: it undoes the choices above rather than being one of them.
+    .svv-quick__clear {
+      grid-column: 1 / -1;
+      color: var(--svv-text-muted);
+      font-weight: 650;
+    }
   }
 
   .svv-summary {

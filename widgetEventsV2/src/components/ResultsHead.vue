@@ -20,9 +20,7 @@ const meta = computed(() => {
     return i18n.t("globalWidgetsTranslations.loadingLabel", { fallback: "Loading" });
   }
 
-  return `${events.totalRecords} ${i18n.t("mainWidget.itemsCounterLabel", {
-    fallback: "events",
-  })}`;
+  return i18n.itemsCount(events.totalRecords);
 });
 </script>
 

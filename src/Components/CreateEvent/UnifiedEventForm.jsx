@@ -2,7 +2,13 @@ import React, { useId, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { v4 as uuid } from "uuid";
 import moment from "moment-timezone";
-import { MapPinIcon, VideoCameraIcon } from "@heroicons/react/24/outline";
+import { toast } from "react-toastify";
+import {
+  ArrowUpTrayIcon,
+  MapPinIcon,
+  PhotoIcon,
+  VideoCameraIcon,
+} from "@heroicons/react/24/outline";
 import BreadCrumbs from "../Menu/BreadCrumbs";
 import { useServvStore } from "../../store/useServvStore";
 import PageWrapper from "../Pages/PageWrapper";
@@ -15,6 +21,9 @@ import NewEndDateControl from "./NewEndDateControl";
 import RegistrantsStep from "./RegistrantsStep";
 import useUnifiedEventForm from "./useUnifiedEventForm";
 import { readDefaults, uses24HourClock } from "./eventFormData";
+import { COVER_IMAGE_ACCEPT, readCoverImage } from "./coverImage";
+import CreateFilterModal from "../Pages/Filters/CreateFilterModal";
+import { useFilterLimits } from "../Pages/Filters/useFilterLimits";
 import styles from "./UnifiedEventForm.module.scss";
 
 const Section = ({ step, title, children }) => (
@@ -99,12 +108,25 @@ export default function UnifiedEventForm() {
   const formRef = useRef(null);
   const [editingTicket, setEditingTicket] = useState(null);
   const [imageError, setImageError] = useState("");
+  const [imageName, setImageName] = useState("");
+  const [imageBusy, setImageBusy] = useState(false);
+  const [creatingFilter, setCreatingFilter] = useState(null);
+  const imageInputId = useId();
   const meeting = event.meeting;
+  // image_content holds a freshly picked data URL, sent to the API as base64;
+  // featured_image_url is the cover already attached to the WordPress post.
+  const cover = event.image_content || event.featured_image_url || "";
   const freePlan = Number(settings.current_plan?.id) === 1;
   const recurringAllowed = settings.current_plan?.features?.some(
     (f) => f.title === "Recurring" && String(f.value) === "true",
   );
   const defaults = readDefaults(settings);
+  // A filter kind the plan does not expose, or a store that has used up its
+  // allowance, cannot gain values from here either.
+  const { isLimitReached, filterCategories } = useFilterLimits(
+    settings,
+    filters,
+  );
   const activeTickets = event.tickets.filter((t) => t.action !== "remove");
   const activeTicket = activeTickets.find((t) => t.id === editingTicket);
   const patchMeeting = (update) => patch({ meeting: update });
@@ -128,6 +150,10 @@ export default function UnifiedEventForm() {
     setEditingTicket(ticket.id);
   };
   const publish = () => {
+    if (imageBusy) {
+      toast.warning("Wait for the cover image to finish processing.");
+      return;
+    }
     if (formRef.current?.reportValidity()) save();
   };
   const updateStart = (part, value) => {
@@ -136,20 +162,33 @@ export default function UnifiedEventForm() {
       startTime: part === "date" ? `${value}T${time}` : `${date}T${value}:00`,
     });
   };
-  const readImage = (file) => {
+  // Reading and re-encoding is asynchronous, so publishing stays blocked until
+  // it finishes: otherwise the payload is built without image_content and the
+  // cover is dropped without any error.
+  const readImage = async (file) => {
     if (!file) return;
-    if (!file.type.startsWith("image/") || file.size > 5 * 1024 * 1024) {
-      setImageError("Choose an image smaller than 5 MB.");
-      return;
+    setImageBusy(true);
+    setImageError("");
+    try {
+      patch({ image_content: await readCoverImage(file) });
+      setImageName(file.name);
+    } catch (failure) {
+      setImageError(failure.message || "Unable to read this image.");
+    } finally {
+      setImageBusy(false);
     }
-    const reader = new FileReader();
-    reader.onload = () => {
-      patch({ image_content: reader.result });
-      setImageError("");
-    };
-    reader.onerror = () => setImageError("Unable to read this image.");
-    reader.readAsDataURL(file);
   };
+  // What the chips below do on click, so a value created in the modal ends up
+  // selected the same way.
+  const selectFilterValue = (key, id) =>
+    patch({
+      filters: {
+        [key]:
+          key === "members"
+            ? [...(event.filters.members || []), Number(id)]
+            : Number(id),
+      },
+    });
   const filterCards = [
     ["location_id", "locations", "Location", "Where the event happens"],
     [
@@ -205,7 +244,7 @@ export default function UnifiedEventForm() {
                   text="Save draft"
                   type="secondary"
                   onAction={saveDraft}
-                  disabled={loading || saving || Boolean(error)}
+                  disabled={loading || saving || imageBusy || Boolean(error)}
                 />
               )}
               <PageActionButton
@@ -213,7 +252,7 @@ export default function UnifiedEventForm() {
                   saving ? "Saving…" : isNew ? "Publish event" : "Save changes"
                 }
                 onAction={publish}
-                disabled={loading || saving || Boolean(error)}
+                disabled={loading || saving || imageBusy || Boolean(error)}
               />
             </div>
           </div>
@@ -287,23 +326,66 @@ export default function UnifiedEventForm() {
                       <details className={styles.details}>
                         <summary>Cover image and additional notes</summary>
                         <div className={styles.detailsBody}>
-                          {event.image_content && (
-                            <img
-                              className={styles.cover}
-                              src={event.image_content}
-                              alt="Event cover"
-                            />
-                          )}
-                          <Field label="Cover image">
-                            <input
-                              type="file"
-                              accept="image/*"
-                              onChange={(e) => readImage(e.target.files?.[0])}
-                            />
-                          </Field>
-                          {imageError && (
-                            <small role="alert">{imageError}</small>
-                          )}
+                          <div className={styles.upload}>
+                            {cover ? (
+                              <img
+                                className={styles.cover}
+                                src={cover}
+                                alt="Event cover"
+                              />
+                            ) : (
+                              <div className={styles.coverEmpty}>
+                                <PhotoIcon className={styles.coverEmptyIcon} />
+                                <span>No cover image yet</span>
+                              </div>
+                            )}
+                            <span className={styles.fieldTitle}>
+                              Cover image
+                            </span>
+                            <div className={styles.uploadRow}>
+                              <input
+                                id={imageInputId}
+                                className={styles.fileInput}
+                                type="file"
+                                accept={COVER_IMAGE_ACCEPT}
+                                disabled={imageBusy}
+                                onChange={(e) => {
+                                  readImage(e.target.files?.[0]);
+                                  // Allows re-picking the same file after an
+                                  // error, which fires no change event.
+                                  e.target.value = "";
+                                }}
+                              />
+                              <label
+                                className={`${styles.uploadButton} ${
+                                  imageBusy ? styles.uploadBusy : ""
+                                }`}
+                                htmlFor={imageInputId}
+                                aria-busy={imageBusy}
+                              >
+                                <ArrowUpTrayIcon
+                                  className={styles.uploadIcon}
+                                />
+                                {imageBusy
+                                  ? "Preparing image…"
+                                  : cover
+                                  ? "Replace image"
+                                  : "Upload image"}
+                              </label>
+                              <small className={styles.uploadHint}>
+                                {imageName ||
+                                  "JPG, PNG, GIF or WEBP · resized before upload"}
+                              </small>
+                            </div>
+                            {imageError && (
+                              <small
+                                className={styles.uploadError}
+                                role="alert"
+                              >
+                                {imageError}
+                              </small>
+                            )}
+                          </div>
                           <Field label="Additional note title">
                             <input
                               value={
@@ -468,6 +550,12 @@ export default function UnifiedEventForm() {
                           const disabled =
                             key === "location_id" &&
                             ["custom", "zoom"].includes(event.location);
+                          // useFilterLimits names the kinds in title case.
+                          const planAllows = filterCategories.includes(
+                            list.charAt(0).toUpperCase() + list.slice(1),
+                          );
+                          const canCreate =
+                            planAllows && !isLimitReached && !disabled;
                           return (
                             <div className={styles.filterCard} key={key}>
                               <div>
@@ -520,10 +608,25 @@ export default function UnifiedEventForm() {
                                     </button>
                                   );
                                 })}
+                                {canCreate && (
+                                  <button
+                                    type="button"
+                                    className={`${styles.chip} ${styles.chipAdd}`}
+                                    onClick={() => setCreatingFilter(list)}
+                                  >
+                                    ＋ New
+                                  </button>
+                                )}
                               </div>
                               {!options.length && (
                                 <small>
                                   No {label.toLowerCase()} filters yet.{" "}
+                                  <Link to="/filters">Manage filters</Link>
+                                </small>
+                              )}
+                              {!canCreate && planAllows && isLimitReached && (
+                                <small>
+                                  Your plan's filter allowance is used up.{" "}
                                   <Link to="/filters">Manage filters</Link>
                                 </small>
                               )}
@@ -910,18 +1013,6 @@ export default function UnifiedEventForm() {
                           patchMeeting({ is_hidden: !value })
                         }
                       />
-                      <Toggle
-                        label="Search engines"
-                        note="Indexing follows WordPress site settings"
-                        checked={false}
-                        disabled
-                      />
-                      <Toggle
-                        label="Waiting list"
-                        note="Not available for individual events yet"
-                        checked={false}
-                        disabled
-                      />
                       <div className={styles.divider} />
                       <Toggle
                         label="Confirmation emails"
@@ -989,6 +1080,18 @@ export default function UnifiedEventForm() {
               )}
             </fieldset>
           </form>
+        )}
+        {creatingFilter && (
+          <CreateFilterModal
+            type={creatingFilter}
+            onClose={() => setCreatingFilter(null)}
+            onCreated={(created) => {
+              const key = filterCards.find(
+                ([, list]) => list === creatingFilter,
+              )?.[0];
+              if (key && created?.id) selectFilterValue(key, created.id);
+            }}
+          />
         )}
       </PageContent>
     </PageWrapper>

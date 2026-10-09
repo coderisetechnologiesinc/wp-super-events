@@ -150,9 +150,50 @@ export const ticketPayload = (ticket, timezone) => ({
   ),
 });
 
+// The API takes one recurrence shape per type, and the end condition is either
+// a number of occurrences or an end date — never both. An event loaded for
+// editing can carry leftovers from another variant (its own API response, or a
+// type the user switched away from), so the body is rebuilt from scratch.
+const recurrencePayload = (recurrence, isNew) => {
+  const type = Number(recurrence.type);
+  if (!type) return null;
+  const payload = {
+    type,
+    repeat_interval: Number(recurrence.repeat_interval) || 1,
+  };
+  if (type === 2) {
+    const days = Array.isArray(recurrence.weekly_days)
+      ? recurrence.weekly_days
+      : String(recurrence.weekly_days ?? "")
+          .split(",")
+          .filter(Boolean);
+    // 1 Sunday through 7 Saturday. PHP joins the array for the create call;
+    // the update body reaches the API unchanged.
+    const numbers = days.map(Number).filter(Number.isFinite);
+    payload.weekly_days = isNew ? numbers : numbers.join(",");
+  }
+  if (type === 3) {
+    if (recurrence.monthly_week_day) {
+      payload.monthly_week = Number(recurrence.monthly_week) || 1;
+      payload.monthly_week_day = Number(recurrence.monthly_week_day);
+    } else {
+      payload.monthly_day = Number(recurrence.monthly_day) || 1;
+    }
+  }
+  if (recurrence.end_times) payload.end_times = Number(recurrence.end_times);
+  else if (recurrence.end_date_time)
+    payload.end_date_time = recurrence.end_date_time;
+  return payload;
+};
+
 export const eventPayload = (event, isNew, freePlan) => {
   const { meeting, filters } = event;
   const offline = event.location !== "zoom";
+  // Hosts are ids in the form, but the event endpoint may describe them as
+  // objects. An event that never had hosts sends no attribute at all.
+  const members = Array.isArray(filters.members)
+    ? filters.members.map((m) => Number(m?.id ?? m)).filter(Number.isFinite)
+    : null;
   const type = meeting.recurrence?.type ? (offline ? 2 : 8) : offline ? 1 : 2;
   const payload = {
     meeting: {
@@ -161,28 +202,33 @@ export const eventPayload = (event, isNew, freePlan) => {
       timezone: meeting.timezone,
       duration: Number(meeting.duration),
       recurrence: meeting.recurrence
-        ? {
-            ...meeting.recurrence,
-            weekly_days: isNew
-              ? meeting.recurrence.weekly_days
-              : Array.isArray(meeting.recurrence.weekly_days)
-              ? meeting.recurrence.weekly_days.join(",")
-              : meeting.recurrence.weekly_days,
-          }
+        ? recurrencePayload(meeting.recurrence, isNew)
         : null,
       is_hidden: Boolean(meeting.is_hidden),
       [isNew ? "startTime" : "start_time"]: meeting.startTime,
       [isNew ? "eventType" : "type"]: type,
     },
+    // Only the documented attributes are forwarded: the event endpoint returns
+    // read-only extras next to them (the *_name labels, current_quantity) that
+    // the API must not receive back on update.
     types: {
-      ...filters,
       location_id: ["zoom", "custom"].includes(event.location)
         ? null
         : filters.location_id || null,
+      category_id: filters.category_id || null,
+      language_id: filters.language_id || null,
+      ...(members ? { members } : {}),
     },
     custom_fields: event.custom_fields,
-    notifications: event.notifications,
-    product: { ...event.product },
+    notifications: {
+      google_calendar: Boolean(event.notifications?.google_calendar),
+      disable_emails: Boolean(event.notifications?.disable_emails),
+    },
+    product: {
+      quantity:
+        event.product?.quantity == null ? null : Number(event.product.quantity),
+      price: event.product?.price == null ? null : Number(event.product.price),
+    },
   };
   if (event.image_content?.startsWith("data:image/"))
     payload.image_content = event.image_content.split(",")[1];

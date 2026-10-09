@@ -162,6 +162,27 @@ function servv_attach_existing_media(int $post_id, string $image_url): bool {
 }
 
 
+/**
+ * Attaches a cover to an event post, from either an existing media URL or the
+ * base64 image_content carried by the create and update payloads. Returns an
+ * empty string on success, or the message to report alongside the saved event:
+ * a cover is never worth failing the event itself over.
+ */
+function servv_attach_event_image(int $post_id, string $image_url = '', string $image_content = ''): string {
+    // The admin always uploads the cover as base64 image_content, so it takes
+    // precedence: image_url only attaches media that already exists here.
+    if (!empty($image_content)) {
+        $attachment_id = servv_attach_image_from_base64($post_id, $image_content);
+        return is_wp_error($attachment_id) ? $attachment_id->get_error_message() : '';
+    }
+    if (!empty($image_url)) {
+        return servv_attach_existing_media($post_id, $image_url)
+            ? '' : 'The selected media could not be found in this site\'s media library.';
+    }
+    return '';
+}
+
+
 function servv_attach_image_from_base64(int $post_id, string $imageContent) {
     require_once ABSPATH . 'wp-admin/includes/file.php';
     require_once ABSPATH . 'wp-admin/includes/image.php';

@@ -34,12 +34,32 @@ require.extensions[".js"] = (mod, file) => {
   } else originalLoader(mod, file);
 };
 
+const fakeStorage = () => {
+  const store = new Map();
+  return {
+    getItem: (key) => (store.has(key) ? store.get(key) : null),
+    setItem: (key, value) => store.set(key, String(value)),
+    removeItem: (key) => store.delete(key),
+    clear: () => store.clear(),
+    keys: () => [...store.keys()],
+  };
+};
 global.window = {
   location: {
     href: "https://site.test/wp-admin/admin.php?page=servv#/events",
     origin: "https://site.test",
+    pathname: "/wp-admin/admin.php",
+    search: "?page=servv",
+    hash: "#/events",
   },
-  servvData: { nativeAdmin: true, install_status: "ok", nonce: "session-a" },
+  history: { replaceState: () => {} },
+  servvData: {
+    nativeAdmin: true,
+    install_status: "ok",
+    nonce: "session-a",
+    cacheScope: "site-a",
+  },
+  localStorage: fakeStorage(),
 };
 const axios = require("axios");
 let calls, handler;
@@ -87,9 +107,20 @@ const deferred = () => {
 };
 const url = "/wp-json/servv-plugin/v1/";
 
+// A WordPress admin menu click is a full page load: fresh modules, same tab,
+// same sessionStorage.
+const reloadPage = () => {
+  ["requestCache.js", "adminApi.js", "adminApiFetch.js"].forEach(
+    (name) => delete require.cache[require.resolve(`../src/utilities/${name}`)],
+  );
+  return require("../src/utilities/adminApi").default;
+};
+
 beforeEach(async () => {
   cache.invalidateRequests(allTags);
   await Promise.resolve();
+  window.localStorage.clear();
+  window.location.search = "?page=servv";
   calls = [];
   wpCalls = [];
   handler = async (config) => response(config);
@@ -247,7 +278,12 @@ test("expired entries refetch and focus refresh notifies mounted readers only wh
     await api.get(url + "events/offline");
     await api.get(url + "shop/info");
     assert.equal(calls.length, 3);
-    now += 300000;
+    // Settings live far longer than a list: they only change through this
+    // admin, which invalidates on save.
+    now += cache.resourceTtl("events");
+    await api.get(url + "shop/info");
+    assert.equal(calls.length, 3);
+    now += cache.resourceTtl("settings");
     await api.get(url + "shop/info");
     assert.equal(calls.length, 4);
   } finally {
@@ -453,4 +489,72 @@ test("Axios and WordPress apiFetch reuse the same endpoint cache in both directi
   assert.deepEqual((await api.get(url + "event/13")).data, wpData);
   assert.equal(calls.length, 1);
   assert.equal(wpCalls.length, 1);
+});
+
+test("serves cached data to a later admin page load, tab close included", async () => {
+  await api.get(url + "shop/settings");
+  await api.get(url + "filters/locations");
+  await Promise.resolve();
+  assert.equal(window.localStorage.keys().length, 1);
+  assert.match(window.localStorage.keys()[0], /^servv:cache:2:site-a$/);
+
+  // Another plugin screen, or the admin reopened in a new tab: memory is gone,
+  // the browser store is not.
+  const reloaded = reloadPage();
+  await reloaded.get(url + "shop/settings");
+  await reloaded.get(url + "filters/locations");
+  assert.equal(calls.length, 2);
+
+  // A save still reaches the server and clears what it invalidated.
+  await reloaded.post(url + "shop/settings", { a: 1 });
+  await Promise.resolve();
+  await reloaded.get(url + "shop/settings");
+  assert.equal(calls.length, 4);
+});
+
+test("keeps separate stores per site, user and plugin version", async () => {
+  await api.get(url + "shop/settings");
+  await Promise.resolve();
+
+  // Another WordPress install in the same browser, or the same site opened by
+  // another user: its scope differs, so none of the above is readable.
+  window.servvData.cacheScope = "site-b";
+  const reloaded = reloadPage();
+  await reloaded.get(url + "shop/settings");
+  assert.equal(calls.length, 2);
+  assert.deepEqual(window.localStorage.keys().sort(), [
+    "servv:cache:2:site-a",
+    "servv:cache:2:site-b",
+  ]);
+  window.servvData.cacheScope = "site-a";
+});
+
+test("never persists while the cache is disabled", async () => {
+  window.servvData.install_status = "pending";
+  const reloaded = reloadPage();
+  await reloaded.get(url + "shop/settings");
+  await reloaded.get(url + "shop/settings");
+  await Promise.resolve();
+  assert.equal(calls.length, 2);
+  assert.equal(window.localStorage.keys().length, 0);
+  window.servvData.install_status = "ok";
+});
+
+test("an integration return refuses the stored accounts until re-read", async () => {
+  await api.get(url + "zoom/account");
+  await api.get(url + "shop/settings");
+  await Promise.resolve();
+
+  // The OAuth confirm page redirects with servv_refresh=accounts, because the
+  // connection changed outside this browser.
+  window.location.search = "?page=servv-integrations&servv_refresh=accounts";
+  const reloaded = reloadPage();
+  await reloaded.get(url + "zoom/account");
+  await reloaded.get(url + "shop/settings");
+
+  // Accounts re-read, and only accounts.
+  assert.deepEqual(
+    calls.map((config) => config.url),
+    [url + "zoom/account", url + "shop/settings", url + "zoom/account"],
+  );
 });

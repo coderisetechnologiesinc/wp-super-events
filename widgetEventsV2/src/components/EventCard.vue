@@ -1,9 +1,12 @@
 <script setup>
 import { computed } from "vue";
+import placeholderImage from "../../../public/assets/images/placeholder.png";
 
+import { useRuntimeStore } from "@/api/wordpress";
 import { useFiltersStore } from "@/stores/filters";
 import { useI18nStore } from "@/stores/i18n";
 import { usePreferencesStore } from "@/stores/preferences";
+import { useProductLinksStore } from "@/stores/productLinks";
 import { useShopStore } from "@/stores/shop";
 import {
   formatAvailability,
@@ -26,6 +29,23 @@ const shop = useShopStore();
 const i18n = useI18nStore();
 const preferences = usePreferencesStore();
 const filters = useFiltersStore();
+const productLinks = useProductLinksStore();
+const { runtime } = useRuntimeStore();
+
+// When the shop opens events on their own page, the card links there for real,
+// so the address is visible and the link can be opened in a new tab or copied.
+// Otherwise it stays a button dressed as a link and the drawer handles it.
+const pageHref = computed(() =>
+  shop.openEventPage && !runtime.preview
+    ? productLinks.hrefFor(props.event)
+    : "",
+);
+
+const open = (e) => {
+  if (pageHref.value) return;
+  e.preventDefault();
+  emit("open", props.event);
+};
 
 const nameOf = (key, id) => {
   const wanted = Array.isArray(id) ? id[0] : id;
@@ -95,12 +115,12 @@ const isSoldOut = computed(() => props.event.availability === "sold-out");
 <template>
   <article class="svv-card" :data-availability="event.availability">
     <a
-      v-if="shop.showEventImages && event.image"
+      v-if="shop.showEventImages"
       class="svv-card__media"
-      href="#"
+      :href="pageHref || '#'"
       :aria-label="event.title"
-      :style="{ backgroundImage: `url('${event.image}')` }"
-      @click.prevent="emit('open', event)"
+      :style="{ backgroundImage: `url('${event.image || placeholderImage}')` }"
+      @click="open"
     ></a>
 
     <div class="svv-card__body">
@@ -112,7 +132,7 @@ const isSoldOut = computed(() => props.event.availability === "sold-out");
       </p>
 
       <h3 class="svv-card__title">
-        <a href="#" @click.prevent="emit('open', event)">{{ event.title }}</a>
+        <a :href="pageHref || '#'" @click="open">{{ event.title }}</a>
       </h3>
 
       <ul v-if="shop.card.badges" class="svv-card__badges">

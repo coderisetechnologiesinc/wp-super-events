@@ -552,16 +552,22 @@ function PlansPage() {
           if (!mounted.current) return;
           setShowPaymentForm(false);
           react_toastify__WEBPACK_IMPORTED_MODULE_2__.toast.success("Your billing plan has been successfully activated.");
+          // The wait below is a few seconds of webhook, so the page says so.
+          if (mounted.current) setBusy(true);
           try {
+            // Waits for the activated plan to actually come back, and drops the
+            // cached settings on the way, before the page re-reads the shop.
+            await _store_useServvStore__WEBPACK_IMPORTED_MODULE_5__.useServvStore.getState().syncPlanAfterActivation(id);
             const refreshed = await _utilities_adminApi__WEBPACK_IMPORTED_MODULE_6__["default"].get("/wp-json/servv-plugin/v1/shop/info", {
               headers: {
                 "X-WP-Nonce": window.servvData.nonce
               }
             });
             if (mounted.current) setShop(refreshed.data);
-            await _store_useServvStore__WEBPACK_IMPORTED_MODULE_5__.useServvStore.getState().fetchSettings();
           } catch {
             react_toastify__WEBPACK_IMPORTED_MODULE_2__.toast.error("Plan status could not be refreshed.");
+          } finally {
+            if (mounted.current) setBusy(false);
           }
         }
       });
@@ -1190,4 +1196,4 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_PlansPage_jsx.js.map?ver=ed92ca9912d39f66ad26
+//# sourceMappingURL=src_Components_Pages_PlansPage_jsx.js.map?ver=581b499a91dc461f3d0d

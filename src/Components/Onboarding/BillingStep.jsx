@@ -32,7 +32,7 @@ const BillingStep = ({
   const [showPaymentOptionsModal, setShowPaymentOptionsModal] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [stripeForm, setStripeForm] = useState(null);
-  const { fetchSettings } = useServvStore();
+  const { syncPlanAfterActivation } = useServvStore();
   useEffect(() => {
     getBillingPlans();
   }, []);
@@ -68,7 +68,9 @@ const BillingStep = ({
         toast("Your billing plan has been successfully activated.");
         setShowPaymentForm(false);
         setAttributes({ planActivated: true, planId: id });
-        await fetchSettings();
+        // Not fetchSettings: the plan reaches Servv through a webhook, so it
+        // has to be waited for, past the cached copy.
+        await syncPlanAfterActivation(id);
         setLoading(false);
       };
 

@@ -38,6 +38,11 @@ const detailLoading = ref(false);
 const { api, runtime } = useRuntimeStore();
 let openRequest = 0;
 async function openEvent(event) {
+  // The shop can ask for the event's own page instead of the drawer. Preview
+  // inside the block editor keeps the drawer: there is nowhere to navigate to.
+  if (shop.openEventPage && !runtime.preview && productLinks.goToPage(event))
+    return;
+
   const request = ++openRequest;
   detailError.value = ''; detailLoading.value = true;
   try {

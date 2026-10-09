@@ -7,6 +7,7 @@ import {
   isSuccessfulData,
   mutationResources,
   requestResource,
+  resourceTtl,
 } from "./requestCache";
 
 const api = axios.create();
@@ -41,9 +42,7 @@ api.defaults.adapter = async (config) => {
     const response = await cachedRequest({
       key: `api:${nonce}:${url.href}`,
       tags: [resource],
-      ttl: ["settings", "filters", "billing"].includes(resource)
-        ? 300000
-        : 60000,
+      ttl: resourceTtl(resource),
       load,
       isValid: ({ data, status }) => {
         let parsed = data;

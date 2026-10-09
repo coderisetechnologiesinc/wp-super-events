@@ -177,3 +177,132 @@ test("free plan publishes registration capacity and excludes removed tickets", (
   event.meeting.recurrence = null;
   assert.equal(eventPayload(event, false, false).meeting.recurrence, null);
 });
+
+test("cover image travels as base64 on create and update, stored urls never do", () => {
+  const event = initialEvent({});
+  event.meeting.topic = "Workshop";
+  event.image_content = "data:image/jpeg;base64,YmFzZTY0";
+  assert.equal(eventPayload(event, true, false).image_content, "YmFzZTY0");
+  assert.equal(eventPayload(event, false, false).image_content, "YmFzZTY0");
+  // The cover already attached to the post is read back as its own field. The
+  // payload never carries image_url: the API would attach it as existing media
+  // instead of the base64 the admin always sends.
+  const stored = loadEvent(
+    {
+      meeting: { timezone: "UTC", topic: "Workshop" },
+      featured_image_url: "https://site.test/cover.jpg",
+    },
+    "offline",
+  );
+  stored.meeting.startTime = event.meeting.startTime;
+  stored.image_content = "";
+  assert.equal(stored.featured_image_url, "https://site.test/cover.jpg");
+  for (const isNew of [true, false]) {
+    const payload = eventPayload(stored, isNew, false);
+    assert.equal("image_content" in payload, false);
+    assert.equal("image_url" in payload, false);
+  }
+  // Picking an image only ever fills image_content, on create and on update.
+  stored.image_content = "data:image/png;base64,Zm9v";
+  for (const isNew of [true, false]) {
+    const payload = eventPayload(stored, isNew, false);
+    assert.equal(payload.image_content, "Zm9v");
+    assert.equal("image_url" in payload, false);
+  }
+});
+
+test("payload forwards only the documented attributes", () => {
+  // Shape the event endpoint returns: read-only labels and quantities sit next
+  // to the attributes the API accepts back.
+  const event = loadEvent(
+    {
+      meeting: { timezone: "UTC", topic: "Workshop", duration: 60 },
+      types: {
+        location_id: 4,
+        location_name: "Main hall",
+        category_id: 7,
+        category_name: "Talks",
+        language_id: 2,
+        language_name: "English",
+        members: ["3", 5],
+      },
+      product: { id: 99, price: "19.99", quantity: 20, current_quantity: 12 },
+      notifications: { google_calendar: 1, disable_emails: 0, extra: "x" },
+    },
+    "offline",
+  );
+  event.meeting.startTime = "2026-07-01T10:00:00";
+  const payload = eventPayload(event, false, false);
+  assert.deepEqual(payload.types, {
+    location_id: 4,
+    category_id: 7,
+    language_id: 2,
+    members: [3, 5],
+  });
+  assert.deepEqual(payload.product, { price: 19.99, quantity: 12 });
+  assert.deepEqual(payload.notifications, {
+    google_calendar: true,
+    disable_emails: false,
+  });
+  // Zoom and custom locations have no location attribute.
+  event.location = "zoom";
+  assert.equal(eventPayload(event, false, false).types.location_id, null);
+});
+
+test("recurrence keeps one variant and one end condition", () => {
+  const event = initialEvent({});
+  event.meeting.topic = "Workshop";
+  // Weekly: an array on create, the comma-separated string on update.
+  event.meeting.recurrence = {
+    type: 2,
+    repeat_interval: 2,
+    weekly_days: [2, 4],
+    end_times: 6,
+    monthly_day: 15,
+  };
+  assert.deepEqual(eventPayload(event, true, false).meeting.recurrence, {
+    type: 2,
+    repeat_interval: 2,
+    weekly_days: [2, 4],
+    end_times: 6,
+  });
+  assert.equal(
+    eventPayload(event, false, false).meeting.recurrence.weekly_days,
+    "2,4",
+  );
+  // Monthly by weekday wins over a stale day of the month, and the two end
+  // conditions are never sent together.
+  event.meeting.recurrence = {
+    type: 3,
+    repeat_interval: 1,
+    monthly_day: 15,
+    monthly_week: 2,
+    monthly_week_day: 3,
+    end_times: 4,
+    end_date_time: "2026-07-31T00:00:00Z",
+  };
+  assert.deepEqual(eventPayload(event, true, false).meeting.recurrence, {
+    type: 3,
+    repeat_interval: 1,
+    monthly_week: 2,
+    monthly_week_day: 3,
+    end_times: 4,
+  });
+  delete event.meeting.recurrence.monthly_week_day;
+  delete event.meeting.recurrence.end_times;
+  assert.deepEqual(eventPayload(event, true, false).meeting.recurrence, {
+    type: 3,
+    repeat_interval: 1,
+    monthly_day: 15,
+    end_date_time: "2026-07-31T00:00:00Z",
+  });
+});
+
+test("hosts are sent as ids, and omitted when the event has none", () => {
+  const event = initialEvent({});
+  event.meeting.topic = "Workshop";
+  event.filters = { members: [{ id: "3" }, 5] };
+  assert.deepEqual(eventPayload(event, true, false).types.members, [3, 5]);
+  event.filters = {};
+  assert.equal("members" in eventPayload(event, true, false).types, false);
+});

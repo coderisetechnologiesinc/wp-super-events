@@ -103,10 +103,10 @@ watch([cursor, () => filters.selected], loadMonth);
     </div>
 
     <button
-      v-if="selected"
+      v-if="filters.hasDateFilter"
       type="button"
       class="svv-calendar__clear"
-      @click="filters.set('date', '')"
+      @click="filters.clearDates()"
     >
       {{ i18n.t("mainWidget.clearFiltersLabel", { fallback: "clear" }) }}
     </button>

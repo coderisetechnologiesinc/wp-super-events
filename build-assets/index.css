@@ -4770,10 +4770,6 @@ button.pagination-control:disabled {
   flex-direction: column;
 }
 
-.flex-col-reverse {
-  flex-direction: column-reverse;
-}
-
 .flex-wrap {
   flex-wrap: wrap;
 }
@@ -6574,24 +6570,8 @@ button.pagination-control:disabled {
     flex-direction: row;
   }
 
-  .md\:flex-col {
-    flex-direction: column;
-  }
-
-  .md\:items-center {
-    align-items: center;
-  }
-
-  .md\:gap-4 {
-    gap: 1rem;
-  }
-
   .md\:gap-8 {
     gap: 2rem;
-  }
-
-  .md\:gap-\[4px\] {
-    gap: 4px;
   }
 
   .md\:p-8 {

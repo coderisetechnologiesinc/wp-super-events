@@ -77,6 +77,13 @@
   },
   {
     "type": "checkbox",
+    "id": "open_event_page",
+    "label": "Open the event page instead of the drawer",
+    "default": false,
+    "info": "Clicking an event goes to its WordPress page. The details drawer is not used."
+  },
+  {
+    "type": "checkbox",
     "id": "redirect_to_event_page",
     "label": "Open the event page when booking",
     "default": false

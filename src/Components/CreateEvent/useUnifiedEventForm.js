@@ -77,12 +77,19 @@ export default function useUnifiedEventForm() {
             throw new Error("Invalid occurrence tickets response");
           next.tickets = loadEvent({ ...data, tickets }, next.location).tickets;
         }
-        // An unavailable WordPress media endpoint must not prevent event editing.
-        try {
-          next.image_content = await getFeaturedImage(id);
-        } catch {
-          /* optional cover */
+        // The cover comes from the event endpoint itself: the wp/v2 media route
+        // it used to be read from is hardened or cached away on many hosts, so
+        // a saved image looked lost.
+        if (!next.featured_image_url) {
+          try {
+            next.featured_image_url = (await getFeaturedImage(id)) || "";
+          } catch {
+            /* optional cover */
+          }
         }
+        // Covers are only ever sent to the API as base64 image_content, so the
+        // field holds a freshly picked image and nothing else.
+        next.image_content = "";
         if (active) {
           setEvent(next);
           initialized.current = true;
@@ -199,8 +206,13 @@ export default function useUnifiedEventForm() {
     setSaving(true);
     try {
       const data = eventPayload(event, !id, freePlan);
+      let imageError = "";
       if (!id) {
-        await createEvent(event.location === "zoom" ? "zoom" : "offline", data);
+        const created = await createEvent(
+          event.location === "zoom" ? "zoom" : "offline",
+          data,
+        );
+        imageError = created?.image_error || "";
       } else {
         // Reconcile each completed mutation immediately so retrying a later
         // failure cannot duplicate ticket creation or repeat deletion.
@@ -250,7 +262,8 @@ export default function useUnifiedEventForm() {
             ),
           }));
         }
-        await updateEvent(id, data, occurrence);
+        const updated = await updateEvent(id, data, occurrence);
+        imageError = updated?.image_error || "";
       }
       try {
         sessionStorage.removeItem(draftKey);
@@ -260,6 +273,7 @@ export default function useUnifiedEventForm() {
       toast.success(
         id ? "Event updated successfully." : "Event published successfully.",
       );
+      if (imageError) toast.warning(`Cover image was not saved: ${imageError}`);
       navigate("/events");
     } catch (failure) {
       toast.error(

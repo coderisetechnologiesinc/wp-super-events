@@ -67,6 +67,9 @@ const buildSteps = (state) => [
 
 const SetupGuide = ({ hasEvents = false }) => {
   const settings = useServvStore((s) => s.settings);
+  // Every connection flag below starts out false and is only answered by the
+  // account sync, so this says whether they mean anything yet.
+  const accountsSynced = useServvStore((s) => s.accountsSynced);
   const zoomConnected = useServvStore((s) => s.zoomConnected);
   const stripeConnected = useServvStore((s) => s.stripeConnected);
   const gmailConnected = useServvStore((s) => s.gmailConnected);
@@ -126,9 +129,11 @@ const SetupGuide = ({ hasEvents = false }) => {
     }
   };
 
-  // Nothing to nag about before the settings land, once every step is done, or
-  // after the shop dismissed it.
-  if (!settings || dismissed || !next) return null;
+  // Nothing to nag about before the settings and the account answers land,
+  // once every step is done, or after the shop dismissed it. Rendering while
+  // the connections are still unknown shows a guide whose steps are all open
+  // and then retracts it as the answers arrive.
+  if (!settings || !accountsSynced || dismissed || !next) return null;
 
   return (
     <section className={styles.card}>

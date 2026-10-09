@@ -31,6 +31,7 @@ function servv_get_event_data($request)
     $quantity = !empty($occurrenceId) ? $quantities[$occurrenceId] ?? null : $quantities[0] ?? null;
     $responseBody['product']['current_quantity'] = $quantity;
     $responseBody['wp_post_url'] = get_permalink($postId);
+    $responseBody['featured_image_url'] = get_the_post_thumbnail_url($postId, 'large') ?: '';
     return $responseBody;
 }
 
@@ -162,22 +163,17 @@ function servv_create_event($request)
         return $postId;
     }
 
-    if(!empty($imageUrl)){
-        servv_attach_existing_media($postId, $imageUrl);
-    } else if(!empty($imageContent)) {
-        $attachmentId = servv_attach_image_from_base64($postId, $imageContent);
-        if (is_wp_error($attachmentId)) {
-            wp_delete_post($postId);
-            return $attachmentId;
-        }
-    }
-
     try {
         $resultData = servvCreateEventSendRequest($postId, $postaData['post_title'], $event, $product, $types, $customFields,
             $notifications, $tickets, $eventLocationType);
     } catch (Exception $e) {
         return new WP_Error(400, 'Bad create post api response. '.$e->getMessage(), ['status' => 400]);
     }
+    $imageError = servv_attach_event_image($postId, $imageUrl, $imageContent);
+    if (!empty($imageError)) {
+        $resultData['image_error'] = $imageError;
+    }
+    $resultData['featured_image_url'] = get_the_post_thumbnail_url($postId, 'large') ?: '';
     $resultData['wp_post_id'] = $postId;
     return $resultData;
 }
@@ -199,23 +195,25 @@ function servv_update_event($request)
         $apiRoute .= '?occurrence_id='.$occurrenceId;
     }
     $requestBody = $request->get_json_params();
+    if (empty($requestBody)) {
+        return new WP_Error(400, 'Empty request body. The server may have rejected the request size.',
+            ['status' => 400]);
+    }
     $requestBody['shop_post_object_id'] = (int)$postId;
     $imageUrl = $requestBody['image_url'] ?? '';
     $imageContent = $requestBody['image_content'] ?? '';
-    if(!empty($imageUrl)){
-        servv_attach_existing_media($postId, $imageUrl);
-    } else if(!empty($imageContent)) {
-        $attachmentId = servv_attach_image_from_base64($postId, $imageContent);
-        if (is_wp_error($attachmentId)) {
-            return $attachmentId;
-        }
-    }
     unset($requestBody['image_url'], $requestBody['image_content']);
     try {
         $responseBody = servvSendApiRequest($apiRoute, $requestBody, 'PATCH');
     } catch(\Exception $e) {
         return new WP_Error($e->getCode(), 'Bad api response. '.$e->getMessage(), ['status' => $e->getCode()]);
     }
+    // A rejected cover must not undo an event the API has already updated.
+    $imageError = servv_attach_event_image($postId, $imageUrl, $imageContent);
+    if (!empty($imageError)) {
+        $responseBody['image_error'] = $imageError;
+    }
+    $responseBody['featured_image_url'] = get_the_post_thumbnail_url($postId, 'large') ?: '';
     $product = $requestBody['product'] ?? [];
     $registrants = $requestBody['registrants'] ?? [];
     $quantity = $product['quantity'] !== null ? (int)$product['quantity'] - count($registrants) : null;

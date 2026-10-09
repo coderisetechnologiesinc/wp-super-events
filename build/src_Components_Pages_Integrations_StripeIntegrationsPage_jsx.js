@@ -690,8 +690,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../Controls/PageActionButton */ "./src/Components/Controls/PageActionButton.jsx");
 /* harmony import */ var he__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! he */ "./node_modules/he/he.js");
 /* harmony import */ var he__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(he__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/index.mjs");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__);
+
 
 
 
@@ -710,31 +712,36 @@ const StripeIntegrationsPage = props => {
   const [selectedCurrency, setSelectedCurrency] = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)(null);
   const fetchAccount = async () => {
     const account = await (0,_utilities_stripe__WEBPACK_IMPORTED_MODULE_3__.getStripeAccount)(servvData.nonce);
-    if (account && account.id) {
-      setAccount(account);
-    }
+    // Always assigned: a disconnected account reads as null, and keeping the
+    // previous one would hide the Connect button.
+    setAccount(account?.id ? account : null);
     setAccountFetched(true);
     const settings = await (0,_utilities_stripe__WEBPACK_IMPORTED_MODULE_3__.getStripeSettings)(servvData.nonce);
     if (settings) {
       setSelectedCurrency(settings.currency);
     }
   };
+  // Stripe sends the merchant back to wordpress_return_url, so it has to be an
+  // admin screen that still exists: a stale target lands on WordPress's
+  // "not allowed to access this page" wall instead of the integration.
+  const openStripeConnect = authUrl => {
+    if (!authUrl) {
+      react_toastify__WEBPACK_IMPORTED_MODULE_8__.toast.error("Stripe did not return a connection link. Please try again.");
+      return;
+    }
+    const returnUrl = `${servvData.adminPages?.integrations || window.location.href.split("#")[0]}#/integrations/stripe`;
+    open(`${servvData.shopify_app}/payments/stripe/connect` + `?wordpress_url=${encodeURIComponent(authUrl)}` + `&wordpress_return_url=${encodeURIComponent(returnUrl)}`, "_top");
+  };
   const handleConnectExistingAccount = async account_id => {
     const url = await (0,_utilities_stripe__WEBPACK_IMPORTED_MODULE_3__.getStripeConnectURL)(servvData.nonce, account_id);
-    if (url) {
-      const returnURL = encodeURIComponent(window.location.origin);
-      const connectURL = encodeURIComponent(url.auth_url);
-      setLoading(false);
-      open(`${servvData.shopify_app}/payments/stripe/connect?wordpress_url=${connectURL}&wordpress_return_url=${returnURL}`, "_top");
-    }
+    setLoading(false);
+    openStripeConnect(url?.auth_url);
   };
   const connectNewAccount = async () => {
-    const connectUrl = await (0,_utilities_stripe__WEBPACK_IMPORTED_MODULE_3__.getStripeConnectURL)(servvData.nonce);
-    const returnURL = encodeURIComponent(window.location.origin);
-    const connectURL = encodeURIComponent(connectUrl.auth_url);
-    open(`${servvData.shopify_app}/payments/stripe/connect?wordpress_url=${encodeURIComponent(connectURL)}&wordpress_return_url=${returnURL}`, "_top");
+    const url = await (0,_utilities_stripe__WEBPACK_IMPORTED_MODULE_3__.getStripeConnectURL)(servvData.nonce);
+    openStripeConnect(url?.auth_url);
   };
-  const renderExistingAccounts = () => connectedAccounts.map(existing => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
+  const renderExistingAccounts = () => connectedAccounts.map(existing => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("button", {
     type: "button",
     className: _IntegrationLayout_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].existingAccount,
     onClick: () => handleConnectExistingAccount(existing.account_id),
@@ -743,26 +750,30 @@ const StripeIntegrationsPage = props => {
   const handleGetConnectURL = async () => {
     setLoading(true);
     const existingAccounts = await (0,_utilities_stripe__WEBPACK_IMPORTED_MODULE_3__.getDisconnectedStripeAccounts)(servvData.nonce);
-    // const url = await getStripeConnectURL(servvData.nonce);
-    // setConnectUrl(url.auth_url);
     setLoading(false);
     if (existingAccounts?.length > 0) {
       setConnectedAccounts(existingAccounts);
       setConnectedAccountsFetched(true);
-    } else {
-      setLoading(true);
-      const url = await (0,_utilities_stripe__WEBPACK_IMPORTED_MODULE_3__.getStripeConnectURL)(servvData.nonce);
-      setConnectUrl(url.auth_url);
-      if (url) open(`${servvData.shopify_app}/stripe/connect?wordpress_url=${encodeURIComponent(url.auth_url)}&wordpress_return_url=${encodeURIComponent(window.location.origin)}`, "_top");
+      return;
     }
+    setLoading(true);
+    const url = await (0,_utilities_stripe__WEBPACK_IMPORTED_MODULE_3__.getStripeConnectURL)(servvData.nonce);
+    setLoading(false);
+    openStripeConnect(url?.auth_url);
   };
   const handleRemoveAccount = async () => {
     setLoading(true);
     const res = await (0,_utilities_stripe__WEBPACK_IMPORTED_MODULE_3__.disconnectStripeAccount)(servvData.nonce);
-    if (res === 200) {
-      setAccount(null);
-    }
     setLoading(false);
+    if (res !== 200) {
+      react_toastify__WEBPACK_IMPORTED_MODULE_8__.toast.error("Unable to disconnect Stripe. Please try again.");
+      return;
+    }
+    setAccount(null);
+    // The account just disconnected joins the reconnectable ones, so the next
+    // Connect press has to ask for that list again.
+    setConnectedAccounts([]);
+    setConnectedAccountsFetched(false);
   };
   (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
     fetchAccount();
@@ -779,7 +790,7 @@ const StripeIntegrationsPage = props => {
         return currency.abbreviation + " - " + he__WEBPACK_IMPORTED_MODULE_7___default().decode(sequence);
       });
     }
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Controls_NewSelectControl__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Controls_NewSelectControl__WEBPACK_IMPORTED_MODULE_4__["default"], {
       options: currencies.map(currency => ({
         value: currency,
         label: currency
@@ -796,7 +807,7 @@ const StripeIntegrationsPage = props => {
     }
   };
   const incomplete = account && !account.charges_enabled;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(_IntegrationLayout__WEBPACK_IMPORTED_MODULE_0__["default"], {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(_IntegrationLayout__WEBPACK_IMPORTED_MODULE_0__["default"], {
     title: "Stripe",
     glyph: "S",
     description: "Accept paid registrations and manage payout settings.",
@@ -804,36 +815,36 @@ const StripeIntegrationsPage = props => {
     status: !isAccountFetched ? "Loading…" : incomplete ? "Connection incomplete" : undefined,
     accountLabel: account?.email,
     loading: loading,
-    actions: isAccountFetched && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {
-      children: [!account && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    actions: isAccountFetched && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.Fragment, {
+      children: [!account && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_6__["default"], {
         text: connectedAccountsFetched && connectedAccounts.length > 0 ? "Connect new account" : "Connect",
         onAction: connectedAccountsFetched && connectedAccounts.length > 0 ? connectNewAccount : handleGetConnectURL
-      }), incomplete && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      }), incomplete && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_6__["default"], {
         text: "Resume integration",
         onAction: () => handleConnectExistingAccount(account.account_id)
-      }), account && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      }), account && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_6__["default"], {
         text: "Disconnect",
         type: "danger-secondary",
         onAction: handleRemoveAccount
       })]
     }),
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_IntegrationLayout__WEBPACK_IMPORTED_MODULE_0__.IntegrationSection, {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_IntegrationLayout__WEBPACK_IMPORTED_MODULE_0__.IntegrationSection, {
       title: "Account",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_IntegrationLayout__WEBPACK_IMPORTED_MODULE_0__.IntegrationAccount, {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_IntegrationLayout__WEBPACK_IMPORTED_MODULE_0__.IntegrationAccount, {
         label: account?.email,
         status: incomplete ? "Connection incomplete" : "Connected"
       })
-    }), connectedAccountsFetched && connectedAccounts.length > 0 && !account && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_IntegrationLayout__WEBPACK_IMPORTED_MODULE_0__.IntegrationSection, {
+    }), connectedAccountsFetched && connectedAccounts.length > 0 && !account && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_IntegrationLayout__WEBPACK_IMPORTED_MODULE_0__.IntegrationSection, {
       title: "Connect existing account",
       children: renderExistingAccounts()
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_IntegrationLayout__WEBPACK_IMPORTED_MODULE_0__.IntegrationSection, {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_IntegrationLayout__WEBPACK_IMPORTED_MODULE_0__.IntegrationSection, {
       title: "Currency",
       description: "The currency used for paid registrations.",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
         className: _IntegrationLayout_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].row,
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
           children: currencySelect()
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_6__["default"], {
           text: "Save",
           disabled: !selectedCurrency || loading,
           onAction: handleCurrencySave
@@ -1625,4 +1636,4 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_Integrations_StripeIntegrationsPage_jsx.js.map?ver=d7f2b981586c4260858e
+//# sourceMappingURL=src_Components_Pages_Integrations_StripeIntegrationsPage_jsx.js.map?ver=ff49cff84d5c5d3b16dc

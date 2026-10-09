@@ -1,5 +1,6 @@
 <script setup>
 import { computed, ref, watch } from "vue";
+import placeholderImage from "../../../public/assets/images/placeholder.png";
 
 import AddToCalendar from "@/components/AddToCalendar.vue";
 import BookingSteps from "@/components/BookingSteps.vue";
@@ -200,9 +201,9 @@ watch(
         <template v-if="inBooking">
           <div class="svv-drawer__summary">
             <img
-              v-if="event.image"
+              v-if="shop.showEventImages"
               class="svv-drawer__summary-image"
-              :src="event.image"
+              :src="event.image || placeholderImage"
               :alt="event.title"
             />
             <div class="svv-drawer__summary-text">
@@ -220,9 +221,9 @@ watch(
 
         <template v-else>
           <img
-            v-if="event.image"
+            v-if="shop.showEventImages"
             class="svv-drawer__hero"
-            :src="event.image"
+            :src="event.image || placeholderImage"
             :alt="event.title"
           />
 

@@ -79,15 +79,21 @@ export default function PlansPage() {
           if (!mounted.current) return;
           setShowPaymentForm(false);
           toast.success("Your billing plan has been successfully activated.");
+          // The wait below is a few seconds of webhook, so the page says so.
+          if (mounted.current) setBusy(true);
           try {
+            // Waits for the activated plan to actually come back, and drops the
+            // cached settings on the way, before the page re-reads the shop.
+            await useServvStore.getState().syncPlanAfterActivation(id);
             const refreshed = await axios.get(
               "/wp-json/servv-plugin/v1/shop/info",
               { headers: { "X-WP-Nonce": window.servvData.nonce } },
             );
             if (mounted.current) setShop(refreshed.data);
-            await useServvStore.getState().fetchSettings();
           } catch {
             toast.error("Plan status could not be refreshed.");
+          } finally {
+            if (mounted.current) setBusy(false);
           }
         },
       });

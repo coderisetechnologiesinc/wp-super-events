@@ -20,8 +20,8 @@ const NewRecurringControl = ({ recurrence, onChange }) => {
   const [monthlyType, setMonthlyType] = useState(!monthly_week_day);
 
   useEffect(() => {
-    if (monthly_week_day) setMonthlyType(false);
-  }, [monthly_week_day]);
+    if (recurrence.monthly_week_day) setMonthlyType(false);
+  }, [recurrence.monthly_week_day]);
 
   /* ---------------------------
      Recurrence type
@@ -50,6 +50,10 @@ const NewRecurringControl = ({ recurrence, onChange }) => {
 
     if (val === 3) {
       delete next.weekly_days;
+      if (!next.monthly_day && !next.monthly_week_day) {
+        next.monthly_week = Number(monthly_week) || 1;
+        next.monthly_week_day = Number(monthly_week_day) || 1;
+      }
     }
 
     onChange(next);
@@ -101,11 +105,11 @@ const NewRecurringControl = ({ recurrence, onChange }) => {
   }));
 
   const monthlyWeekOptions = ["First", "Second", "Third", "Fourth", "Last"].map(
-    (v, i) => ({ value: i + 1, label: v })
+    (v, i) => ({ value: i + 1, label: v }),
   );
 
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
-    (d, i) => ({ value: i + 1, label: d })
+    (d, i) => ({ value: i + 1, label: d }),
   );
 
   /* ---------------------------
@@ -208,7 +212,21 @@ const NewRecurringControl = ({ recurrence, onChange }) => {
             <RadioGroup
               name="monthly-type"
               value={monthlyType ? "day" : "week"}
-              onChange={(v) => setMonthlyType(v === "day")}
+              onChange={(v) => {
+                const byDay = v === "day";
+                setMonthlyType(byDay);
+                const next = { ...recurrence };
+                if (byDay) {
+                  delete next.monthly_week;
+                  delete next.monthly_week_day;
+                  next.monthly_day = Number(monthly_day) || 1;
+                } else {
+                  delete next.monthly_day;
+                  next.monthly_week = Number(monthly_week) || 1;
+                  next.monthly_week_day = Number(monthly_week_day) || 1;
+                }
+                onChange(next);
+              }}
               options={[
                 { value: "day", label: "Day of month" },
                 { value: "week", label: "Day of week" },
