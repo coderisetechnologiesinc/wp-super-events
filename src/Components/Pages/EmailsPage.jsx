@@ -98,16 +98,25 @@ const EmailsPage = ({ onPageSelect = () => {} }) => {
       setDefaultProvider("gmail");
     }
   }, [settings?.settings?.email_provider]);
+  // A service with nothing connected reads as an error, so both the account and
+  // the fetched flag are set either way: otherwise the section renders neither
+  // Connect nor Disconnect.
   const getGmailAccount = async () => {
     const { data } = await getGmailAccountUtil();
-    if (data) {
-      if (data.email) setAccount(data);
-      setAccountFetched(true);
-    }
+    setAccount(data?.email ? data : null);
+    setAccountFetched(true);
   };
   const handleRemoveAccount = async () => {
-    await disconnectGmailAccount();
-    setAccount(null);
+    try {
+      await disconnectGmailAccount();
+      setAccount(null);
+      toast.success("Gmail account has been successfully disconnected");
+    } catch (failure) {
+      toast.error(
+        failure.response?.data?.message ||
+          "Unable to disconnect Gmail. Please try again.",
+      );
+    }
   };
   const handleRemoveSMTPAccount = async () => {
     const res = await deleteSMTPAccount();

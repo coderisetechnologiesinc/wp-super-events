@@ -708,12 +708,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _utilities_adminApi__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../utilities/adminApi */ "./src/utilities/adminApi.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-4WY6JWTD.mjs");
-/* harmony import */ var _Modals_ModalShell__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../Modals/ModalShell */ "./src/Components/Modals/ModalShell.jsx");
-/* harmony import */ var _Modals_ConnectServiceModalContent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../Modals/ConnectServiceModalContent */ "./src/Components/Modals/ConnectServiceModalContent.jsx");
-/* harmony import */ var _utilities_accounts__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../utilities/accounts */ "./src/utilities/accounts.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-4WY6JWTD.mjs");
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/index.mjs");
+/* harmony import */ var _Modals_ModalShell__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../Modals/ModalShell */ "./src/Components/Modals/ModalShell.jsx");
+/* harmony import */ var _Modals_ConnectServiceModalContent__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../Modals/ConnectServiceModalContent */ "./src/Components/Modals/ConnectServiceModalContent.jsx");
+/* harmony import */ var _utilities_accounts__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../utilities/accounts */ "./src/utilities/accounts.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__);
+
 
 
 
@@ -739,36 +741,47 @@ const ConnectedServicePage = ({
   confirmService = null,
   manageRoute = null
 }) => {
-  const navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_9__.useNavigate)();
+  const navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_10__.useNavigate)();
   const [account, setAccount] = (0,react__WEBPACK_IMPORTED_MODULE_3__.useState)(null);
   const [isAccountFetched, setAccountFetched] = (0,react__WEBPACK_IMPORTED_MODULE_3__.useState)(false);
   const [showConfirmationModal, setShowConfirmationModal] = (0,react__WEBPACK_IMPORTED_MODULE_3__.useState)(false);
   const [confirmed, setConfirmed] = (0,react__WEBPACK_IMPORTED_MODULE_3__.useState)(false);
   const accountUrl = `/wp-json/servv-plugin/v1/${service}/account`;
+
+  // The endpoint answers a disconnected service with an error status, so a
+  // failed read is the normal "nothing connected" state. It must still mark the
+  // account as fetched, or the page renders neither Connect nor Disconnect.
   const getAccount = async () => {
-    const response = await (0,_utilities_adminApi__WEBPACK_IMPORTED_MODULE_4__["default"])({
-      method: "GET",
-      url: accountUrl,
-      headers: {
-        "X-WP-Nonce": servvData.nonce
-      }
-    });
-    if (response && response.status === 200) {
-      setAccount(resolveAccount(response.data) ? response.data : null);
+    try {
+      const response = await (0,_utilities_adminApi__WEBPACK_IMPORTED_MODULE_4__["default"])({
+        method: "GET",
+        url: accountUrl,
+        headers: {
+          "X-WP-Nonce": servvData.nonce
+        }
+      });
+      setAccount(response?.status === 200 && resolveAccount(response.data) ? response.data : null);
+    } catch {
+      setAccount(null);
+    } finally {
+      setAccountFetched(true);
     }
-    setAccountFetched(true);
   };
   const handleRemoveAccount = async () => {
-    await (0,_utilities_adminApi__WEBPACK_IMPORTED_MODULE_4__["default"])({
-      method: "DELETE",
-      url: accountUrl,
-      headers: {
-        "X-WP-Nonce": servvData.nonce
-      }
-    });
-    setAccount(null);
+    try {
+      await (0,_utilities_adminApi__WEBPACK_IMPORTED_MODULE_4__["default"])({
+        method: "DELETE",
+        url: accountUrl,
+        headers: {
+          "X-WP-Nonce": servvData.nonce
+        }
+      });
+      setAccount(null);
+    } catch (failure) {
+      react_toastify__WEBPACK_IMPORTED_MODULE_5__.toast.error(failure.response?.data?.message || `Unable to disconnect ${breadcrumbLabel}. Please try again.`);
+    }
   };
-  const handleGetConnectURL = () => (0,_utilities_accounts__WEBPACK_IMPORTED_MODULE_7__.openServiceConnectURL)(service);
+  const handleGetConnectURL = () => (0,_utilities_accounts__WEBPACK_IMPORTED_MODULE_8__.openServiceConnectURL)(service);
   (0,react__WEBPACK_IMPORTED_MODULE_3__.useEffect)(() => {
     getAccount();
   }, []);
@@ -777,38 +790,38 @@ const ConnectedServicePage = ({
     e?.preventDefault();
     if (confirmService) setShowConfirmationModal(true);else handleGetConnectURL();
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(_IntegrationLayout__WEBPACK_IMPORTED_MODULE_0__["default"], {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(_IntegrationLayout__WEBPACK_IMPORTED_MODULE_0__["default"], {
     title: heading || title,
     description: description,
     glyph: service === "zoom" ? "Z" : "G",
     connected: Boolean(account),
     status: !isAccountFetched ? "Loading…" : undefined,
     accountLabel: account ? getAccountLabel(account) : undefined,
-    actions: isAccountFetched && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {
-      children: account ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    actions: isAccountFetched && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.Fragment, {
+      children: account ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.Fragment, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_1__["default"], {
           text: "Disconnect",
           type: "danger-secondary",
           onAction: handleRemoveAccount
-        }), manageRoute && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        }), manageRoute && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_1__["default"], {
           text: "Manage",
           onAction: () => navigate(manageRoute)
         })]
-      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_1__["default"], {
         text: "Connect",
         onAction: onConnectClick
       })
     }),
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_IntegrationLayout__WEBPACK_IMPORTED_MODULE_0__.IntegrationSection, {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_IntegrationLayout__WEBPACK_IMPORTED_MODULE_0__.IntegrationSection, {
       title: "Account",
       description: description,
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_IntegrationLayout__WEBPACK_IMPORTED_MODULE_0__.IntegrationAccount, {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_IntegrationLayout__WEBPACK_IMPORTED_MODULE_0__.IntegrationAccount, {
         label: account ? getAccountLabel(account) : undefined
       })
-    }), confirmService && showConfirmationModal && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Modals_ModalShell__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    }), confirmService && showConfirmationModal && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Modals_ModalShell__WEBPACK_IMPORTED_MODULE_6__["default"], {
       title: `Connect ${breadcrumbLabel}`,
       onClose: () => setShowConfirmationModal(false),
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Modals_ConnectServiceModalContent__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Modals_ConnectServiceModalContent__WEBPACK_IMPORTED_MODULE_7__["default"], {
         service: confirmService,
         confirmed: confirmed,
         setConfirmed: setConfirmed,
@@ -1184,4 +1197,4 @@ const ForwardRef = /*#__PURE__*/ react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(Q
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_Integrations_CalendarsPage_jsx.js.map?ver=87df0d209c0df252d42b
+//# sourceMappingURL=src_Components_Pages_Integrations_CalendarsPage_jsx.js.map?ver=d86420dc34d17131264b

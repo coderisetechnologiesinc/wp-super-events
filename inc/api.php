@@ -378,7 +378,9 @@ function servv_plugin_zoom_confirm() {
         wp_die('Invalid');
     }
     $code = isset($_GET['code']) ? sanitize_text_field(wp_unslash($_GET['code'])) : '';
-    $redirectUrl = admin_url('admin.php?page='.SERVV_PLUGIN_SLUG);
+    // Back to the screen the connection was started from, not the dashboard.
+    // servv_refresh tells the admin's data cache that the account just changed.
+    $redirectUrl = servv_get_hash_admin_url('servv-integrations', 'integrations/zoom', ['servv_refresh' => 'accounts']);
     if(empty($code)) {
         wp_die('Invalid');
     }
@@ -397,7 +399,9 @@ function servv_plugin_calendar_confirm() {
         wp_die('Invalid');
     }
     $code = isset($_GET['code']) ? sanitize_text_field(wp_unslash($_GET['code'])) : '';
-    $redirectUrl = admin_url('admin.php?page='.SERVV_PLUGIN_SLUG);
+    // Back to the screen the connection was started from, not the dashboard.
+    // servv_refresh tells the admin's data cache that the account just changed.
+    $redirectUrl = servv_get_hash_admin_url('servv-integrations', 'integrations/calendars', ['servv_refresh' => 'accounts']);
     if(empty($code)) {
         wp_die('Invalid');
     }
@@ -416,7 +420,9 @@ function servv_plugin_gmail_confirm() {
         wp_die('Invalid');
     }
     $code = isset($_GET['code']) ? sanitize_text_field(wp_unslash($_GET['code'])) : '';
-    $redirectUrl = admin_url('admin.php?page='.SERVV_PLUGIN_SLUG);
+    // Back to the screen the connection was started from, not the dashboard.
+    // servv_refresh tells the admin's data cache that the account just changed.
+    $redirectUrl = servv_get_hash_admin_url('servv-integrations', 'integrations/gmail', ['servv_refresh' => 'accounts']);
     if(empty($code)) {
         wp_die('Invalid');
     }

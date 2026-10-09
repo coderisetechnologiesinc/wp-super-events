@@ -300,6 +300,20 @@
       opacity: 0.5;
       cursor: default;
     }
+    // Reads as an action rather than a value, so it keeps the chip's shape but
+    // drops the raised look the selectable ones have.
+    &.chipAdd {
+      color: #6436c9;
+      font-weight: 700;
+      border-style: dashed;
+      border-color: #c3a8f3;
+      background: #fcfbff;
+      box-shadow: none;
+      &:hover:not(:disabled) {
+        color: #51299f;
+        background: #f5f0ff;
+      }
+    }
   }
   .schedule {
     display: grid;
@@ -464,6 +478,96 @@
     max-height: 180px;
     object-fit: cover;
     border-radius: 12px;
+  }
+  .upload {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .coverEmpty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 112px;
+    border-radius: 12px;
+    border: 1px dashed #d9e1ee;
+    background: #f7f9fc;
+    color: #5b6680;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .coverEmptyIcon {
+    width: 24px;
+    height: 24px;
+    color: #9aa6bf;
+  }
+  .uploadRow {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    min-width: 0;
+  }
+  .fileInput {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .uploadButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 40px;
+    padding: 0 16px;
+    border-radius: 12px;
+    border: 1px solid #e8edf5;
+    background: #fff;
+    color: #6436c9;
+    cursor: pointer;
+    white-space: nowrap;
+    font:
+      700 13px/20px "Plus Jakarta Sans",
+      sans-serif;
+    box-shadow:
+      6px 6px 14px #dce2ec,
+      -3px -3px 9px #fbfcfe;
+    &:hover {
+      color: #51299f;
+    }
+    &:active {
+      box-shadow:
+        inset 4px 4px 9px #dce2ec,
+        inset -2px -2px 6px #fbfcfe;
+    }
+  }
+  .uploadBusy {
+    color: #5b6680;
+    pointer-events: none;
+    box-shadow:
+      inset 4px 4px 9px #dce2ec,
+      inset -2px -2px 6px #fbfcfe;
+  }
+  .fileInput:focus-visible + .uploadButton {
+    outline: 2px solid #6436c9;
+    outline-offset: 2px;
+  }
+  .uploadIcon {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+  }
+  .uploadHint {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .uploadError {
+    color: #b42318;
+    font-weight: 600;
   }
   @media (max-width: 1100px) {
     .layout {

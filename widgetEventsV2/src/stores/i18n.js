@@ -33,6 +33,17 @@ export const useI18nStore = defineStore("i18n", () => {
 
   const t = (path, vars) => translator.value(path, vars);
 
+  // "1 item" / "7 items". The singular has its own key, the same pair the v1
+  // widget and the admin's translation defaults use, so wording a shop already
+  // translated keeps working here.
+  const itemsLabel = (count) =>
+    Number(count) === 1
+      ? t("mainWidget.singleEventItemsCounterLabel", { fallback: "item" })
+      : t("mainWidget.itemsCounterLabel", { fallback: "items" });
+
+  // The count and its word, in the order the locale writes them.
+  const itemsCount = (count) => `${Number(count) || 0} ${itemsLabel(count)}`;
+
   function setLocale(next) {
     requested.value = next;
   }
@@ -44,6 +55,8 @@ export const useI18nStore = defineStore("i18n", () => {
     offeredLocales,
     defaultLocale,
     t,
+    itemsLabel,
+    itemsCount,
     setLocale,
   };
 });

@@ -33,6 +33,13 @@ export const useEventsStore = defineStore("events", () => {
   const error = ref(null);
 
   const datesByMonth = ref({});
+  const datesLoaded = ref(false);
+  // The endpoint answers with every date matching the current filters, so one
+  // request serves the strip's two-month window, the calendar panel under it
+  // and any month the visitor steps to. Asking per month made those views fire
+  // a request each for neighbouring months on every filter change, and made
+  // stepping a month wait on the network for data already paid for.
+  let datesRequest = null;
 
   const filtersStore = useFiltersStore();
 
@@ -89,19 +96,44 @@ export const useEventsStore = defineStore("events", () => {
     if (Number.isFinite(size) && size > 0) pageSize.value = size;
   }
 
+  function loadDates() {
+    if (datesLoaded.value) return Promise.resolve();
+    if (datesRequest) return datesRequest;
+
+    datesRequest = (async () => {
+      try {
+        // A day already picked must not narrow the answer down to itself: the
+        // strip and the calendar still show the whole window around it.
+        const dates = await api.fetchDates({
+          ...requestArgs(),
+          filters: { ...filtersStore.selected, date: "" },
+        });
+        const grouped = {};
+
+        (Array.isArray(dates) ? dates : []).forEach((value) => {
+          const day = String(value).slice(0, 10);
+          const month = day.slice(0, 7);
+
+          if (!/^\d{4}-\d{2}-\d{2}$/.test(day)) return;
+          (grouped[month] ||= []).push(day);
+        });
+
+        datesByMonth.value = grouped;
+        datesLoaded.value = true;
+      } catch (e) {
+        if (!isAbortError(e)) error.value = e;
+      } finally {
+        datesRequest = null;
+      }
+    })();
+
+    return datesRequest;
+  }
+
   async function fetchDates(month) {
-    if (datesByMonth.value[month]) return datesByMonth.value[month];
+    await loadDates();
 
-    try {
-      const dates = await api.fetchDates({
-        ...requestArgs(),
-        month,
-      });
-
-      datesByMonth.value = { ...datesByMonth.value, [month]: dates || [] };
-    } catch (e) {
-      if (!isAbortError(e)) error.value = e;
-    }
+    if (!month) return Object.values(datesByMonth.value).flat();
 
     return datesByMonth.value[month] || [];
   }
@@ -122,6 +154,11 @@ export const useEventsStore = defineStore("events", () => {
 
   function invalidateDates() {
     datesByMonth.value = {};
+    datesLoaded.value = false;
+    // A reply still on its way answers the filters that have just been
+    // replaced, so it is no longer shareable: the next caller starts a request
+    // of its own, which aborts the stale one through its scope.
+    datesRequest = null;
   }
 
   return {

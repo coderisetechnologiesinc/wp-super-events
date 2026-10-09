@@ -21,6 +21,7 @@ const Dashboard = () => {
   const filtersList = useServvStore((s) => s.filtersList);
   const zoomAccount = useServvStore((s) => s.zoomAccount);
   const zoomConnected = useServvStore((s) => s.zoomConnected);
+  const accountsSynced = useServvStore((s) => s.accountsSynced);
 
   const {
     // merged list — used when eventType === "all"
@@ -112,6 +113,9 @@ const Dashboard = () => {
 
     if (
       firstFetchDone &&
+      // An empty list proves nothing until the zoom answer is in: the merged
+      // fetch leaves zoom out while the connection is still unknown.
+      accountsSynced &&
       mergedList.length === 0 &&
       !zoomConnected &&
       !onboardingSkipped &&
@@ -124,7 +128,7 @@ const Dashboard = () => {
     ) {
       navigate("/onboarding?activate_plan");
     }
-  }, [firstFetchDone, zoomConnected, mergedList.length]);
+  }, [firstFetchDone, accountsSynced, zoomConnected, mergedList.length]);
 
   const handleCreateNewEvent = () => {
     if (servvData.gutenberg_active)
@@ -144,7 +148,6 @@ const Dashboard = () => {
     datePlacement,
     groups: displayGroups,
   } = useDisplayOptions("dashboard");
-
 
   // The calendar owns the range while it is on screen and needs the whole
   // window rather than a page; leaving it hands the range back to the
@@ -167,6 +170,16 @@ const Dashboard = () => {
   useEffect(() => {
     if (eventsList.length > 0) setHasAnyEvent(true);
   }, [eventsList.length]);
+
+  // The setup banner asks whether the shop has events, so it may only appear
+  // once a fetch has finished — a list still waiting for its zoom half would
+  // make it advertise "create your first event" and then take it back. Latched
+  // too, so later refetches do not blink it off the page.
+  const [eventsSettled, setEventsSettled] = useState(false);
+
+  useEffect(() => {
+    if (firstFetchDone && !eventsLoading) setEventsSettled(true);
+  }, [firstFetchDone, eventsLoading]);
 
   const location = useLocation();
   useEffect(() => {
@@ -234,9 +247,7 @@ const Dashboard = () => {
       <PageContent className={styles.page}>
         {/* The first-run checklist, above the page like the reference. It
             hides itself once every step is done or the shop dismisses it. */}
-        {firstFetchDone && (
-          <SetupGuide hasEvents={hasAnyEvent} />
-        )}
+        {eventsSettled && <SetupGuide hasEvents={hasAnyEvent} />}
 
         <PageHeader
           eyebrow="WP Super Events by ServvAI"
@@ -280,7 +291,6 @@ const Dashboard = () => {
           onCreate={handleCreateNewEvent}
         />
       </PageContent>
-
     </PageWrapper>
   );
 };

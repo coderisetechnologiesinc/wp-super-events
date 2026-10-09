@@ -133,7 +133,10 @@ function servv_create_payment_plan_subscription($request)
 
     $data = [
         'plan_id' => (int)$planId,
-        'return_url'    => admin_url('admin.php?page='.SERVV_PLUGIN_SLUG),
+        // servv_refresh drops the admin's cached plan: the subscription is
+        // registered while the merchant is away on Stripe.
+        'return_url'    => servv_get_hash_admin_url(SERVV_PLUGIN_SLUG, '',
+            ['servv_refresh' => 'settings,billing']),
         'is_annual'    => (bool)$isAnnual,
     ];
     try {
@@ -148,7 +151,10 @@ function servv_create_billing_portal_session($request)
 {
     $apiRoute = '/payments/stripe/session/billing/portal';
     $data = [
-        'return_url'    => admin_url('admin.php?page='.SERVV_PLUGIN_SLUG)
+        // The portal is where a plan gets changed or cancelled, so the cached
+        // plan must not survive the trip either.
+        'return_url'    => servv_get_hash_admin_url(SERVV_PLUGIN_SLUG, '',
+            ['servv_refresh' => 'settings,billing'])
     ];
     try {
         $responseBody = servvSendApiRequest($apiRoute, $data, 'POST');

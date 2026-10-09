@@ -171,7 +171,7 @@ const BillingStep = ({
   const [selectedPlan, setSelectedPlan] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   const [stripeForm, setStripeForm] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   const {
-    fetchSettings
+    syncPlanAfterActivation
   } = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_7__.useServvStore)();
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     getBillingPlans();
@@ -206,7 +206,9 @@ const BillingStep = ({
           planActivated: true,
           planId: id
         });
-        await fetchSettings();
+        // Not fetchSettings: the plan reaches Servv through a webhook, so it
+        // has to be waited for, past the cached copy.
+        await syncPlanAfterActivation(id);
         setLoading(false);
       };
       const checkout = await stripe.initEmbeddedCheckout({
@@ -739,4 +741,4 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Onboarding_BillingStep_jsx.js.map?ver=18b28c21714ce29436ba
+//# sourceMappingURL=src_Components_Onboarding_BillingStep_jsx.js.map?ver=9a4b4c1773439c3623be

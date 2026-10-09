@@ -1221,18 +1221,24 @@ const EmailsPage = ({
       setDefaultProvider("gmail");
     }
   }, [settings?.settings?.email_provider]);
+  // A service with nothing connected reads as an error, so both the account and
+  // the fetched flag are set either way: otherwise the section renders neither
+  // Connect nor Disconnect.
   const getGmailAccount = async () => {
     const {
       data
     } = await (0,_utilities_accounts__WEBPACK_IMPORTED_MODULE_6__.getGmailAccount)();
-    if (data) {
-      if (data.email) setAccount(data);
-      setAccountFetched(true);
-    }
+    setAccount(data?.email ? data : null);
+    setAccountFetched(true);
   };
   const handleRemoveAccount = async () => {
-    await (0,_utilities_accounts__WEBPACK_IMPORTED_MODULE_6__.disconnectGmailAccount)();
-    setAccount(null);
+    try {
+      await (0,_utilities_accounts__WEBPACK_IMPORTED_MODULE_6__.disconnectGmailAccount)();
+      setAccount(null);
+      react_toastify__WEBPACK_IMPORTED_MODULE_5__.toast.success("Gmail account has been successfully disconnected");
+    } catch (failure) {
+      react_toastify__WEBPACK_IMPORTED_MODULE_5__.toast.error(failure.response?.data?.message || "Unable to disconnect Gmail. Please try again.");
+    }
   };
   const handleRemoveSMTPAccount = async () => {
     const res = await (0,_utilities_mails__WEBPACK_IMPORTED_MODULE_7__.deleteSMTPAccount)();
@@ -2109,4 +2115,4 @@ const ForwardRef = /*#__PURE__*/ react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(Q
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_EmailsPage_jsx.js.map?ver=41588096b627f1e53119
+//# sourceMappingURL=src_Components_Pages_EmailsPage_jsx.js.map?ver=5d8838d107167cee54be

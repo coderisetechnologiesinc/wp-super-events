@@ -5206,4 +5206,4 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_SettingsPage_jsx.js.map?ver=56cd9ea4a1b340273bd9
+//# sourceMappingURL=src_Components_Pages_SettingsPage_jsx.js.map?ver=0efb667ec547cc2725b6

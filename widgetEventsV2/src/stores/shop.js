@@ -81,6 +81,8 @@ export const useShopStore = defineStore("shop", () => {
   const redirectToProductPage = computed(
     () => !!config.value.redirect_to_event_page,
   );
+  // Opening an event goes to its WordPress page instead of the drawer.
+  const openEventPage = computed(() => !!config.value.open_event_page);
   const shareDomainSuffix = computed(
     () => config.value.custom_domain_suffix ||
       style.value.ew_custom_domain_suffix ||
@@ -159,6 +161,7 @@ export const useShopStore = defineStore("shop", () => {
     isCategoryView,
     isCalendarView,
     redirectToProductPage,
+    openEventPage,
     descriptionWordLimit,
     shareDomainSuffix,
     viewMode,

@@ -4,6 +4,7 @@ import { createWordPressApi } from './wordpress';
 import { normalizeEvent } from './normalize';
 import { useShopStore } from '../stores/shop';
 import { useEventsStore } from '../stores/events';
+import { useFiltersStore } from '../stores/filters';
 import { useBookingStore } from '../stores/booking';
 import schema from '../../../inc/widget-v2-schema.json';
 const config = Object.fromEntries(schema.filter((f) => f.id).map((f) => [f.id, f.default ?? '']));
@@ -87,6 +88,27 @@ it('loads all calendar pages with date bounds', async () => {
   piniaFor(runtime()); fetch.mockImplementation(async (url, { body }) => { requests.push({ params: body }); return json({ page_count: 2, meetings: [{ id: Number(body.get('page')) }] }); });
   const result = await useEventsStore().fetchCalendarMonth('2026-10'); expect(result).toHaveLength(2);
   expect(requests[0].params.get('start_datetime')).toBe('2026-10-01T00:00:00.000Z'); expect(requests[1].params.get('page')).toBe('2');
+});
+it('loads every month of dates in one request and groups them', async () => {
+  piniaFor(runtime());
+  fetch.mockImplementation(async (url, { body }) => { requests.push({ params: body }); return json(['2026-10-04', '2026-11-02', '2026-11-20']); });
+  const events = useEventsStore();
+  const dateRequests = () => requests.filter((item) => item.params.get('action') === 'servv_get_events_filtered_list_dates');
+  // The strip's two-month window and the calendar panel, all in one tick.
+  const [october, november] = await Promise.all([events.fetchDates('2026-10'), events.fetchDates('2026-11'), events.fetchDates('2026-10')]);
+  expect(dateRequests()).toHaveLength(1);
+  expect(dateRequests()[0].params.get('date')).toBe(null);
+  expect(october).toEqual(['2026-10-04']);
+  expect(november).toEqual(['2026-11-02', '2026-11-20']);
+  // Stepping to a further month is answered from the same reply.
+  await events.fetchDates('2026-12');
+  expect(dateRequests()).toHaveLength(1);
+  // Changed filters drop it, and a picked day never narrows the next answer.
+  events.invalidateDates();
+  useFiltersStore().set('date', '2026-10-04');
+  await events.fetchDates('2026-10');
+  expect(dateRequests()).toHaveLength(2);
+  expect(dateRequests()[1].params.get('date')).toBe(null);
 });
 it('appends progressive pages and resets on page one', async () => {
   piniaFor({ ...runtime(), config: { ...config, view_mode: 'progressive' } });

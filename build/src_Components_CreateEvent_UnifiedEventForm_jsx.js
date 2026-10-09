@@ -872,8 +872,8 @@ const NewRecurringControl = ({
   } = recurrence;
   const [monthlyType, setMonthlyType] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(!monthly_week_day);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (monthly_week_day) setMonthlyType(false);
-  }, [monthly_week_day]);
+    if (recurrence.monthly_week_day) setMonthlyType(false);
+  }, [recurrence.monthly_week_day]);
 
   /* ---------------------------
      Recurrence type
@@ -901,6 +901,10 @@ const NewRecurringControl = ({
     }
     if (val === 3) {
       delete next.weekly_days;
+      if (!next.monthly_day && !next.monthly_week_day) {
+        next.monthly_week = Number(monthly_week) || 1;
+        next.monthly_week_day = Number(monthly_week_day) || 1;
+      }
     }
     onChange(next);
   };
@@ -1063,7 +1067,23 @@ const NewRecurringControl = ({
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_RadioGroup__WEBPACK_IMPORTED_MODULE_5__["default"], {
           name: "monthly-type",
           value: monthlyType ? "day" : "week",
-          onChange: v => setMonthlyType(v === "day"),
+          onChange: v => {
+            const byDay = v === "day";
+            setMonthlyType(byDay);
+            const next = {
+              ...recurrence
+            };
+            if (byDay) {
+              delete next.monthly_week;
+              delete next.monthly_week_day;
+              next.monthly_day = Number(monthly_day) || 1;
+            } else {
+              delete next.monthly_day;
+              next.monthly_week = Number(monthly_week) || 1;
+              next.monthly_week_day = Number(monthly_week_day) || 1;
+            }
+            onChange(next);
+          },
           options: [{
             value: "day",
             label: "Day of month"
@@ -2303,27 +2323,37 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-4WY6JWTD.mjs");
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-4WY6JWTD.mjs");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
 /* harmony import */ var moment_timezone__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment-timezone */ "./node_modules/moment-timezone/index.js");
 /* harmony import */ var moment_timezone__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment_timezone__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/MapPinIcon.js");
-/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/VideoCameraIcon.js");
-/* harmony import */ var _Menu_BreadCrumbs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Menu/BreadCrumbs */ "./src/Components/Menu/BreadCrumbs.jsx");
-/* harmony import */ var _store_useServvStore__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../store/useServvStore */ "./src/store/useServvStore.js");
-/* harmony import */ var _Pages_PageWrapper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Pages/PageWrapper */ "./src/Components/Pages/PageWrapper.jsx");
-/* harmony import */ var _Containers_PageContent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Containers/PageContent */ "./src/Components/Containers/PageContent.jsx");
-/* harmony import */ var _Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Controls/PageActionButton */ "./src/Components/Controls/PageActionButton.jsx");
-/* harmony import */ var _Controls_NewRecurringControl__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Controls/NewRecurringControl */ "./src/Components/Controls/NewRecurringControl.jsx");
-/* harmony import */ var _Controls_NewDatePickerControl__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Controls/NewDatePickerControl */ "./src/Components/Controls/NewDatePickerControl.jsx");
-/* harmony import */ var _EventTimeControl__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./EventTimeControl */ "./src/Components/CreateEvent/EventTimeControl.jsx");
-/* harmony import */ var _NewEndDateControl__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./NewEndDateControl */ "./src/Components/CreateEvent/NewEndDateControl.jsx");
-/* harmony import */ var _RegistrantsStep__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./RegistrantsStep */ "./src/Components/CreateEvent/RegistrantsStep.jsx");
-/* harmony import */ var _useUnifiedEventForm__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./useUnifiedEventForm */ "./src/Components/CreateEvent/useUnifiedEventForm.js");
-/* harmony import */ var _eventFormData__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./eventFormData */ "./src/Components/CreateEvent/eventFormData.js");
-/* harmony import */ var _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./UnifiedEventForm.module.scss */ "./src/Components/CreateEvent/UnifiedEventForm.module.scss");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/index.mjs");
+/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/PhotoIcon.js");
+/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/ArrowUpTrayIcon.js");
+/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/MapPinIcon.js");
+/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/VideoCameraIcon.js");
+/* harmony import */ var _Menu_BreadCrumbs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Menu/BreadCrumbs */ "./src/Components/Menu/BreadCrumbs.jsx");
+/* harmony import */ var _store_useServvStore__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../store/useServvStore */ "./src/store/useServvStore.js");
+/* harmony import */ var _Pages_PageWrapper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Pages/PageWrapper */ "./src/Components/Pages/PageWrapper.jsx");
+/* harmony import */ var _Containers_PageContent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Containers/PageContent */ "./src/Components/Containers/PageContent.jsx");
+/* harmony import */ var _Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Controls/PageActionButton */ "./src/Components/Controls/PageActionButton.jsx");
+/* harmony import */ var _Controls_NewRecurringControl__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Controls/NewRecurringControl */ "./src/Components/Controls/NewRecurringControl.jsx");
+/* harmony import */ var _Controls_NewDatePickerControl__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../Controls/NewDatePickerControl */ "./src/Components/Controls/NewDatePickerControl.jsx");
+/* harmony import */ var _EventTimeControl__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./EventTimeControl */ "./src/Components/CreateEvent/EventTimeControl.jsx");
+/* harmony import */ var _NewEndDateControl__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./NewEndDateControl */ "./src/Components/CreateEvent/NewEndDateControl.jsx");
+/* harmony import */ var _RegistrantsStep__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./RegistrantsStep */ "./src/Components/CreateEvent/RegistrantsStep.jsx");
+/* harmony import */ var _useUnifiedEventForm__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./useUnifiedEventForm */ "./src/Components/CreateEvent/useUnifiedEventForm.js");
+/* harmony import */ var _eventFormData__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./eventFormData */ "./src/Components/CreateEvent/eventFormData.js");
+/* harmony import */ var _coverImage__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./coverImage */ "./src/Components/CreateEvent/coverImage.js");
+/* harmony import */ var _Pages_Filters_CreateFilterModal__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../Pages/Filters/CreateFilterModal */ "./src/Components/Pages/Filters/CreateFilterModal.jsx");
+/* harmony import */ var _Pages_Filters_useFilterLimits__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../Pages/Filters/useFilterLimits */ "./src/Components/Pages/Filters/useFilterLimits.js");
+/* harmony import */ var _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./UnifiedEventForm.module.scss */ "./src/Components/CreateEvent/UnifiedEventForm.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__);
+
+
+
+
 
 
 
@@ -2347,18 +2377,18 @@ const Section = ({
   step,
   title,
   children
-}) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("section", {
-  className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].card,
-  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("header", {
-    className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].cardHeader,
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("span", {
-      className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].eyebrow,
+}) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("section", {
+  className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].card,
+  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("header", {
+    className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].cardHeader,
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("span", {
+      className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].eyebrow,
       children: ["Step ", step]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("h2", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("h2", {
       children: title
     })]
-  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
-    className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].body,
+  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("div", {
+    className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].body,
     children: children
   })]
 });
@@ -2368,9 +2398,9 @@ const Field = ({
   children
 }) => {
   const id = (0,react__WEBPACK_IMPORTED_MODULE_0__.useId)();
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("label", {
-    className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].field,
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("label", {
+    className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].field,
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("span", {
       id: id,
       children: label
     }), react__WEBPACK_IMPORTED_MODULE_0___default().cloneElement(children, {
@@ -2378,7 +2408,7 @@ const Field = ({
       ...(hint ? {
         "aria-describedby": `${id}-hint`
       } : {})
-    }), hint && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("small", {
+    }), hint && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("small", {
       id: `${id}-hint`,
       children: hint
     })]
@@ -2391,20 +2421,20 @@ const Choice = ({
   icon: Icon,
   onClick,
   disabled
-}) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("button", {
+}) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("button", {
   type: "button",
-  className: `${_UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].choice} ${selected ? _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].selected : ""}`,
+  className: `${_UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].choice} ${selected ? _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].selected : ""}`,
   "aria-pressed": selected,
   onClick: onClick,
   disabled: disabled,
-  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
-    className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].radio
-  }), Icon && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(Icon, {
-    className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].formatIcon
-  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("span", {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("strong", {
+  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("span", {
+    className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].radio
+  }), Icon && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(Icon, {
+    className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].formatIcon
+  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("span", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("strong", {
       children: label
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("small", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("small", {
       children: note
     })]
   })]
@@ -2415,23 +2445,23 @@ const Toggle = ({
   checked,
   onChange,
   disabled
-}) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-  className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].toggleRow,
-  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("strong", {
+}) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("div", {
+  className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].toggleRow,
+  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("strong", {
       children: label
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("small", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("small", {
       children: note
     })]
-  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("button", {
+  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("button", {
     type: "button",
     role: "switch",
     "aria-label": label,
     "aria-checked": checked,
     disabled: disabled,
-    className: `${_UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].toggle} ${checked ? _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].on : ""}`,
+    className: `${_UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].toggle} ${checked ? _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].on : ""}`,
     onClick: () => onChange?.(!checked),
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {})
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("span", {})
   })]
 });
 function UnifiedEventForm() {
@@ -2450,19 +2480,32 @@ function UnifiedEventForm() {
     occurrence,
     registrantsView,
     recoverDraft
-  } = (0,_useUnifiedEventForm__WEBPACK_IMPORTED_MODULE_12__["default"])();
-  const filters = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_3__.useServvStore)(s => s.filtersList);
-  const stripe = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_3__.useServvStore)(s => s.stripeConnected);
-  const zoom = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_3__.useServvStore)(s => s.zoomConnected);
-  const calendar = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_3__.useServvStore)(s => s.calendarConnected);
-  const navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_16__.useNavigate)();
+  } = (0,_useUnifiedEventForm__WEBPACK_IMPORTED_MODULE_13__["default"])();
+  const filters = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_4__.useServvStore)(s => s.filtersList);
+  const stripe = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_4__.useServvStore)(s => s.stripeConnected);
+  const zoom = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_4__.useServvStore)(s => s.zoomConnected);
+  const calendar = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_4__.useServvStore)(s => s.calendarConnected);
+  const navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_20__.useNavigate)();
   const formRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const [editingTicket, setEditingTicket] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   const [imageError, setImageError] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("");
+  const [imageName, setImageName] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("");
+  const [imageBusy, setImageBusy] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [creatingFilter, setCreatingFilter] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const imageInputId = (0,react__WEBPACK_IMPORTED_MODULE_0__.useId)();
   const meeting = event.meeting;
+  // image_content holds a freshly picked data URL, sent to the API as base64;
+  // featured_image_url is the cover already attached to the WordPress post.
+  const cover = event.image_content || event.featured_image_url || "";
   const freePlan = Number(settings.current_plan?.id) === 1;
   const recurringAllowed = settings.current_plan?.features?.some(f => f.title === "Recurring" && String(f.value) === "true");
-  const defaults = (0,_eventFormData__WEBPACK_IMPORTED_MODULE_13__.readDefaults)(settings);
+  const defaults = (0,_eventFormData__WEBPACK_IMPORTED_MODULE_14__.readDefaults)(settings);
+  // A filter kind the plan does not expose, or a store that has used up its
+  // allowance, cannot gain values from here either.
+  const {
+    isLimitReached,
+    filterCategories
+  } = (0,_Pages_Filters_useFilterLimits__WEBPACK_IMPORTED_MODULE_17__.useFilterLimits)(settings, filters);
   const activeTickets = event.tickets.filter(t => t.action !== "remove");
   const activeTicket = activeTickets.find(t => t.id === editingTicket);
   const patchMeeting = update => patch({
@@ -2477,7 +2520,7 @@ function UnifiedEventForm() {
   });
   const addTicket = () => {
     const ticket = {
-      id: (0,uuid__WEBPACK_IMPORTED_MODULE_17__["default"])(),
+      id: (0,uuid__WEBPACK_IMPORTED_MODULE_21__["default"])(),
       title: "Standard",
       type: "free",
       quantity: Number(defaults.default_quantity) || 1,
@@ -2489,6 +2532,10 @@ function UnifiedEventForm() {
     setEditingTicket(ticket.id);
   };
   const publish = () => {
+    if (imageBusy) {
+      react_toastify__WEBPACK_IMPORTED_MODULE_2__.toast.warning("Wait for the cover image to finish processing.");
+      return;
+    }
     if (formRef.current?.reportValidity()) save();
   };
   const updateStart = (part, value) => {
@@ -2497,100 +2544,109 @@ function UnifiedEventForm() {
       startTime: part === "date" ? `${value}T${time}` : `${date}T${value}:00`
     });
   };
-  const readImage = file => {
+  // Reading and re-encoding is asynchronous, so publishing stays blocked until
+  // it finishes: otherwise the payload is built without image_content and the
+  // cover is dropped without any error.
+  const readImage = async file => {
     if (!file) return;
-    if (!file.type.startsWith("image/") || file.size > 5 * 1024 * 1024) {
-      setImageError("Choose an image smaller than 5 MB.");
-      return;
-    }
-    const reader = new FileReader();
-    reader.onload = () => {
+    setImageBusy(true);
+    setImageError("");
+    try {
       patch({
-        image_content: reader.result
+        image_content: await (0,_coverImage__WEBPACK_IMPORTED_MODULE_15__.readCoverImage)(file)
       });
-      setImageError("");
-    };
-    reader.onerror = () => setImageError("Unable to read this image.");
-    reader.readAsDataURL(file);
+      setImageName(file.name);
+    } catch (failure) {
+      setImageError(failure.message || "Unable to read this image.");
+    } finally {
+      setImageBusy(false);
+    }
   };
+  // What the chips below do on click, so a value created in the modal ends up
+  // selected the same way.
+  const selectFilterValue = (key, id) => patch({
+    filters: {
+      [key]: key === "members" ? [...(event.filters.members || []), Number(id)] : Number(id)
+    }
+  });
   const filterCards = [["location_id", "locations", "Location", "Where the event happens"], ["category_id", "categories", "Category", "Groups events in the public list"], ["members", "members", "Member", "Host shown to attendees"], ["language_id", "languages", "Language", "Language of the session"]];
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Pages_PageWrapper__WEBPACK_IMPORTED_MODULE_4__["default"], {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_Pages_PageWrapper__WEBPACK_IMPORTED_MODULE_5__["default"], {
     flush: true,
     loading: loading,
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(_Containers_PageContent__WEBPACK_IMPORTED_MODULE_5__["default"], {
-      className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].root,
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("header", {
-        className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].header,
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Menu_BreadCrumbs__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)(_Containers_PageContent__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].root,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("header", {
+        className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].header,
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_Menu_BreadCrumbs__WEBPACK_IMPORTED_MODULE_3__["default"], {
           breadcrumbs: [{
             label: "Events",
             to: "/events"
           }, {
             label: registrantsView ? "Registrants" : isNew ? "New event" : "Edit event"
           }]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-          className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].headingRow,
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("h1", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("div", {
+          className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].headingRow,
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("h1", {
               children: registrantsView ? "Registrants" : isNew ? "New event" : "Edit event"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("p", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("p", {
               children: registrantsView ? meeting.topic : "Five sections, then publish. Everything else can be edited later."
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-            className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].actions,
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_6__["default"], {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("div", {
+            className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].actions,
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_7__["default"], {
               text: "Cancel",
               type: "ghost",
               onAction: () => navigate("/events"),
               disabled: saving
-            }), !registrantsView && isNew && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_6__["default"], {
+            }), !registrantsView && isNew && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_7__["default"], {
               text: "Save draft",
               type: "secondary",
               onAction: saveDraft,
-              disabled: loading || saving || Boolean(error)
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_6__["default"], {
+              disabled: loading || saving || imageBusy || Boolean(error)
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_7__["default"], {
               text: saving ? "Saving…" : isNew ? "Publish event" : "Save changes",
               onAction: publish,
-              disabled: loading || saving || Boolean(error)
+              disabled: loading || saving || imageBusy || Boolean(error)
             })]
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
-          className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].divider
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("div", {
+          className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].divider
         })]
-      }), error ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+      }), error ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("div", {
         role: "alert",
-        className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].warning,
+        className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].warning,
         children: error
-      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("form", {
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("form", {
         ref: formRef,
         onSubmit: e => {
           e.preventDefault();
           save();
         },
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("fieldset", {
-          className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].fieldset,
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("fieldset", {
+          className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].fieldset,
           disabled: loading || saving,
-          children: registrantsView ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_RegistrantsStep__WEBPACK_IMPORTED_MODULE_11__["default"], {
+          children: registrantsView ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_RegistrantsStep__WEBPACK_IMPORTED_MODULE_12__["default"], {
             settings: settings,
             attributes: event,
             setAttributes: patch,
             changeStep: () => navigate(`/events/${event.location === "zoom" ? "zoom" : "offline"}/${id}${occurrence ? `?occurrence_id=${encodeURIComponent(occurrence)}` : ""}`),
             handleFormSubmit: save,
             registrantsView: true
-          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-            className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].layout,
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-              className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].sections,
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(Section, {
+          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("div", {
+            className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].layout,
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("div", {
+              className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].sections,
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)(Section, {
                 step: "1",
                 title: "Basics",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(Field, {
-                  label: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.Fragment, {
-                    children: ["Event title ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("em", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(Field, {
+                  label: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.Fragment, {
+                    children: ["Event title ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("em", {
                       children: "*"
                     })]
                   }),
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("input", {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("input", {
                     required: true,
                     value: meeting.topic || "",
                     placeholder: "e.g. Autumn ceramics workshop",
@@ -2598,10 +2654,10 @@ function UnifiedEventForm() {
                       topic: e.target.value
                     })
                   })
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(Field, {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(Field, {
                   label: "Description",
                   hint: "Shown on the public event page and in confirmation emails.",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("textarea", {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("textarea", {
                     rows: "4",
                     value: meeting.agenda || "",
                     placeholder: "What will attendees learn or experience?",
@@ -2609,29 +2665,61 @@ function UnifiedEventForm() {
                       agenda: e.target.value
                     })
                   })
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("details", {
-                  className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].details,
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("summary", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("details", {
+                  className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].details,
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("summary", {
                     children: "Cover image and additional notes"
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-                    className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].detailsBody,
-                    children: [event.image_content && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("img", {
-                      className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].cover,
-                      src: event.image_content,
-                      alt: "Event cover"
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(Field, {
-                      label: "Cover image",
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("input", {
-                        type: "file",
-                        accept: "image/*",
-                        onChange: e => readImage(e.target.files?.[0])
-                      })
-                    }), imageError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("small", {
-                      role: "alert",
-                      children: imageError
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(Field, {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("div", {
+                    className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].detailsBody,
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("div", {
+                      className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].upload,
+                      children: [cover ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("img", {
+                        className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].cover,
+                        src: cover,
+                        alt: "Event cover"
+                      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("div", {
+                        className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].coverEmpty,
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_22__["default"], {
+                          className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].coverEmptyIcon
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("span", {
+                          children: "No cover image yet"
+                        })]
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("span", {
+                        className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].fieldTitle,
+                        children: "Cover image"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("div", {
+                        className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].uploadRow,
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("input", {
+                          id: imageInputId,
+                          className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].fileInput,
+                          type: "file",
+                          accept: _coverImage__WEBPACK_IMPORTED_MODULE_15__.COVER_IMAGE_ACCEPT,
+                          disabled: imageBusy,
+                          onChange: e => {
+                            readImage(e.target.files?.[0]);
+                            // Allows re-picking the same file after an
+                            // error, which fires no change event.
+                            e.target.value = "";
+                          }
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("label", {
+                          className: `${_UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].uploadButton} ${imageBusy ? _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].uploadBusy : ""}`,
+                          htmlFor: imageInputId,
+                          "aria-busy": imageBusy,
+                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_23__["default"], {
+                            className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].uploadIcon
+                          }), imageBusy ? "Preparing image…" : cover ? "Replace image" : "Upload image"]
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("small", {
+                          className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].uploadHint,
+                          children: imageName || "JPG, PNG, GIF or WEBP · resized before upload"
+                        })]
+                      }), imageError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("small", {
+                        className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].uploadError,
+                        role: "alert",
+                        children: imageError
+                      })]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(Field, {
                       label: "Additional note title",
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("input", {
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("input", {
                         value: event.custom_fields.custom_field_2_name || "",
                         onChange: e => patch({
                           custom_fields: {
@@ -2639,9 +2727,9 @@ function UnifiedEventForm() {
                           }
                         })
                       })
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(Field, {
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(Field, {
                       label: "Additional note",
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("textarea", {
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("textarea", {
                         rows: "2",
                         value: event.custom_fields.custom_field_2_value || "",
                         onChange: e => patch({
@@ -2653,12 +2741,12 @@ function UnifiedEventForm() {
                     })]
                   })]
                 })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(Section, {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)(Section, {
                 step: "2",
                 title: "Format & location",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
-                  className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].formats,
-                  children: [["offline", "In-person", "Physical address, shown on the public page", _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_18__["default"]], ["custom", "Online", "Meeting link sent with the confirmation", _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_19__["default"]], ["hybrid", "Hybrid", "Both an address and a meeting link", _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_19__["default"]]].map(([value, label, note, icon]) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(Choice, {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("div", {
+                  className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].formats,
+                  children: [["offline", "In-person", "Physical address, shown on the public page", _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_24__["default"]], ["custom", "Online", "Meeting link sent with the confirmation", _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_25__["default"]], ["hybrid", "Hybrid", "Both an address and a meeting link", _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_25__["default"]]].map(([value, label, note, icon]) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(Choice, {
                     selected: event.location === value || value === "custom" && event.location === "zoom",
                     label: label,
                     note: note,
@@ -2672,27 +2760,27 @@ function UnifiedEventForm() {
                       }
                     })
                   }, value))
-                }), ["custom", "hybrid", "zoom"].includes(event.location) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.Fragment, {
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(Field, {
+                }), ["custom", "hybrid", "zoom"].includes(event.location) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.Fragment, {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(Field, {
                     label: "Meeting provider",
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("select", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("select", {
                       value: event.location === "zoom" ? "zoom" : "custom",
                       disabled: !isNew,
                       onChange: e => patch({
                         location: e.target.value === "zoom" ? "zoom" : "custom"
                       }),
-                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("option", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("option", {
                         value: "custom",
                         children: "Custom meeting link"
-                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("option", {
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("option", {
                         value: "zoom",
                         disabled: !zoom,
                         children: ["Zoom", !zoom ? " — connect first" : ""]
                       })]
                     })
-                  }), event.location !== "zoom" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(Field, {
+                  }), event.location !== "zoom" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(Field, {
                     label: "Meeting link",
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("input", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("input", {
                       type: "url",
                       required: true,
                       value: event.custom_fields.custom_field_1_value || "",
@@ -2705,41 +2793,44 @@ function UnifiedEventForm() {
                       })
                     })
                   })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
-                  className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].divider
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-                  className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].filterHeading,
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("strong", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("div", {
+                  className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].divider
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("div", {
+                  className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].filterHeading,
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("strong", {
                     children: "Filters"
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("small", {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("small", {
                     children: "Four attributes drive the public filter bar. Unset values are hidden."
                   })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
-                  className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].filters,
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("div", {
+                  className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].filters,
                   children: filterCards.map(([key, list, label, note]) => {
                     const options = filters?.[list] || [];
                     const selected = options.filter(option => key === "members" ? event.filters.members?.map(Number).includes(Number(option.id)) : Number(event.filters[key]) === Number(option.id));
                     const disabled = key === "location_id" && ["custom", "zoom"].includes(event.location);
-                    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-                      className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].filterCard,
-                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("strong", {
+                    // useFilterLimits names the kinds in title case.
+                    const planAllows = filterCategories.includes(list.charAt(0).toUpperCase() + list.slice(1));
+                    const canCreate = planAllows && !isLimitReached && !disabled;
+                    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("div", {
+                      className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].filterCard,
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("div", {
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("strong", {
                           children: label
-                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("small", {
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("small", {
                           children: note
                         })]
-                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
-                        className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].filterValue,
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("span", {
+                        className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].filterValue,
                         children: selected.map(o => o.name).join(", ") || "Not set"
-                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
-                        className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].chips,
-                        children: options.map(option => {
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("div", {
+                        className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].chips,
+                        children: [options.map(option => {
                           const checked = selected.includes(option);
-                          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("button", {
+                          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("button", {
                             type: "button",
                             disabled: disabled,
                             "aria-pressed": checked,
-                            className: `${_UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].chip} ${checked ? _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].selected : ""}`,
+                            className: `${_UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].chip} ${checked ? _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].selected : ""}`,
                             onClick: () => patch({
                               filters: {
                                 [key]: key === "members" ? checked ? (event.filters.members || []).filter(id => Number(id) !== Number(option.id)) : [...(event.filters.members || []), Number(option.id)] : checked ? null : Number(option.id)
@@ -2747,9 +2838,19 @@ function UnifiedEventForm() {
                             }),
                             children: option.name
                           }, option.id);
-                        })
-                      }), !options.length && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("small", {
-                        children: ["No ", label.toLowerCase(), " filters yet.", " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_16__.Link, {
+                        }), canCreate && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("button", {
+                          type: "button",
+                          className: `${_UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].chip} ${_UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].chipAdd}`,
+                          onClick: () => setCreatingFilter(list),
+                          children: "\uFF0B New"
+                        })]
+                      }), !options.length && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("small", {
+                        children: ["No ", label.toLowerCase(), " filters yet.", " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_20__.Link, {
+                          to: "/filters",
+                          children: "Manage filters"
+                        })]
+                      }), !canCreate && planAllows && isLimitReached && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("small", {
+                        children: ["Your plan's filter allowance is used up.", " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_20__.Link, {
                           to: "/filters",
                           children: "Manage filters"
                         })]
@@ -2757,16 +2858,16 @@ function UnifiedEventForm() {
                     }, key);
                   })
                 })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(Section, {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)(Section, {
                 step: "3",
                 title: "Schedule",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-                  className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].schedule,
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-                    className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].field,
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("div", {
+                  className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].schedule,
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("div", {
+                    className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].field,
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("span", {
                       children: "Start date"
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Controls_NewDatePickerControl__WEBPACK_IMPORTED_MODULE_8__["default"], {
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_Controls_NewDatePickerControl__WEBPACK_IMPORTED_MODULE_9__["default"], {
                       mode: "single",
                       variant: "field",
                       fullWidth: true,
@@ -2775,18 +2876,18 @@ function UnifiedEventForm() {
                       minDate: isNew ? new Date() : undefined,
                       onChange: date => updateStart("date", date.format("YYYY-MM-DD"))
                     })]
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-                    className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].field,
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("div", {
+                    className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].field,
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("span", {
                       children: "Start time"
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_EventTimeControl__WEBPACK_IMPORTED_MODULE_9__["default"], {
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_EventTimeControl__WEBPACK_IMPORTED_MODULE_10__["default"], {
                       value: (meeting.startTime || "").slice(11, 16),
-                      use24Hours: (0,_eventFormData__WEBPACK_IMPORTED_MODULE_13__.uses24HourClock)(settings),
+                      use24Hours: (0,_eventFormData__WEBPACK_IMPORTED_MODULE_14__.uses24HourClock)(settings),
                       onChange: time => updateStart("time", time)
                     })]
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(Field, {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(Field, {
                     label: "Duration (minutes)",
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("input", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("input", {
                       type: "number",
                       required: true,
                       min: "1",
@@ -2797,25 +2898,25 @@ function UnifiedEventForm() {
                       })
                     })
                   })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(Field, {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(Field, {
                   label: "Time zone",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("select", {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("select", {
                     value: meeting.timezone,
                     onChange: e => patchMeeting({
                       timezone: e.target.value
                     }),
-                    children: moment_timezone__WEBPACK_IMPORTED_MODULE_1___default().tz.names().map(zone => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("option", {
+                    children: moment_timezone__WEBPACK_IMPORTED_MODULE_1___default().tz.names().map(zone => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("option", {
                       value: zone,
                       children: zone
                     }, zone))
                   })
-                }), !occurrence && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.Fragment, {
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
-                    className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].fieldTitle,
+                }), !occurrence && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.Fragment, {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("span", {
+                    className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].fieldTitle,
                     children: "Recurrence"
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
-                    className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].recurrence,
-                    children: [["one", "One-time", "Single occurrence"], ["weekly", "Weekly", "Repeats every week"], ["custom", "Custom", "Daily, weekly or monthly"]].map(([value, label, note]) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(Choice, {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("div", {
+                    className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].recurrence,
+                    children: [["one", "One-time", "Single occurrence"], ["weekly", "Weekly", "Repeats every week"], ["custom", "Custom", "Daily, weekly or monthly"]].map(([value, label, note]) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(Choice, {
                       selected: value === "one" ? !meeting.recurrence : value === "weekly" ? meeting.recurrence?.type === 2 : Boolean(meeting.recurrence) && meeting.recurrence.type !== 2,
                       label: label,
                       note: note,
@@ -2831,16 +2932,16 @@ function UnifiedEventForm() {
                         }
                       })
                     }, value))
-                  }), !recurringAllowed && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("small", {
+                  }), !recurringAllowed && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("small", {
                     children: "Recurring events require a plan with the Recurring feature."
-                  }), meeting.recurrence && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-                    className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].recurringControls,
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Controls_NewRecurringControl__WEBPACK_IMPORTED_MODULE_7__["default"], {
+                  }), meeting.recurrence && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("div", {
+                    className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].recurringControls,
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_Controls_NewRecurringControl__WEBPACK_IMPORTED_MODULE_8__["default"], {
                       recurrence: meeting.recurrence,
                       onChange: recurrence => patchMeeting({
                         recurrence
                       })
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_NewEndDateControl__WEBPACK_IMPORTED_MODULE_10__["default"], {
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_NewEndDateControl__WEBPACK_IMPORTED_MODULE_11__["default"], {
                       recurrence: meeting.recurrence,
                       meetingType: event.location === "zoom" ? "zoom" : "offline",
                       onChange: recurrence => patchMeeting({
@@ -2849,13 +2950,13 @@ function UnifiedEventForm() {
                     })]
                   })]
                 })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(Section, {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)(Section, {
                 step: "4",
                 title: "Tickets",
-                children: [!activeTickets.length && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(Field, {
+                children: [!activeTickets.length && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(Field, {
                   label: "Capacity",
                   hint: freePlan ? `Free plan: up to ${settings.free_registrants_limit || 15} registrations.` : "Total registrations available for this event.",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("input", {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("input", {
                     type: "number",
                     min: "1",
                     max: freePlan ? settings.free_registrants_limit || 15 : undefined,
@@ -2867,10 +2968,10 @@ function UnifiedEventForm() {
                       }
                     })
                   })
-                }), !isNew && !activeTickets.length && !freePlan && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(Field, {
+                }), !isNew && !activeTickets.length && !freePlan && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(Field, {
                   label: "Registration price",
                   hint: "Price for the existing single registration type.",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("input", {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("input", {
                     type: "number",
                     min: "0",
                     step: "0.01",
@@ -2881,59 +2982,59 @@ function UnifiedEventForm() {
                       }
                     })
                   })
-                }), activeTickets.map(ticket => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-                  className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].ticketRow,
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("strong", {
+                }), activeTickets.map(ticket => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("div", {
+                  className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].ticketRow,
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("div", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("strong", {
                       children: ticket.title
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("small", {
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("small", {
                       children: ["Capacity ", ticket.quantity, ticket.start_datetime || ticket.end_datetime ? " · Scheduled sales" : " · Open sales"]
                     })]
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("strong", {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("strong", {
                     children: ticket.type === "free" ? "Free" : ticket.type === "donation" ? "Donation" : `${settings.settings?.currency || "USD"} ${Number(ticket.price || 0).toFixed(2)}`
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_6__["default"], {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_7__["default"], {
                     text: editingTicket === ticket.id ? "Done" : "Edit",
                     type: "secondary",
                     size: "xs",
                     onAction: () => setEditingTicket(editingTicket === ticket.id ? null : ticket.id)
                   })]
-                }, ticket.id)), activeTicket && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-                  className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].ticketEditor,
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(Field, {
+                }, ticket.id)), activeTicket && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("div", {
+                  className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].ticketEditor,
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(Field, {
                     label: "Ticket name",
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("input", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("input", {
                       required: true,
                       value: activeTicket.title,
                       onChange: e => patchTicket(activeTicket.id, {
                         title: e.target.value
                       })
                     })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-                    className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].schedule,
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(Field, {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("div", {
+                    className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].schedule,
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(Field, {
                       label: "Type",
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("select", {
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("select", {
                         value: activeTicket.type,
                         onChange: e => patchTicket(activeTicket.id, {
                           type: e.target.value,
                           price: e.target.value === "free" ? 0 : Number(defaults.default_price) || 1
                         }),
-                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("option", {
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("option", {
                           value: "free",
                           children: "Free"
-                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("option", {
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("option", {
                           value: "paid",
                           disabled: freePlan || !stripe,
                           children: "Paid"
-                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("option", {
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("option", {
                           value: "donation",
                           disabled: freePlan || !stripe,
                           children: "Donation"
                         })]
                       })
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(Field, {
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(Field, {
                       label: "Capacity",
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("input", {
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("input", {
                         type: "number",
                         min: "1",
                         step: "1",
@@ -2943,9 +3044,9 @@ function UnifiedEventForm() {
                           quantity: Number(e.target.value)
                         })
                       })
-                    }), activeTicket.type === "paid" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(Field, {
+                    }), activeTicket.type === "paid" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(Field, {
                       label: "Price",
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("input", {
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("input", {
                         type: "number",
                         min: "0.01",
                         step: "0.01",
@@ -2956,19 +3057,19 @@ function UnifiedEventForm() {
                         })
                       })
                     })]
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
-                    className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].schedule,
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("div", {
+                    className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].schedule,
                     children: ["start_datetime", "end_datetime"].map(key => {
                       const label = key === "start_datetime" ? "Sales start" : "Sales end";
                       const value = activeTicket[key];
                       const update = (date, time) => patchTicket(activeTicket.id, {
                         [key]: `${date}T${time}:00`
                       });
-                      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
-                        className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].field,
-                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("span", {
+                      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("div", {
+                        className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].field,
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("span", {
                           children: [label, " (optional)"]
-                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Controls_NewDatePickerControl__WEBPACK_IMPORTED_MODULE_8__["default"], {
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_Controls_NewDatePickerControl__WEBPACK_IMPORTED_MODULE_9__["default"], {
                           mode: "single",
                           variant: "field",
                           fullWidth: true,
@@ -2976,13 +3077,13 @@ function UnifiedEventForm() {
                           label: "Select date",
                           value: value?.slice(0, 10),
                           onChange: date => update(date.format("YYYY-MM-DD"), value?.slice(11, 16) || "00:00")
-                        }), value && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.Fragment, {
-                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_EventTimeControl__WEBPACK_IMPORTED_MODULE_9__["default"], {
+                        }), value && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.Fragment, {
+                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_EventTimeControl__WEBPACK_IMPORTED_MODULE_10__["default"], {
                             label: `${label} time`,
                             value: value.slice(11, 16),
-                            use24Hours: (0,_eventFormData__WEBPACK_IMPORTED_MODULE_13__.uses24HourClock)(settings),
+                            use24Hours: (0,_eventFormData__WEBPACK_IMPORTED_MODULE_14__.uses24HourClock)(settings),
                             onChange: time => update(value.slice(0, 10), time)
-                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_6__["default"], {
+                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_7__["default"], {
                             text: "Clear",
                             type: "ghost",
                             size: "xs",
@@ -2993,7 +3094,7 @@ function UnifiedEventForm() {
                         })]
                       }, key);
                     })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_6__["default"], {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_7__["default"], {
                     text: "Remove ticket",
                     type: "danger-ghost",
                     onAction: () => {
@@ -3006,40 +3107,30 @@ function UnifiedEventForm() {
                       setEditingTicket(null);
                     }
                   })]
-                }), (!freePlan || !activeTickets.length) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("button", {
-                  className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].addTicket,
+                }), (!freePlan || !activeTickets.length) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("button", {
+                  className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].addTicket,
                   type: "button",
                   onClick: addTicket,
                   children: "\uFF0B Add ticket type"
                 })]
               })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("aside", {
-              className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].aside,
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("section", {
-                className: `${_UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].card} ${_UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].visibility}`,
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
-                  className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].asideEyebrow,
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("aside", {
+              className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].aside,
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("section", {
+                className: `${_UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].card} ${_UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].visibility}`,
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("span", {
+                  className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].asideEyebrow,
                   children: "Step 5 \xB7 Visibility"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(Toggle, {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(Toggle, {
                   label: "Public page",
                   note: "Listed on the events widget",
                   checked: !meeting.is_hidden,
                   onChange: value => patchMeeting({
                     is_hidden: !value
                   })
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(Toggle, {
-                  label: "Search engines",
-                  note: "Indexing follows WordPress site settings",
-                  checked: false,
-                  disabled: true
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(Toggle, {
-                  label: "Waiting list",
-                  note: "Not available for individual events yet",
-                  checked: false,
-                  disabled: true
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
-                  className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].divider
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(Toggle, {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("div", {
+                  className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].divider
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(Toggle, {
                   label: "Confirmation emails",
                   note: "Send event emails to attendees",
                   checked: !event.notifications.disable_emails,
@@ -3048,7 +3139,7 @@ function UnifiedEventForm() {
                       disable_emails: !value
                     }
                   })
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(Toggle, {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(Toggle, {
                   label: "Google Calendar",
                   note: calendar ? "Add this event to your calendar" : "Connect Google Calendar to enable",
                   checked: Boolean(event.notifications.google_calendar),
@@ -3059,37 +3150,136 @@ function UnifiedEventForm() {
                     }
                   })
                 })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("section", {
-                className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].warning,
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("strong", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("section", {
+                className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].warning,
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("strong", {
                   children: "Before you publish"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("ul", {
-                  children: [!stripe && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("li", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("ul", {
+                  children: [!stripe && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("li", {
                     children: "Stripe is not connected \u2014 paid tickets are unavailable."
-                  }), event.location === "zoom" && !zoom && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("li", {
+                  }), event.location === "zoom" && !zoom && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("li", {
                     children: "Connect Zoom before publishing an online meeting."
-                  }), !activeTickets.length && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("li", {
+                  }), !activeTickets.length && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("li", {
                     children: "This event uses a single registration capacity."
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("li", {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("li", {
                     children: "Check the time zone and ticket availability."
                   })]
-                }), !stripe && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_6__["default"], {
+                }), !stripe && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_7__["default"], {
                   text: "Connect Stripe",
                   type: "secondary",
                   size: "xs",
                   onAction: () => navigate("/integrations")
                 })]
-              }), isNew && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("p", {
-                className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].draftNote,
+              }), isNew && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("p", {
+                className: _UnifiedEventForm_module_scss__WEBPACK_IMPORTED_MODULE_18__["default"].draftNote,
                 children: [recoverDraft ? "Your saved draft has been restored. " : "", "Saved drafts stay in this browser tab and are restored when you reopen New event."]
               })]
             })]
           })
         })
+      }), creatingFilter && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_Pages_Filters_CreateFilterModal__WEBPACK_IMPORTED_MODULE_16__["default"], {
+        type: creatingFilter,
+        onClose: () => setCreatingFilter(null),
+        onCreated: created => {
+          const key = filterCards.find(([, list]) => list === creatingFilter)?.[0];
+          if (key && created?.id) selectFilterValue(key, created.id);
+        }
       })]
     })
   });
 }
+
+/***/ }),
+
+/***/ "./src/Components/CreateEvent/coverImage.js":
+/*!**************************************************!*\
+  !*** ./src/Components/CreateEvent/coverImage.js ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   COVER_IMAGE_ACCEPT: () => (/* binding */ COVER_IMAGE_ACCEPT),
+/* harmony export */   COVER_IMAGE_TYPES: () => (/* binding */ COVER_IMAGE_TYPES),
+/* harmony export */   readCoverImage: () => (/* binding */ readCoverImage)
+/* harmony export */ });
+// The cover image travels to the API as base64 inside the event payload, both
+// on create and on update. A raw photo therefore inflates the JSON body by a
+// third, and hosting stacks reject or truncate such bodies long before the
+// 5 MB a file picker happily accepts (nginx client_max_body_size, PHP
+// post_max_size, WAFs). Every picked file is re-encoded here so the payload
+// stays small enough to survive production, and so unsupported camera formats
+// fail with a message instead of a 415 from the server.
+
+// What inc/helpers.php accepts after decoding the base64.
+const COVER_IMAGE_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp"];
+const COVER_IMAGE_ACCEPT = COVER_IMAGE_TYPES.join(",");
+// Read from disk; anything larger is a camera original the browser would also
+// struggle to decode.
+const MAX_FILE_BYTES = 15 * 1024 * 1024;
+// Sent to the API. 400 KB of base64 is ~534 KB on the wire, which fits inside
+// the 1 MB body limit nginx ships with by default.
+const MAX_PAYLOAD_BYTES = 400 * 1024;
+const MAX_DIMENSION = 1600;
+const base64Bytes = dataUrl => Math.ceil((dataUrl.length - dataUrl.indexOf(",") - 1) * 3 / 4);
+const readFile = file => new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.onload = () => resolve(reader.result);
+  reader.onerror = () => reject(new Error("Unable to read this image."));
+  reader.readAsDataURL(file);
+});
+const loadImage = dataUrl => new Promise((resolve, reject) => {
+  const image = new Image();
+  image.onload = () => resolve(image);
+  image.onerror = () => reject(new Error("This image could not be processed. Save it as JPG, PNG, GIF or WEBP and try again."));
+  image.src = dataUrl;
+});
+
+// Scales down to MAX_DIMENSION and then searches for the highest JPEG quality
+// that still fits the payload budget.
+const compress = image => {
+  const scale = Math.min(1, MAX_DIMENSION / Math.max(image.naturalWidth, image.naturalHeight));
+  const width = Math.max(1, Math.round(image.naturalWidth * scale));
+  const height = Math.max(1, Math.round(image.naturalHeight * scale));
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const context = canvas.getContext("2d");
+  // JPEG has no alpha channel, so transparency has to land on something.
+  context.fillStyle = "#ffffff";
+  context.fillRect(0, 0, width, height);
+  context.drawImage(image, 0, 0, width, height);
+  const top = canvas.toDataURL("image/jpeg", 0.9);
+  if (base64Bytes(top) <= MAX_PAYLOAD_BYTES) return top;
+  let low = 0.3;
+  let high = 0.9;
+  let best = null;
+  for (let step = 0; step < 8; step += 1) {
+    const quality = (low + high) / 2;
+    const candidate = canvas.toDataURL("image/jpeg", quality);
+    if (base64Bytes(candidate) <= MAX_PAYLOAD_BYTES) {
+      best = candidate;
+      low = quality;
+    } else {
+      high = quality;
+    }
+  }
+  return best || canvas.toDataURL("image/jpeg", 0.3);
+};
+
+// Resolves with a data URL ready for event.image_content, or rejects with a
+// message that can be shown as-is.
+const readCoverImage = async file => {
+  if (!COVER_IMAGE_TYPES.includes(file.type)) throw new Error("Choose a JPG, PNG, GIF or WEBP image.");
+  if (file.size > MAX_FILE_BYTES) throw new Error("Choose an image smaller than 15 MB.");
+  const dataUrl = await readFile(file);
+  // Small files are forwarded untouched: that keeps PNG transparency and
+  // animated GIFs intact, which a canvas round-trip would flatten.
+  if (base64Bytes(dataUrl) <= MAX_PAYLOAD_BYTES) return dataUrl;
+  const compressed = compress(await loadImage(dataUrl));
+  if (base64Bytes(compressed) > MAX_PAYLOAD_BYTES * 2) throw new Error("This image is too large to upload. Try a smaller or less detailed image.");
+  return compressed;
+};
 
 /***/ }),
 
@@ -3207,12 +3397,49 @@ const ticketPayload = (ticket, timezone) => ({
   is_donation: ticket.type === "donation",
   ...Object.fromEntries(["start_datetime", "end_datetime"].map(key => [key, ticket[key] ? moment_timezone__WEBPACK_IMPORTED_MODULE_0___default().tz(ticket[key], timezone).utc().format("YYYY-MM-DDTHH:mm:ss[Z]") : null]))
 });
+
+// The API takes one recurrence shape per type, and the end condition is either
+// a number of occurrences or an end date — never both. An event loaded for
+// editing can carry leftovers from another variant (its own API response, or a
+// type the user switched away from), so the body is rebuilt from scratch.
+const recurrencePayload = (recurrence, isNew) => {
+  const type = Number(recurrence.type);
+  if (!type) return null;
+  const payload = {
+    type,
+    repeat_interval: Number(recurrence.repeat_interval) || 1
+  };
+  if (type === 2) {
+    var _recurrence$weekly_da;
+    const days = Array.isArray(recurrence.weekly_days) ? recurrence.weekly_days : String((_recurrence$weekly_da = recurrence.weekly_days) !== null && _recurrence$weekly_da !== void 0 ? _recurrence$weekly_da : "").split(",").filter(Boolean);
+    // 1 Sunday through 7 Saturday. PHP joins the array for the create call;
+    // the update body reaches the API unchanged.
+    const numbers = days.map(Number).filter(Number.isFinite);
+    payload.weekly_days = isNew ? numbers : numbers.join(",");
+  }
+  if (type === 3) {
+    if (recurrence.monthly_week_day) {
+      payload.monthly_week = Number(recurrence.monthly_week) || 1;
+      payload.monthly_week_day = Number(recurrence.monthly_week_day);
+    } else {
+      payload.monthly_day = Number(recurrence.monthly_day) || 1;
+    }
+  }
+  if (recurrence.end_times) payload.end_times = Number(recurrence.end_times);else if (recurrence.end_date_time) payload.end_date_time = recurrence.end_date_time;
+  return payload;
+};
 const eventPayload = (event, isNew, freePlan) => {
   const {
     meeting,
     filters
   } = event;
   const offline = event.location !== "zoom";
+  // Hosts are ids in the form, but the event endpoint may describe them as
+  // objects. An event that never had hosts sends no attribute at all.
+  const members = Array.isArray(filters.members) ? filters.members.map(m => {
+    var _m$id;
+    return Number((_m$id = m?.id) !== null && _m$id !== void 0 ? _m$id : m);
+  }).filter(Number.isFinite) : null;
   const type = meeting.recurrence?.type ? offline ? 2 : 8 : offline ? 1 : 2;
   const payload = {
     meeting: {
@@ -3220,22 +3447,30 @@ const eventPayload = (event, isNew, freePlan) => {
       agenda: meeting.agenda || "",
       timezone: meeting.timezone,
       duration: Number(meeting.duration),
-      recurrence: meeting.recurrence ? {
-        ...meeting.recurrence,
-        weekly_days: isNew ? meeting.recurrence.weekly_days : Array.isArray(meeting.recurrence.weekly_days) ? meeting.recurrence.weekly_days.join(",") : meeting.recurrence.weekly_days
-      } : null,
+      recurrence: meeting.recurrence ? recurrencePayload(meeting.recurrence, isNew) : null,
       is_hidden: Boolean(meeting.is_hidden),
       [isNew ? "startTime" : "start_time"]: meeting.startTime,
       [isNew ? "eventType" : "type"]: type
     },
+    // Only the documented attributes are forwarded: the event endpoint returns
+    // read-only extras next to them (the *_name labels, current_quantity) that
+    // the API must not receive back on update.
     types: {
-      ...filters,
-      location_id: ["zoom", "custom"].includes(event.location) ? null : filters.location_id || null
+      location_id: ["zoom", "custom"].includes(event.location) ? null : filters.location_id || null,
+      category_id: filters.category_id || null,
+      language_id: filters.language_id || null,
+      ...(members ? {
+        members
+      } : {})
     },
     custom_fields: event.custom_fields,
-    notifications: event.notifications,
+    notifications: {
+      google_calendar: Boolean(event.notifications?.google_calendar),
+      disable_emails: Boolean(event.notifications?.disable_emails)
+    },
     product: {
-      ...event.product
+      quantity: event.product?.quantity == null ? null : Number(event.product.quantity),
+      price: event.product?.price == null ? null : Number(event.product.price)
     }
   };
   if (event.image_content?.startsWith("data:image/")) payload.image_content = event.image_content.split(",")[1];
@@ -3331,12 +3566,19 @@ function useUnifiedEventForm() {
           tickets
         }, next.location).tickets;
       }
-      // An unavailable WordPress media endpoint must not prevent event editing.
-      try {
-        next.image_content = await (0,_utilities_events__WEBPACK_IMPORTED_MODULE_5__.getFeaturedImage)(id);
-      } catch {
-        /* optional cover */
+      // The cover comes from the event endpoint itself: the wp/v2 media route
+      // it used to be read from is hardened or cached away on many hosts, so
+      // a saved image looked lost.
+      if (!next.featured_image_url) {
+        try {
+          next.featured_image_url = (await (0,_utilities_events__WEBPACK_IMPORTED_MODULE_5__.getFeaturedImage)(id)) || "";
+        } catch {
+          /* optional cover */
+        }
       }
+      // Covers are only ever sent to the API as base64 image_content, so the
+      // field holds a freshly picked image and nothing else.
+      next.image_content = "";
       if (active) {
         setEvent(next);
         initialized.current = true;
@@ -3411,8 +3653,10 @@ function useUnifiedEventForm() {
     setSaving(true);
     try {
       const data = (0,_eventFormData__WEBPACK_IMPORTED_MODULE_7__.eventPayload)(event, !id, freePlan);
+      let imageError = "";
       if (!id) {
-        await (0,_utilities_events__WEBPACK_IMPORTED_MODULE_5__.createEvent)(event.location === "zoom" ? "zoom" : "offline", data);
+        const created = await (0,_utilities_events__WEBPACK_IMPORTED_MODULE_5__.createEvent)(event.location === "zoom" ? "zoom" : "offline", data);
+        imageError = created?.image_error || "";
       } else {
         // Reconcile each completed mutation immediately so retrying a later
         // failure cannot duplicate ticket creation or repeat deletion.
@@ -3447,7 +3691,8 @@ function useUnifiedEventForm() {
             }])
           }));
         }
-        await (0,_utilities_events__WEBPACK_IMPORTED_MODULE_5__.updateEvent)(id, data, occurrence);
+        const updated = await (0,_utilities_events__WEBPACK_IMPORTED_MODULE_5__.updateEvent)(id, data, occurrence);
+        imageError = updated?.image_error || "";
       }
       try {
         sessionStorage.removeItem(draftKey);
@@ -3455,6 +3700,7 @@ function useUnifiedEventForm() {
         /* storage unavailable */
       }
       react_toastify__WEBPACK_IMPORTED_MODULE_2__.toast.success(id ? "Event updated successfully." : "Event published successfully.");
+      if (imageError) react_toastify__WEBPACK_IMPORTED_MODULE_2__.toast.warning(`Cover image was not saved: ${imageError}`);
       navigate("/events");
     } catch (failure) {
       react_toastify__WEBPACK_IMPORTED_MODULE_2__.toast.error(failure.response?.data?.message || failure.message || "Unable to save event. Please try again.");
@@ -3622,6 +3868,459 @@ const Spinner = ({
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Spinner);
+
+/***/ }),
+
+/***/ "./src/Components/Modals/ModalShell.jsx":
+/*!**********************************************!*\
+  !*** ./src/Components/Modals/ModalShell.jsx ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/XMarkIcon.js");
+/* harmony import */ var _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ModalShell.module.scss */ "./src/Components/Modals/ModalShell.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+
+const SIZES = {
+  sm: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].sm,
+  md: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].md,
+  lg: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].lg,
+  xl: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].xl
+};
+
+// The centred dialog from the design reference.
+const ModalShell = ({
+  title,
+  eyebrow,
+  description,
+  footer,
+  size = "lg",
+  // Opt-in: the existing call sites close through their own controls only, so
+  // the default keeps their behaviour unchanged.
+  closeOnOverlay = false,
+  children,
+  onClose
+}) => {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+    className: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].overlay,
+    onClick: closeOnOverlay ? onClose : undefined,
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      className: `${_ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].dialog} ${SIZES[size] || SIZES.lg}`,
+      role: "dialog",
+      "aria-modal": "true",
+      "aria-label": typeof title === "string" ? title : undefined,
+      onClick: e => e.stopPropagation(),
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        className: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].header,
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+          children: [eyebrow && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+            className: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].eyebrow,
+            children: eyebrow
+          }), title && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h2", {
+            className: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].title,
+            children: title
+          }), description && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+            className: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].description,
+            children: description
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+          type: "button",
+          className: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].close,
+          onClick: onClose,
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_3__["default"], {})
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+        className: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].body,
+        children: children
+      }), footer && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+        className: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].footer,
+        children: footer
+      })]
+    })
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ModalShell);
+
+/***/ }),
+
+/***/ "./src/Components/Pages/Filters/CreateFilterModal.jsx":
+/*!************************************************************!*\
+  !*** ./src/Components/Pages/Filters/CreateFilterModal.jsx ***!
+  \************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/index.mjs");
+/* harmony import */ var _Modals_ModalShell__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Modals/ModalShell */ "./src/Components/Modals/ModalShell.jsx");
+/* harmony import */ var _Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../Controls/PageActionButton */ "./src/Components/Controls/PageActionButton.jsx");
+/* harmony import */ var _FilterFormSection__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./FilterFormSection */ "./src/Components/Pages/Filters/FilterFormSection.jsx");
+/* harmony import */ var _filterFields__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./filterFields */ "./src/Components/Pages/Filters/filterFields.js");
+/* harmony import */ var _utilities_filters__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../utilities/filters */ "./src/utilities/filters.js");
+/* harmony import */ var _store_useServvStore__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../store/useServvStore */ "./src/store/useServvStore.js");
+/* harmony import */ var _FilterForm_module_scss__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./FilterForm.module.scss */ "./src/Components/Pages/Filters/FilterForm.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__);
+
+
+
+
+
+
+
+
+
+
+// Creates one filter value without leaving the page that needed it — the event
+// form, so far. The filter pages stay the place to edit values, reorder them
+// and set a location's hours; this only asks for what a value cannot be created
+// without.
+//
+// onCreated receives the new value, so the caller can select what the host just
+// created instead of making them find it in a list.
+
+const CreateFilterModal = ({
+  type,
+  onClose,
+  onCreated
+}) => {
+  const form = _filterFields__WEBPACK_IMPORTED_MODULE_5__.FILTER_FORMS[type];
+  const syncSingleFilterFromServer = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_7__.useServvStore)(s => s.syncSingleFilterFromServer);
+  const [values, setValues] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({});
+  const [showErrors, setShowErrors] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [saving, setSaving] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  if (!form) return null;
+  const errors = (0,_filterFields__WEBPACK_IMPORTED_MODULE_5__.filterFormErrors)(type, values);
+  const change = (key, value) => {
+    setShowErrors(false);
+    setValues(prev => ({
+      ...prev,
+      [key]: value
+    }));
+  };
+  const save = async () => {
+    if (Object.keys(errors).length) {
+      setShowErrors(true);
+      return;
+    }
+    setSaving(true);
+    try {
+      const created = await (0,_utilities_filters__WEBPACK_IMPORTED_MODULE_6__.saveFilter)(type, values);
+      await syncSingleFilterFromServer(type);
+      // The create response carries the new id on most collections; where it
+      // does not, the refreshed list is matched by the name just submitted.
+      const name = String(values.name || "").trim();
+      const stored = _store_useServvStore__WEBPACK_IMPORTED_MODULE_7__.useServvStore.getState().filtersList?.[type]?.find(value => String(value.name || "").trim() === name);
+      onCreated?.(created?.id ? {
+        ...stored,
+        ...created
+      } : stored);
+      react_toastify__WEBPACK_IMPORTED_MODULE_1__.toast.success(`${form.label} created.`);
+      onClose();
+    } catch (failure) {
+      react_toastify__WEBPACK_IMPORTED_MODULE_1__.toast.error(failure.response?.data?.message || `Unable to create this ${form.label.toLowerCase()}. Please try again.`);
+    } finally {
+      setSaving(false);
+    }
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Modals_ModalShell__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    eyebrow: "New filter",
+    title: `New ${form.label.toLowerCase()}`,
+    description: form.description,
+    size: "md",
+    onClose: saving ? () => {} : onClose,
+    footer: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.Fragment, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        text: "Cancel",
+        type: "secondary",
+        disabled: saving,
+        onAction: onClose
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        text: saving ? "Creating…" : "Create filter",
+        disabled: saving,
+        onAction: save
+      })]
+    }),
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+      className: _FilterForm_module_scss__WEBPACK_IMPORTED_MODULE_8__["default"].fieldGrid,
+      children: form.fields.map(field => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_FilterFormSection__WEBPACK_IMPORTED_MODULE_4__.FilterField, {
+        label: field.label,
+        required: field.required,
+        hint: field.hint,
+        error: showErrors ? errors[field.key] : undefined,
+        fullWidth: field.fullWidth,
+        value: values[field.key] || "",
+        type: "text",
+        maxLength: field.maxLength,
+        textarea: field.textarea,
+        rows: field.rows,
+        disabled: saving,
+        onChange: value => change(field.key, value)
+      }, field.key))
+    })
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (CreateFilterModal);
+
+/***/ }),
+
+/***/ "./src/Components/Pages/Filters/FilterFormSection.jsx":
+/*!************************************************************!*\
+  !*** ./src/Components/Pages/Filters/FilterFormSection.jsx ***!
+  \************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   FilterField: () => (/* binding */ FilterField),
+/* harmony export */   FilterOrdering: () => (/* binding */ FilterOrdering),
+/* harmony export */   "default": () => (/* binding */ FilterFormSection)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Controls_NewInputFieldControl__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../Controls/NewInputFieldControl */ "./src/Components/Controls/NewInputFieldControl.jsx");
+/* harmony import */ var _FilterForm_module_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./FilterForm.module.scss */ "./src/Components/Pages/Filters/FilterForm.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__);
+
+
+
+
+function FilterFormSection({
+  title,
+  description,
+  children,
+  grid = false
+}) {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("section", {
+    className: _FilterForm_module_scss__WEBPACK_IMPORTED_MODULE_2__["default"].card,
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("header", {
+      className: _FilterForm_module_scss__WEBPACK_IMPORTED_MODULE_2__["default"].cardHeader,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("h2", {
+        children: title
+      }), description && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("p", {
+        children: description
+      })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+      className: `${_FilterForm_module_scss__WEBPACK_IMPORTED_MODULE_2__["default"].cardBody} ${grid ? _FilterForm_module_scss__WEBPACK_IMPORTED_MODULE_2__["default"].fieldGrid : ""}`,
+      children: children
+    })]
+  });
+}
+function FilterField({
+  label,
+  required = false,
+  hint,
+  error,
+  fullWidth = false,
+  ...props
+}) {
+  const id = (0,react__WEBPACK_IMPORTED_MODULE_0__.useId)();
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+    className: `${_FilterForm_module_scss__WEBPACK_IMPORTED_MODULE_2__["default"].field} ${fullWidth ? _FilterForm_module_scss__WEBPACK_IMPORTED_MODULE_2__["default"].fullWidth : ""}`,
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("label", {
+      htmlFor: id,
+      children: [label, required ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+        className: _FilterForm_module_scss__WEBPACK_IMPORTED_MODULE_2__["default"].required,
+        children: " *"
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+        className: _FilterForm_module_scss__WEBPACK_IMPORTED_MODULE_2__["default"].optional,
+        children: "Optional"
+      })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_Controls_NewInputFieldControl__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      ...props,
+      id: id,
+      width: "100%",
+      error: Boolean(error)
+    }), error ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+      className: _FilterForm_module_scss__WEBPACK_IMPORTED_MODULE_2__["default"].error,
+      role: "alert",
+      children: error
+    }) : hint && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+      className: _FilterForm_module_scss__WEBPACK_IMPORTED_MODULE_2__["default"].hint,
+      children: hint
+    })]
+  });
+}
+function FilterOrdering({
+  editing,
+  value,
+  onChange
+}) {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(FilterFormSection, {
+    title: "Ordering",
+    children: editing ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+      className: _FilterForm_module_scss__WEBPACK_IMPORTED_MODULE_2__["default"].ordering,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        className: _FilterForm_module_scss__WEBPACK_IMPORTED_MODULE_2__["default"].priority,
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(FilterField, {
+          label: "Priority",
+          value: value !== null && value !== void 0 ? value : "",
+          maxLength: 10,
+          onChange: onChange
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("p", {
+        className: _FilterForm_module_scss__WEBPACK_IMPORTED_MODULE_2__["default"].hint,
+        children: "Set the order in which this value appears in the filter list."
+      })]
+    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("p", {
+      className: _FilterForm_module_scss__WEBPACK_IMPORTED_MODULE_2__["default"].hint,
+      children: "Priority can be edited after this filter is created."
+    })
+  });
+}
+
+/***/ }),
+
+/***/ "./src/Components/Pages/Filters/filterFields.js":
+/*!******************************************************!*\
+  !*** ./src/Components/Pages/Filters/filterFields.js ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   FILTER_FORMS: () => (/* binding */ FILTER_FORMS),
+/* harmony export */   filterFormErrors: () => (/* binding */ filterFormErrors)
+/* harmony export */ });
+// What a new filter value needs, per collection. Shared by anything that
+// creates one without the full filter page: the fields a value cannot be
+// created without, and nothing else. Priority is deliberately absent — the
+// pages only offer it while editing — and so are a location's operational
+// hours, which have their own time controls there.
+
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PHONE = /^\+?[\d\s\-().]{7,20}$/;
+const NAME = {
+  key: "name",
+  required: true,
+  maxLength: 100,
+  fullWidth: true,
+  hint: "This name identifies the value in your event filters."
+};
+const DETAILS = {
+  key: "details",
+  label: "Details",
+  maxLength: 200,
+  textarea: true,
+  rows: 3,
+  fullWidth: true
+};
+const FILTER_FORMS = {
+  locations: {
+    label: "Location",
+    description: "Where the event happens. Hours can be set afterwards.",
+    fields: [{
+      ...NAME,
+      label: "Location name"
+    }, DETAILS]
+  },
+  categories: {
+    label: "Category",
+    description: "Groups events in the public list.",
+    fields: [{
+      ...NAME,
+      label: "Category name"
+    }, DETAILS]
+  },
+  languages: {
+    label: "Language",
+    description: "The language the session is held in.",
+    fields: [{
+      ...NAME,
+      label: "Language name"
+    }]
+  },
+  members: {
+    label: "Member",
+    description: "The host shown to attendees.",
+    fields: [{
+      ...NAME,
+      label: "Member name"
+    }, {
+      key: "email",
+      label: "Email",
+      maxLength: 150,
+      validate: value => !value || EMAIL.test(value) ? "" : "Invalid email address"
+    }, {
+      key: "phone",
+      label: "Phone",
+      maxLength: 30,
+      validate: value => !value || PHONE.test(value) ? "" : "Invalid phone number"
+    }, {
+      key: "description",
+      label: "Description",
+      maxLength: 200,
+      textarea: true,
+      rows: 3,
+      fullWidth: true
+    }]
+  }
+};
+const filterFormErrors = (type, values = {}) => {
+  const errors = {};
+  (FILTER_FORMS[type]?.fields || []).forEach(field => {
+    const value = values[field.key];
+    if (field.required && !String(value || "").trim()) errors[field.key] = `${field.label} is required.`;else if (field.validate) {
+      const error = field.validate(value);
+      if (error) errors[field.key] = error;
+    }
+  });
+  return errors;
+};
+
+/***/ }),
+
+/***/ "./src/Components/Pages/Filters/useFilterLimits.js":
+/*!*********************************************************!*\
+  !*** ./src/Components/Pages/Filters/useFilterLimits.js ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   useFilterLimits: () => (/* binding */ useFilterLimits)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+const BASE_CATEGORIES = ["Locations", "Languages", "Categories"];
+const DEFAULT_FILTERS_LIMIT = 25;
+
+// Which filter kinds the current plan exposes, and whether the store has hit
+// its filter allowance.
+//
+// All three values are derived rather than held in state: the pages used to
+// compute them in an effect that mutated the category array in place, so
+// "Members" could go missing or appear several times depending on how many
+// times the effect had run.
+const useFilterLimits = (settings, filtersList) => {
+  const plan = settings?.current_plan;
+  const maxFiltersNumber = plan?.filters_limit || DEFAULT_FILTERS_LIMIT;
+  const totalFilters = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => Object.values(filtersList || {}).reduce((total, arr) => total + (arr?.length || 0), 0), [filtersList]);
+
+  // Member filters are gated behind a paid plan (plan id 1 is the free tier).
+  const filterCategories = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => !plan || plan.id !== 1 ? [...BASE_CATEGORIES, "Members"] : BASE_CATEGORIES, [plan]);
+  return {
+    maxFiltersNumber,
+    isLimitReached: totalFilters >= maxFiltersNumber,
+    filterCategories
+  };
+};
 
 /***/ }),
 
@@ -3878,7 +4577,7 @@ async function adminApiFetch(options) {
     const response = await (0,_requestCache__WEBPACK_IMPORTED_MODULE_1__.cachedRequest)({
       key: `api:${window.servvData.nonce}:${url.href}`,
       tags: [resource],
-      ttl: ["settings", "filters", "billing"].includes(resource) ? 300000 : 60000,
+      ttl: (0,_requestCache__WEBPACK_IMPORTED_MODULE_1__.resourceTtl)(resource),
       load: async () => ({
         data: JSON.stringify(await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_0___default()(options)),
         status: 200,
@@ -3985,9 +4684,10 @@ const updateEvent = async (postId, data, occurrenceId = null) => {
 const getFeaturedImage = async (postId, signal = null) => {
   const WP_API_BASE = `/wp-json/wp/v2/posts`;
   const res = await fetch(`${WP_API_BASE}/${postId}?_embed`, {
-    signal
+    signal,
+    credentials: "same-origin",
+    headers: headers()
   });
-  console.log(res);
   if (!res.ok) throw new Error("Failed to fetch post");
   const post = await res.json();
   return post?._embedded?.["wp:featuredmedia"]?.[0]?.source_url || null;
@@ -4392,7 +5092,37 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 // extracted by mini-css-extract-plugin
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"timeControl":"G5MqN3QTDf0f1ZRP7n2c","root":"cuF89BwKIpGdzKThM6AU","header":"TP01_oU1_ToRX2QvbZgv","sections":"sleWB6ChmtSgnqg9lLsb","headingRow":"q59ZKFZI0ev6y_Q14lWc","actions":"_DzciE1nbrOwbp3SfFwb","divider":"AOuZDwhPKBn9XbvsRS_d","fieldset":"QnQ_XIVqLVDaqpysIdW5","layout":"O4FNiakiDPiy7TPwkroc","card":"dDwEbnVy1pHADesI6KtL","cardHeader":"oNXP75IxKkXLBBBAlTwv","eyebrow":"u7X97eyKICFl2_UFQ3KE","asideEyebrow":"pczVkaxP3ZG7JDRTUM2r","body":"lG6yeAhE3CxgHJZ4X0s7","field":"MzxTqOE3jQGBmRsh99A1","fieldTitle":"pXW4XerjQy0b3dxOPxiw","filterHeading":"nsfdvZ3QYFxsa4ZXeZe7","formats":"SghLMok5_SHtiyAFbfMQ","choice":"y9Y6b3Ni8Q2HqJIt1yBP","selected":"soheQdEFDIsOVHVNmtCw","radio":"jzv8jZiWF7NBWLSgBC0k","formatIcon":"oAaVYIHlHFq0s0OlugpY","filters":"Mhs6VM9jJcuS8feQXogt","filterCard":"xEUvbyb9V3BYKd1xv9zh","filterValue":"rghRT3z2In_h6FA2mCCl","chips":"YTG9Yu2HeyBnRrKHaWYf","chip":"qZFvDT9XEYEX02vaLEbE","schedule":"nwMs3lgMP6RehUI4k9nn","recurrence":"TaLkekVKQSxRdZHp_IrJ","recurringControls":"E4rjJmWRomPycrKrbvdn","ticketRow":"UL1APrfzeWEUwZcj6qe9","ticketEditor":"OrLAk9z0kfiTlYkOrmNp","addTicket":"VMFWTk04GNTNfjFfXb7O","aside":"zO1O2hivf4A3vShPRhvE","visibility":"BchTe1XQSeR9fIYFt8hu","toggleRow":"ta3RznGWMYheqbARdUgP","toggle":"yx1SPhnlgptdz990EgBD","on":"LQJcUuxcOHk1YdH739dC","warning":"qDF0DpEg5rz7I8vERdwQ","draftNote":"KYZchE4xVEXYFuScCZkJ","details":"cNHEn1Sn1DvtqiJ1itLr","detailsBody":"k8d89AxvOe7YphF_CDzW","cover":"QuLBR5XH9444KLpaJZrx"});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"timeControl":"G5MqN3QTDf0f1ZRP7n2c","root":"cuF89BwKIpGdzKThM6AU","header":"TP01_oU1_ToRX2QvbZgv","sections":"sleWB6ChmtSgnqg9lLsb","headingRow":"q59ZKFZI0ev6y_Q14lWc","actions":"_DzciE1nbrOwbp3SfFwb","divider":"AOuZDwhPKBn9XbvsRS_d","fieldset":"QnQ_XIVqLVDaqpysIdW5","layout":"O4FNiakiDPiy7TPwkroc","card":"dDwEbnVy1pHADesI6KtL","cardHeader":"oNXP75IxKkXLBBBAlTwv","eyebrow":"u7X97eyKICFl2_UFQ3KE","asideEyebrow":"pczVkaxP3ZG7JDRTUM2r","body":"lG6yeAhE3CxgHJZ4X0s7","field":"MzxTqOE3jQGBmRsh99A1","fieldTitle":"pXW4XerjQy0b3dxOPxiw","filterHeading":"nsfdvZ3QYFxsa4ZXeZe7","formats":"SghLMok5_SHtiyAFbfMQ","choice":"y9Y6b3Ni8Q2HqJIt1yBP","selected":"soheQdEFDIsOVHVNmtCw","radio":"jzv8jZiWF7NBWLSgBC0k","formatIcon":"oAaVYIHlHFq0s0OlugpY","filters":"Mhs6VM9jJcuS8feQXogt","filterCard":"xEUvbyb9V3BYKd1xv9zh","filterValue":"rghRT3z2In_h6FA2mCCl","chips":"YTG9Yu2HeyBnRrKHaWYf","chip":"qZFvDT9XEYEX02vaLEbE","chipAdd":"qHceRAdyzoEk5VXo5rA5","schedule":"nwMs3lgMP6RehUI4k9nn","recurrence":"TaLkekVKQSxRdZHp_IrJ","recurringControls":"E4rjJmWRomPycrKrbvdn","ticketRow":"UL1APrfzeWEUwZcj6qe9","ticketEditor":"OrLAk9z0kfiTlYkOrmNp","addTicket":"VMFWTk04GNTNfjFfXb7O","aside":"zO1O2hivf4A3vShPRhvE","visibility":"BchTe1XQSeR9fIYFt8hu","toggleRow":"ta3RznGWMYheqbARdUgP","toggle":"yx1SPhnlgptdz990EgBD","on":"LQJcUuxcOHk1YdH739dC","warning":"qDF0DpEg5rz7I8vERdwQ","draftNote":"KYZchE4xVEXYFuScCZkJ","details":"cNHEn1Sn1DvtqiJ1itLr","detailsBody":"k8d89AxvOe7YphF_CDzW","cover":"QuLBR5XH9444KLpaJZrx","upload":"Gydv5VUuUF7vjRvikufg","coverEmpty":"e8YpA2PJ7vo9P2TEHx3z","coverEmptyIcon":"V3dbOMdOaW93yPWKmoh2","uploadRow":"_HOjpq4lSItujlsMthhw","fileInput":"_NCKMsVti_ALE62MpFsA","uploadButton":"unrzdvUtmqx4rF3z2UWw","uploadBusy":"lPJDgGYQUEFPfBmHQKa8","uploadIcon":"TjQGXnyw2LNWb178p35N","uploadHint":"KsyYOBH9PljAPwDPIFfe","uploadError":"zxjBUQl7CbWMln37CMpn"});
+
+/***/ }),
+
+/***/ "./src/Components/Modals/ModalShell.module.scss":
+/*!******************************************************!*\
+  !*** ./src/Components/Modals/ModalShell.module.scss ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"overlay":"zaqd_YWTGq9h9BrDhnml","svFade":"lQqxKZGLcAKV1Jn8Vt2F","dialog":"XXcDzcz01ytVnY3hpKJj","svPop":"DdditGgnQd2jVs8QrqsH","sm":"HW1Ittu6VG1nOuS1qg32","md":"vJ0FZD6KHZ4i9D5apaFY","lg":"YHKB1jznvv4OseMsi_Az","xl":"Efc0HlnFAqkwM15HiCNa","header":"R3wk4fdBZ02XilBUvvKA","eyebrow":"WERcf127A0gFANECWp8h","title":"iXgumjbKr876OyoPtlx9","description":"MPu8eTML6zZvnQl6CbB4","close":"MV0wlpfgIbnXq6oksmES","body":"EySeA5xUa9n4fl1YJ9vW","footer":"uM3hTqX_1dotCASYgHwQ"});
+
+/***/ }),
+
+/***/ "./src/Components/Pages/Filters/FilterForm.module.scss":
+/*!*************************************************************!*\
+  !*** ./src/Components/Pages/Filters/FilterForm.module.scss ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"layout":"uwuR254aylSmBYNYnMYN","sections":"haInXcveXbCJcMk4ILmQ","card":"RZj3GyLsSpdkSytrH11H","cardHeader":"GTTJrMZweuT2YkiBo1b3","eyebrow":"S9rPtYRN1mgp1IWi2FTS","cardBody":"Rbh7Rug7wRj_AbfZhjra","fieldGrid":"fG0hA8a5o0sB4wCPM3Hw","field":"Ix0lZTD3Uz6SOHSlqQew","fullWidth":"unAJYKilCzDzC87aX1hs","required":"bTKTESDYvH5174FSTRAh","optional":"hS8BKtNFvE550PYvwR4j","hint":"S9uz1NIhVAuEu3mQo9qG","error":"A_QFYiL4ogkj_pcYgLAz","ordering":"UaWnAlElIr8HXN_6gPP9","priority":"kLI3oDce3GGf0WszqhdZ","hours":"OipoCl47a5CLwc_xTrcy","chips":"MsxEVxG8o02QuN2MuTQf","kindChip":"jDlSzQhIUPgVeq3L02a8","modeChip":"vhYeKF8DcJEIUp6SuY4J","preview":"OzQKCneELWCjyyElmYp4","previewHeader":"t_EEix4mDs1er8qo_VEo","existingFilters":"dNDZtq0HyLESSA3VcSFQ","currentFilter":"tTlGID8QtShlCSQP2nUu"});
 
 /***/ }),
 
@@ -4423,6 +5153,46 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 // extracted by mini-css-extract-plugin
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"root":"NvXIBF17sKtsJ5DppGj6","blurred":"s8xU0aT_Upum9VaMUtFv","overlay":"rwBQn7Ep0HRpuD73wvEE"});
+
+/***/ }),
+
+/***/ "./node_modules/@heroicons/react/24/outline/esm/ArrowUpTrayIcon.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/@heroicons/react/24/outline/esm/ArrowUpTrayIcon.js ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+
+function ArrowUpTrayIcon({
+  title,
+  titleId,
+  ...props
+}, svgRef) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("svg", Object.assign({
+    xmlns: "http://www.w3.org/2000/svg",
+    fill: "none",
+    viewBox: "0 0 24 24",
+    strokeWidth: 1.5,
+    stroke: "currentColor",
+    "aria-hidden": "true",
+    "data-slot": "icon",
+    ref: svgRef,
+    "aria-labelledby": titleId
+  }, props), title ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("title", {
+    id: titleId
+  }, title) : null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("path", {
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    d: "M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"
+  }));
+}
+const ForwardRef = /*#__PURE__*/ react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(ArrowUpTrayIcon);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ForwardRef);
 
 /***/ }),
 
@@ -4506,6 +5276,46 @@ function MapPinIcon({
   }));
 }
 const ForwardRef = /*#__PURE__*/ react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(MapPinIcon);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ForwardRef);
+
+/***/ }),
+
+/***/ "./node_modules/@heroicons/react/24/outline/esm/PhotoIcon.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/@heroicons/react/24/outline/esm/PhotoIcon.js ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+
+function PhotoIcon({
+  title,
+  titleId,
+  ...props
+}, svgRef) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("svg", Object.assign({
+    xmlns: "http://www.w3.org/2000/svg",
+    fill: "none",
+    viewBox: "0 0 24 24",
+    strokeWidth: 1.5,
+    stroke: "currentColor",
+    "aria-hidden": "true",
+    "data-slot": "icon",
+    ref: svgRef,
+    "aria-labelledby": titleId
+  }, props), title ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("title", {
+    id: titleId
+  }, title) : null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("path", {
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    d: "m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
+  }));
+}
+const ForwardRef = /*#__PURE__*/ react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(PhotoIcon);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ForwardRef);
 
 /***/ }),
@@ -4722,4 +5532,4 @@ function validate(uuid) {
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_CreateEvent_UnifiedEventForm_jsx.js.map?ver=df8bf415933da6e54ae4
+//# sourceMappingURL=src_Components_CreateEvent_UnifiedEventForm_jsx.js.map?ver=ce81931d8e0cb9deda3a

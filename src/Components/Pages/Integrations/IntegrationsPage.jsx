@@ -111,7 +111,7 @@ const IntegrationsPage = ({
       key: "gmail",
       glyph: "M",
       title: "Gmail",
-      description: "Send event email notifications and reminders with Gmail.",
+      description: "Send event email notifications and reminders.",
       connected: gmailConnected,
 
       route: "/integrations/gmail",

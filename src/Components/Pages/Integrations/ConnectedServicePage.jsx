@@ -7,6 +7,7 @@ import useCacheRefresh from "../../../hooks/useCacheRefresh";
 import { useEffect, useState } from "react";
 import axios from "../../../utilities/adminApi";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import ModalShell from "../../Modals/ModalShell";
 import ConnectServiceModalContent from "../../Modals/ConnectServiceModalContent";
@@ -34,27 +35,43 @@ const ConnectedServicePage = ({
 
   const accountUrl = `/wp-json/servv-plugin/v1/${service}/account`;
 
+  // The endpoint answers a disconnected service with an error status, so a
+  // failed read is the normal "nothing connected" state. It must still mark the
+  // account as fetched, or the page renders neither Connect nor Disconnect.
   const getAccount = async () => {
-    const response = await axios({
-      method: "GET",
-      url: accountUrl,
-      headers: { "X-WP-Nonce": servvData.nonce },
-    });
+    try {
+      const response = await axios({
+        method: "GET",
+        url: accountUrl,
+        headers: { "X-WP-Nonce": servvData.nonce },
+      });
 
-    if (response && response.status === 200) {
-      setAccount(resolveAccount(response.data) ? response.data : null);
+      setAccount(
+        response?.status === 200 && resolveAccount(response.data)
+          ? response.data
+          : null,
+      );
+    } catch {
+      setAccount(null);
+    } finally {
+      setAccountFetched(true);
     }
-
-    setAccountFetched(true);
   };
 
   const handleRemoveAccount = async () => {
-    await axios({
-      method: "DELETE",
-      url: accountUrl,
-      headers: { "X-WP-Nonce": servvData.nonce },
-    });
-    setAccount(null);
+    try {
+      await axios({
+        method: "DELETE",
+        url: accountUrl,
+        headers: { "X-WP-Nonce": servvData.nonce },
+      });
+      setAccount(null);
+    } catch (failure) {
+      toast.error(
+        failure.response?.data?.message ||
+          `Unable to disconnect ${breadcrumbLabel}. Please try again.`,
+      );
+    }
   };
 
   const handleGetConnectURL = () => openServiceConnectURL(service);

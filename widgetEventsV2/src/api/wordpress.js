@@ -54,7 +54,9 @@ export function createWordPressApi(runtime) {
     fetchTypes: () => request('servv_get_types_list'),
     fetchMeetings: ({ filters, defaults, page = 1, pageSize = 10, withoutOccurrences, scope = 'meetings:list' } = {}) =>
       request('servv_get_events_filtered_list', { ...toRequestParams(filters, { defaults }), page, page_size: pageSize, ...(withoutOccurrences ? { without_occurrences: 1 } : {}) }, scope),
-    fetchDates: ({ filters, defaults, month } = {}) => request('servv_get_events_filtered_list_dates', { ...toRequestParams(filters, { defaults }), date: month }, `meetings:dates:${month}`),
+    // No month means every matching date, which is how one reply serves every
+    // month the widget shows.
+    fetchDates: ({ filters, defaults, month } = {}) => request('servv_get_events_filtered_list_dates', { ...toRequestParams(filters, { defaults }), date: month }, `meetings:dates:${month || 'all'}`),
     fetchEventInfo: (postId) => request('servv_get_event_info', { post_id: postId }),
     fetchQuestions: (postId, formType) => request('servv_get_event_questions_list', { post_id: postId, form_type: formType }),
     saveAnswers: (postId, { questions, email, occurrenceId }) => request('servv_add_event_answer', { post_id: postId, answers: questions, email, occurrence_id: occurrenceId }),

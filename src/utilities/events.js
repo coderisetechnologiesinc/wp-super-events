@@ -37,8 +37,11 @@ export const updateEvent = async (postId, data, occurrenceId = null) => {
 
 export const getFeaturedImage = async (postId, signal = null) => {
   const WP_API_BASE = `/wp-json/wp/v2/posts`;
-  const res = await fetch(`${WP_API_BASE}/${postId}?_embed`, { signal });
-  console.log(res);
+  const res = await fetch(`${WP_API_BASE}/${postId}?_embed`, {
+    signal,
+    credentials: "same-origin",
+    headers: headers(),
+  });
   if (!res.ok) throw new Error("Failed to fetch post");
   const post = await res.json();
   return post?._embedded?.["wp:featuredmedia"]?.[0]?.source_url || null;

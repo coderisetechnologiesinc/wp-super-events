@@ -713,6 +713,9 @@ const SetupGuide = ({
   hasEvents = false
 }) => {
   const settings = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_1__.useServvStore)(s => s.settings);
+  // Every connection flag below starts out false and is only answered by the
+  // account sync, so this says whether they mean anything yet.
+  const accountsSynced = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_1__.useServvStore)(s => s.accountsSynced);
   const zoomConnected = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_1__.useServvStore)(s => s.zoomConnected);
   const stripeConnected = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_1__.useServvStore)(s => s.stripeConnected);
   const gmailConnected = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_1__.useServvStore)(s => s.gmailConnected);
@@ -755,9 +758,11 @@ const SetupGuide = ({
     }
   };
 
-  // Nothing to nag about before the settings land, once every step is done, or
-  // after the shop dismissed it.
-  if (!settings || dismissed || !next) return null;
+  // Nothing to nag about before the settings and the account answers land,
+  // once every step is done, or after the shop dismissed it. Rendering while
+  // the connections are still unknown shows a guide whose steps are all open
+  // and then retracts it as the answers arrive.
+  if (!settings || !accountsSynced || dismissed || !next) return null;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("section", {
     className: _SetupGuide_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].card,
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
@@ -1890,6 +1895,7 @@ const Dashboard = () => {
   const filtersList = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_5__.useServvStore)(s => s.filtersList);
   const zoomAccount = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_5__.useServvStore)(s => s.zoomAccount);
   const zoomConnected = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_5__.useServvStore)(s => s.zoomConnected);
+  const accountsSynced = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_5__.useServvStore)(s => s.accountsSynced);
   const {
     // merged list — used when eventType === "all"
     mergedList,
@@ -1980,12 +1986,15 @@ const Dashboard = () => {
   // }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_4__.useEffect)(() => {
     const onboardingSkipped = localStorage.getItem("onboardingSkipped") === window.location.origin;
-    if (firstFetchDone && mergedList.length === 0 && !zoomConnected && !onboardingSkipped && !isFiltersApplied()) {
+    if (firstFetchDone &&
+    // An empty list proves nothing until the zoom answer is in: the merged
+    // fetch leaves zoom out while the connection is still unknown.
+    accountsSynced && mergedList.length === 0 && !zoomConnected && !onboardingSkipped && !isFiltersApplied()) {
       navigate("/onboarding");
     } else if (settings?.is_wp_marketplace && (settings?.current_plan?.id === 1 || !settings.current_plan)) {
       navigate("/onboarding?activate_plan");
     }
-  }, [firstFetchDone, zoomConnected, mergedList.length]);
+  }, [firstFetchDone, accountsSynced, zoomConnected, mergedList.length]);
   const handleCreateNewEvent = () => {
     if (servvData.gutenberg_active) navigate("/events/new", {
       state: {
@@ -2025,6 +2034,15 @@ const Dashboard = () => {
   (0,react__WEBPACK_IMPORTED_MODULE_4__.useEffect)(() => {
     if (eventsList.length > 0) setHasAnyEvent(true);
   }, [eventsList.length]);
+
+  // The setup banner asks whether the shop has events, so it may only appear
+  // once a fetch has finished — a list still waiting for its zoom half would
+  // make it advertise "create your first event" and then take it back. Latched
+  // too, so later refetches do not blink it off the page.
+  const [eventsSettled, setEventsSettled] = (0,react__WEBPACK_IMPORTED_MODULE_4__.useState)(false);
+  (0,react__WEBPACK_IMPORTED_MODULE_4__.useEffect)(() => {
+    if (firstFetchDone && !eventsLoading) setEventsSettled(true);
+  }, [firstFetchDone, eventsLoading]);
   const location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_16__.useLocation)();
   (0,react__WEBPACK_IMPORTED_MODULE_4__.useEffect)(() => {
     const params = new URLSearchParams(location.search);
@@ -2084,7 +2102,7 @@ const Dashboard = () => {
     flush: true,
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(_Containers_PageContent__WEBPACK_IMPORTED_MODULE_1__["default"], {
       className: _Dashboard_module_scss__WEBPACK_IMPORTED_MODULE_14__["default"].page,
-      children: [firstFetchDone && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Containers_SetupGuide__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      children: [eventsSettled && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Containers_SetupGuide__WEBPACK_IMPORTED_MODULE_3__["default"], {
         hasEvents: hasAnyEvent
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Containers_PageHeader__WEBPACK_IMPORTED_MODULE_2__["default"], {
         eyebrow: "WP Super Events by ServvAI",
@@ -3478,6 +3496,7 @@ __webpack_require__.r(__webpack_exports__);
 const useEventsLogic = (settings, filtersList, zoomAccount) => {
   const PAGE_SIZE = 10;
   const isZoomConnected = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_7__.useServvStore)(s => s.zoomConnected);
+  const accountsSynced = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_7__.useServvStore)(s => s.accountsSynced);
   const navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_8__.useNavigate)();
   const syncAccountsAfterEvents = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_7__.useServvStore)(s => s.syncAccountsAfterEvents);
   const syncFiltersFromServer = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_7__.useServvStore)(s => s.syncFiltersFromServer);
@@ -3766,6 +3785,8 @@ const useEventsLogic = (settings, filtersList, zoomAccount) => {
   // =====================================================================
 
   const syncedAfterEventsRef = (0,react__WEBPACK_IMPORTED_MODULE_2__.useRef)(false);
+  // True while the loading state is deliberately held for the zoom answer.
+  const awaitingZoomRef = (0,react__WEBPACK_IMPORTED_MODULE_2__.useRef)(false);
   const stateRef = (0,react__WEBPACK_IMPORTED_MODULE_2__.useRef)({});
   stateRef.current = {
     eventType,
@@ -3775,7 +3796,8 @@ const useEventsLogic = (settings, filtersList, zoomAccount) => {
     dates,
     selectedFilters,
     settings,
-    isZoomConnected
+    isZoomConnected,
+    accountsSynced
   };
   const getEventsList = (0,react__WEBPACK_IMPORTED_MODULE_2__.useCallback)(async ({
     page = 1,
@@ -3854,6 +3876,12 @@ const useEventsLogic = (settings, filtersList, zoomAccount) => {
     const headers = {
       "X-WP-Nonce": servvData.nonce
     };
+    // The zoom connection is only answered by the account sync that runs
+    // after the first fetch, so this pass may be offline-only merely because
+    // the answer has not arrived yet. If zoom turns out to be connected the
+    // effect below fetches again and re-sorts the list, so the loading state
+    // is held until then instead of painting offline events twice.
+    const zoomPassMayFollow = !s.accountsSynced && !s.isZoomConnected;
 
     // Whole-range mode asks both endpoints for the full window, so there is
     // nothing to balance between them and nothing to page through.
@@ -3993,7 +4021,8 @@ const useEventsLogic = (settings, filtersList, zoomAccount) => {
       console.error(e);
       (0,react_toastify__WEBPACK_IMPORTED_MODULE_5__.toast)("Error fetching merged events");
     } finally {
-      setMergedLoading(false);
+      awaitingZoomRef.current = zoomPassMayFollow;
+      if (!zoomPassMayFollow) setMergedLoading(false);
     }
     if (!syncedAfterEventsRef.current) {
       syncedAfterEventsRef.current = true;
@@ -4157,7 +4186,17 @@ const useEventsLogic = (settings, filtersList, zoomAccount) => {
     doFetch();
   }, [settings]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // 2) FILTER / TYPE / ZOOM CONNECTION CHANGES
+  // 2) ZOOM ANSWER — release a list that was waiting for it
+  // A connected account triggers the refetch below, which keeps the loading
+  // state it inherits. A disconnected one fetches nothing more, so what the
+  // offline pass already rendered is final.
+  (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
+    if (!awaitingZoomRef.current || !accountsSynced || isZoomConnected) return;
+    awaitingZoomRef.current = false;
+    setMergedLoading(false);
+  }, [accountsSynced, isZoomConnected]);
+
+  // 3) FILTER / TYPE / ZOOM CONNECTION CHANGES
   (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
     if (!initialLoadDoneRef.current) return;
     if (!shouldFetch()) return;
@@ -4167,12 +4206,12 @@ const useEventsLogic = (settings, filtersList, zoomAccount) => {
   JSON.stringify(selectedFilters), isZoomConnected // re-fetch when zoom connects/disconnects
   ]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // 3) TOAST ERRORS
+  // 4) TOAST ERRORS
   (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
     if (showError) (0,react_toastify__WEBPACK_IMPORTED_MODULE_5__.toast)(showError);
   }, [showError]);
 
-  // 4) TIME FORMAT & TIMEZONE — runs once
+  // 5) TIME FORMAT & TIMEZONE — runs once
   const settingsAppliedRef = (0,react__WEBPACK_IMPORTED_MODULE_2__.useRef)(false);
   (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
     if (!settings || settingsAppliedRef.current) return;
@@ -4634,9 +4673,10 @@ const updateEvent = async (postId, data, occurrenceId = null) => {
 const getFeaturedImage = async (postId, signal = null) => {
   const WP_API_BASE = `/wp-json/wp/v2/posts`;
   const res = await fetch(`${WP_API_BASE}/${postId}?_embed`, {
-    signal
+    signal,
+    credentials: "same-origin",
+    headers: headers()
   });
-  console.log(res);
   if (!res.ok) throw new Error("Failed to fetch post");
   const post = await res.json();
   return post?._embedded?.["wp:featuredmedia"]?.[0]?.source_url || null;
@@ -5826,4 +5866,4 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_Dashboard_jsx.js.map?ver=267f32375b7ccd56754d
+//# sourceMappingURL=src_Components_Pages_Dashboard_jsx.js.map?ver=ed0f32842452596a929c

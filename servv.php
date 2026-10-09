@@ -3,7 +3,7 @@
  * Plugin Name: WP Super Events – Event Booking & Tickets
  * Plugin URI: https://wpsuperevents.com
  * Description: Create event calendars, registrations, recurring events, tickets, and online or in-person events directly in WordPress.
- * Version: 2.0.0
+ * Version: 1.2.1
  * Author: ServvAI
  * Author URI: https://wpsuperevents.com
  * License: GPL2
@@ -46,7 +46,7 @@ function servv_plugin_activate_single_site() {
         wp_schedule_single_event(time() + 5, 'servv_plugin_delayed_install');
     }
     update_option('servv_onboarding_status', 'pending', false);
-    update_option('servv_onboarding_redirect', '1', false);
+    delete_option('servv_onboarding_redirect');
     if (function_exists('spawn_cron')) {
         spawn_cron();
     }
@@ -388,7 +388,7 @@ add_action('wp_enqueue_scripts', function () {
 
     wp_enqueue_style(
         'servv-checkout-styles',
-        plugin_dir_url(__FILE__) . 'build-assets/index.css',
+        plugin_dir_url(__FILE__) . 'build/checkout.css',
         [],
         $asset['version']
     );
@@ -404,6 +404,7 @@ add_action('wp_enqueue_scripts', function () {
     wp_localize_script('servv-checkout', 'servvCheckoutData', [
         'postId'  => get_the_ID(),
         'eventId' => $event_id,
+        'stripeAccountId' => get_option('servv_stripe_account_id', ''),
         'ajaxUrl' => admin_url('admin-ajax.php'),
         'restUrl' => rest_url(),
         'nonce'   => wp_create_nonce('payment_nonce'),
@@ -459,6 +460,39 @@ function servv_render_event_purchase_form($atts) {
 // ─────────────────────────────────────────────────────────────────────────────
 
 add_action('admin_menu', 'servv_add_admin_page');
+add_action('admin_page_access_denied', 'servv_recover_integration_return_page');
+
+/**
+ * Return URLs for the integrations live on the Servv side, and some of them
+ * still point at admin pages this plugin no longer registers (the Stripe
+ * Connect return is one). WordPress answers an unregistered page with
+ * "Sorry, you are not allowed to access this page", which reads as a failed
+ * connection even though the account was linked, so an administrator asking
+ * for one of our pages is sent to the screen that owns it instead.
+ */
+function servv_recover_integration_return_page() {
+    if (!current_user_can('manage_options')) {
+        return;
+    }
+    $page = servv_get_current_admin_page();
+    if (strpos($page, 'servv') !== 0) {
+        return;
+    }
+    // A page we do register is a genuine denial, not a stale return URL.
+    if (isset(servv_get_admin_screens()[$page])) {
+        return;
+    }
+    $route = 'integrations';
+    foreach (['stripe' => 'integrations/stripe', 'zoom' => 'integrations/zoom',
+        'gmail' => 'integrations/gmail', 'calendar' => 'integrations/calendars'] as $needle => $target) {
+        if (strpos($page, $needle) !== false) {
+            $route = $target;
+            break;
+        }
+    }
+    wp_safe_redirect(servv_get_hash_admin_url('servv-integrations', $route));
+    exit;
+}
 add_action('admin_enqueue_scripts', 'servv_admin_enqueue_scripts');
 add_action('admin_init', 'servv_maybe_redirect_to_onboarding');
 add_action('admin_post_servv_dismiss_onboarding', 'servv_handle_dismiss_onboarding');
@@ -587,20 +621,10 @@ function servv_add_admin_page() {
 }
 
 function servv_maybe_redirect_to_onboarding() {
-    if (get_option('servv_onboarding_redirect') !== '1') {
-        return;
-    }
-    if (!current_user_can('manage_options') || wp_doing_ajax() || is_network_admin()) {
-        return;
-    }
-    $page = servv_get_current_admin_page();
-    if ($page === 'servv-onboarding') {
+    // Automatic setup navigation is temporarily disabled, including queued redirects.
+    if (get_option('servv_onboarding_redirect') === '1') {
         delete_option('servv_onboarding_redirect');
-        return;
     }
-    delete_option('servv_onboarding_redirect');
-    wp_safe_redirect(admin_url('admin.php?page=servv-onboarding'));
-    exit;
 }
 
 function servv_handle_dismiss_onboarding() {
@@ -618,8 +642,11 @@ function servv_is_onboarding_dismissed() {
     return get_option('servv_onboarding_status') === 'dismissed';
 }
 
-function servv_get_hash_admin_url($page, $route = '') {
+function servv_get_hash_admin_url($page, $route = '', $args = []) {
     $url = admin_url('admin.php?page=' . $page);
+    if (!empty($args)) {
+        $url = add_query_arg($args, $url);
+    }
     if ($route !== '') {
         $url .= '#/' . ltrim($route, '/');
     }
@@ -724,7 +751,8 @@ function servv_render_status_badge($status) {
 }
 
 function servv_plugin_stripe_confirm() {
-    servv_js_redirect(servv_get_hash_admin_url('servv-integrations', 'integrations/stripe'));
+    servv_js_redirect(servv_get_hash_admin_url('servv-integrations', 'integrations/stripe',
+        ['servv_refresh' => 'accounts']));
 }
 
 function servv_render_onboarding_screen() {
@@ -792,7 +820,7 @@ function servv_render_integrations_overview() {
         [
             'service'     => 'gmail',
             'title'       => 'Gmail',
-            'description' => 'Send event email notifications and reminders with Gmail.',
+            'description' => 'Send event email notifications and reminders.',
             'url'         => servv_get_hash_admin_url('servv-integrations', 'integrations/gmail'),
         ],
         [
@@ -1081,6 +1109,15 @@ function servv_admin_enqueue_scripts() {
         'postUrl'           => admin_url('post.php'),
         'adminUrl'          => admin_url('admin.php'),
         'install_status'    => get_option('servv_install_status', ''),
+        // Scopes the admin's session data cache. Several WordPress installs
+        // can share a browser (and a multisite network shares an origin), so
+        // the site, the user and the plugin version decide the store.
+        'cacheScope'        => substr(hash('sha256', implode('|', [
+            (string) get_current_blog_id(),
+            home_url(),
+            (string) get_current_user_id(),
+            SERVV_PLUGIN_VERSION,
+        ])), 0, 16),
         'setupDismissed'    => servv_is_onboarding_dismissed(),
         'setupDismissUrl'   => servv_get_native_notice_url(true),
         'gutenberg_active'  => (int)function_exists( 'register_block_type' ),

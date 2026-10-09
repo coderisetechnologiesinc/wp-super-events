@@ -7,6 +7,7 @@ import {
   isSuccessfulData,
   mutationResources,
   requestResource,
+  resourceTtl,
 } from "./requestCache";
 
 export default async function adminApiFetch(options) {
@@ -19,9 +20,7 @@ export default async function adminApiFetch(options) {
     const response = await cachedRequest({
       key: `api:${window.servvData.nonce}:${url.href}`,
       tags: [resource],
-      ttl: ["settings", "filters", "billing"].includes(resource)
-        ? 300000
-        : 60000,
+      ttl: resourceTtl(resource),
       load: async () => ({
         data: JSON.stringify(await apiFetch(options)),
         status: 200,

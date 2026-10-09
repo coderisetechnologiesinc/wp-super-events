@@ -494,7 +494,7 @@ const IntegrationsPage = ({
     key: "gmail",
     glyph: "M",
     title: "Gmail",
-    description: "Send event email notifications and reminders with Gmail.",
+    description: "Send event email notifications and reminders.",
     connected: gmailConnected,
     route: "/integrations/gmail"
   }, {
@@ -745,4 +745,4 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_Integrations_IntegrationsPage_jsx.js.map?ver=59291ef1d5836a5d2490
+//# sourceMappingURL=src_Components_Pages_Integrations_IntegrationsPage_jsx.js.map?ver=100dbef6c0d30a840edd

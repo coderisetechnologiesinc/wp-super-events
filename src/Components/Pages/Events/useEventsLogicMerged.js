@@ -12,6 +12,7 @@ import { useServvStore } from "../../../store/useServvStore";
 export const useEventsLogic = (settings, filtersList, zoomAccount) => {
   const PAGE_SIZE = 10;
   const isZoomConnected = useServvStore((s) => s.zoomConnected);
+  const accountsSynced = useServvStore((s) => s.accountsSynced);
   const navigate = useNavigate();
   const syncAccountsAfterEvents = useServvStore(
     (s) => s.syncAccountsAfterEvents,
@@ -323,6 +324,8 @@ export const useEventsLogic = (settings, filtersList, zoomAccount) => {
   // =====================================================================
 
   const syncedAfterEventsRef = useRef(false);
+  // True while the loading state is deliberately held for the zoom answer.
+  const awaitingZoomRef = useRef(false);
 
   const stateRef = useRef({});
   stateRef.current = {
@@ -334,6 +337,7 @@ export const useEventsLogic = (settings, filtersList, zoomAccount) => {
     selectedFilters,
     settings,
     isZoomConnected,
+    accountsSynced,
   };
 
   const getEventsList = useCallback(
@@ -390,7 +394,14 @@ export const useEventsLogic = (settings, filtersList, zoomAccount) => {
   // =====================================================================
 
   const getMergedEventsList = useCallback(
-    async ({ page = 1, is_Past, search, datesObj, filtersObj, pageSize } = {}) => {
+    async ({
+      page = 1,
+      is_Past,
+      search,
+      datesObj,
+      filtersObj,
+      pageSize,
+    } = {}) => {
       const s = stateRef.current;
       is_Past = is_Past ?? s.isPast;
       search = search ?? s.searchString;
@@ -400,6 +411,12 @@ export const useEventsLogic = (settings, filtersList, zoomAccount) => {
       const version = resourceVersion("events");
       setMergedLoading(true);
       const headers = { "X-WP-Nonce": servvData.nonce };
+      // The zoom connection is only answered by the account sync that runs
+      // after the first fetch, so this pass may be offline-only merely because
+      // the answer has not arrived yet. If zoom turns out to be connected the
+      // effect below fetches again and re-sorts the list, so the loading state
+      // is held until then instead of painting offline events twice.
+      const zoomPassMayFollow = !s.accountsSynced && !s.isZoomConnected;
 
       // Whole-range mode asks both endpoints for the full window, so there is
       // nothing to balance between them and nothing to page through.
@@ -532,7 +549,9 @@ export const useEventsLogic = (settings, filtersList, zoomAccount) => {
             ...mapEventRows(pastZoom?.data.meetings ?? [], "zoom", true),
           ].filter((row) => row._sortKey >= from && row._sortKey <= to);
 
-          const seen = new Set(merged.map((row) => `${row.id}${row.occurrence_id || ""}`));
+          const seen = new Set(
+            merged.map((row) => `${row.id}${row.occurrence_id || ""}`),
+          );
           merged = [
             ...merged,
             ...past.filter(
@@ -549,7 +568,14 @@ export const useEventsLogic = (settings, filtersList, zoomAccount) => {
         const safePage = Math.min(Math.max(1, page), totalPages);
 
         if (version !== resourceVersion("events")) {
-          return await getMergedEventsList({ page, is_Past, search, datesObj, filtersObj, pageSize });
+          return await getMergedEventsList({
+            page,
+            is_Past,
+            search,
+            datesObj,
+            filtersObj,
+            pageSize,
+          });
         }
         setMergedList(merged);
         setMergedPagination({
@@ -562,7 +588,8 @@ export const useEventsLogic = (settings, filtersList, zoomAccount) => {
         console.error(e);
         toast("Error fetching merged events");
       } finally {
-        setMergedLoading(false);
+        awaitingZoomRef.current = zoomPassMayFollow;
+        if (!zoomPassMayFollow) setMergedLoading(false);
       }
 
       if (!syncedAfterEventsRef.current) {
@@ -737,10 +764,16 @@ export const useEventsLogic = (settings, filtersList, zoomAccount) => {
   useCacheRefresh(["events"], () => {
     if (!initialLoadDoneRef.current) return;
     if (view === "occurrences" && selectedEventForOccurrences) {
-      return getEventOccurrencess(selectedEventForOccurrences, occurrencesPagination.pageNumber || 1);
+      return getEventOccurrencess(
+        selectedEventForOccurrences,
+        occurrencesPagination.pageNumber || 1,
+      );
     }
     if (stateRef.current.eventType === "all") {
-      return getMergedEventsList({ page: mergedPagination.pageNumber || 1, pageSize: stateRef.current.wholeRange ? WHOLE_RANGE_SIZE : undefined });
+      return getMergedEventsList({
+        page: mergedPagination.pageNumber || 1,
+        pageSize: stateRef.current.wholeRange ? WHOLE_RANGE_SIZE : undefined,
+      });
     }
     return getEventsList({ page: pagination.pageNumber || 1 });
   });
@@ -753,7 +786,17 @@ export const useEventsLogic = (settings, filtersList, zoomAccount) => {
     doFetch();
   }, [settings]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // 2) FILTER / TYPE / ZOOM CONNECTION CHANGES
+  // 2) ZOOM ANSWER — release a list that was waiting for it
+  // A connected account triggers the refetch below, which keeps the loading
+  // state it inherits. A disconnected one fetches nothing more, so what the
+  // offline pass already rendered is final.
+  useEffect(() => {
+    if (!awaitingZoomRef.current || !accountsSynced || isZoomConnected) return;
+    awaitingZoomRef.current = false;
+    setMergedLoading(false);
+  }, [accountsSynced, isZoomConnected]);
+
+  // 3) FILTER / TYPE / ZOOM CONNECTION CHANGES
   useEffect(() => {
     if (!initialLoadDoneRef.current) return;
     if (!shouldFetch()) return;
@@ -769,12 +812,12 @@ export const useEventsLogic = (settings, filtersList, zoomAccount) => {
     isZoomConnected, // re-fetch when zoom connects/disconnects
   ]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // 3) TOAST ERRORS
+  // 4) TOAST ERRORS
   useEffect(() => {
     if (showError) toast(showError);
   }, [showError]);
 
-  // 4) TIME FORMAT & TIMEZONE — runs once
+  // 5) TIME FORMAT & TIMEZONE — runs once
   const settingsAppliedRef = useRef(false);
   useEffect(() => {
     if (!settings || settingsAppliedRef.current) return;

@@ -1,5 +1,9 @@
 import { create } from "zustand";
-import { resourceVersion } from "../utilities/requestCache";
+import {
+  invalidateRequests,
+  resourceVersion,
+  subscribeToInvalidation,
+} from "../utilities/requestCache";
 
 import { getSettings } from "../utilities/settings";
 import { getFilters, getFilterType } from "../utilities/filters";
@@ -16,6 +20,9 @@ export const useServvStore = create((set, get) => ({
   filtersHash: null,
   zoomAccount: null,
   zoomConnected: false,
+  // Connection flags start out false and are only answered by the account
+  // sync, so "false" alone cannot be told apart from "not asked yet".
+  accountsSynced: false,
   stripeConnected: false,
   stripeCurrency: "CAD",
   gmailConnected: false,
@@ -50,6 +57,36 @@ export const useServvStore = create((set, get) => ({
       });
       return null;
     }
+  },
+
+  // Stripe confirms the payment in the browser, but the subscription reaches
+  // Servv through a webhook, so a settings read right after checkout can still
+  // answer with the old plan — and the cached copy would pin it there for the
+  // rest of its TTL. The cache is dropped and the plan re-read until it
+  // changes, for a bounded number of tries.
+  syncPlanAfterActivation: async (expectedPlanId = null) => {
+    const expected = Number(expectedPlanId) || null;
+    const previous = Number(get().settings?.current_plan?.id) || null;
+    const activated = (planId) =>
+      Boolean(planId) && (expected ? planId === expected : planId !== previous);
+
+    for (let attempt = 1; attempt <= 5; attempt++) {
+      invalidateRequests(["settings", "billing"]);
+      let fresh = null;
+      try {
+        fresh = await getSettings();
+      } catch (e) {
+        console.error("Plan sync error", e);
+      }
+      if (fresh && !fresh.errorCode && !fresh.error) {
+        set({ settings: fresh });
+        if (activated(Number(fresh.current_plan?.id) || null)) return fresh;
+      }
+      if (attempt < 5)
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+    }
+
+    return get().settings;
   },
 
   syncZoomAccount: async () => {
@@ -92,22 +129,30 @@ export const useServvStore = create((set, get) => ({
   },
 
   syncAccountsAfterEvents: async () => {
-    try {
-      const zoom = await getZoomAccount();
-      set({ zoomConnected: !!zoom?.data?.id });
-
-      const stripe = await getStripeAccount();
-      set({ stripeConnected: !!stripe?.data?.id });
-      set({ stripeCurrency: stripe?.data?.currency });
-
-      const gmail = await getGmailAccount();
-      set({ gmailConnected: !!gmail?.data?.id });
-
-      const calendar = await getCalendarAccount?.();
-      set({ calendarConnected: !!calendar?.data?.id });
-    } catch (e) {
-      console.error("Account sync error", e);
-    }
+    // All four answers are asked for at once and land in a single update: a
+    // flag that flips while the rest are still in flight lets the setup guide
+    // render a half-known state and then retract it. allSettled so one failing
+    // service cannot leave the others unknown.
+    const results = await Promise.allSettled([
+      getZoomAccount(),
+      getStripeAccount(),
+      getGmailAccount(),
+      getCalendarAccount?.(),
+    ]);
+    const [zoom, stripe, gmail, calendar] = results.map((result) =>
+      result.status === "fulfilled" ? result.value?.data : null,
+    );
+    results
+      .filter((result) => result.status === "rejected")
+      .forEach((result) => console.error("Account sync error", result.reason));
+    set({
+      zoomConnected: !!zoom?.id,
+      stripeConnected: !!stripe?.id,
+      stripeCurrency: stripe?.currency ?? get().stripeCurrency,
+      gmailConnected: !!gmail?.id,
+      calendarConnected: !!calendar?.id,
+      accountsSynced: true,
+    });
   },
 
   syncSingleFilterFromServer: async (filterId) => {
@@ -162,3 +207,13 @@ export const useServvStore = create((set, get) => ({
 
   getCachedFilters: () => get().filtersList,
 }));
+
+// Connecting or disconnecting a service invalidates the accounts cache. The
+// flags above decide what the setup guide shows and whether the events list
+// asks the zoom endpoint, so they are read back instead of staying at whatever
+// the page was opened with.
+subscribeToInvalidation((tags) => {
+  if (!tags.includes("accounts")) return;
+  if (!useServvStore.getState().accountsSynced) return;
+  useServvStore.getState().syncAccountsAfterEvents();
+});
