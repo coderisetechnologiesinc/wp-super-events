@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useServvStore } from "../../store/useServvStore";
+import { isFreePlan } from "../../utilities/planCapabilities";
 import PageActionButton from "../Controls/PageActionButton";
 import styles from "./SetupGuide.module.scss";
 
@@ -33,6 +34,9 @@ const buildSteps = (state) => [
       : "/integrations/gmail",
     done: state.gmailConnected && state.calendarConnected,
   },
+  // Zoom and Stripe are paid-plan integrations: a free shop has nothing to
+  // connect them to, and their accounts are not read on that plan either, so
+  // nagging about them would be a step that can never complete.
   {
     key: "zoom",
     title: t("Connect Zoom"),
@@ -42,6 +46,7 @@ const buildSteps = (state) => [
     action: t("Manage Zoom"),
     route: "/integrations/zoom",
     done: state.zoomConnected,
+    available: state.paidPlan,
   },
   {
     key: "stripe",
@@ -52,6 +57,7 @@ const buildSteps = (state) => [
     action: t("Manage Stripe"),
     route: "/integrations/stripe",
     done: state.stripeConnected,
+    available: state.paidPlan,
   },
   {
     key: "event",
@@ -70,6 +76,9 @@ const SetupGuide = ({ hasEvents = false }) => {
   // Every connection flag below starts out false and is only answered by the
   // account sync, so this says whether they mean anything yet.
   const accountsSynced = useServvStore((s) => s.accountsSynced);
+  // The calendar read follows the account batch, and the Google step below
+  // needs both halves before it can say whether it is done.
+  const calendarSynced = useServvStore((s) => s.calendarSynced);
   const zoomConnected = useServvStore((s) => s.zoomConnected);
   const stripeConnected = useServvStore((s) => s.stripeConnected);
   const gmailConnected = useServvStore((s) => s.gmailConnected);
@@ -95,6 +104,8 @@ const SetupGuide = ({ hasEvents = false }) => {
     }
   }, [settings?.settings?.admin_dashboard]);
 
+  const paidPlan = !isFreePlan(settings);
+
   const steps = useMemo(
     () =>
       buildSteps({
@@ -104,7 +115,8 @@ const SetupGuide = ({ hasEvents = false }) => {
         zoomConnected,
         stripeConnected,
         hasEvents,
-      }),
+        paidPlan,
+      }).filter((step) => step.available !== false),
     [
       defaultsSet,
       gmailConnected,
@@ -112,6 +124,7 @@ const SetupGuide = ({ hasEvents = false }) => {
       zoomConnected,
       stripeConnected,
       hasEvents,
+      paidPlan,
     ],
   );
 
@@ -133,7 +146,8 @@ const SetupGuide = ({ hasEvents = false }) => {
   // once every step is done, or after the shop dismissed it. Rendering while
   // the connections are still unknown shows a guide whose steps are all open
   // and then retracts it as the answers arrive.
-  if (!settings || !accountsSynced || dismissed || !next) return null;
+  if (!settings || !accountsSynced || !calendarSynced || dismissed || !next)
+    return null;
 
   return (
     <section className={styles.card}>

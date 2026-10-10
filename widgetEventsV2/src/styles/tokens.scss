@@ -38,6 +38,11 @@
   --svv-primary-hover: var(--svv-v2-primary-hover, #4a18b4);
   --svv-primary-text: var(--svv-v2-primary-text, #ffffff);
   --svv-primary-subtle: color-mix(in srgb, var(--svv-primary) 12%, var(--svv-bg));
+  // Primary as ink rather than as a fill. A colour chosen to carry white
+  // button text is often too deep to read as text itself on a dark ground,
+  // and those are two different jobs. Defaults to the fill, so a scheme that
+  // does not care sees no change.
+  --svv-primary-ink: var(--svv-primary);
 
   --svv-accent: var(--svv-v2-accent, #ff8f5c);
   --svv-accent-strong: var(--svv-v2-accent-strong, #a8481b);

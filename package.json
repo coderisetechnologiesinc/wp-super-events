@@ -22,7 +22,9 @@
 		"packages-update": "wp-scripts packages-update",
 		"plugin-zip": "wp-scripts plugin-zip",
 		"build:widget-v2": "npm --prefix widgetEventsV2 run build",
-		"test:widget-v2": "npm --prefix widgetEventsV2 test"
+		"test:widget-v2": "npm --prefix widgetEventsV2 test",
+		"test:queue": "node scripts/test-request-queue.cjs",
+		"test:widget-v2-schemes": "node scripts/test-widget-v2-schemes.cjs"
 	},
 	"files": [
 		"[^.]*"

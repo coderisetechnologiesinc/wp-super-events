@@ -8,6 +8,11 @@ import {
 import { getSettings } from "../utilities/settings";
 import { getFilters, getFilterType } from "../utilities/filters";
 import {
+  needsGmailAccount,
+  needsStripeAccount,
+  needsZoomAccount,
+} from "../utilities/planCapabilities";
+import {
   getZoomAccount,
   getStripeAccount,
   getGmailAccount,
@@ -23,6 +28,9 @@ export const useServvStore = create((set, get) => ({
   // Connection flags start out false and are only answered by the account
   // sync, so "false" alone cannot be told apart from "not asked yet".
   accountsSynced: false,
+  // The calendar answer follows the others instead of competing with them, so
+  // it gets its own flag: the screens that render it wait on this one.
+  calendarSynced: false,
   stripeConnected: false,
   stripeCurrency: "CAD",
   gmailConnected: false,
@@ -122,36 +130,72 @@ export const useServvStore = create((set, get) => ({
   syncCalendarAccount: async () => {
     try {
       const calendar = await getCalendarAccount?.();
-      set({ calendarConnected: !!calendar?.data?.id });
+      set({ calendarConnected: !!calendar?.data?.id, calendarSynced: true });
     } catch (e) {
       console.error("Calendar account sync error", e);
+      // A failed read is still an answer: leaving the flag false would make
+      // the screens that fall back to this ask again on every render.
+      set({ calendarSynced: true });
     }
   },
 
   syncAccountsAfterEvents: async () => {
-    // All four answers are asked for at once and land in a single update: a
-    // flag that flips while the rest are still in flight lets the setup guide
-    // render a half-known state and then retract it. allSettled so one failing
-    // service cannot leave the others unknown.
-    const results = await Promise.allSettled([
-      getZoomAccount(),
-      getStripeAccount(),
-      getGmailAccount(),
-      getCalendarAccount?.(),
-    ]);
-    const [zoom, stripe, gmail, calendar] = results.map((result) =>
-      result.status === "fulfilled" ? result.value?.data : null,
-    );
-    results
-      .filter((result) => result.status === "rejected")
-      .forEach((result) => console.error("Account sync error", result.reason));
+    // Only the accounts the plan and the chosen email provider can answer for.
+    // A free shop has no Zoom and no Stripe to connect, and a paid shop that
+    // sends through SMTP has no Gmail account to report — asking anyway spends
+    // a PHP worker the proxy needs for the reads that do say something.
+    const settings = get().settings;
+    const reads = [
+      ["zoom", getZoomAccount, needsZoomAccount(settings)],
+      ["stripe", getStripeAccount, needsStripeAccount(settings)],
+      ["gmail", getGmailAccount, needsGmailAccount(settings)],
+    ].filter(([, , needed]) => needed);
+
+    // The answers land in a single update: a flag that flips while the rest
+    // are still in flight lets the setup guide render a half-known state and
+    // then retract it. allSettled so one failing service cannot leave the
+    // others unknown.
+    const results = await Promise.allSettled(reads.map(([, read]) => read()));
+    const answers = {};
+    results.forEach((result, index) => {
+      const [service] = reads[index];
+      if (result.status === "fulfilled") answers[service] = result.value?.data;
+      else console.error(`${service} account sync error`, result.reason);
+    });
+    const asked = (service) => reads.some(([name]) => name === service);
+
+    // A service the plan does not expose reads as not connected — its screens
+    // are closed to the shop either way. The account object itself is only
+    // replaced when it was actually asked for, so a read skipped here cannot
+    // discard what VenueStep fetched on its own.
     set({
-      zoomConnected: !!zoom?.id,
-      stripeConnected: !!stripe?.id,
-      stripeCurrency: stripe?.currency ?? get().stripeCurrency,
-      gmailConnected: !!gmail?.id,
-      calendarConnected: !!calendar?.id,
+      zoomConnected: !!answers.zoom?.id,
+      zoomAccount: asked("zoom") ? answers.zoom ?? null : get().zoomAccount,
+      stripeConnected: !!answers.stripe?.id,
+      stripeCurrency: answers.stripe?.currency ?? get().stripeCurrency,
+      gmailConnected: !!answers.gmail?.id,
       accountsSynced: true,
+    });
+
+    // Nothing on the dashboard renders the calendar connection, so its read
+    // follows the batch rather than joining it. The screens that do render it
+    // ask for it themselves if this never ran.
+    return get().syncCalendarAccount();
+  },
+
+  // Fills the connection flags from answers a screen already has. The
+  // integrations page asks for all four accounts regardless of plan, so its
+  // results are what fill in whatever the sync above skipped or deferred.
+  adoptAccountAnswers: (answers = {}) => {
+    set({
+      zoomConnected: !!answers.zoom?.id,
+      zoomAccount: answers.zoom ?? get().zoomAccount,
+      stripeConnected: !!answers.stripe?.id,
+      stripeCurrency: answers.stripe?.currency ?? get().stripeCurrency,
+      gmailConnected: !!answers.gmail?.id,
+      calendarConnected: !!answers.calendar?.id,
+      accountsSynced: true,
+      calendarSynced: true,
     });
   },
 
@@ -189,7 +233,7 @@ export const useServvStore = create((set, get) => ({
     if (!settings?.current_plan?.id) return;
 
     try {
-      const serverFilters = await getFilters(settings.current_plan.id);
+      const serverFilters = await getFilters(settings);
       if (version !== resourceVersion("filters"))
         return get().syncFiltersFromServer();
       const newHash = JSON.stringify(serverFilters);

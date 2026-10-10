@@ -1,11 +1,22 @@
+@use "../breakpoints" as *;
+
 .svv-wgt-v2-container {
-  --svv-v2-bg: #000000;
+  // Painted, not handed to --svv-v2-bg: the block writes that token inline on
+  // this very element whenever the skin is not Glass, and an inline custom
+  // property outranks any stylesheet — the merchant's background colour was
+  // overruling this scheme's own. A real property on the scheme's selector
+  // outranks the base rule instead, whatever the token says.
+  background-color: #000000;
 }
 
 .svv-wgt-v2 {
   --svv-poster-ink: #f4f1e8;
   --svv-poster-acid: #ccff00;
-  --svv-poster-ultra: #5a5cff;
+  // Light enough to be read as text on the paper — it labels the drawer
+  // sections, the card's date line and the Clear action. The button fill that
+  // uses it gets a dark label instead of white.
+  --svv-poster-ultra: #9ea0ff;
+  --svv-poster-on-ultra: #0b0b0f;
   --svv-poster-on-acid: #0b0b0f;
   --svv-poster-sand: #101016;
   --svv-poster-paper: #15151c;
@@ -15,7 +26,7 @@
   --svv-border: #282830;
 
   --svv-primary: #ccff00;
-  --svv-primary-hover: #5a5cff;
+  --svv-primary-hover: #9ea0ff;
   --svv-primary-text: #0b0b0f;
 
   --svv-success: #4fd39b;
@@ -52,6 +63,34 @@
   .svv-drawer__head .svv-drawer__icon,
   .svv-drawer__head .svv-badge {
     color: #0b0b0f;
+  }
+
+  @include mobile {
+    .svv-drawer__cta {
+      border-color: #000000;
+    }
+
+    .svv-submit {
+      border: 2px solid #000000;
+    }
+
+    .svv-datestrip__chip {
+      background: var(--svv-poster-paper);
+      color: var(--svv-poster-ink);
+
+      span {
+        color: var(--svv-text-muted);
+      }
+
+      &.is-selected {
+        background: var(--svv-poster-acid);
+        color: var(--svv-poster-on-acid);
+
+        span {
+          color: var(--svv-poster-on-acid);
+        }
+      }
+    }
   }
 
   .svv-drawer__head .svv-drawer__icon:hover {

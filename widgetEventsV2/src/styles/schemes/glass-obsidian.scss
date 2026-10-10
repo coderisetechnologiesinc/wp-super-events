@@ -27,7 +27,14 @@
   --svv-card-text: #f4f5fb;
 
   --svv-primary: #6d49ff;
-  --svv-primary-hover: #5c37f0;
+  // Lighter than the primary, not darker: every other dark scheme steps up
+  // this way. It is also the badge's text colour (_card.scss), and the darker
+  // value left that unreadable on the translucent violet behind it.
+  --svv-primary-hover: #9b82ff;
+  // The fill above is deep enough to carry white button text, which makes it
+  // far too dark to be read as text on this ground — it was what left the
+  // marked calendar dates and the add-to-calendar pills illegible.
+  --svv-primary-ink: #b9a6ff;
   --svv-primary-text: #ffffff;
   --svv-primary-subtle: rgba(157, 123, 255, 0.22);
 
@@ -45,6 +52,10 @@
   --svv-calendar-selected-text: #ffffff;
   --svv-calendar-today-border: rgba(255, 255, 255, 0.35);
 
+  // The glass panes paint over every drawer surface, so the token below is
+  // never seen today — but it is the only one in this scheme still carrying
+  // the light default, and anything new that reads it would come out white.
+  --svv-drawer-bg: #11131c;
   --svv-drawer-backdrop: rgba(0, 0, 0, 0.55);
 
   .svv-search:focus-within,

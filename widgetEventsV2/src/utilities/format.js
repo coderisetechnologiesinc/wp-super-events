@@ -109,10 +109,10 @@ export function formatAvailability({ availability, seatsRemaining } = {}, t) {
 
   if (typeof seatsRemaining !== "number") return "";
 
-  if (availability === "few-left") {
+  if (seatsRemaining === 1) {
     return t("onProductWidget.remainingBookingsLabel", {
       count: seatsRemaining,
-      fallback: `${seatsRemaining} left`,
+      fallback: 'Only 1 left!',
     });
   }
 

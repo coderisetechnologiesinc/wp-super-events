@@ -425,15 +425,19 @@ const IntegrationsPage = ({
         "X-WP-Nonce": window.servvData.nonce
       }
     })));
-    setAccounts(previous => {
-      const next = {
-        ...previous
-      };
-      results.forEach((result, index) => {
-        if (result.status === "fulfilled") next[services[index]] = result.value.data;
-      });
-      return next;
+    const answers = {};
+    results.forEach((result, index) => {
+      if (result.status === "fulfilled") answers[services[index]] = result.value.data;
     });
+    setAccounts(previous => ({
+      ...previous,
+      ...answers
+    }));
+    // This screen is the one place that asks for every account regardless of
+    // plan, so its answers also fill the store flags the dashboard skipped on
+    // a free plan or deferred — the calendar one in particular, which several
+    // screens read and none of them fetch on their own.
+    _store_useServvStore__WEBPACK_IMPORTED_MODULE_6__.useServvStore.getState().adoptAccountAnswers(answers);
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     loadAccounts();
@@ -744,4 +748,4 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_Integrations_IntegrationsPage_jsx.js.map?ver=4e4843beee062da8a483
+//# sourceMappingURL=src_Components_Pages_Integrations_IntegrationsPage_jsx.js.map?ver=34243146cacf0c727763

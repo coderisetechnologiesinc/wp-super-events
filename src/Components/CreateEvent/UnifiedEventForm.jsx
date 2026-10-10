@@ -1,4 +1,4 @@
-import React, { useId, useRef, useState } from "react";
+import React, { useEffect, useId, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { v4 as uuid } from "uuid";
 import moment from "moment-timezone";
@@ -104,7 +104,15 @@ export default function UnifiedEventForm() {
   const stripe = useServvStore((s) => s.stripeConnected);
   const zoom = useServvStore((s) => s.zoomConnected);
   const calendar = useServvStore((s) => s.calendarConnected);
+  const calendarSynced = useServvStore((s) => s.calendarSynced);
   const navigate = useNavigate();
+
+  // BrandingStep renders the Google Calendar toggle from `calendar`, and the
+  // dashboard bootstrap defers that read — this form can open before it ran,
+  // or on a reload that never passed through the dashboard at all.
+  useEffect(() => {
+    if (!calendarSynced) useServvStore.getState().syncCalendarAccount();
+  }, [calendarSynced]);
   const formRef = useRef(null);
   const [editingTicket, setEditingTicket] = useState(null);
   const [imageError, setImageError] = useState("");

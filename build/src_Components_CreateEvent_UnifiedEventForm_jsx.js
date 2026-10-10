@@ -2484,7 +2484,15 @@ function UnifiedEventForm() {
   const stripe = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_4__.useServvStore)(s => s.stripeConnected);
   const zoom = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_4__.useServvStore)(s => s.zoomConnected);
   const calendar = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_4__.useServvStore)(s => s.calendarConnected);
+  const calendarSynced = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_4__.useServvStore)(s => s.calendarSynced);
   const navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_20__.useNavigate)();
+
+  // BrandingStep renders the Google Calendar toggle from `calendar`, and the
+  // dashboard bootstrap defers that read — this form can open before it ran,
+  // or on a reload that never passed through the dashboard at all.
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (!calendarSynced) _store_useServvStore__WEBPACK_IMPORTED_MODULE_4__.useServvStore.getState().syncCalendarAccount();
+  }, [calendarSynced]);
   const formRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   const [editingTicket, setEditingTicket] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   const [imageError, setImageError] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("");
@@ -5531,4 +5539,4 @@ function validate(uuid) {
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_CreateEvent_UnifiedEventForm_jsx.js.map?ver=25ef77f7744ce078af02
+//# sourceMappingURL=src_Components_CreateEvent_UnifiedEventForm_jsx.js.map?ver=bc9200a2f8e4b81f1ebd

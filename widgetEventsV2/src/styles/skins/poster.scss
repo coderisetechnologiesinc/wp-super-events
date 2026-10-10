@@ -24,6 +24,9 @@
   --svv-poster-paper: var(--svv-v2-surface, #f4f1e8);
   --svv-poster-rule: 2px solid var(--svv-poster-ink);
   --svv-poster-on-acid: var(--svv-poster-ink);
+  // Same idea for the ultra fill: a scheme that lightens ultra so it can be
+  // read as text on a dark ground needs the button label to go dark.
+  --svv-poster-on-ultra: #ffffff;
 
   --svv-text: var(--svv-v2-text, #24242c);
   --svv-text-muted: var(--svv-v2-text-muted, #5c5c68);
@@ -380,7 +383,7 @@
 
     &:hover:not(:disabled) {
       background: var(--svv-poster-ultra);
-      color: #ffffff;
+      color: var(--svv-poster-on-ultra);
     }
   }
 
@@ -587,9 +590,13 @@
     backdrop-filter: none;
   }
 
+  // _drawer.scss gives every icon the drawer's own background, which here is
+  // the paper — a dark box dropped onto the head, with the head's ink on top
+  // of it. They belong on the head itself.
   .svv-drawer__head .svv-drawer__icon,
   .svv-drawer__head .svv-badge {
     border-color: currentcolor;
+    background: transparent;
     color: var(--svv-poster-acid);
   }
 
@@ -625,8 +632,15 @@
   }
 
   .svv-drawer__foot {
+    // Acid ground: everything inside has to be the ink that reads on acid,
+    // exactly as the card hover state flips it. A scheme whose ink is light —
+    // Blackout's is a cream — otherwise prints the total invisibly.
+    --svv-poster-ink: var(--svv-poster-on-acid);
+    --svv-card-text: var(--svv-poster-on-acid);
+
     border-top: var(--svv-poster-rule);
     background: var(--svv-poster-acid);
+    color: var(--svv-poster-on-acid);
     backdrop-filter: none;
   }
 

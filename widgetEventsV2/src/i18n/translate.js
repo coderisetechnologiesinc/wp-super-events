@@ -62,7 +62,14 @@ export function createTranslator(translations = {}, { locale, defaultLocale } = 
     for (const candidate of chain) {
       const value = readPath(translations[candidate], path);
 
-      if (typeof value === "string" && value.length > 0) return interpolate(value, vars);
+      if (typeof value === "string" && value.length > 0) {
+        // Existing shops can still return the old built-in English default.
+        // Keep custom wording and other languages untouched.
+        const template = path === 'onProductWidget.remainingBookingsLabel' && ['Hurry! Only ### left in stock!', 'Hurry! Only ### left!'].includes(value)
+          ? 'Only ### left!'
+          : value;
+        return interpolate(template, vars);
+      }
     }
 
     return interpolate(vars?.fallback ?? "", vars);

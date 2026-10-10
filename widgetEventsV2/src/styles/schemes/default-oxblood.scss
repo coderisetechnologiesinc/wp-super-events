@@ -1,5 +1,10 @@
 .svv-wgt-v2-container {
-  --svv-v2-bg: #f1e3d6;
+  // Painted, not handed to --svv-v2-bg: the block writes that token inline on
+  // this very element whenever the skin is not Glass, and an inline custom
+  // property outranks any stylesheet — the merchant's background colour was
+  // overruling this scheme's own. A real property on the scheme's selector
+  // outranks the base rule instead, whatever the token says.
+  background-color: #f1e3d6;
 }
 
 .svv-wgt-v2 {

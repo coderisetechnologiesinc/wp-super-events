@@ -35,14 +35,17 @@ const IntegrationsPage = ({
         }),
       ),
     );
-    setAccounts((previous) => {
-      const next = { ...previous };
-      results.forEach((result, index) => {
-        if (result.status === "fulfilled")
-          next[services[index]] = result.value.data;
-      });
-      return next;
+    const answers = {};
+    results.forEach((result, index) => {
+      if (result.status === "fulfilled")
+        answers[services[index]] = result.value.data;
     });
+    setAccounts((previous) => ({ ...previous, ...answers }));
+    // This screen is the one place that asks for every account regardless of
+    // plan, so its answers also fill the store flags the dashboard skipped on
+    // a free plan or deferred — the calendar one in particular, which several
+    // screens read and none of them fetch on their own.
+    useServvStore.getState().adoptAccountAnswers(answers);
   };
   useEffect(() => {
     loadAccounts();
