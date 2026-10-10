@@ -51,7 +51,7 @@
 
       &:hover:not(:disabled) {
         border-color: var(--svv-primary);
-        color: var(--svv-primary);
+        color: var(--svv-primary-ink);
       }
 
       &:disabled {

@@ -653,12 +653,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-4WY6JWTD.mjs");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-4WY6JWTD.mjs");
 /* harmony import */ var _store_useServvStore__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../store/useServvStore */ "./src/store/useServvStore.js");
-/* harmony import */ var _Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Controls/PageActionButton */ "./src/Components/Controls/PageActionButton.jsx");
-/* harmony import */ var _SetupGuide_module_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./SetupGuide.module.scss */ "./src/Components/Containers/SetupGuide.module.scss");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _utilities_planCapabilities__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utilities/planCapabilities */ "./src/utilities/planCapabilities.js");
+/* harmony import */ var _Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Controls/PageActionButton */ "./src/Components/Controls/PageActionButton.jsx");
+/* harmony import */ var _SetupGuide_module_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./SetupGuide.module.scss */ "./src/Components/Containers/SetupGuide.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__);
+
 
 
 
@@ -686,20 +688,26 @@ const buildSteps = state => [{
   // Deep-link to whichever half of the Google connection is still missing.
   route: state.gmailConnected ? "/integrations/calendars" : "/integrations/gmail",
   done: state.gmailConnected && state.calendarConnected
-}, {
+},
+// Zoom and Stripe are paid-plan integrations: a free shop has nothing to
+// connect them to, and their accounts are not read on that plan either, so
+// nagging about them would be a step that can never complete.
+{
   key: "zoom",
   title: t("Connect Zoom"),
   description: t("Enable online event creation and meeting-link generation for virtual events."),
   action: t("Manage Zoom"),
   route: "/integrations/zoom",
-  done: state.zoomConnected
+  done: state.zoomConnected,
+  available: state.paidPlan
 }, {
   key: "stripe",
   title: t("Connect Stripe"),
   description: t("Accept paid registrations and configure the payout account for ticket sales."),
   action: t("Manage Stripe"),
   route: "/integrations/stripe",
-  done: state.stripeConnected
+  done: state.stripeConnected,
+  available: state.paidPlan
 }, {
   key: "event",
   title: t("Create your first event"),
@@ -715,11 +723,14 @@ const SetupGuide = ({
   // Every connection flag below starts out false and is only answered by the
   // account sync, so this says whether they mean anything yet.
   const accountsSynced = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_1__.useServvStore)(s => s.accountsSynced);
+  // The calendar read follows the account batch, and the Google step below
+  // needs both halves before it can say whether it is done.
+  const calendarSynced = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_1__.useServvStore)(s => s.calendarSynced);
   const zoomConnected = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_1__.useServvStore)(s => s.zoomConnected);
   const stripeConnected = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_1__.useServvStore)(s => s.stripeConnected);
   const gmailConnected = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_1__.useServvStore)(s => s.gmailConnected);
   const calendarConnected = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_1__.useServvStore)(s => s.calendarConnected);
-  const navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_5__.useNavigate)();
+  const navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_6__.useNavigate)();
   // The option the native onboarding screen writes — the banner starts hidden
   // for a shop that already dismissed it there.
   const [dismissed, setDismissed] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(Boolean(servvData?.setupDismissed));
@@ -736,14 +747,16 @@ const SetupGuide = ({
       return false;
     }
   }, [settings?.settings?.admin_dashboard]);
+  const paidPlan = !(0,_utilities_planCapabilities__WEBPACK_IMPORTED_MODULE_2__.isFreePlan)(settings);
   const steps = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => buildSteps({
     defaultsSet,
     gmailConnected,
     calendarConnected,
     zoomConnected,
     stripeConnected,
-    hasEvents
-  }), [defaultsSet, gmailConnected, calendarConnected, zoomConnected, stripeConnected, hasEvents]);
+    hasEvents,
+    paidPlan
+  }).filter(step => step.available !== false), [defaultsSet, gmailConnected, calendarConnected, zoomConnected, stripeConnected, hasEvents, paidPlan]);
   const doneCount = steps.filter(step => step.done).length;
   const next = steps.find(step => !step.done);
   const handleDismiss = () => {
@@ -761,53 +774,53 @@ const SetupGuide = ({
   // once every step is done, or after the shop dismissed it. Rendering while
   // the connections are still unknown shows a guide whose steps are all open
   // and then retracts it as the answers arrive.
-  if (!settings || !accountsSynced || dismissed || !next) return null;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("section", {
-    className: _SetupGuide_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].card,
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
-      className: _SetupGuide_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].mark,
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("svg", {
+  if (!settings || !accountsSynced || !calendarSynced || dismissed || !next) return null;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("section", {
+    className: _SetupGuide_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].card,
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+      className: _SetupGuide_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].mark,
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("svg", {
         viewBox: "0 0 24 24",
         fill: "none",
         stroke: "currentColor",
         strokeWidth: "2",
         strokeLinecap: "round",
         "aria-hidden": "true",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
           d: "M12 8v5M12 16.5v.5"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("circle", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("circle", {
           cx: "12",
           cy: "12",
           r: "9"
         })]
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-      className: _SetupGuide_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].body,
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-        className: _SetupGuide_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].title,
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+      className: _SetupGuide_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].body,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+        className: _SetupGuide_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].title,
         children: [t("Finish your setup"), " \u2014 ", doneCount, " ", t("of"), " ", steps.length, " ", t("steps done")]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
-        className: _SetupGuide_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].text,
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
+        className: _SetupGuide_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].text,
         children: next.description
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-        className: _SetupGuide_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].progress,
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+        className: _SetupGuide_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].progress,
         role: "progressbar",
         "aria-label": t("Setup progress"),
         "aria-valuenow": doneCount,
         "aria-valuemin": 0,
         "aria-valuemax": steps.length,
-        children: steps.map(step => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
-          className: [_SetupGuide_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].bar, step.done ? _SetupGuide_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].barDone : ""].filter(Boolean).join(" "),
+        children: steps.map(step => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+          className: [_SetupGuide_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].bar, step.done ? _SetupGuide_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].barDone : ""].filter(Boolean).join(" "),
           title: step.done ? `${step.title} ✓` : step.title
         }, step.key))
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-      className: _SetupGuide_module_scss__WEBPACK_IMPORTED_MODULE_3__["default"].actions,
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+      className: _SetupGuide_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].actions,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
         type: "primary",
         text: next.action,
         onAction: () => navigate(next.route)
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
         type: "secondary",
         text: t("Dismiss"),
         onAction: handleDismiss
@@ -5889,4 +5902,4 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_Dashboard_jsx.js.map?ver=dcb8c7ae9a24aef2efdb
+//# sourceMappingURL=src_Components_Pages_Dashboard_jsx.js.map?ver=2c40d0c484b74f1c94fc

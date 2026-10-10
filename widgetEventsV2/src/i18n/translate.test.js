@@ -59,8 +59,13 @@ describe("createTranslator", () => {
     const t = createTranslator(translations, { locale: "en", defaultLocale: "en" });
 
     expect(t("onProductWidget.remainingBookingsLabel", { count: 3 })).toBe(
-      "Hurry! Only 3 left in stock!",
+      "Only 3 left!",
     );
+  });
+
+  it('preserves custom availability translations', () => {
+    const t = createTranslator({ en: { onProductWidget: { remainingBookingsLabel: 'Only ### seats remaining' } } }, { locale: 'en' });
+    expect(t('onProductWidget.remainingBookingsLabel', { count: 1 })).toBe('Only 1 seats remaining');
   });
 
   it("returns the given fallback when no locale has the key", () => {

@@ -138,7 +138,7 @@
 
     &:hover {
       border-color: var(--svv-primary);
-      color: var(--svv-primary);
+      color: var(--svv-primary-ink);
     }
 
     svg {
@@ -295,7 +295,7 @@
     border: 1px solid color-mix(in srgb, var(--svv-primary) 35%, var(--svv-card-bg));
     border-radius: var(--svv-pill);
     background: var(--svv-card-bg);
-    color: var(--svv-primary);
+    color: var(--svv-primary-ink);
     font-size: u(0.875);
     font-weight: 850;
 
@@ -319,7 +319,7 @@
     border: 0;
     padding: 0;
     background: transparent;
-    color: var(--svv-primary);
+    color: var(--svv-primary-ink);
     font-weight: 850;
     text-align: left;
 
@@ -352,7 +352,7 @@
       border: 0;
       border-radius: var(--svv-pill);
       background: var(--svv-card-bg);
-      color: var(--svv-primary);
+      color: var(--svv-primary-ink);
       font-weight: 950;
 
       &:disabled {

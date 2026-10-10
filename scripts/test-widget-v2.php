@@ -96,6 +96,19 @@ check(strpos($font(['widget_skin' => 'poster-hazard']), 'family=Anton') !== fals
 check($font(['widget_skin' => 'poster', 'skin_custom_styles' => 'true']) === '', 'An opt-in replaces the style font, so none is loaded');
 check($font(['widget_skin' => 'plastic']) === '', 'A style without its own family loads nothing');
 check($font(['widget_skin' => 'adaptive']) === '', 'Adaptive follows the theme typography');
+check(strpos($font(['widget_skin' => 'glass']), 'family=Instrument+Sans') !== false, 'Glass loads its mobile typography');
+check(strpos($font(['widget_skin' => 'glass-obsidian']), 'family=Instrument+Sans') !== false, 'Glass schemes load the base typography');
+foreach (['glass-tropic', 'glass-obsidian'] as $skin) {
+    $style = servv_widget_v2_style(servv_widget_v2_config(['widget_skin' => $skin]));
+    check(strpos($style, '--svv-v2-bg:') === false, 'Glass scheme background must not be overridden inline');
+    check(strpos($style, '--svv-v2-glass-blob-') === false, 'Glass scheme glows must not be overridden inline');
+    $image = servv_widget_v2_style(servv_widget_v2_config(['widget_skin' => $skin, 'background_image' => 'https://site.test/photo.jpg']));
+    check(strpos($image, '--svv-v2-bg-image:url(') !== false, 'Glass schemes still allow a custom background image');
+}
+$glass_style = servv_widget_v2_style(servv_widget_v2_config(['widget_skin' => 'glass', 'glass_blob_opacity' => 22]));
+check(strpos($glass_style, '--svv-v2-glass-blob-1:rgba(98,36,231,0.22)') !== false, 'Glass keeps configured glows');
+check(strpos($glass_style, '--svv-v2-glass-blob-2:rgba(56,170,255,0.19998)') !== false, 'Glass second glow matches source intensity');
+check(strpos($glass_style, '--svv-v2-glass-blob-3:rgba(255,140,190,0.17996)') !== false, 'Glass third glow matches source intensity');
 check(servv_widget_v2_font_handle(servv_widget_v2_config(['widget_skin' => 'swiss-concrete'])) === 'servv-events-v2-fonts-swiss', 'One font handle per base style');
 
 echo "Widget PHP checks passed: validation, defaults, overrides, unique instances, nonce, styles, schemes, fonts.\n";

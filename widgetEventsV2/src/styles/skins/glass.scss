@@ -2,7 +2,9 @@
 @use "../breakpoints" as *;
 
 .svv-wgt-v2-container {
-  --svv-v2-bg-radius: 28px;
+  // The panes inside carry the rounding; the tinted block behind them runs
+  // edge to edge.
+  --svv-v2-bg-radius: 0px;
   --svv-glass-tint: var(--svv-v2-skin-bg, var(--svv-v2-bg, #eeeaf6));
   --svv-glass-blob-1: var(--svv-v2-glass-blob-1, rgba(98, 36, 231, 0.22));
   --svv-glass-blob-2: var(--svv-v2-glass-blob-2, rgba(56, 170, 255, 0.2));
@@ -25,8 +27,13 @@
   --svv-glass-dark: #000000;
   --svv-glass-reflex-light: 1;
   --svv-glass-reflex-dark: 0.8;
-  --svv-glass-fill: 36%;
-  --svv-glass-control-fill: 40%;
+  // Matched to the reference design: a pane is a little over half white over
+  // its backdrop, and nothing brightens the backdrop before that. The previous
+  // pairing — a lighter fill but a brightened backdrop under it — clipped the
+  // pane to flat white on a light background and threw away the tint the glass
+  // is supposed to carry.
+  --svv-glass-fill: 52%;
+  --svv-glass-control-fill: 55%;
 
   --svv-glass: color-mix(in srgb, var(--svv-glass-material) var(--svv-glass-fill), transparent);
   --svv-glass-control: color-mix(
@@ -34,14 +41,20 @@
     var(--svv-glass-material) var(--svv-glass-control-fill),
     transparent
   );
-  --svv-glass-control-hover: color-mix(in srgb, var(--svv-glass-material) 52%, transparent);
-  --svv-glass-blur: blur(28px) saturate(150%) brightness(1.2);
+  --svv-glass-control-hover: color-mix(in srgb, var(--svv-glass-material) 90%, transparent);
+  // Saturate, do not brighten: lifting the backdrop is what washed the hue out.
+  --svv-glass-blur: blur(28px) saturate(180%);
 
   // bevel: bright top-left and bottom-right rims over inner shade, then two
   // ambient drops. Offsets read as a lit edge instead of a flat hairline.
+  //
+  // The first layer is the pane's rim — the `border: 1px solid` the reference
+  // design puts on every pane. It has to stay strong enough to separate one
+  // pane from the next against a busy backdrop; the per-scheme reflex knob is
+  // what dims it, not this number.
   --svv-glass-shadow:
     inset 0 0 0 1px
-      color-mix(in srgb, var(--svv-glass-light) calc(var(--svv-glass-reflex-light) * 10%), transparent),
+      color-mix(in srgb, var(--svv-glass-light) calc(var(--svv-glass-reflex-light) * 75%), transparent),
     inset 1.8px 3px 0 -2px
       color-mix(in srgb, var(--svv-glass-light) calc(var(--svv-glass-reflex-light) * 90%), transparent),
     inset -2px -2px 0 -2px
@@ -64,7 +77,7 @@
   // same idea, shallower, for pills and inputs
   --svv-glass-control-shadow:
     inset 0 0 0 1px
-      color-mix(in srgb, var(--svv-glass-light) calc(var(--svv-glass-reflex-light) * 10%), transparent),
+      color-mix(in srgb, var(--svv-glass-light) calc(var(--svv-glass-reflex-light) * 80%), transparent),
     inset 2px 1px 0 -1px
       color-mix(in srgb, var(--svv-glass-light) calc(var(--svv-glass-reflex-light) * 90%), transparent),
     inset -1.5px -1px 0 -1px
@@ -88,7 +101,7 @@
   --svv-text-muted: var(--svv-v2-text-muted, #7a768a);
   --svv-border: var(--svv-v2-border, rgba(23, 19, 42, 0.08));
   --svv-border-strong: var(--svv-v2-border-strong, rgba(23, 19, 42, 0.14));
-  --svv-glass-pane: rgba(255, 255, 255, 0.3);
+  --svv-glass-pane: rgba(255, 255, 255, 0.45);
   --svv-bg: var(--svv-glass-pane);
   --svv-surface: var(--svv-glass-pane);
   --svv-card-bg: var(--svv-glass-card, transparent);
@@ -111,10 +124,18 @@
     overflow: visible;
   }
 
-  // Four-layer glass: refraction, tint, specular, content. The first two are
-  // pseudo-elements, the specular is the box-shadow bevel on the element itself.
+  // Three-layer glass: the blurred backdrop on the pane itself, the tint and
+  // specular sheen in ::after above it, and the bevel as the pane's box-shadow.
+  //
+  // The blur used to live on a ::before, which made it invisible both when
+  // reading these rules and when inspecting a pane in devtools. It carried the
+  // SVG refraction filter too; that is gone, so there is nothing left for the
+  // pseudo-element to do and the declaration belongs where the reference
+  // design puts it — on the pane.
+  //
   // Never on the <dialog> itself: an open modal is position: fixed in the top
-  // layer, and overriding that drops it into normal flow.
+  // layer, and overriding that drops it into normal flow. These are the inner
+  // panels, which is why they can carry it.
   .svv-shell__header,
   .svv-shell__aside,
   .svv-shell__content,
@@ -126,20 +147,10 @@
     background: transparent;
     border: 0;
     box-shadow: var(--svv-glass-shadow);
+    -webkit-backdrop-filter: var(--svv-glass-blur);
+    backdrop-filter: var(--svv-glass-blur);
 
-    // refraction layer
-    &::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: -2;
-      pointer-events: none;
-      border-radius: inherit;
-      -webkit-backdrop-filter: var(--svv-glass-blur);
-      backdrop-filter: var(--svv-glass-blur);
-    }
-
-    // tint + specular sheen, above the refraction and under the content
+    // tint + specular sheen, above the blurred backdrop and under the content
     &::after {
       content: "";
       position: absolute;
@@ -484,16 +495,18 @@
   }
 
   @include mobile {
+    // Panes sit nearly edge to edge on a phone, where the desktop rounding
+    // reads as a pill rather than a panel.
     .svv-shell__header {
       position: static;
       margin: 0 12px 12px;
       padding: 10px;
-      border-radius: 24px;
+      border-radius: 16px;
     }
 
     .svv-shell__content {
       margin: 0 12px;
-      border-radius: 24px;
+      border-radius: 16px;
     }
 
     .svv-shell__strip {
@@ -501,14 +514,22 @@
       border-bottom: 0;
     }
 
+    // The date strip is the calendar on a phone. These used to be literal
+    // light-design values — a white fill with the scheme's own text colour on
+    // top — so on a dark scheme the chips turned into white text on white, and
+    // the selected one filled with --svv-text, which IS the text colour.
+    // Material from the glass tokens, selection from the base sheet's primary.
     .svv-datestrip__chip {
-      border-radius: 16px;
-      border-color: rgba(255, 255, 255, 0.85);
-      background: rgba(255, 255, 255, 0.55);
+      border: 0;
+      border-radius: 12px;
+      background: var(--svv-glass-control);
+      box-shadow: var(--svv-glass-control-shadow);
 
+      // Restated only because the skin's material above outranks the base
+      // rule's selected state.
       &.is-selected {
-        border-color: var(--svv-text);
-        background: var(--svv-text);
+        background: var(--svv-primary);
+        color: var(--svv-primary-text);
       }
     }
 
@@ -542,7 +563,7 @@
     .svv-shell__header {
       position: relative;
       top: auto;
-      border-radius: 24px;
+      border-radius: 16px;
     }
 
     .svv-events--grid .svv-card {
@@ -552,17 +573,20 @@
   }
 }
 
-// Chromium is the only engine that bends a captured backdrop through an SVG
-// filter; elsewhere the panes stay flat glass.
-@supports (backdrop-filter: url(#svv-glass-dist)) {
-  .svv-wgt-v2 {
-    .svv-shell__header::before,
-    .svv-shell__aside::before,
-    .svv-shell__content::before,
-    .svv-events--grid .svv-card::before,
-    .svv-drawer__panel::before,
-    .svv-modal__panel::before {
-      filter: url(#svv-glass-dist);
-    }
-  }
-}
+// The refraction layers are deliberately NOT run through the block's SVG
+// displacement filter.
+//
+// Bending a captured backdrop that way tears it: feDisplacementMap samples the
+// already-blurred backdrop up to half its scale away, so a wide soft gradient
+// behind the widget comes back as ragged curtains, and the pane's own edge
+// pulls in nothing where the sample falls outside the filter region. On the
+// Obsidian scheme — a large, smooth, saturated glow on near-black — it was the
+// most visible thing on the screen. Measured against the alternatives: a
+// smaller scale and a filter region widened to 200% both still tore.
+//
+// What makes the glass is the rest of the stack, all still here: the blurred
+// and brightened backdrop, the tint, the specular bevel and the sheen.
+//
+// (inc/widget-v2.php still emits the filter and --svv-glass-distortion, and
+// scripts/build-skins.mjs still rewrites `filter: url(#svv-glass-dist)` into
+// that variable, so restoring this is a matter of putting the rule back.)

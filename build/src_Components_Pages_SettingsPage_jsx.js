@@ -4646,7 +4646,7 @@ const translationsKeysTpl = {
     registerInWaitingList: "Join the Waiting List",
     eventSoldOut: "Sold out",
     appointmentSoldOut: "Sold out",
-    remainingBookingsLabel: "Hurry! Only ### left in stock!",
+    remainingBookingsLabel: "Only ### left!",
     addToCartLabel: "Confirm",
     questionsFormTitle: "Questions Form",
     additionalMembersFormTitle: "Multi Booking",
@@ -4969,4 +4969,4 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_SettingsPage_jsx.js.map?ver=8af98a9be7e08f54a446
+//# sourceMappingURL=src_Components_Pages_SettingsPage_jsx.js.map?ver=ec278b6a61506bc5a9de

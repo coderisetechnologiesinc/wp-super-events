@@ -88,6 +88,18 @@ describe("truncateWords", () => {
 describe("formatAvailability", () => {
   const t = (_path, { fallback }) => fallback;
 
+  it('uses the short low-stock default when translations are missing', () => {
+    expect(formatAvailability({ availability: 'few-left', seatsRemaining: 1 }, t)).toBe('Only 1 left!');
+  });
+
+  it.each([2, 3, 5])('uses a simple count for %i remaining seats, even with low stock', (seatsRemaining) => {
+    expect(formatAvailability({ availability: 'few-left', seatsRemaining }, t)).toBe(`${seatsRemaining} left`);
+  });
+
+  it('emphasizes the last seat regardless of the stock threshold', () => {
+    expect(formatAvailability({ availability: 'available', seatsRemaining: 1 }, t)).toBe('Only 1 left!');
+  });
+
   it("says nothing when the shop does not track the quantity", () => {
     expect(formatAvailability({ availability: "available", seatsRemaining: null }, t)).toBe("");
   });

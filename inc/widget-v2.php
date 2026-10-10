@@ -101,6 +101,7 @@ function servv_widget_v2_font_url($config) {
     $parts = servv_widget_v2_style_parts($config['widget_skin']);
     if ($parts['base'] === 'default' || $config['skin_custom_styles']) { return ''; }
     $families = [
+        'glass' => 'family=Instrument+Sans:wght@400;500;600;700',
         'polaris' => 'family=Inter:wght@400;450;550;650',
         'poster' => 'family=Anton&family=Archivo:wght@400;500;600;700',
         'neumorph' => 'family=Plus+Jakarta+Sans:wght@500;600;700;800',
@@ -129,8 +130,10 @@ function servv_widget_v2_style($config) {
     $set('drawer-width', $config['drawer_width']);
     $set('font', $config['use_theme_styles'] ? 'inherit' : $config['font_family']);
     $set('heading-font', $config['heading_font'] ?: $config['font_family']);
-    $set('bg', $config['use_theme_styles'] ? 'var(--wp--preset--color--base, #ffffff)' : $config['color_background']);
     $parts = servv_widget_v2_style_parts($config['widget_skin']);
+    if ($parts['base'] !== 'glass' || $parts['scheme'] === '') {
+        $set('bg', $config['use_theme_styles'] ? 'var(--wp--preset--color--base, #ffffff)' : $config['color_background']);
+    }
     $themed = $parts['scheme'] === '' && (!$config['use_theme_styles'] || $parts['base'] === 'default' || $config['skin_custom_styles']);
     if ($themed) {
         $colors = [
@@ -170,10 +173,14 @@ function servv_widget_v2_style($config) {
         $set('bg-overlay', $gradient . $config['background_overlay_from'] . ',' . $config['background_overlay_to'] . ')');
     }
     $set('bg-overlay-opacity', $config['background_overlay_opacity'] / 100);
-    foreach ([1, 2, 3] as $number) {
-        $hex = ltrim($config['glass_blob_color_' . $number], '#');
-        if (strlen($hex) === 3) { $hex = $hex[0].$hex[0].$hex[1].$hex[1].$hex[2].$hex[2]; }
-        $set('glass-blob-' . $number, 'rgba(' . hexdec(substr($hex, 0, 2)) . ',' . hexdec(substr($hex, 2, 2)) . ',' . hexdec(substr($hex, 4, 2)) . ',' . ($config['glass_blob_opacity'] / 100) . ')');
+    // Glass schemes ship their own background and glow palette. Inline values
+    // would override those palettes regardless of stylesheet specificity.
+    if ($parts['base'] === 'glass' && $parts['scheme'] === '') {
+        foreach ([1 => 1, 2 => 0.909, 3 => 0.818] as $number => $intensity) {
+            $hex = ltrim($config['glass_blob_color_' . $number], '#');
+            if (strlen($hex) === 3) { $hex = $hex[0].$hex[0].$hex[1].$hex[1].$hex[2].$hex[2]; }
+            $set('glass-blob-' . $number, 'rgba(' . hexdec(substr($hex, 0, 2)) . ',' . hexdec(substr($hex, 2, 2)) . ',' . hexdec(substr($hex, 4, 2)) . ',' . ($config['glass_blob_opacity'] / 100 * $intensity) . ')');
+        }
     }
     return implode(';', $vars);
 }

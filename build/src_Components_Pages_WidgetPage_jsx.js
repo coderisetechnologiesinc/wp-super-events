@@ -1062,4 +1062,4 @@ module.exports = /*#__PURE__*/JSON.parse('[{"type":"header","content":"Placement
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_WidgetPage_jsx.js.map?ver=1fca5cdeb331864196d5
+//# sourceMappingURL=src_Components_Pages_WidgetPage_jsx.js.map?ver=9faa0ef9695a70e3edfb

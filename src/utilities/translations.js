@@ -98,7 +98,7 @@ export const translationsKeysTpl = {
     registerInWaitingList: "Join the Waiting List",
     eventSoldOut: "Sold out",
     appointmentSoldOut: "Sold out",
-    remainingBookingsLabel: "Hurry! Only ### left in stock!",
+    remainingBookingsLabel: "Only ### left!",
     addToCartLabel: "Confirm",
     questionsFormTitle: "Questions Form",
     additionalMembersFormTitle: "Multi Booking",

@@ -9,17 +9,21 @@ import {
   requestResource,
   resourceTtl,
 } from "./requestCache";
+import { runQueued } from "./requestQueue";
 
 const api = axios.create();
 const transport = axios.getAdapter(api.defaults.adapter);
 api.defaults.adapter = async (config) => {
+  // Every request leaves through the queue, so no screen can fan out wider
+  // than the proxy's PHP pool can answer — see requestQueue for why.
+  const send = () => runQueued(() => transport(config));
   const url = canonicalRequestURL(api.getUri(config));
   const sameOrigin = url.origin === window.location.origin;
   const enabled = adminCacheEnabled() && sameOrigin;
   const method = (config.method || "get").toLowerCase();
   const resource = enabled ? requestResource(url.pathname) : null;
   const load = async () => {
-    const response = await transport(config);
+    const response = await send();
     // Keep transport metadata out of the JSON cache. Axios parses the raw body
     // separately for each consumer, so callers may safely normalize/edit data.
     return {
@@ -57,7 +61,7 @@ api.defaults.adapter = async (config) => {
     return { ...response, config };
   }
 
-  const response = await transport(config);
+  const response = await send();
   if (
     enabled &&
     method !== "get" &&

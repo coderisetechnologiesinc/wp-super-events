@@ -5664,4 +5664,4 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_EventsListPage_jsx.js.map?ver=75c2242dafb5b23ba2e9
+//# sourceMappingURL=src_Components_Pages_EventsListPage_jsx.js.map?ver=77399694975bd6d77e70

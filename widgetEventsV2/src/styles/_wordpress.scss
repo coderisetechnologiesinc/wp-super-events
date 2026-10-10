@@ -1,5 +1,6 @@
 @use "unit" as *;
 @use "controls" as controls;
+@use "breakpoints" as *;
 
 // Keep WordPress constrained layouts from replacing the configured widget width.
 .svv-wgt-v2-container.svv-wgt-v2-container {
@@ -13,6 +14,20 @@
 }
 .svv-wgt-v2-container::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; border-radius: inherit; background-image: var(--svv-v2-bg-overlay, none); opacity: var(--svv-v2-bg-overlay-opacity, 1); }
 .svv-wgt-v2-container [data-servv-app]:empty { min-height: 420px; }
+
+@include mobile {
+  .svv-wgt-v2-container.svv-wgt-v2-container {
+    padding-inline: 0;
+
+    &[data-svv-mobile-width] {
+      width: var(--svv-mobile-width);
+      max-width: none;
+      // WordPress constrained layouts set auto margins with !important.
+      margin-left: var(--svv-mobile-left) !important;
+      margin-right: var(--svv-mobile-right) !important;
+    }
+  }
+}
 
 .svv-wgt-v2 {
   .svv-field__control {

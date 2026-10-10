@@ -111,7 +111,7 @@
     }
 
     .svv-shell__content {
-      padding: 18px 16px 24px;
+      padding: 18px 8px 24px;
     }
 
     .svv-results__title {
@@ -271,6 +271,66 @@
 
     .svv-results__title {
       font-size: 22px;
+    }
+  }
+}
+
+@include mobile {
+  .svv-wgt-v2-container.svv-wgt-v2-container .svv-wgt-v2 .svv-shell__content {
+    padding-inline: 8px;
+  }
+
+  .svv-wgt-v2-container .svv-wgt-v2 {
+    .svv-events--list .svv-card.svv-card,
+    .svv-events--grid .svv-card.svv-card {
+      border: 1px solid var(--svv-border);
+      border-radius: var(--svv-radius);
+    }
+
+    .svv-events--list .svv-card.svv-card {
+      padding: 16px 12px;
+    }
+
+    .svv-events--list .svv-events__items {
+      gap: 14px;
+    }
+  }
+
+  .svv-wgt-v2-container .svv-wgt-v2 .svv-card {
+    .svv-card__action {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .svv-card__pricing {
+      display: grid;
+      gap: 2px;
+      text-align: start;
+    }
+
+    .svv-card__price {
+      white-space: nowrap;
+    }
+
+    .svv-card__availability {
+      white-space: normal;
+    }
+
+    .svv-card__actions {
+      display: flex;
+      width: auto;
+      flex-shrink: 0;
+      gap: 8px;
+      margin-inline-start: auto;
+    }
+
+    .svv-card__cta {
+      flex: 0 0 auto;
+      min-width: 140px;
+      padding-inline: 24px;
+      font-size: 16px;
     }
   }
 }

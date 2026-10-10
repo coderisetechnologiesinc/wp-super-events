@@ -434,7 +434,8 @@ test("aggregated filter and analytics responses cannot mix pre-save and post-sav
   const { getAnalyticsEvents } = require("../src/utilities/analytics");
   for (const [load, readPaths, mutation] of [
     [
-      () => getFilters(1),
+      // A free plan: the three shared kinds, without the paid-plan members.
+      () => getFilters({ current_plan: { price: 0 } }),
       ["filters/locations", "filters/languages", "filters/categories"],
       "filters/locations/7",
     ],

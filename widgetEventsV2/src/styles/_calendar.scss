@@ -48,7 +48,7 @@
 
       &:hover {
         border-color: var(--svv-primary);
-        color: var(--svv-primary);
+        color: var(--svv-primary-ink);
       }
     }
   }
@@ -157,7 +157,7 @@
 
     &.is-marked {
       background: var(--svv-calendar-marked-bg);
-      color: var(--svv-primary);
+      color: var(--svv-primary-ink);
 
       &::after {
         content: "";
@@ -204,7 +204,7 @@
 
     &:hover {
       border-color: var(--svv-primary);
-      color: var(--svv-primary);
+      color: var(--svv-primary-ink);
     }
   }
 
@@ -265,7 +265,7 @@
   }
 
   .svv-monthview__cell.is-today .svv-monthview__date {
-    color: var(--svv-primary);
+    color: var(--svv-primary-ink);
   }
 
   .svv-monthview__events {

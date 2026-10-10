@@ -1,4 +1,5 @@
 import { resourceVersion } from "./requestCache";
+import { needsMembersFilter } from "./planCapabilities";
 import axios from "./adminApi";
 
 export const getFilterType = async (type) => {
@@ -26,28 +27,22 @@ export const createLocation = async (name) => {
   return response.data;
 };
 
-export const getFilters = async (current_plan) => {
+export const getFilters = async (settings) => {
   const version = resourceVersion("filters");
   const filterTypes = ["locations", "languages", "categories"];
-  if (current_plan !== 1) {
+  // Members are a paid-plan kind, so a free shop's read would answer nothing
+  // its filter screens can show.
+  if (needsMembersFilter(settings)) {
     filterTypes.push("members");
   }
 
-  const isDev = servvData.servv_plugin_mode === "development";
-  const results = [];
+  // Asked for together: the request queue decides how many actually travel at
+  // once, which is what the development-only serial path used to guard.
+  const results = await Promise.all(
+    filterTypes.map((type) => getFilterType(type)),
+  );
 
-  if (isDev) {
-    for (const type of filterTypes) {
-      const result = await getFilterType(type);
-      results.push(result);
-    }
-  } else {
-    const fetchPromises = filterTypes.map((type) => getFilterType(type));
-    const parallelResults = await Promise.all(fetchPromises);
-    results.push(...parallelResults);
-  }
-
-  if (version !== resourceVersion("filters")) return getFilters(current_plan);
+  if (version !== resourceVersion("filters")) return getFilters(settings);
   const filters = {};
   for (const result of results) {
     if (result?.data) {

@@ -3,6 +3,7 @@ import { createPinia } from 'pinia';
 import App from './App.vue';
 import { useRuntimeStore } from './api/wordpress';
 import { useBookingStore } from './stores/booking';
+import { fitMobileWidth } from './utilities/mobileWidth';
 
 export function mountWidgets(parent = document) {
   parent.querySelectorAll('[data-servv-events-v2]').forEach((root) => {
@@ -19,7 +20,9 @@ export function mountWidgets(parent = document) {
       app.use(pinia);
       app.mount(target);
       root.__servvApp = app;
+      const disposeMobileWidth = runtime.preview ? () => {} : fitMobileWidth(root);
       root.__servvDispose = () => {
+        disposeMobileWidth();
         useBookingStore(pinia).close();
         useRuntimeStore(pinia).api.dispose();
         app.unmount();

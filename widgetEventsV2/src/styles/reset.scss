@@ -55,6 +55,15 @@
     text-transform: none;
   }
 
+  // `all: revert` above hands the placeholder back to the browser's grey,
+  // which knows nothing about the scheme behind it — unreadable on every dark
+  // one. Muted scheme text reads on light and dark alike. The explicit opacity
+  // is for Firefox, which dims placeholders by default.
+  :where(input, textarea)::placeholder {
+    color: var(--svv-text-muted);
+    opacity: 1;
+  }
+
   :where(dialog) {
     all: revert;
     box-sizing: border-box;
