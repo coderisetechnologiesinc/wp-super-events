@@ -1,3 +1,18 @@
+# v2.3.0
+
+2.3.0 (2026-10-10)
+
+## Feature Release
+
+- Fixed mobile widget width to compensate for WordPress theme spacing. (8d77330)
+- Added visible borders and rounded corners to mobile event cards. (8d77330)
+- Placed Price/Free above the remaining-seat count, alongside Share and Book now. (8d77330)
+- Fixed Glass, Tropic, and Obsidian backgrounds and glow palettes. (8d77330)
+- Refined Glass transparency, blur, panel edges, and mobile rounding; removed distortion artifacts. (8d77330)
+- Improved dark-scheme text, placeholder, badge, and calendar contrast. (8d77330)
+- Fixed mobile date-chip contrast in Glass and Poster Blackout. (8d77330)
+- Improved Poster drawer-header controls, footer totals, and hover contrast. (8d77330)
+
 # v2.2.0
 
 2.2.0 (2026-10-10)
