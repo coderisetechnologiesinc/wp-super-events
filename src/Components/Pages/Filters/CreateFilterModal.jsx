@@ -7,6 +7,7 @@ import { FILTER_FORMS, filterFormErrors } from "./filterFields";
 import { saveFilter } from "../../../utilities/filters";
 import { useServvStore } from "../../../store/useServvStore";
 import styles from "./FilterForm.module.scss";
+import { useFilterLimits } from "./useFilterLimits";
 
 // Creates one filter value without leaving the page that needed it — the event
 // form, so far. The filter pages stay the place to edit values, reorder them
@@ -17,6 +18,12 @@ import styles from "./FilterForm.module.scss";
 // created instead of making them find it in a list.
 const CreateFilterModal = ({ type, onClose, onCreated }) => {
   const form = FILTER_FORMS[type];
+  const settings = useServvStore((store) => store.settings);
+  const filters = useServvStore((store) => store.filtersList);
+  const { isLimitReached, isMembersLimitReached, filterCategories } = useFilterLimits(settings, filters);
+  const creationBlocked = !settings || isLimitReached ||
+    !filterCategories.some((category) => category.toLowerCase() === type) ||
+    (type === "members" && isMembersLimitReached);
   const syncSingleFilterFromServer = useServvStore(
     (s) => s.syncSingleFilterFromServer,
   );
@@ -33,6 +40,10 @@ const CreateFilterModal = ({ type, onClose, onCreated }) => {
   };
 
   const save = async () => {
+    if (creationBlocked) {
+      toast.error("Your plan does not allow another filter of this type.");
+      return;
+    }
     if (Object.keys(errors).length) {
       setShowErrors(true);
       return;
@@ -80,7 +91,7 @@ const CreateFilterModal = ({ type, onClose, onCreated }) => {
           />
           <PageActionButton
             text={saving ? "Creating…" : "Create filter"}
-            disabled={saving}
+            disabled={saving || creationBlocked}
             onAction={save}
           />
         </>

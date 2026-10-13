@@ -1076,10 +1076,11 @@ function FiltersListPage() {
   const [loading, setLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const {
     isLimitReached,
+    isMembersLimitReached,
     filterCategories
   } = (0,_useFilterLimits__WEBPACK_IMPORTED_MODULE_12__.useFilterLimits)(settings, filtersList);
   const filters = filtersList[type?.toLowerCase()] || EMPTY;
-  const canCreate = Boolean(settings && filterCategories.includes(type) && !isLimitReached);
+  const canCreate = Boolean(settings && filterCategories.includes(type) && !isLimitReached && (type !== "Members" || !isMembersLimitReached));
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     setSelected(previous => previous.filter(id => filters.some(filter => filter.id === id)));
   }, [filters, type]);
@@ -1163,30 +1164,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utilities_planLimits__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../utilities/planLimits */ "./src/utilities/planLimits.js");
 
-const BASE_CATEGORIES = ["Locations", "Languages", "Categories"];
-const DEFAULT_FILTERS_LIMIT = 25;
 
-// Which filter kinds the current plan exposes, and whether the store has hit
-// its filter allowance.
-//
-// All three values are derived rather than held in state: the pages used to
-// compute them in an effect that mutated the category array in place, so
-// "Members" could go missing or appear several times depending on how many
-// times the effect had run.
-const useFilterLimits = (settings, filtersList) => {
-  const plan = settings?.current_plan;
-  const maxFiltersNumber = plan?.filters_limit || DEFAULT_FILTERS_LIMIT;
-  const totalFilters = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => Object.values(filtersList || {}).reduce((total, arr) => total + (arr?.length || 0), 0), [filtersList]);
-
-  // Member filters are gated behind a paid plan (plan id 1 is the free tier).
-  const filterCategories = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => !plan || plan.id !== 1 ? [...BASE_CATEGORIES, "Members"] : BASE_CATEGORIES, [plan]);
-  return {
-    maxFiltersNumber,
-    isLimitReached: totalFilters >= maxFiltersNumber,
-    filterCategories
-  };
-};
+const useFilterLimits = (settings, filtersList) => (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => (0,_utilities_planLimits__WEBPACK_IMPORTED_MODULE_1__.filterAllowance)(settings?.current_plan, filtersList), [settings?.current_plan, filtersList]);
 
 /***/ }),
 
@@ -1246,6 +1227,54 @@ const PageWrapper = props => {
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PageWrapper);
+
+/***/ }),
+
+/***/ "./src/utilities/planLimits.js":
+/*!*************************************!*\
+  !*** ./src/utilities/planLimits.js ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   PLAN_LIMITS: () => (/* binding */ PLAN_LIMITS),
+/* harmony export */   filterAllowance: () => (/* binding */ filterAllowance),
+/* harmony export */   limitReached: () => (/* binding */ limitReached),
+/* harmony export */   multiTicketsAllowed: () => (/* binding */ multiTicketsAllowed),
+/* harmony export */   planLimit: () => (/* binding */ planLimit),
+/* harmony export */   recurringAllowed: () => (/* binding */ recurringAllowed)
+/* harmony export */ });
+const PLAN_LIMITS = [["filters_limit", "Filters limit"], ["members_limit", "Members limit"], ["offline_events_limit", "In-person events limit"], ["offline_recurring_events_limit", "Recurring in-person events limit"], ["recurring_events_limit", "Recurring online events limit"], ["events_limit", "Online events limit"]];
+const planLimit = (plan, key, fallback = null) => {
+  const value = plan?.[key];
+  if (value == null || value === "" || typeof value === "boolean") return fallback;
+  const number = Number(value);
+  return Number.isInteger(number) && number >= -1 ? number : fallback;
+};
+const limitReached = (count, limit) => limit != null && limit !== -1 && count >= limit;
+const filterAllowance = (plan, filters = {}) => {
+  const maxFiltersNumber = planLimit(plan, "filters_limit", 25);
+  const membersLimit = planLimit(plan, "members_limit", Number(plan?.id) === 1 ? 0 : -1);
+  const totalFilters = ["locations", "languages", "categories", "members"].reduce((count, type) => count + (Array.isArray(filters[type]) ? filters[type].length : 0), 0);
+  const isLimitReached = limitReached(totalFilters, maxFiltersNumber);
+  const isMembersLimitReached = limitReached(filters.members?.length || 0, membersLimit);
+  const filterCategories = ["Locations", "Languages", "Categories", ...(membersLimit !== 0 ? ["Members"] : [])];
+  return {
+    maxFiltersNumber,
+    membersLimit,
+    totalFilters,
+    isLimitReached,
+    isMembersLimitReached,
+    filterCategories
+  };
+};
+const recurringAllowed = (plan, location) => {
+  const limit = planLimit(plan, location === "zoom" ? "recurring_events_limit" : "offline_recurring_events_limit");
+  if (limit != null) return limit !== 0;
+  return !!plan?.features?.some(feature => ["Recurring", "Recurring Events"].includes(feature.title) && String(feature.value) === "true");
+};
+const multiTicketsAllowed = plan => plan?.multi_tickets == null ? Number(plan?.id) !== 1 : [true, "true", 1, "1"].includes(plan.multi_tickets);
 
 /***/ }),
 
@@ -1728,4 +1757,4 @@ const ForwardRef = /*#__PURE__*/ react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(U
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_Filters_FiltersListPage_jsx.js.map?ver=2826c139dfbe8f520c2b
+//# sourceMappingURL=src_Components_Pages_Filters_FiltersListPage_jsx.js.map?ver=d8df0838a54cbb78f3aa

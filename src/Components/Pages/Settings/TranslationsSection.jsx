@@ -3,6 +3,9 @@ import styles from "./SettingsForm.module.scss";
 import BlockStack from "../../Containers/BlockStack";
 import AnnotatedSection from "../../Containers/AnnotatedSection";
 import NewSelectControl from "../../Controls/NewSelectControl";
+import { useState } from "react";
+import PageActionButton from "../../Controls/PageActionButton";
+import ModalShell from "../../Modals/ModalShell";
 
 const TranslationsSection = ({
   responsiveBlockStack,
@@ -13,9 +16,34 @@ const TranslationsSection = ({
   langForEdit,
   handleSelectLanguageforEdit,
   renderTranslations,
+  onResetTranslations,
+  resetting = false,
 }) => {
+  const [confirmReset, setConfirmReset] = useState(false);
   return (
     <BlockStack gap={0} cardsLayout={true} className={styles.rows}>
+      <AnnotatedSection
+        variant="settings"
+        title="Default translations"
+        description="Restore the bundled translations for all 12 languages and save them immediately."
+        className={responsiveBlockStack}
+      >
+        <PageActionButton text="Reset all translations" type="danger-secondary" disabled={resetting} onAction={() => setConfirmReset(true)} />
+      </AnnotatedSection>
+      {confirmReset && (
+        <ModalShell
+          size="sm"
+          title="Reset all translations?"
+          description="This replaces custom translations in every language with the standard translations bundled with the plugin."
+          onClose={() => !resetting && setConfirmReset(false)}
+          footer={<>
+            <PageActionButton text="Cancel" type="secondary" disabled={resetting} onAction={() => setConfirmReset(false)} />
+            <PageActionButton text={resetting ? "Resetting…" : "Reset all translations"} type="danger" disabled={resetting} onAction={async () => { if (await onResetTranslations()) setConfirmReset(false); }} />
+          </>}
+        >
+          <p>Changes are saved for all languages. Your default widget language stays the same.</p>
+        </ModalShell>
+      )}
       <AnnotatedSection
         variant="settings"
         title="Default language for widgets"

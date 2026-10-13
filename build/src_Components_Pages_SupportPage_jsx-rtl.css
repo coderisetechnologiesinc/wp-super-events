@@ -346,6 +346,15 @@
 }
 :is(#servv-wrap, .servv-ui) .WQg8OdSbPcxlMORAs8zx {
   text-align: center;
+  display: grid;
+  grid-template-rows: 20px 72px 29px minmax(29px, auto);
+  align-content: start;
+}
+:is(#servv-wrap, .servv-ui) .WQg8OdSbPcxlMORAs8zx > * {
+  min-width: 0;
+}
+:is(#servv-wrap, .servv-ui) .WQg8OdSbPcxlMORAs8zx > p:last-child {
+  min-height: 21px;
 }
 :is(#servv-wrap, .servv-ui) .gJ7kPiHbnFYuU96l5rxz .Q_72bu2MtVtONMSl0sDe {
   color: #6436c9;
@@ -539,6 +548,7 @@
 }
 :is(#servv-wrap, .servv-ui) .HCuLbevyv514DTXmRM0w li {
   display: flex;
+  min-height: 20px;
   gap: 10px;
   font-size: 13px;
   line-height: 19px;

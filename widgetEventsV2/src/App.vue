@@ -16,7 +16,6 @@ import ResultsHead from "@/components/ResultsHead.vue";
 import SearchField from "@/components/SearchField.vue";
 import SharePanel from "@/components/SharePanel.vue";
 import SummaryCards from "@/components/SummaryCards.vue";
-import TimezoneSelect from "@/components/TimezoneSelect.vue";
 import ViewModeToggle from "@/components/ViewModeToggle.vue";
 import WidgetShell from "@/components/WidgetShell.vue";
 import { openBookingLink, useBookingStore } from "@/stores/booking";
@@ -88,7 +87,6 @@ onMounted(widget.init);
         <FiltersDrawer />
         <ViewModeToggle v-if="shop.showViewToggle" />
         <LanguageSelect v-if="shop.showLanguageSelector" />
-        <TimezoneSelect v-if="shop.controls.timezoneSelector" />
       </template>
 
       <template v-if="shop.controls.mobileDateStrip" #strip>

@@ -25,6 +25,7 @@ import { COVER_IMAGE_ACCEPT, readCoverImage } from "./coverImage";
 import CreateFilterModal from "../Pages/Filters/CreateFilterModal";
 import { useFilterLimits } from "../Pages/Filters/useFilterLimits";
 import styles from "./UnifiedEventForm.module.scss";
+import { recurringAllowed as canUseRecurring, multiTicketsAllowed } from "../../utilities/planLimits";
 
 const Section = ({ step, title, children }) => (
   <section className={styles.card}>
@@ -125,13 +126,11 @@ export default function UnifiedEventForm() {
   // featured_image_url is the cover already attached to the WordPress post.
   const cover = event.image_content || event.featured_image_url || "";
   const freePlan = Number(settings.current_plan?.id) === 1;
-  const recurringAllowed = settings.current_plan?.features?.some(
-    (f) => f.title === "Recurring" && String(f.value) === "true",
-  );
+  const recurringAllowed = canUseRecurring(settings.current_plan, event.location);
   const defaults = readDefaults(settings);
   // A filter kind the plan does not expose, or a store that has used up its
   // allowance, cannot gain values from here either.
-  const { isLimitReached, filterCategories } = useFilterLimits(
+  const { isLimitReached, isMembersLimitReached, filterCategories } = useFilterLimits(
     settings,
     filters,
   );
@@ -563,7 +562,8 @@ export default function UnifiedEventForm() {
                             list.charAt(0).toUpperCase() + list.slice(1),
                           );
                           const canCreate =
-                            planAllows && !isLimitReached && !disabled;
+                            planAllows && !isLimitReached && !disabled &&
+                            (list !== "members" || !isMembersLimitReached);
                           return (
                             <div className={styles.filterCard} key={key}>
                               <div>
@@ -997,7 +997,7 @@ export default function UnifiedEventForm() {
                           />
                         </div>
                       )}
-                      {(!freePlan || !activeTickets.length) && (
+                      {(multiTicketsAllowed(settings.current_plan) || !activeTickets.length) && (
                         <button
                           className={styles.addTicket}
                           type="button"

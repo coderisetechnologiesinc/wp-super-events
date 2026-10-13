@@ -23,7 +23,7 @@ const mapRegistrants = (res) =>
   res.registrants?.map(mapRegistrant).filter(Boolean) || [];
 
 const withOccurrence = (url, occurrenceId) =>
-  occurrenceId ? `${url}&occurrence_id=${occurrenceId}` : url;
+  occurrenceId ? `${url}&occurrence_id=${encodeURIComponent(occurrenceId)}` : url;
 
 const getNonceHeaders = () => {
   if (typeof servvData !== "undefined" && servvData.nonce) {
@@ -38,6 +38,7 @@ export const fetchRegistrants = async ({
   postID,
   page = 1,
   occurrenceId = null,
+  throwOnError = false,
 }) => {
   const url = withOccurrence(
     `/servv-plugin/v1/event/${postID}/registrants?page_size=20&page=${page}`,
@@ -52,9 +53,11 @@ export const fetchRegistrants = async ({
       pagination: {
         pageNumber: res.page_number,
         pageCount: res.page_count,
+        totalRecords: res.total_records,
       },
     };
   } catch (e) {
+    if (throwOnError) throw e;
     return {
       registrants: [],
       pagination: { pageNumber: 1, pageCount: 1 },
@@ -67,6 +70,7 @@ export const fetchRegistrantsWithToken = async ({
   next_page_token = null,
   occurrenceId = null,
   pageSize = 20,
+  throwOnError = false,
 }) => {
   let url = `/servv-plugin/v1/event/${postID}/registrants?page_size=${pageSize}`;
 
@@ -89,6 +93,7 @@ export const fetchRegistrantsWithToken = async ({
       },
     };
   } catch (e) {
+    if (throwOnError) throw e;
     console.error("fetchRegistrantsWithToken failed", e);
 
     return {
@@ -112,7 +117,7 @@ export const deleteRegistrant = async ({
   let path = `/servv-plugin/v1/event/${postID}/registrants/${registrantID}`;
 
   if (occurrenceId) {
-    path += `?occurrence_id=${occurrenceId}`;
+    path += `?occurrence_id=${encodeURIComponent(occurrenceId)}`;
   }
 
   return apiFetch({
@@ -131,7 +136,7 @@ export const resendRegistrantNotification = async ({
   let path = `/servv-plugin/v1/event/${postID}/registrants/${registrantID}/resend`;
 
   if (occurrenceId) {
-    path += `?occurrence_id=${occurrenceId}`;
+    path += `?occurrence_id=${encodeURIComponent(occurrenceId)}`;
   }
 
   return apiFetch({
@@ -149,7 +154,7 @@ export const resendAllNotifications = async ({
   let url = `/wp-json/servv-plugin/v1/event/${postID}/registrants/resend`;
 
   if (occurrenceId) {
-    url += `?occurrence_id=${occurrenceId}`;
+    url += `?occurrence_id=${encodeURIComponent(occurrenceId)}`;
   }
 
   return axios({
@@ -157,4 +162,11 @@ export const resendAllNotifications = async ({
     method: "POST",
     headers: getNonceHeaders(),
   });
+};
+
+export const addRegistrant = async ({ postID, occurrenceId = null, firstName, lastName, email }) => {
+  const response = await axios.patch(`/wp-json/servv-plugin/v1/event/${postID}`, {
+    registrants: [{ first_name: firstName.trim(), last_name: lastName.trim(), email: email.trim() }],
+  }, { headers: getNonceHeaders(), params: occurrenceId ? { occurrence_id: occurrenceId } : {} });
+  return response.data;
 };

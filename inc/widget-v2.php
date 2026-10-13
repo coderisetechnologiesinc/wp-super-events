@@ -201,7 +201,7 @@ function servv_widget_v2_enqueue($config, $with_fonts = true) {
     wp_enqueue_script('servv-events-v2', $base . 'servv-events-v2.js', [], is_file($path . 'servv-events-v2.js') ? filemtime($path . 'servv-events-v2.js') : SERVV_PLUGIN_VERSION, true);
 }
 
-add_shortcode('servv_events', 'servv_widget_v2_shortcode');
+add_shortcode('wp_super_events', 'servv_widget_v2_shortcode');
 function servv_widget_v2_shortcode($atts = [], $content = null, $tag = '', $preview = false) {
     $config = servv_widget_v2_config(is_array($atts) ? $atts : []);
     if (!$config['show_events_widget']) { return ''; }
@@ -239,7 +239,7 @@ function servv_widget_v2_shortcode($atts = [], $content = null, $tag = '', $prev
 // Enqueue styles before wp_head for ordinary post/page shortcode placements.
 add_action('wp_enqueue_scripts', function () {
     $post = get_post();
-    if ($post && has_shortcode($post->post_content, 'servv_events')) {
+    if ($post && has_shortcode($post->post_content, 'wp_super_events')) {
         servv_widget_v2_enqueue(servv_widget_v2_config());
         // Multiple instances can use different skins. All are small, scoped stylesheets.
         foreach (servv_widget_v2_skin_ids() as $skin) {

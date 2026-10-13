@@ -4,12 +4,13 @@ import { defineStore } from "pinia";
 import { selectableLocales } from "@/i18n/languages";
 import { FALLBACK_LOCALE, createTranslator, resolveLocale } from "@/i18n/translate";
 import { useShopStore } from "./shop";
+import { prepareWidgetTranslations } from "../../../translations/widget";
 
 export const useI18nStore = defineStore("i18n", () => {
   const shop = useShopStore();
   const requested = ref(null);
 
-  const translations = computed(() => shop.style.translations || {});
+  const translations = computed(() => prepareWidgetTranslations(shop.style).translations);
   const availableLocales = computed(() => Object.keys(translations.value));
   const offeredLocales = computed(() => selectableLocales(availableLocales.value));
   const defaultLocale = computed(

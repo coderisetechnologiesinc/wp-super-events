@@ -464,16 +464,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Controls/PageActionButton */ "./src/Components/Controls/PageActionButton.jsx");
 /* harmony import */ var _Controls_PaymentOptionsModal__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Controls/PaymentOptionsModal */ "./src/Components/Controls/PaymentOptionsModal.jsx");
 /* harmony import */ var _store_useServvStore__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../store/useServvStore */ "./src/store/useServvStore.js");
-/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/CreditCardIcon.js");
-/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/CheckCircleIcon.js");
+/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/CreditCardIcon.js");
 /* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/XCircleIcon.js");
+/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/CheckCircleIcon.js");
 /* harmony import */ var _utilities_adminApi__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../utilities/adminApi */ "./src/utilities/adminApi.js");
 /* harmony import */ var _PageWrapper__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./PageWrapper */ "./src/Components/Pages/PageWrapper.jsx");
 /* harmony import */ var _Containers_PageContent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Containers/PageContent */ "./src/Components/Containers/PageContent.jsx");
 /* harmony import */ var _Containers_PageHeader__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../Containers/PageHeader */ "./src/Components/Containers/PageHeader.jsx");
 /* harmony import */ var _PlansSupport_module_scss__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./PlansSupport.module.scss */ "./src/Components/Pages/PlansSupport.module.scss");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var _utilities_planLimits__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../utilities/planLimits */ "./src/utilities/planLimits.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__);
+
 
 
 
@@ -488,7 +490,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function PlansPage() {
-  var _shop$current_plan;
+  var _shop$current_plan, _ref, _ref2, _current$payed_until;
   const [shop, setShop] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   const [plans, setPlans] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const [loading, setLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true);
@@ -609,53 +611,59 @@ function PlansPage() {
   const currentName = typeof current === "object" && current ? current.name || "Current plan" : current || "No active plan detected";
   const isMarketplace = Boolean(shop?.is_wp_marketplace);
   const maxPlanId = Math.max(...plans.map(plan => Number(plan.id)));
-  const visiblePlans = plans.filter(plan => !isMarketplace || Number(plan.id) !== 1);
+  const visiblePlans = plans.filter(plan => ![true, "true", 1, "1"].includes(plan.hidden) && (!isMarketplace || Number(plan.id) !== 1));
   const currentPaid = Number(current?.price) > 0 || Number(current?.price_annual) > 0;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_PageWrapper__WEBPACK_IMPORTED_MODULE_7__["default"], {
+  const paidUntilValue = (_ref = (_ref2 = (_current$payed_until = current?.payed_until) !== null && _current$payed_until !== void 0 ? _current$payed_until : current?.paid_until) !== null && _ref2 !== void 0 ? _ref2 : shop?.payed_until) !== null && _ref !== void 0 ? _ref : shop?.paid_until;
+  const paidUntilDate = paidUntilValue ? new Date(typeof paidUntilValue === "string" ? paidUntilValue.trim().replace(/^(\d{4}-\d{2}-\d{2}) /, "$1T") : paidUntilValue) : null;
+  const paidUntil = paidUntilDate && !Number.isNaN(paidUntilDate.getTime()) ? paidUntilDate.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC"
+  }) : paidUntilValue ? String(paidUntilValue) : null;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_PageWrapper__WEBPACK_IMPORTED_MODULE_7__["default"], {
     flush: true,
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(_Containers_PageContent__WEBPACK_IMPORTED_MODULE_8__["default"], {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Containers_PageHeader__WEBPACK_IMPORTED_MODULE_9__["default"], {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(_Containers_PageContent__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Containers_PageHeader__WEBPACK_IMPORTED_MODULE_9__["default"], {
         className: _PlansSupport_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].plansHeader,
         title: "Plans",
-        description: "WP Super Events is free during the 2026 launch period through December 31, 2026. Paid plans are planned for 2027 and will be announced before the launch period ends.",
-        actions: currentPaid ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        description: "",
+        actions: currentPaid ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
           text: "Billing settings",
-          icon: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_12__["default"], {}),
+          icon: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_13__["default"], {}),
           type: "secondary",
           disabled: busy,
           onAction: openPortal
         }) : undefined
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
         className: _PlansSupport_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].divider
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("section", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("section", {
         className: `${_PlansSupport_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].card} ${_PlansSupport_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].current}`,
         "aria-busy": loading,
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
             className: _PlansSupport_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].eyebrow,
             children: "Current plan"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("h2", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("h2", {
             className: _PlansSupport_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].planName,
             children: loading ? "Loading plan…" : currentName
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("p", {
-            children: "Launch period \xB7 through December 31, 2026"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
+        }), currentPaid && paidUntil && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("span", {
           className: _PlansSupport_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].badge,
-          children: "2026 launch period"
+          children: ["Paid until ", paidUntil]
         })]
-      }), errors.shop && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("p", {
+      }), errors.shop && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("p", {
         className: _PlansSupport_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].notice,
         role: "alert",
         children: errors.shop
-      }), errors.plans ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("p", {
+      }), errors.plans ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("p", {
         className: _PlansSupport_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].notice,
         role: "alert",
         children: errors.plans
-      }) : !loading && !plans.length ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("p", {
+      }) : !loading && !plans.length ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("p", {
         className: _PlansSupport_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].notice,
         children: "No public paid plan catalog is available yet."
-      }) : null, !showPaymentForm && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+      }) : null, !showPaymentForm && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
         className: _PlansSupport_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].planGrid,
         "aria-busy": loading || busy,
         children: visiblePlans.map((plan, index) => {
@@ -666,69 +674,81 @@ function PlansPage() {
           const isUpgradeable = current?.id != null && Number(plan.id) > Number(current.id);
           const isPremium = Number(plan.id) === maxPlanId;
           const isPaid = price > 0 || annual > 0;
-          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("section", {
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("section", {
             className: `${_PlansSupport_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].card} ${_PlansSupport_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].planCard} ${isPremium ? _PlansSupport_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].premium : ""}`,
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
               className: _PlansSupport_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].planHeading,
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("h2", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("h2", {
                 className: _PlansSupport_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].planLabel,
                 children: plan.name || "Plan"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("p", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("p", {
                 className: _PlansSupport_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].price,
-                children: price > 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.Fragment, {
-                  children: ["$", price, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
+                children: price > 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.Fragment, {
+                  children: ["$", price, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
                     children: "/mo"
                   })]
-                }) : annual > 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.Fragment, {
-                  children: ["$", annual, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
+                }) : annual > 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.Fragment, {
+                  children: ["$", annual, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
                     children: "/yr"
                   })]
                 }) : "Free"
-              }), Number(plan.application_fee_percent) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("p", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("p", {
                 className: _PlansSupport_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].fee,
-                children: [plan.application_fee_percent, "% transaction fee"]
-              }), plan.description && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("p", {
-                children: plan.description
+                children: Number(plan.application_fee_percent) > 0 ? `${plan.application_fee_percent}% transaction fee` : "\u00a0"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("p", {
+                children: plan.description?.trim() || "\u00a0"
               })]
-            }), Array.isArray(plan.features) && plan.features.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("ul", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("ul", {
+              className: _PlansSupport_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].features,
+              "aria-label": `${plan.name || "Plan"} limits`,
+              children: _utilities_planLimits__WEBPACK_IMPORTED_MODULE_11__.PLAN_LIMITS.map(([key, label]) => {
+                const fallback = key === "filters_limit" ? 25 : key === "members_limit" ? Number(plan.id) === 1 ? 0 : -1 : null;
+                const value = (0,_utilities_planLimits__WEBPACK_IMPORTED_MODULE_11__.planLimit)(plan, key, isCurrent ? (0,_utilities_planLimits__WEBPACK_IMPORTED_MODULE_11__.planLimit)(current, key, fallback) : fallback);
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("li", {
+                  children: [value === 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_14__["default"], {}) : value != null ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_15__["default"], {}) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("span", {
+                    children: [label, ": ", value === -1 ? "Unlimited" : value !== null && value !== void 0 ? value : "Unlimited"]
+                  })]
+                }, key);
+              })
+            }), Array.isArray(plan.features) && plan.features.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("ul", {
               className: _PlansSupport_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].features,
               children: plan.features.map((feature, i) => {
                 const object = feature && typeof feature === "object";
                 const included = !object || feature.value === "true" || feature.value === true;
-                const Icon = included ? _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_13__["default"] : _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_14__["default"];
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("li", {
+                const Icon = included ? _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_15__["default"] : _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_14__["default"];
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("li", {
                   className: included ? "" : _PlansSupport_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].unavailable,
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(Icon, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(Icon, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
                     children: object ? feature.title || feature.name || "" : String(feature)
                   })]
                 }, i);
               })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
               className: _PlansSupport_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].planActions,
-              children: [isCurrent && isPaid ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
+              children: [isCurrent && isPaid ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
                 text: "Manage",
                 fullWidth: true,
                 disabled: busy,
                 onAction: openPortal
-              }) : !isCurrent && isUpgradeable ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
+              }) : !isCurrent && isUpgradeable ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
                 text: "Activate",
                 fullWidth: true,
                 disabled: busy || loading,
                 onAction: () => isMarketplace ? activatePlan(plan.id) : setSelectedPlan(plan)
-              }) : null, isCurrent && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
+              }) : null, isCurrent && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
                 className: _PlansSupport_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].badge,
                 children: "Current plan"
               })]
             })]
           }, (_plan$id = plan.id) !== null && _plan$id !== void 0 ? _plan$id : index);
         })
-      }), showPaymentForm && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("section", {
+      }), showPaymentForm && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("section", {
         className: _PlansSupport_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].card,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
           id: "servv-payment-element",
           ref: checkoutHost
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Controls_PaymentOptionsModal__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Controls_PaymentOptionsModal__WEBPACK_IMPORTED_MODULE_4__["default"], {
         open: Boolean(selectedPlan),
         onCancel: () => setSelectedPlan(null),
         fee: selectedPlan?.application_fee_percent,
@@ -740,6 +760,54 @@ function PlansPage() {
     })
   });
 }
+
+/***/ }),
+
+/***/ "./src/utilities/planLimits.js":
+/*!*************************************!*\
+  !*** ./src/utilities/planLimits.js ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   PLAN_LIMITS: () => (/* binding */ PLAN_LIMITS),
+/* harmony export */   filterAllowance: () => (/* binding */ filterAllowance),
+/* harmony export */   limitReached: () => (/* binding */ limitReached),
+/* harmony export */   multiTicketsAllowed: () => (/* binding */ multiTicketsAllowed),
+/* harmony export */   planLimit: () => (/* binding */ planLimit),
+/* harmony export */   recurringAllowed: () => (/* binding */ recurringAllowed)
+/* harmony export */ });
+const PLAN_LIMITS = [["filters_limit", "Filters limit"], ["members_limit", "Members limit"], ["offline_events_limit", "In-person events limit"], ["offline_recurring_events_limit", "Recurring in-person events limit"], ["recurring_events_limit", "Recurring online events limit"], ["events_limit", "Online events limit"]];
+const planLimit = (plan, key, fallback = null) => {
+  const value = plan?.[key];
+  if (value == null || value === "" || typeof value === "boolean") return fallback;
+  const number = Number(value);
+  return Number.isInteger(number) && number >= -1 ? number : fallback;
+};
+const limitReached = (count, limit) => limit != null && limit !== -1 && count >= limit;
+const filterAllowance = (plan, filters = {}) => {
+  const maxFiltersNumber = planLimit(plan, "filters_limit", 25);
+  const membersLimit = planLimit(plan, "members_limit", Number(plan?.id) === 1 ? 0 : -1);
+  const totalFilters = ["locations", "languages", "categories", "members"].reduce((count, type) => count + (Array.isArray(filters[type]) ? filters[type].length : 0), 0);
+  const isLimitReached = limitReached(totalFilters, maxFiltersNumber);
+  const isMembersLimitReached = limitReached(filters.members?.length || 0, membersLimit);
+  const filterCategories = ["Locations", "Languages", "Categories", ...(membersLimit !== 0 ? ["Members"] : [])];
+  return {
+    maxFiltersNumber,
+    membersLimit,
+    totalFilters,
+    isLimitReached,
+    isMembersLimitReached,
+    filterCategories
+  };
+};
+const recurringAllowed = (plan, location) => {
+  const limit = planLimit(plan, location === "zoom" ? "recurring_events_limit" : "offline_recurring_events_limit");
+  if (limit != null) return limit !== 0;
+  return !!plan?.features?.some(feature => ["Recurring", "Recurring Events"].includes(feature.title) && String(feature.value) === "true");
+};
+const multiTicketsAllowed = plan => plan?.multi_tickets == null ? Number(plan?.id) !== 1 : [true, "true", 1, "1"].includes(plan.multi_tickets);
 
 /***/ }),
 
@@ -1195,4 +1263,4 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_PlansPage_jsx.js.map?ver=8ee93801f2b0458ec665
+//# sourceMappingURL=src_Components_Pages_PlansPage_jsx.js.map?ver=2ae4c139fdacd24404fe

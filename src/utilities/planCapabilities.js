@@ -14,7 +14,8 @@
 // disconnected.
 export const isFreePlan = (settings) => {
   const price = Number(settings?.current_plan?.price);
-  return Number.isFinite(price) && price === 0;
+  const annual = Number(settings?.current_plan?.price_annual ?? 0);
+  return Number.isFinite(price) && price === 0 && Number.isFinite(annual) && annual === 0;
 };
 
 // Zoom and Stripe are paid-plan integrations: a free shop can neither create a
@@ -31,4 +32,6 @@ export const needsGmailAccount = (settings) =>
   settings?.settings?.email_provider !== "smtp" || isFreePlan(settings);
 
 // Members are a paid-plan filter kind — `members_limit` is 0 on free.
-export const needsMembersFilter = (settings) => !isFreePlan(settings);
+export const needsMembersFilter = (settings) => settings?.current_plan?.members_limit != null
+  ? Number(settings.current_plan.members_limit) !== 0
+  : !isFreePlan(settings);

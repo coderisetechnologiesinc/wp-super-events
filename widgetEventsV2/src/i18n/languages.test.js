@@ -8,7 +8,7 @@ import {
 } from "./languages";
 
 describe("supported locales", () => {
-  it("covers the thirteen languages the app translates", () => {
+  it("covers the twelve languages the app translates", () => {
     expect(SUPPORTED_LOCALES).toEqual([
       "zh-cn",
       "nl",
@@ -20,7 +20,6 @@ describe("supported locales", () => {
       "ja",
       "ko",
       "no",
-      "ru",
       "es",
       "sv",
     ]);

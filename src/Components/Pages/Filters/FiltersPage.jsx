@@ -13,7 +13,7 @@ export default function FiltersPage() {
   const filters = useServvStore((s) => s.filtersList);
   const settings = useServvStore((s) => s.settings);
   const loading = useServvStore((s) => s.loading);
-  const { maxFiltersNumber, isLimitReached, filterCategories } =
+  const { maxFiltersNumber, totalFilters, isLimitReached, isMembersLimitReached, filterCategories } =
     useFilterLimits(settings, filters);
   const navigate = useNavigate();
   return (
@@ -24,12 +24,13 @@ export default function FiltersPage() {
           description="Attributes visitors can filter your public event list by."
           actions={
             <CreateFilterMenu
-              types={filterCategories}
+              types={filterCategories.filter((type) => type !== "Members" || !isMembersLimitReached)}
               disabled={isLimitReached || !settings}
             />
           }
         />
         <div className={styles.divider} />
+        <p>Filters limit: {totalFilters} / {maxFiltersNumber === -1 ? "Unlimited" : maxFiltersNumber}</p>
         {isLimitReached && (
           <p className={styles.limit}>
             Filter limit reached ({maxFiltersNumber}). Upgrade your plan to add

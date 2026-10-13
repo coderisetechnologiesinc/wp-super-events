@@ -126,7 +126,7 @@ defineExpose({ validate });
     >
       <legend class="svv-members__legend">
         {{
-          i18n.t("onProductWidget.memberFormMember", { fallback: "Member" })
+          i18n.t("onProductWidget.memberFormMember", { fallback: "Registrant" })
         }}
         <span
           v-if="index === 0 && isSelfRegistration"

@@ -963,6 +963,7 @@ const mergeAttributesPatch = (prev, patch) => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   createEvent: () => (/* binding */ createEvent),
+/* harmony export */   eventAdminPath: () => (/* binding */ eventAdminPath),
 /* harmony export */   eventKey: () => (/* binding */ eventKey),
 /* harmony export */   eventRoutePayload: () => (/* binding */ eventRoutePayload),
 /* harmony export */   generateEventData: () => (/* binding */ generateEventData),
@@ -1037,10 +1038,18 @@ const eventRoutePayload = (event, {
 } = {}) => ({
   id: event.post_id,
   occurrence_id: event.occurrence_id,
+  provider: event.provider || (String(event.type).toLowerCase() === "zoom" ? "zoom" : "offline"),
   ...(registrants ? {
     registrants_view: true
   } : {})
 });
+const eventAdminPath = (selected, fallbackProvider = "offline") => {
+  const provider = selected.provider || selected.type || fallbackProvider;
+  const pathType = String(provider).toLowerCase() === "zoom" ? "zoom" : "offline";
+  const query = new URLSearchParams();
+  if (selected.occurrence_id != null && selected.occurrence_id !== "") query.set("occurrence_id", selected.occurrence_id);
+  return `/events/${pathType}/${selected.id}${selected.registrants_view ? "/registrants" : ""}${query.size ? `?${query}` : ""}`;
+};
 
 /***/ }),
 
@@ -1397,4 +1406,4 @@ const ForwardRef = /*#__PURE__*/ react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(R
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Onboarding_OnboardingFlow_jsx.js.map?ver=377180039b8af817702f
+//# sourceMappingURL=src_Components_Onboarding_OnboardingFlow_jsx.js.map?ver=529bdab7cd2dd6f3a920
