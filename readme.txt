@@ -19,6 +19,16 @@ Use WP Super Events for classes, workshops, webinars, community events, training
 
 Create and publish events from WordPress with an event builder designed to reduce setup time. Configure dates, recurrence, venues, hosts, ticket options, capacity, and registration details without leaving your WordPress dashboard.
 
+= Trusted by 500+ Brands on Shopify — Now Available for WordPress =
+
+Built by the team behind Servv AI, WP Super Events brings a proven event booking platform to WordPress.
+
+Servv AI has helped **500+ Shopify brands manage events, registrations, and bookings, processing over $2 million in bookings** through its platform.
+
+Now, we're bringing that experience to WordPress with WP Super Events — making it easier for businesses, creators, and communities to create events, sell tickets, manage registrations, and host online, in-person, or hybrid experiences directly from their WordPress websites.
+
+[Explore WP Super Events](https://wpsuperevents.com) | [Try the Live Demo](https://wpsuperevents.com/demo/default)
+
 = Everything You Need to Run Events =
 
 * **One-time and recurring events** — Schedule individual events or flexible recurring sessions.
@@ -55,19 +65,15 @@ Create recurring event schedules for classes, weekly sessions, workshops, traini
 
 WP Super Events includes AI-assisted tools that can help create event descriptions and featured imagery. AI output should always be reviewed before publishing.
 
-= Free During Our 2026 Launch =
-
-WP Super Events is free during our 2026 launch period through December 31, 2026. No credit card is required to explore the available plugin functionality during the launch period.
-
-Paid plans are planned for 2027. Pricing and packaging will be announced before the end of the launch period. Users will not be automatically charged simply for installing or using the plugin during the free launch period.
-
 = Live Demo =
 
 See WP Super Events in action:
-https://wpsuperevents.com/demo
 
-Learn more:
-https://wpsuperevents.com
+[Try the Live Demo](https://wpsuperevents.com/demo/default)
+
+Learn more about the plugin:
+
+[Visit WP Super Events](https://wpsuperevents.com/)
 
 == Installation ==
 
