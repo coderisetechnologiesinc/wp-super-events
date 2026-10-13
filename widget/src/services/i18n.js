@@ -10,7 +10,7 @@ import {
 Vue.use(VueI18n);
 let currentAppInstance = null;
 
-let supportedLanguagesList = defaultTranslationLanguages;
+let supportedLanguagesList = [...defaultTranslationLanguages];
 
 const messages = mergeTranslations(getTranslationsTpl(), {});
 
@@ -32,13 +32,13 @@ export const setTranslationMessages = (messagesScope = {}) => {
   );
 
   forEach(mergedMessagesScope, (langMessages, lang) => {
-    supportedLanguagesList.push(lang);
+    if (!supportedLanguagesList.includes(lang)) supportedLanguagesList.push(lang);
     i18n.setLocaleMessage(lang, langMessages);
   });
 };
 export const setCurrentLanguage = (newLang = "en") => {
   if (!currentAppInstance) return;
-
+  if (!supportedLanguagesList.includes(newLang)) newLang = "en";
   currentAppInstance.$i18n.locale = newLang;
 };
 

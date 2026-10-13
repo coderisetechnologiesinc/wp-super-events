@@ -14,6 +14,7 @@ import PageWrapper from "./PageWrapper";
 import PageContent from "../Containers/PageContent";
 import PageHeader from "../Containers/PageHeader";
 import styles from "./PlansSupport.module.scss";
+import { PLAN_LIMITS as planLimits, planLimit } from "../../utilities/planLimits";
 
 export default function PlansPage() {
   const [shop, setShop] = useState(null);
@@ -147,17 +148,29 @@ export default function PlansPage() {
   const isMarketplace = Boolean(shop?.is_wp_marketplace);
   const maxPlanId = Math.max(...plans.map((plan) => Number(plan.id)));
   const visiblePlans = plans.filter(
-    (plan) => !isMarketplace || Number(plan.id) !== 1,
+    (plan) => ![true, "true", 1, "1"].includes(plan.hidden) &&
+      (!isMarketplace || Number(plan.id) !== 1),
   );
   const currentPaid =
     Number(current?.price) > 0 || Number(current?.price_annual) > 0;
+  const paidUntilValue = current?.payed_until ?? current?.paid_until ?? shop?.payed_until ?? shop?.paid_until;
+  const paidUntilDate = paidUntilValue
+    ? new Date(typeof paidUntilValue === "string"
+        ? paidUntilValue.trim().replace(/^(\d{4}-\d{2}-\d{2}) /, "$1T")
+        : paidUntilValue)
+    : null;
+  const paidUntil = paidUntilDate && !Number.isNaN(paidUntilDate.getTime())
+    ? paidUntilDate.toLocaleDateString("en-US", {
+        month: "long", day: "numeric", year: "numeric", timeZone: "UTC",
+      })
+    : paidUntilValue ? String(paidUntilValue) : null;
   return (
     <PageWrapper flush>
       <PageContent>
         <PageHeader
           className={styles.plansHeader}
           title="Plans"
-          description="WP Super Events is free during the 2026 launch period through December 31, 2026. Paid plans are planned for 2027 and will be announced before the launch period ends."
+          description=""
           actions={
             currentPaid ? (
               <PageActionButton
@@ -180,9 +193,10 @@ export default function PlansPage() {
             <h2 className={styles.planName}>
               {loading ? "Loading plan…" : currentName}
             </h2>
-            <p>Launch period · through December 31, 2026</p>
           </div>
-          <span className={styles.badge}>2026 launch period</span>
+          {currentPaid && paidUntil && (
+            <span className={styles.badge}>Paid until {paidUntil}</span>
+          )}
         </section>
         {errors.shop && (
           <p className={styles.notice} role="alert">
@@ -236,13 +250,27 @@ export default function PlansPage() {
                         "Free"
                       )}
                     </p>
-                    {Number(plan.application_fee_percent) > 0 && (
-                      <p className={styles.fee}>
-                        {plan.application_fee_percent}% transaction fee
-                      </p>
-                    )}
-                    {plan.description && <p>{plan.description}</p>}
+                    <p className={styles.fee}>
+                      {Number(plan.application_fee_percent) > 0
+                        ? `${plan.application_fee_percent}% transaction fee`
+                        : "\u00a0"}
+                    </p>
+                    <p>{plan.description?.trim() || "\u00a0"}</p>
                   </div>
+                  <ul className={styles.features} aria-label={`${plan.name || "Plan"} limits`}>
+                    {planLimits.map(([key, label]) => {
+                      const fallback = key === "filters_limit" ? 25
+                        : key === "members_limit" ? (Number(plan.id) === 1 ? 0 : -1)
+                        : null;
+                      const value = planLimit(plan, key, isCurrent ? planLimit(current, key, fallback) : fallback);
+                      return (
+                        <li key={key}>
+                          {value === 0 ? <XCircleIcon /> : value != null ? <CheckCircleIcon /> : null}
+                          <span>{label}: {value === -1 ? "Unlimited" : value ?? "Unlimited"}</span>
+                        </li>
+                      );
+                    })}
+                  </ul>
                   {Array.isArray(plan.features) && plan.features.length > 0 && (
                     <ul className={styles.features}>
                       {plan.features.map((feature, i) => {

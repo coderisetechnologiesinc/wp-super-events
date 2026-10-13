@@ -8,6 +8,7 @@ import { timezonesList } from "../../../utilities/timezones";
 import timezonesWithOffset from "../../../utilities/timezones";
 import { useNavigate } from "react-router-dom";
 import { useServvStore } from "../../../store/useServvStore";
+import { eventAdminPath } from "../../../utilities/events";
 
 export const useEventsLogic = (settings, filtersList, zoomAccount) => {
   const PAGE_SIZE = 10;
@@ -243,15 +244,7 @@ export const useEventsLogic = (settings, filtersList, zoomAccount) => {
   // =====================================================================
 
   const handleOpenEvent = (selected) => {
-    const { id, occurrence_id, type } = selected;
-    const pathType =
-      type === "Zoom" ? "zoom" : eventType === "all" ? "offline" : eventType;
-
-    if (occurrence_id) {
-      navigate(`/events/${pathType}/${id}?occ=${occurrence_id}`);
-    } else {
-      navigate(`/events/${pathType}/${id}`);
-    }
+    navigate(eventAdminPath(selected, eventType));
   };
 
   // =====================================================================

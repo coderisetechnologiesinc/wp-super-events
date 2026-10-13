@@ -16,6 +16,7 @@ import {
   updateEvent,
 } from "../../utilities/events";
 import axios from "../../utilities/adminApi";
+import { planLimit, recurringAllowed, multiTicketsAllowed } from "../../utilities/planLimits";
 import {
   eventPayload,
   initialEvent,
@@ -135,6 +136,23 @@ export default function useUnifiedEventForm() {
 
   const save = async () => {
     if (saveLock.current || error || loading) return;
+    if (!settings?.current_plan) {
+      toast.error("Wait for your plan settings to load before publishing.");
+      return;
+    }
+    const plan = settings.current_plan;
+    const hasRecurrence = !!event.meeting.recurrence?.type;
+    const eventLimitKey = event.location === "zoom"
+      ? (hasRecurrence ? "recurring_events_limit" : "events_limit")
+      : (hasRecurrence ? "offline_recurring_events_limit" : "offline_events_limit");
+    if (!id && planLimit(plan, eventLimitKey) === 0) {
+      toast.error("Your plan does not include this event type.");
+      return;
+    }
+    if (hasRecurrence && !recurringAllowed(plan, event.location)) {
+      toast.error("Your plan does not include recurring events of this type.");
+      return;
+    }
     const start = moment.tz(event.meeting.startTime, event.meeting.timezone);
     if (
       !event.meeting.topic?.trim() ||
@@ -156,6 +174,10 @@ export default function useUnifiedEventForm() {
       return;
     }
     const tickets = event.tickets.filter((t) => t.action !== "remove");
+    if (tickets.length > 1 && !multiTicketsAllowed(plan)) {
+      toast.error("Your plan supports one ticket type per event.");
+      return;
+    }
     if (
       tickets.some(
         (t) =>

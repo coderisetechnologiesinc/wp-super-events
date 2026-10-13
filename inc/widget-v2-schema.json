@@ -89,12 +89,6 @@
     "default": false
   },
   {
-    "type": "checkbox",
-    "id": "show_timezone_selector",
-    "label": "Timezone selector",
-    "default": true
-  },
-  {
     "type": "select",
     "id": "calendar_position",
     "label": "Calendar panel",

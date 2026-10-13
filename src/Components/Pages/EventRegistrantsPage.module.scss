@@ -1,0 +1,25 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+@include m.scoped {
+  .divider { height: 3px; border-radius: t.$radius-pill; background: t.$surface; box-shadow: t.$shadow-track; }
+  .card { min-width: 0; border: 1px solid t.$border; border-radius: t.$radius-2xl; background: t.$surface; box-shadow: t.$shadow-card; overflow: hidden; }
+  .toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; padding: 22px 24px; h2 { margin: 0; @include m.text(18, t.$weight-bold); color: t.$text; } p { margin: 6px 0 0; @include m.text(13); color: t.$text-secondary; } }
+  .actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .row { display: grid; grid-template-columns: 18px minmax(0, 1fr) minmax(0, 1.4fr) 96px; align-items: center; gap: 16px; padding: 16px 24px; border-top: 1px solid t.$border; @include m.text(13); color: t.$text; }
+  .tableHeader { background: t.$canvas; color: t.$text-secondary; font-weight: t.$weight-semibold; }
+  .name { font-weight: t.$weight-semibold; overflow-wrap: anywhere; }
+  .email { color: t.$text-secondary; overflow-wrap: anywhere; }
+  .pagination { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 18px 24px; border-top: 1px solid t.$border; @include m.text(13); color: t.$text-secondary; }
+  .state { min-height: 180px; padding: 36px 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; text-align: center; h3, p { margin: 0; } p { color: t.$text-secondary; } }
+  .note { margin: 0; @include m.text(13); color: t.$text-secondary; }
+  .form { display: grid; gap: 16px; }
+  .error { margin: 0; color: t.$danger-text; @include m.text(13); }
+  @media (max-width: 735px) {
+    .toolbar, .pagination { padding: 18px 16px; }
+    .row { padding: 16px; gap: 8px 12px; grid-template-columns: 18px minmax(0, 1fr) 84px; }
+    .tableHeader { span:nth-of-type(2) { display: none; } }
+    .row:not(.tableHeader) { > label { grid-row: span 2; } > button { grid-column: 3; grid-row: 1 / span 2; } }
+    .name { grid-column: 2; }
+    .email { grid-column: 2; grid-row: 2; }
+  }
+}

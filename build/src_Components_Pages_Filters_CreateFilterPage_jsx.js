@@ -1342,7 +1342,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-4WY6JWTD.mjs");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-4WY6JWTD.mjs");
 /* harmony import */ var _Menu_BreadCrumbs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../Menu/BreadCrumbs */ "./src/Components/Menu/BreadCrumbs.jsx");
 /* harmony import */ var _Containers_PageContent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../Containers/PageContent */ "./src/Components/Containers/PageContent.jsx");
 /* harmony import */ var _Containers_PageHeader__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Containers/PageHeader */ "./src/Components/Containers/PageHeader.jsx");
@@ -1352,8 +1352,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _store_useServvStore__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../store/useServvStore */ "./src/store/useServvStore.js");
 /* harmony import */ var _FiltersPage_module_scss__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./FiltersPage.module.scss */ "./src/Components/Pages/Filters/FiltersPage.module.scss");
 /* harmony import */ var _FilterForm_module_scss__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./FilterForm.module.scss */ "./src/Components/Pages/Filters/FilterForm.module.scss");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var _useFilterLimits__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./useFilterLimits */ "./src/Components/Pages/Filters/useFilterLimits.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__);
+
 
 
 
@@ -1377,16 +1379,24 @@ const FilterFormLayout = ({
 }) => {
   const {
     type
-  } = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_10__.useParams)();
+  } = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_11__.useParams)();
   const kind = _CreateFilterMenu__WEBPACK_IMPORTED_MODULE_5__.FILTER_TYPES[type];
+  const settings = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_6__.useServvStore)(store => store.settings);
+  const filtersList = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_6__.useServvStore)(store => store.filtersList);
+  const {
+    isLimitReached,
+    isMembersLimitReached,
+    filterCategories
+  } = (0,_useFilterLimits__WEBPACK_IMPORTED_MODULE_9__.useFilterLimits)(settings, filtersList);
+  const creationBlocked = !editing && (!settings || isLimitReached || !filterCategories.includes(type) || type === "Members" && isMembersLimitReached);
   const filters = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_6__.useServvStore)(store => store.filtersList[type?.toLowerCase()]);
-  const [searchParams] = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_10__.useSearchParams)();
+  const [searchParams] = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_11__.useSearchParams)();
   const currentId = searchParams.get("id");
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_PageWrapper__WEBPACK_IMPORTED_MODULE_4__["default"], {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_PageWrapper__WEBPACK_IMPORTED_MODULE_4__["default"], {
     flush: true,
     loading: loading,
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(_Containers_PageContent__WEBPACK_IMPORTED_MODULE_1__["default"], {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Menu_BreadCrumbs__WEBPACK_IMPORTED_MODULE_0__["default"], {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(_Containers_PageContent__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_Menu_BreadCrumbs__WEBPACK_IMPORTED_MODULE_0__["default"], {
         breadcrumbs: [{
           label: "Filters",
           to: "/filters"
@@ -1396,49 +1406,49 @@ const FilterFormLayout = ({
         }, {
           label: title
         }]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Containers_PageHeader__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_Containers_PageHeader__WEBPACK_IMPORTED_MODULE_2__["default"], {
           title: title,
           description: description,
-          actions: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.Fragment, {
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          actions: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
               text: "Cancel",
               type: "secondary",
               disabled: loading,
               onAction: onCancel
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
               text: loading ? "Saving…" : editing ? "Save changes" : "Create filter",
-              onAction: onSave,
-              disabled: saveDisabled || loading
+              onAction: () => !creationBlocked && onSave(),
+              disabled: saveDisabled || loading || creationBlocked
             })]
           })
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
         className: _FiltersPage_module_scss__WEBPACK_IMPORTED_MODULE_7__["default"].divider
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
         className: _FilterForm_module_scss__WEBPACK_IMPORTED_MODULE_8__["default"].layout,
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
           className: _FilterForm_module_scss__WEBPACK_IMPORTED_MODULE_8__["default"].sections,
           children: children
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("aside", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("aside", {
           className: _FilterForm_module_scss__WEBPACK_IMPORTED_MODULE_8__["default"].preview,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("section", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("section", {
             className: _FilterForm_module_scss__WEBPACK_IMPORTED_MODULE_8__["default"].card,
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("header", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("header", {
               className: _FilterForm_module_scss__WEBPACK_IMPORTED_MODULE_8__["default"].previewHeader,
               children: "Existing filters"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
               className: _FilterForm_module_scss__WEBPACK_IMPORTED_MODULE_8__["default"].cardBody,
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
                 className: _FilterForm_module_scss__WEBPACK_IMPORTED_MODULE_8__["default"].eyebrow,
                 children: kind?.label || type
-              }), filters?.length ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("ul", {
+              }), filters?.length ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("ul", {
                 className: _FilterForm_module_scss__WEBPACK_IMPORTED_MODULE_8__["default"].existingFilters,
-                children: filters.map(filter => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("li", {
+                children: filters.map(filter => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("li", {
                   className: String(filter.id) === currentId ? _FilterForm_module_scss__WEBPACK_IMPORTED_MODULE_8__["default"].currentFilter : undefined,
                   children: filter.name
                 }, filter.id))
-              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("p", {
+              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("p", {
                 className: _FilterForm_module_scss__WEBPACK_IMPORTED_MODULE_8__["default"].hint,
                 children: "No existing filters yet."
               })]
@@ -1561,6 +1571,25 @@ function FilterOrdering({
 
 /***/ }),
 
+/***/ "./src/Components/Pages/Filters/useFilterLimits.js":
+/*!*********************************************************!*\
+  !*** ./src/Components/Pages/Filters/useFilterLimits.js ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   useFilterLimits: () => (/* binding */ useFilterLimits)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utilities_planLimits__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../utilities/planLimits */ "./src/utilities/planLimits.js");
+
+
+const useFilterLimits = (settings, filtersList) => (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => (0,_utilities_planLimits__WEBPACK_IMPORTED_MODULE_1__.filterAllowance)(settings?.current_plan, filtersList), [settings?.current_plan, filtersList]);
+
+/***/ }),
+
 /***/ "./src/Components/Pages/PageWrapper.jsx":
 /*!**********************************************!*\
   !*** ./src/Components/Pages/PageWrapper.jsx ***!
@@ -1617,6 +1646,54 @@ const PageWrapper = props => {
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PageWrapper);
+
+/***/ }),
+
+/***/ "./src/utilities/planLimits.js":
+/*!*************************************!*\
+  !*** ./src/utilities/planLimits.js ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   PLAN_LIMITS: () => (/* binding */ PLAN_LIMITS),
+/* harmony export */   filterAllowance: () => (/* binding */ filterAllowance),
+/* harmony export */   limitReached: () => (/* binding */ limitReached),
+/* harmony export */   multiTicketsAllowed: () => (/* binding */ multiTicketsAllowed),
+/* harmony export */   planLimit: () => (/* binding */ planLimit),
+/* harmony export */   recurringAllowed: () => (/* binding */ recurringAllowed)
+/* harmony export */ });
+const PLAN_LIMITS = [["filters_limit", "Filters limit"], ["members_limit", "Members limit"], ["offline_events_limit", "In-person events limit"], ["offline_recurring_events_limit", "Recurring in-person events limit"], ["recurring_events_limit", "Recurring online events limit"], ["events_limit", "Online events limit"]];
+const planLimit = (plan, key, fallback = null) => {
+  const value = plan?.[key];
+  if (value == null || value === "" || typeof value === "boolean") return fallback;
+  const number = Number(value);
+  return Number.isInteger(number) && number >= -1 ? number : fallback;
+};
+const limitReached = (count, limit) => limit != null && limit !== -1 && count >= limit;
+const filterAllowance = (plan, filters = {}) => {
+  const maxFiltersNumber = planLimit(plan, "filters_limit", 25);
+  const membersLimit = planLimit(plan, "members_limit", Number(plan?.id) === 1 ? 0 : -1);
+  const totalFilters = ["locations", "languages", "categories", "members"].reduce((count, type) => count + (Array.isArray(filters[type]) ? filters[type].length : 0), 0);
+  const isLimitReached = limitReached(totalFilters, maxFiltersNumber);
+  const isMembersLimitReached = limitReached(filters.members?.length || 0, membersLimit);
+  const filterCategories = ["Locations", "Languages", "Categories", ...(membersLimit !== 0 ? ["Members"] : [])];
+  return {
+    maxFiltersNumber,
+    membersLimit,
+    totalFilters,
+    isLimitReached,
+    isMembersLimitReached,
+    filterCategories
+  };
+};
+const recurringAllowed = (plan, location) => {
+  const limit = planLimit(plan, location === "zoom" ? "recurring_events_limit" : "offline_recurring_events_limit");
+  if (limit != null) return limit !== 0;
+  return !!plan?.features?.some(feature => ["Recurring", "Recurring Events"].includes(feature.title) && String(feature.value) === "true");
+};
+const multiTicketsAllowed = plan => plan?.multi_tickets == null ? Number(plan?.id) !== 1 : [true, "true", 1, "1"].includes(plan.multi_tickets);
 
 /***/ }),
 
@@ -1979,4 +2056,4 @@ const ForwardRef = /*#__PURE__*/ react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(U
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_Filters_CreateFilterPage_jsx.js.map?ver=8db57f9def185edbaf61
+//# sourceMappingURL=src_Components_Pages_Filters_CreateFilterPage_jsx.js.map?ver=7abd03cc344775044e25

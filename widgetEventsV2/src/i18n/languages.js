@@ -9,7 +9,6 @@ export const SUPPORTED_LOCALES = [
   "ja",
   "ko",
   "no",
-  "ru",
   "es",
   "sv",
 ];
@@ -25,7 +24,6 @@ const LANGUAGE_NAMES = {
   ja: "Japanese",
   ko: "Korean",
   no: "Norwegian",
-  ru: "Russian",
   es: "Spanish",
   sv: "Swedish",
 };

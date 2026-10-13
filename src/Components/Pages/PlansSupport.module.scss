@@ -9,6 +9,15 @@
   }
   .planHeading {
     text-align: center;
+    display: grid;
+    grid-template-rows: 20px 72px 29px minmax(29px, auto);
+    align-content: start;
+    > * {
+      min-width: 0;
+    }
+    > p:last-child {
+      min-height: 21px;
+    }
   }
   .card .planLabel {
     color: t.$primary;
@@ -161,6 +170,7 @@
     list-style: none;
     li {
       display: flex;
+      min-height: 20px;
       gap: 10px;
       @include m.text(13, t.$weight-medium);
       color: t.$text-secondary;

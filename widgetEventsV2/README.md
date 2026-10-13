@@ -10,8 +10,8 @@ media library; hex colors support alpha channels. Preview cannot create
 registrations or payments.
 
 ```text
-[servv_events]
-[servv_events view_mode="grid" widget_skin="swiss" events_per_page="12"]
+[wp_super_events]
+[wp_super_events view_mode="grid" widget_skin="swiss" events_per_page="12"]
 ```
 
 Configuration priority: schema defaults → saved WordPress defaults → shortcode

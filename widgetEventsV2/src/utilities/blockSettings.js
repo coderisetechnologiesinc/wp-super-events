@@ -12,7 +12,6 @@ const GROUPS = {
   controls: {
     search: "show_search",
     languageSelector: "show_language_selector",
-    timezoneSelector: "show_timezone_selector",
     quickDateFilters: "show_quick_date_filters",
     mobileDateStrip: "show_mobile_date_strip",
     summaryCards: "show_summary_cards",

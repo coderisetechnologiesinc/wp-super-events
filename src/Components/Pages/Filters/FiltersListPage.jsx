@@ -28,13 +28,14 @@ export default function FiltersListPage() {
   const storeLoading = useServvStore((s) => s.loading);
   const [selected, setSelected] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { isLimitReached, filterCategories } = useFilterLimits(
+  const { isLimitReached, isMembersLimitReached, filterCategories } = useFilterLimits(
     settings,
     filtersList,
   );
   const filters = filtersList[type?.toLowerCase()] || EMPTY;
   const canCreate = Boolean(
-    settings && filterCategories.includes(type) && !isLimitReached,
+    settings && filterCategories.includes(type) && !isLimitReached &&
+    (type !== "Members" || !isMembersLimitReached),
   );
   useEffect(() => {
     setSelected((previous) =>

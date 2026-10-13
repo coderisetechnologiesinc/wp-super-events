@@ -8,6 +8,7 @@ import { FILTER_TYPES } from "./CreateFilterMenu";
 import { useServvStore } from "../../../store/useServvStore";
 import shared from "./FiltersPage.module.scss";
 import styles from "./FilterForm.module.scss";
+import { useFilterLimits } from "./useFilterLimits";
 
 const FilterFormLayout = ({
   title,
@@ -21,6 +22,11 @@ const FilterFormLayout = ({
 }) => {
   const { type } = useParams();
   const kind = FILTER_TYPES[type];
+  const settings = useServvStore((store) => store.settings);
+  const filtersList = useServvStore((store) => store.filtersList);
+  const { isLimitReached, isMembersLimitReached, filterCategories } = useFilterLimits(settings, filtersList);
+  const creationBlocked = !editing && (!settings || isLimitReached ||
+    !filterCategories.includes(type) || (type === "Members" && isMembersLimitReached));
   const filters = useServvStore(
     (store) => store.filtersList[type?.toLowerCase()],
   );
@@ -56,8 +62,8 @@ const FilterFormLayout = ({
                       ? "Save changes"
                       : "Create filter"
                   }
-                  onAction={onSave}
-                  disabled={saveDisabled || loading}
+                  onAction={() => !creationBlocked && onSave()}
+                  disabled={saveDisabled || loading || creationBlocked}
                 />
               </>
             }

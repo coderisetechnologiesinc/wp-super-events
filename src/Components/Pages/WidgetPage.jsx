@@ -15,7 +15,7 @@ const colorSwatch = (value) => {
 };
 const cleanText = (value) => String(value).replace(/[;{}<>\[\]"]/g, '').slice(0, 300);
 export function widgetShortcode(config) {
-  return `[servv_events ${fields.map((field) => {
+  return `[wp_super_events ${fields.map((field) => {
     const value = config[field.id] ?? defaults[field.id];
     return `${field.id}="${field.type === 'checkbox' ? (value ? 'true' : 'false') : (field.type === 'text' ? cleanText(value) : String(value).replace(/["\[\]]/g, (char) => encodeURIComponent(char)))}"`;
   }).join(' ')}]`;
@@ -163,7 +163,7 @@ export default function WidgetPage() {
               <textarea aria-label="Widget shortcode" readOnly value={shortcode} rows={6} onFocus={(event) => event.target.select()} />
               <div className={styles.embedActions}><PageActionButton text="Copy shortcode" onAction={copy} disabled={loading} />
                 <span>{dirty ? 'Unsaved changes are included in this shortcode.' : 'Settings saved.'}</span></div>
-              <p className={styles.hint}>Use <code>[servv_events]</code> to follow the saved defaults. A shortcode with attributes keeps its own appearance.</p>
+              <p className={styles.hint}>Use <code>[wp_super_events]</code> to follow the saved defaults. A shortcode with attributes keeps its own appearance.</p>
             </section>
           </div>
           <aside className={styles.preview}>

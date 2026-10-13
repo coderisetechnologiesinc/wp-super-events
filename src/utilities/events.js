@@ -69,5 +69,14 @@ export const eventKey = (event) => `${event.id}${event.occurrence_id || ""}`;
 export const eventRoutePayload = (event, { registrants = false } = {}) => ({
   id: event.post_id,
   occurrence_id: event.occurrence_id,
+  provider: event.provider || (String(event.type).toLowerCase() === "zoom" ? "zoom" : "offline"),
   ...(registrants ? { registrants_view: true } : {}),
 });
+
+export const eventAdminPath = (selected, fallbackProvider = "offline") => {
+  const provider = selected.provider || selected.type || fallbackProvider;
+  const pathType = String(provider).toLowerCase() === "zoom" ? "zoom" : "offline";
+  const query = new URLSearchParams();
+  if (selected.occurrence_id != null && selected.occurrence_id !== "") query.set("occurrence_id", selected.occurrence_id);
+  return `/events/${pathType}/${selected.id}${selected.registrants_view ? "/registrants" : ""}${query.size ? `?${query}` : ""}`;
+};

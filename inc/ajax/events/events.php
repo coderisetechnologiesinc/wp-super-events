@@ -216,6 +216,18 @@ function servv_update_event($request)
     $responseBody['featured_image_url'] = get_the_post_thumbnail_url($postId, 'large') ?: '';
     $product = $requestBody['product'] ?? [];
     $registrants = $requestBody['registrants'] ?? [];
+    if (!array_key_exists('quantity', $product)) {
+        // Registrant-only edits must not reset the event or other occurrences.
+        if (!empty($registrants)) {
+            $quantities = json_decode(get_post_meta($postId, 'servv_event_quantities', true) ?: '{}', true) ?: [];
+            $key = !empty($occurrenceId) ? $occurrenceId : 0;
+            if (isset($quantities[$key])) {
+                $quantities[$key] = max(0, (int)$quantities[$key] - count($registrants));
+                update_post_meta($postId, 'servv_event_quantities', json_encode($quantities));
+            }
+        }
+        return $responseBody;
+    }
     $quantity = $product['quantity'] !== null ? (int)$product['quantity'] - count($registrants) : null;
 
     if(!empty($occurrenceId)){

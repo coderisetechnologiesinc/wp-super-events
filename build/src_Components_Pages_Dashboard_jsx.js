@@ -3517,8 +3517,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment_timezone__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(moment_timezone__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/index.mjs");
 /* harmony import */ var _utilities_timezones__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../utilities/timezones */ "./src/utilities/timezones.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-4WY6JWTD.mjs");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-4WY6JWTD.mjs");
 /* harmony import */ var _store_useServvStore__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../store/useServvStore */ "./src/store/useServvStore.js");
+/* harmony import */ var _utilities_events__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../utilities/events */ "./src/utilities/events.js");
+
 
 
 
@@ -3533,7 +3535,7 @@ const useEventsLogic = (settings, filtersList, zoomAccount) => {
   const PAGE_SIZE = 10;
   const isZoomConnected = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_7__.useServvStore)(s => s.zoomConnected);
   const accountsSynced = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_7__.useServvStore)(s => s.accountsSynced);
-  const navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_8__.useNavigate)();
+  const navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_9__.useNavigate)();
   const syncAccountsAfterEvents = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_7__.useServvStore)(s => s.syncAccountsAfterEvents);
   const syncFiltersFromServer = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_7__.useServvStore)(s => s.syncFiltersFromServer);
   const setDatePreset = (0,react__WEBPACK_IMPORTED_MODULE_2__.useRef)(1);
@@ -3752,17 +3754,7 @@ const useEventsLogic = (settings, filtersList, zoomAccount) => {
   // =====================================================================
 
   const handleOpenEvent = selected => {
-    const {
-      id,
-      occurrence_id,
-      type
-    } = selected;
-    const pathType = type === "Zoom" ? "zoom" : eventType === "all" ? "offline" : eventType;
-    if (occurrence_id) {
-      navigate(`/events/${pathType}/${id}?occ=${occurrence_id}`);
-    } else {
-      navigate(`/events/${pathType}/${id}`);
-    }
+    navigate((0,_utilities_events__WEBPACK_IMPORTED_MODULE_8__.eventAdminPath)(selected, eventType));
   };
 
   // =====================================================================
@@ -4664,6 +4656,7 @@ const DashboardPagination = ({
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   createEvent: () => (/* binding */ createEvent),
+/* harmony export */   eventAdminPath: () => (/* binding */ eventAdminPath),
 /* harmony export */   eventKey: () => (/* binding */ eventKey),
 /* harmony export */   eventRoutePayload: () => (/* binding */ eventRoutePayload),
 /* harmony export */   generateEventData: () => (/* binding */ generateEventData),
@@ -4738,10 +4731,18 @@ const eventRoutePayload = (event, {
 } = {}) => ({
   id: event.post_id,
   occurrence_id: event.occurrence_id,
+  provider: event.provider || (String(event.type).toLowerCase() === "zoom" ? "zoom" : "offline"),
   ...(registrants ? {
     registrants_view: true
   } : {})
 });
+const eventAdminPath = (selected, fallbackProvider = "offline") => {
+  const provider = selected.provider || selected.type || fallbackProvider;
+  const pathType = String(provider).toLowerCase() === "zoom" ? "zoom" : "offline";
+  const query = new URLSearchParams();
+  if (selected.occurrence_id != null && selected.occurrence_id !== "") query.set("occurrence_id", selected.occurrence_id);
+  return `/events/${pathType}/${selected.id}${selected.registrants_view ? "/registrants" : ""}${query.size ? `?${query}` : ""}`;
+};
 
 /***/ }),
 
@@ -5902,4 +5903,4 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_Dashboard_jsx.js.map?ver=2c40d0c484b74f1c94fc
+//# sourceMappingURL=src_Components_Pages_Dashboard_jsx.js.map?ver=b9b831108fb6c4ca76a0

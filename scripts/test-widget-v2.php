@@ -3,7 +3,7 @@
 define('ABSPATH', __DIR__);
 define('SERVV_PLUGIN_VERSION', 'test');
 function add_action(...$args) {}
-function add_shortcode(...$args) {}
+function add_shortcode($tag, $callback) { global $shortcodes; $shortcodes[$tag] = $callback; }
 function get_option($key, $default = false) { return $key === 'servv_widget_v2_settings' ? ['view_mode' => 'grid', 'events_per_page' => 12] : $default; }
 function sanitize_text_field($value) { return trim(strip_tags((string)$value)); }
 function sanitize_hex_color($value) { return preg_match('/^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i', $value) ? $value : null; }
@@ -22,6 +22,9 @@ function did_action($name) { return 0; }
 require __DIR__ . '/../inc/widget-v2.php';
 function check($condition, $message) { if (!$condition) { throw new Exception($message); } }
 $defaults = servv_widget_v2_defaults();
+check(($shortcodes['wp_super_events'] ?? '') === 'servv_widget_v2_shortcode', 'New shortcode is registered');
+check(!isset($shortcodes['servv_events']), 'Old shortcode is not registered');
+check(!array_key_exists('show_timezone_selector', $defaults), 'Timezone selector setting is hidden');
 foreach (servv_widget_v2_schema() as $field) {
     if (isset($field['id'])) { check(array_key_exists($field['id'], $defaults), 'Missing default'); }
 }

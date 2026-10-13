@@ -58,8 +58,9 @@ import 'quill/dist/quill.core.css';
 
 import ValidationScreen from './Components/Pages/ValidationScreen.jsx';
 const CreateEventForm = React.lazy( () =>
-	import( './Components/CreateEvent/UnifiedEventForm.jsx' )
+	import( './Components/CreateEvent/EventEditorRoute.jsx' )
 );
+const EventRegistrantsPage = React.lazy( () => import( './Components/Pages/EventRegistrantsPage.jsx' ) );
 const Dashboard = React.lazy( () =>
 	import( './Components/Pages/Dashboard.jsx' )
 );
@@ -177,6 +178,7 @@ const AppRouter = ( { restAPIAvailable } ) => {
 
 				<Route element={ <LayoutWrapper /> }>
 					<Route path="events/new" element={ <CreateEventForm /> } />
+					<Route path="events/:provider/:id/registrants" element={ <EventRegistrantsPage /> } />
 					<Route path="events/offline/:id" element={ <CreateEventForm /> } />
 					<Route path="events/zoom/:id" element={ <CreateEventForm /> } />
 					<Route

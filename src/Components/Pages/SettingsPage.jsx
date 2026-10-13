@@ -23,6 +23,7 @@ import { timezonesList } from "../../utilities/timezones";
 import {
   mergeTranslations,
   getTranslationsTpl,
+  prepareWidgetTranslations,
 } from "../../utilities/translations";
 import { getLanguagesList } from "../../utilities/languages";
 import { useServvStore } from "../../store/useServvStore";
@@ -101,6 +102,9 @@ const SettingsPage = () => {
 
   const validateWidgetSettings = async (newSettings) => {
     let settings = { ...newSettings };
+    if (/^ru(?:[-_]|$)/i.test(settings.widgets_default_language || "")) {
+      settings.widgets_default_language = "en";
+    }
     if (settings.ew_events_list_view === undefined)
       settings.ew_events_list_view = "list";
     if (settings.ew_events_grid_fluid_mode === undefined)
@@ -325,29 +329,56 @@ const SettingsPage = () => {
     return langCode || "English";
   };
 
-  const saveSettings = async () => {
-    setLoading(true);
-    const saveSettingsResponse = await axios({
-      method: "PUT",
-      url: "/wp-json/servv-plugin/v1/shop/settings",
-      headers: { "X-WP-Nonce": servvData.nonce },
-      data: {
-        ...settings,
-        settings: {
-          ...settings.settings,
-          admin_dashboard: JSON.stringify(settings.settings.admin_dashboard),
-          widget_style_settings: JSON.stringify(
-            settings.settings.widget_style_settings,
-          ),
-        },
+  const saveSettings = async (nextSettings = settings, message = "Settings saved successfully.") => {
+    if (!nextSettings?.settings) return false;
+    const savedSettings = {
+      ...nextSettings,
+      settings: {
+        ...nextSettings.settings,
+        widget_style_settings: prepareWidgetTranslations(nextSettings.settings.widget_style_settings),
       },
-    }).catch((err) => console.error(err));
-
-    if (saveSettingsResponse?.status === 200) {
-      toast("Settings saved successfully.");
-      fetchSettings();
+    };
+    setLoading(true);
+    try {
+      const saveSettingsResponse = await axios({
+        method: "PUT",
+        url: "/wp-json/servv-plugin/v1/shop/settings",
+        headers: { "X-WP-Nonce": servvData.nonce },
+        data: {
+          ...savedSettings,
+          settings: {
+            ...savedSettings.settings,
+            admin_dashboard: JSON.stringify(savedSettings.settings.admin_dashboard),
+            widget_style_settings: JSON.stringify(
+              savedSettings.settings.widget_style_settings,
+            ),
+          },
+        },
+      });
+      if (saveSettingsResponse?.status !== 200 || saveSettingsResponse.data?.error || saveSettingsResponse.data?.errorCode || saveSettingsResponse.data?.success === false) {
+        throw new Error("Unable to save settings.");
+      }
+      setSettings(savedSettings);
+      toast.success(message);
+      await fetchSettings();
+      return true;
+    } catch (error) {
+      toast.error(error.response?.data?.message || error.message || "Unable to save settings.");
+      return false;
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
+  };
+
+  const resetTranslations = async () => {
+    if (loading || !settings?.settings) return false;
+    return saveSettings({
+      ...settings,
+      settings: {
+        ...settings.settings,
+        widget_style_settings: prepareWidgetTranslations(settings.settings.widget_style_settings, true),
+      },
+    }, "All translations reset to defaults.");
   };
 
   const saveAllSettings = async () => {
@@ -369,7 +400,7 @@ const SettingsPage = () => {
       setLoading(true);
       await getSettings();
       await getN8nSettings();
-      if (settings.current_plan && settings?.current_plan?.id !== 1) {
+      if (settings?.current_plan && settings.current_plan.id !== 1) {
         await getZoomAccount();
         await getStripeAccount();
       }
@@ -378,7 +409,7 @@ const SettingsPage = () => {
       setLoading(true);
       getSettings();
       getN8nSettings();
-      if (settings.curent_plan && settings?.current_plan?.id !== 1) {
+      if (settings?.current_plan && settings.current_plan.id !== 1) {
         getZoomAccount();
         getStripeAccount();
       }
@@ -1026,6 +1057,8 @@ const SettingsPage = () => {
                       langForEdit={langForEdit}
                       handleSelectLanguageforEdit={handleSelectLanguageforEdit}
                       renderTranslations={renderTranslations}
+                      onResetTranslations={resetTranslations}
+                      resetting={loading}
                     />
                   </SpinnerLoader>
                 </SettingsSection>

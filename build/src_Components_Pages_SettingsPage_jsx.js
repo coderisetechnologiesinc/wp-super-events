@@ -1254,6 +1254,88 @@ const Spinner = ({
 
 /***/ }),
 
+/***/ "./src/Components/Modals/ModalShell.jsx":
+/*!**********************************************!*\
+  !*** ./src/Components/Modals/ModalShell.jsx ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/XMarkIcon.js");
+/* harmony import */ var _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ModalShell.module.scss */ "./src/Components/Modals/ModalShell.module.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+
+const SIZES = {
+  sm: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].sm,
+  md: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].md,
+  lg: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].lg,
+  xl: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].xl
+};
+
+// The centred dialog from the design reference.
+const ModalShell = ({
+  title,
+  eyebrow,
+  description,
+  footer,
+  size = "lg",
+  // Opt-in: the existing call sites close through their own controls only, so
+  // the default keeps their behaviour unchanged.
+  closeOnOverlay = false,
+  children,
+  onClose
+}) => {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+    className: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].overlay,
+    onClick: closeOnOverlay ? onClose : undefined,
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      className: `${_ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].dialog} ${SIZES[size] || SIZES.lg}`,
+      role: "dialog",
+      "aria-modal": "true",
+      "aria-label": typeof title === "string" ? title : undefined,
+      onClick: e => e.stopPropagation(),
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        className: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].header,
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+          children: [eyebrow && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+            className: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].eyebrow,
+            children: eyebrow
+          }), title && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h2", {
+            className: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].title,
+            children: title
+          }), description && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+            className: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].description,
+            children: description
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+          type: "button",
+          className: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].close,
+          onClick: onClose,
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_3__["default"], {})
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+        className: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].body,
+        children: children
+      }), footer && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+        className: _ModalShell_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].footer,
+        children: footer
+      })]
+    })
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ModalShell);
+
+/***/ }),
+
 /***/ "./src/Components/Pages/Integrations/N8NSettings.jsx":
 /*!***********************************************************!*\
   !*** ./src/Components/Pages/Integrations/N8NSettings.jsx ***!
@@ -2096,10 +2178,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Containers_BlockStack__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../Containers/BlockStack */ "./src/Components/Containers/BlockStack.jsx");
 /* harmony import */ var _Containers_AnnotatedSection__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Containers/AnnotatedSection */ "./src/Components/Containers/AnnotatedSection.jsx");
 /* harmony import */ var _Controls_NewSelectControl__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../Controls/NewSelectControl */ "./src/Components/Controls/NewSelectControl.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../Controls/PageActionButton */ "./src/Components/Controls/PageActionButton.jsx");
+/* harmony import */ var _Modals_ModalShell__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../Modals/ModalShell */ "./src/Components/Modals/ModalShell.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__);
 
 // components/Settings/TranslationsSettings.jsx
+
+
+
 
 
 
@@ -2112,18 +2201,55 @@ const TranslationsSection = ({
   handleDefaultLanguageChange,
   langForEdit,
   handleSelectLanguageforEdit,
-  renderTranslations
+  renderTranslations,
+  onResetTranslations,
+  resetting = false
 }) => {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_Containers_BlockStack__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  const [confirmReset, setConfirmReset] = (0,react__WEBPACK_IMPORTED_MODULE_4__.useState)(false);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_Containers_BlockStack__WEBPACK_IMPORTED_MODULE_1__["default"], {
     gap: 0,
     cardsLayout: true,
     className: _SettingsForm_module_scss__WEBPACK_IMPORTED_MODULE_0__["default"].rows,
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_Containers_AnnotatedSection__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Containers_AnnotatedSection__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      variant: "settings",
+      title: "Default translations",
+      description: "Restore the bundled translations for all 12 languages and save them immediately.",
+      className: responsiveBlockStack,
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        text: "Reset all translations",
+        type: "danger-secondary",
+        disabled: resetting,
+        onAction: () => setConfirmReset(true)
+      })
+    }), confirmReset && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Modals_ModalShell__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      size: "sm",
+      title: "Reset all translations?",
+      description: "This replaces custom translations in every language with the standard translations bundled with the plugin.",
+      onClose: () => !resetting && setConfirmReset(false),
+      footer: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_5__["default"], {
+          text: "Cancel",
+          type: "secondary",
+          disabled: resetting,
+          onAction: () => setConfirmReset(false)
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_5__["default"], {
+          text: resetting ? "Resetting…" : "Reset all translations",
+          type: "danger",
+          disabled: resetting,
+          onAction: async () => {
+            if (await onResetTranslations()) setConfirmReset(false);
+          }
+        })]
+      }),
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("p", {
+        children: "Changes are saved for all languages. Your default widget language stays the same."
+      })
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Containers_AnnotatedSection__WEBPACK_IMPORTED_MODULE_2__["default"], {
       variant: "settings",
       title: "Default language for widgets",
       description: "Translate text in widgets to any language",
       className: responsiveBlockStack,
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_Controls_NewSelectControl__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Controls_NewSelectControl__WEBPACK_IMPORTED_MODULE_3__["default"], {
         label: "Default language",
         options: getLangsSelectOptions().map(lang => ({
           value: lang.label,
@@ -2132,12 +2258,12 @@ const TranslationsSection = ({
         onChange: handleDefaultLanguageChange,
         value: getDefaultWidgetLanguageName()
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_Containers_AnnotatedSection__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Containers_AnnotatedSection__WEBPACK_IMPORTED_MODULE_2__["default"], {
       variant: "settings",
       title: "Language for translate",
       description: "Before choosing the default language, select one from the list. Then, edit the widget fields and save the changes",
       className: responsiveBlockStack,
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_Controls_NewSelectControl__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Controls_NewSelectControl__WEBPACK_IMPORTED_MODULE_3__["default"], {
         label: "Language",
         options: getLangsSelectOptions().map(lang => ({
           value: lang.label,
@@ -2146,22 +2272,22 @@ const TranslationsSection = ({
         onChange: handleSelectLanguageforEdit,
         value: getLangsSelectOptions().map(lang => lang.label).find(label => label.startsWith(langForEdit))
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_Containers_AnnotatedSection__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Containers_AnnotatedSection__WEBPACK_IMPORTED_MODULE_2__["default"], {
       variant: "settings",
       title: "Global Widgets Translations",
       className: responsiveBlockStack,
       children: renderTranslations()
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_Containers_AnnotatedSection__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Containers_AnnotatedSection__WEBPACK_IMPORTED_MODULE_2__["default"], {
       variant: "settings",
       title: "Events Widget Translations",
       className: responsiveBlockStack,
       children: renderTranslations("mainWidget")
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_Containers_AnnotatedSection__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Containers_AnnotatedSection__WEBPACK_IMPORTED_MODULE_2__["default"], {
       variant: "settings",
       title: "Filters Translations",
       className: responsiveBlockStack,
       children: renderTranslations("customFilters")
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_Containers_AnnotatedSection__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Containers_AnnotatedSection__WEBPACK_IMPORTED_MODULE_2__["default"], {
       variant: "settings",
       title: "Registration Translations",
       className: responsiveBlockStack,
@@ -2368,6 +2494,9 @@ const SettingsPage = () => {
     let settings = {
       ...newSettings
     };
+    if (/^ru(?:[-_]|$)/i.test(settings.widgets_default_language || "")) {
+      settings.widgets_default_language = "en";
+    }
     if (settings.ew_events_list_view === undefined) settings.ew_events_list_view = "list";
     if (settings.ew_events_grid_fluid_mode === undefined) settings.ew_events_grid_fluid_mode = false;
     if (settings.ew_card_description_display_words_limit === undefined) settings.ew_card_description_display_words_limit = 9;
@@ -2536,28 +2665,55 @@ const SettingsPage = () => {
     const langCode = fullList.filter(lang => lang.value === defaultWidgetLanguage)[0]?.label;
     return langCode || "English";
   };
-  const saveSettings = async () => {
-    setLoading(true);
-    const saveSettingsResponse = await (0,_utilities_adminApi__WEBPACK_IMPORTED_MODULE_1__["default"])({
-      method: "PUT",
-      url: "/wp-json/servv-plugin/v1/shop/settings",
-      headers: {
-        "X-WP-Nonce": servvData.nonce
-      },
-      data: {
-        ...settings,
-        settings: {
-          ...settings.settings,
-          admin_dashboard: JSON.stringify(settings.settings.admin_dashboard),
-          widget_style_settings: JSON.stringify(settings.settings.widget_style_settings)
-        }
+  const saveSettings = async (nextSettings = settings, message = "Settings saved successfully.") => {
+    if (!nextSettings?.settings) return false;
+    const savedSettings = {
+      ...nextSettings,
+      settings: {
+        ...nextSettings.settings,
+        widget_style_settings: (0,_utilities_translations__WEBPACK_IMPORTED_MODULE_12__.prepareWidgetTranslations)(nextSettings.settings.widget_style_settings)
       }
-    }).catch(err => console.error(err));
-    if (saveSettingsResponse?.status === 200) {
-      (0,react_toastify__WEBPACK_IMPORTED_MODULE_3__.toast)("Settings saved successfully.");
-      fetchSettings();
+    };
+    setLoading(true);
+    try {
+      const saveSettingsResponse = await (0,_utilities_adminApi__WEBPACK_IMPORTED_MODULE_1__["default"])({
+        method: "PUT",
+        url: "/wp-json/servv-plugin/v1/shop/settings",
+        headers: {
+          "X-WP-Nonce": servvData.nonce
+        },
+        data: {
+          ...savedSettings,
+          settings: {
+            ...savedSettings.settings,
+            admin_dashboard: JSON.stringify(savedSettings.settings.admin_dashboard),
+            widget_style_settings: JSON.stringify(savedSettings.settings.widget_style_settings)
+          }
+        }
+      });
+      if (saveSettingsResponse?.status !== 200 || saveSettingsResponse.data?.error || saveSettingsResponse.data?.errorCode || saveSettingsResponse.data?.success === false) {
+        throw new Error("Unable to save settings.");
+      }
+      setSettings(savedSettings);
+      react_toastify__WEBPACK_IMPORTED_MODULE_3__.toast.success(message);
+      await fetchSettings();
+      return true;
+    } catch (error) {
+      react_toastify__WEBPACK_IMPORTED_MODULE_3__.toast.error(error.response?.data?.message || error.message || "Unable to save settings.");
+      return false;
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
+  };
+  const resetTranslations = async () => {
+    if (loading || !settings?.settings) return false;
+    return saveSettings({
+      ...settings,
+      settings: {
+        ...settings.settings,
+        widget_style_settings: (0,_utilities_translations__WEBPACK_IMPORTED_MODULE_12__.prepareWidgetTranslations)(settings.settings.widget_style_settings, true)
+      }
+    }, "All translations reset to defaults.");
   };
   const saveAllSettings = async () => {
     if (servvData.servv_plugin_mode === "development") {
@@ -2577,7 +2733,7 @@ const SettingsPage = () => {
       setLoading(true);
       await getSettings();
       await getN8nSettings();
-      if (settings.current_plan && settings?.current_plan?.id !== 1) {
+      if (settings?.current_plan && settings.current_plan.id !== 1) {
         await getZoomAccount();
         await getStripeAccount();
       }
@@ -2586,7 +2742,7 @@ const SettingsPage = () => {
       setLoading(true);
       getSettings();
       getN8nSettings();
-      if (settings.curent_plan && settings?.current_plan?.id !== 1) {
+      if (settings?.current_plan && settings.current_plan.id !== 1) {
         getZoomAccount();
         getStripeAccount();
       }
@@ -3111,7 +3267,9 @@ const SettingsPage = () => {
               handleDefaultLanguageChange: handleDefaultLanguageChange,
               langForEdit: langForEdit,
               handleSelectLanguageforEdit: handleSelectLanguageforEdit,
-              renderTranslations: renderTranslations
+              renderTranslations: renderTranslations,
+              onResetTranslations: resetTranslations,
+              resetting: loading
             })
           })
         })]
@@ -4539,171 +4697,77 @@ const timezonesList = {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   defaultTranslationLanguages: () => (/* reexport safe */ _translations_widget__WEBPACK_IMPORTED_MODULE_0__.defaultTranslationLanguages),
+/* harmony export */   filterSavedTranslations: () => (/* reexport safe */ _translations_widget__WEBPACK_IMPORTED_MODULE_0__.filterSavedTranslations),
+/* harmony export */   getTranslationsTpl: () => (/* reexport safe */ _translations_widget__WEBPACK_IMPORTED_MODULE_0__.getTranslationsTpl),
+/* harmony export */   languagesCodeName: () => (/* reexport safe */ _translations_widget__WEBPACK_IMPORTED_MODULE_0__.languagesCodeName),
+/* harmony export */   mergeTranslations: () => (/* reexport safe */ _translations_widget__WEBPACK_IMPORTED_MODULE_0__.mergeTranslations),
+/* harmony export */   prepareWidgetTranslations: () => (/* reexport safe */ _translations_widget__WEBPACK_IMPORTED_MODULE_0__.prepareWidgetTranslations),
+/* harmony export */   translationsKeysTpl: () => (/* reexport safe */ _translations_widget__WEBPACK_IMPORTED_MODULE_0__.translationsKeysTpl)
+/* harmony export */ });
+/* harmony import */ var _translations_widget__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../translations/widget */ "./translations/widget/index.js");
+
+
+/***/ }),
+
+/***/ "./translations/widget/index.js":
+/*!**************************************!*\
+  !*** ./translations/widget/index.js ***!
+  \**************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   defaultTranslationLanguages: () => (/* binding */ defaultTranslationLanguages),
+/* harmony export */   filterSavedTranslations: () => (/* binding */ filterSavedTranslations),
 /* harmony export */   getTranslationsTpl: () => (/* binding */ getTranslationsTpl),
 /* harmony export */   languagesCodeName: () => (/* binding */ languagesCodeName),
 /* harmony export */   mergeTranslations: () => (/* binding */ mergeTranslations),
+/* harmony export */   prepareWidgetTranslations: () => (/* binding */ prepareWidgetTranslations),
 /* harmony export */   translationsKeysTpl: () => (/* binding */ translationsKeysTpl)
 /* harmony export */ });
-/* harmony import */ var lodash_foreach__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash.foreach */ "./node_modules/lodash.foreach/index.js");
-/* harmony import */ var lodash_foreach__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash_foreach__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _zh_cn_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./zh-cn.json */ "./translations/widget/zh-cn.json");
+/* harmony import */ var _nl_json__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./nl.json */ "./translations/widget/nl.json");
+/* harmony import */ var _en_json__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./en.json */ "./translations/widget/en.json");
+/* harmony import */ var _fr_json__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./fr.json */ "./translations/widget/fr.json");
+/* harmony import */ var _de_json__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./de.json */ "./translations/widget/de.json");
+/* harmony import */ var _hi_json__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./hi.json */ "./translations/widget/hi.json");
+/* harmony import */ var _it_json__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./it.json */ "./translations/widget/it.json");
+/* harmony import */ var _ja_json__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./ja.json */ "./translations/widget/ja.json");
+/* harmony import */ var _ko_json__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./ko.json */ "./translations/widget/ko.json");
+/* harmony import */ var _no_json__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./no.json */ "./translations/widget/no.json");
+/* harmony import */ var _es_json__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./es.json */ "./translations/widget/es.json");
+/* harmony import */ var _sv_json__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./sv.json */ "./translations/widget/sv.json");
 
-const translationsKeysTpl = {
-  customFilters: {
-    filter_label_dates: "Dates",
-    filter_label_locations: "Location",
-    filter_label_languages: "Language",
-    filter_label_categories: "Category",
-    filter_label_members: "Member",
-    filter_label_teams: "Team",
-    filter_all_dates: "All dates",
-    filter_all_locations: "All locations",
-    filter_all_languages: "All languages",
-    filter_all_categories: "All categories",
-    filter_all_members: "All members",
-    filter_all_teams: "All teams",
-    filterPropertyDetailsLabel: "Details",
-    filterPropertyEmailLabel: "Email",
-    filterPropertyPhoneLabel: "Phone",
-    filterPropertyOperationalHoursLabel: "Operational hours"
-  },
-  globalWidgetsTranslations: {
-    priceLabel: "Price",
-    filtersLabel: "Filters",
-    calendarLabel: "Calendar",
-    priceFreeLabel: "Free",
-    dayLabelPlural: "d",
-    dayLabelSingular: "d",
-    hourLabelPlural: "h",
-    hourLabelSingular: "h",
-    minuteLabelPlural: "m",
-    minuteLabelSingular: "m",
-    loadingLabel: "Loading",
-    backLabel: "Back",
-    closeLabel: "Close",
-    nextLabel: "Next",
-    previousLabel: "Previous",
-    languageLabel: "Language",
-    timezoneLabel: "Timezone",
-    eventTimeLabel: "Event time",
-    viewModeListLabel: "List",
-    viewModeGridLabel: "Grid"
-  },
-  mainWidget: {
-    openDialogButton: "Book event",
-    eventsListTitle: "Events list",
-    bundlesListTitle: "Bundles list",
-    widgetEventsListSwitchLabel: "Events",
-    widgetBundlesListSwitchLabel: "Bundles",
-    bundleAddToCartButtonLabel: "Add to Cart",
-    eventAddToCartButtonLabel: "Add to Cart",
-    liveShoppingJoinButtonLabel: "Join",
-    liveShoppingStartCountdown: "in",
-    bundleEventsListTitle: "Included events",
-    shareEventPanelTitle: "Share this event",
-    searchEventPlaceholder: "Search",
-    itemsCounterLabel: "items",
-    singleEventItemsCounterLabel: "item",
-    clearFiltersLabel: "clear",
-    bookButtonLabel: "Book now",
-    virtualAppointmentLabel: "Appointment",
-    virtualEventLabel: "Virtual",
-    inPersonEventLabel: "Event",
-    webinarLabel: "Webinar",
-    liveShoppingLabel: "Live Shopping",
-    eventDetailsButtonLabel: "Details",
-    eventDescriptionFieldLabel: "Description",
-    todaySeparatorLabel: "Today",
-    tomorrowSeparatorLabel: "Tomorrow",
-    filtersStepLabel: "Filters",
-    resultStypeLabel: "Result",
-    goToFiltersResultButton: "Next: Result",
-    labelForMonthWithoutEvents: "There are no events scheduled for this month",
-    nextMonthButton: "Next",
-    availableQuantitySuffix: "left",
-    widgetHeaderLabel: "Events",
-    hostFilterLabel: "Host",
-    allDatesLabel: "All",
-    quickDateToday: "Today",
-    quickDateTomorrow: "Tomorrow",
-    quickDateThisWeek: "This Week",
-    quickDateWeekend: "Weekend",
-    applyFiltersLabel: "Show results",
-    showMoreEventsLabel: "+ ### More",
-    summaryAvailableLabel: "available event sessions",
-    summaryWaitlistLabel: "waitlist opportunities",
-    recurringEventLabel: "Recurring",
-    relatedEventsLabel: "Related events",
-    addToCalendarLabel: "Add to calendar",
-    copyLinkLabel: "Copy link",
-    copiedLabel: "Copied",
-    loadingErrorLabel: "Something went wrong. Please try again later."
-  },
-  onProductWidget: {
-    selectTimeButton: "Select the Date and Time",
-    selectDateAndTimeButton: "Select the Date and Time",
-    addToCartButton: "Add To Cart",
-    registerInWaitingList: "Join the Waiting List",
-    eventSoldOut: "Sold out",
-    appointmentSoldOut: "Sold out",
-    remainingBookingsLabel: "Only ### left!",
-    addToCartLabel: "Confirm",
-    questionsFormTitle: "Questions Form",
-    additionalMembersFormTitle: "Multi Booking",
-    memberFormDescription: "Add Email Addresses for Additional Recipients",
-    freeCheckoutNewslettersAgreement: "Click here to receive marketing emails and newsletters",
-    termsOfUseAgreement: "By selecting this checkbox, you agree to our",
-    termsOfUseAnd: "and",
-    freeCheckoutCloseRegistrationButton: "Close",
-    freeCheckoutInvalidEmailMessage: "Please enter a valid email address",
-    freeCheckoutMandatoryRequiermentsMessageHeader: "Please fill in the form below with your email and name to complete your registration",
-    freeRegistrationFormTitle: "Registration",
-    freeRegistrationFormDescription: "Please fill in the form below with your email and name to complete your registration",
-    fastRegistration: "Checkout",
-    memberFormMember: "Additional Registrant",
-    memberFormEmail: "Email",
-    memberFormFirstName: "First Name",
-    memberFormLastName: "Last Name",
-    eventQuestionsFormTitle: "Event Questions Form",
-    submitQuestionsForm: "Submit",
-    mandatoryRequiermentsMessageHeader: "This field is mandatory",
-    mandatoryRequiermentsMessage: "Please fill in this field",
-    invalidEmailMessage: "Please enter a valid email address.",
-    noAvailableSlots: "No appointment slots available at the moment",
-    registrationCompletedMessageTitle: "Registration completed!",
-    privacyPolicyLinkText: "Privacy Policy",
-    termsOfUseLinkText: "Terms of Use",
-    registrationCompletedMessageDescription: "You have successfully registered. A confirmation email has been sent to the provided email address. Please check your inbox.",
-    waitingListNameLabel: "Name",
-    waitingListEmailLabel: "Email",
-    memberFormPrimaryBadge: "Primary contact",
-    captchaRequiredMessage: "Please complete the captcha to continue",
-    genericErrorMessage: "Something went wrong. Please try again."
-  },
-  liveShoppingWidget: {
-    joinToCallButton: "Join",
-    enterAdmittedUser: "Enter",
-    joinUserWithEmailButton: "Join",
-    usernameInputLabel: "Username",
-    emailInputLabel: "Email",
-    usernameInputPlaceholder: "john.doe",
-    emailInputPlaceholder: "john.doe@acme.com",
-    loginFormTitle: "Please enter your username and email to join the call",
-    waitForConnectionMessage: "Please wait until the owner allows you in",
-    reconnectionMessage: "Something has gone wrong, we are trying to reconnect you",
-    waitForAdmitMessage: "Please wait, we are trying to connect you",
-    connectionErrorMessage: "Please reload the page",
-    productAddedToCartMessage: "The product has been added to the cart",
-    emptyUsernameWarning: "Please enter your username",
-    emptyEmailWarning: "Please enter your email",
-    wrongEmailFormatWarning: "Please enter the correct email",
-    audioRequirmentsIssue: "The system does not support VOIP, but you can join the audio by phone",
-    screenRequirmentsIssue: "The screen is not compatible with the current web browser.",
-    videoRequirmentsIssue: "The video is not compatible with the current web browser.",
-    browserRequirmentsIssue: "Please update your browser"
-  }
+
+
+
+
+
+
+
+
+
+
+
+const defaults = {
+  "zh-cn": _zh_cn_json__WEBPACK_IMPORTED_MODULE_0__,
+  nl: _nl_json__WEBPACK_IMPORTED_MODULE_1__,
+  en: _en_json__WEBPACK_IMPORTED_MODULE_2__,
+  fr: _fr_json__WEBPACK_IMPORTED_MODULE_3__,
+  de: _de_json__WEBPACK_IMPORTED_MODULE_4__,
+  hi: _hi_json__WEBPACK_IMPORTED_MODULE_5__,
+  it: _it_json__WEBPACK_IMPORTED_MODULE_6__,
+  ja: _ja_json__WEBPACK_IMPORTED_MODULE_7__,
+  ko: _ko_json__WEBPACK_IMPORTED_MODULE_8__,
+  no: _no_json__WEBPACK_IMPORTED_MODULE_9__,
+  es: _es_json__WEBPACK_IMPORTED_MODULE_10__,
+  sv: _sv_json__WEBPACK_IMPORTED_MODULE_11__
 };
-const defaultTranslationLanguages = ["zh-cn", "nl", "en", "fr", "de", "hi", "it", "ja", "ko", "no", "ru", "es", "sv"];
+const clone = value => JSON.parse(JSON.stringify(value));
+const objectOf = value => value && typeof value === "object" && !Array.isArray(value) ? value : {};
+const translationsKeysTpl = clone(_en_json__WEBPACK_IMPORTED_MODULE_2__);
+const defaultTranslationLanguages = Object.keys(defaults);
 const languagesCodeName = {
   "zh-cn": "zh-CN",
   nl: "nl",
@@ -4715,45 +4779,43 @@ const languagesCodeName = {
   ja: "ja",
   ko: "ko",
   no: "no",
-  ru: "ru",
   es: "es",
   sv: "sv"
 };
-const getTranslationsTpl = () => {
-  const tpl = {};
-  lodash_foreach__WEBPACK_IMPORTED_MODULE_0___default()(defaultTranslationLanguages, langCode => {
-    tpl[langCode] = translationsKeysTpl;
-  });
-  return tpl;
-};
+
+// Each request gets independent editable dictionaries, never references to the
+// JSON modules or another language's values.
+const getTranslationsTpl = () => clone(defaults);
+const filterSavedTranslations = value => Object.fromEntries(Object.entries(objectOf(value)).filter(([locale]) => !/^ru(?:[-_]|$)/i.test(locale.trim())));
 const mergeTranslations = (recipientTranslations = {}, injectedTranslations = {}) => {
-  const languagesForProcessing = Object.keys(recipientTranslations);
-  const mergedTranslations = {};
-  lodash_foreach__WEBPACK_IMPORTED_MODULE_0___default()(languagesForProcessing, langCode => {
-    if (injectedTranslations[langCode] === undefined) {
-      mergedTranslations[langCode] = translationsKeysTpl;
-    } else {
-      const langData = {};
-      lodash_foreach__WEBPACK_IMPORTED_MODULE_0___default()(recipientTranslations[langCode], (sectionValue, sectionName) => {
-        if (injectedTranslations[langCode][sectionName] === undefined) {
-          langData[sectionName] = recipientTranslations[langCode][sectionName];
-        } else {
-          if (!langData[sectionName]) langData[sectionName] = {};
-          const fieldsForProcessing = Object.keys(recipientTranslations[langCode][sectionName]);
-          lodash_foreach__WEBPACK_IMPORTED_MODULE_0___default()({
-            ...recipientTranslations[langCode][sectionName],
-            ...injectedTranslations[langCode][sectionName]
-          }, (fieldValue, fieldName) => {
-            if (fieldsForProcessing.includes(fieldName)) {
-              langData[sectionName][fieldName] = fieldValue;
-            }
-          });
-        }
-      });
-      mergedTranslations[langCode] = langData;
+  const overrides = objectOf(injectedTranslations);
+  const merged = {};
+  for (const [locale, sections] of Object.entries(objectOf(recipientTranslations))) {
+    merged[locale] = {};
+    const saved = objectOf(overrides[locale]);
+    for (const [section, fields] of Object.entries(objectOf(sections))) {
+      merged[locale][section] = {};
+      const injected = objectOf(saved[section]);
+      for (const [key, value] of Object.entries(objectOf(fields))) {
+        merged[locale][section][key] = typeof injected[key] === "string" ? injected[key] : value;
+      }
     }
-  });
-  return mergedTranslations;
+  }
+  return merged;
+};
+const prepareWidgetTranslations = (widgetSettings, reset = false) => {
+  const style = objectOf(widgetSettings);
+  const saved = filterSavedTranslations(style.translations);
+  return {
+    ...style,
+    ...(/^ru(?:[-_]|$)/i.test(style.widgets_default_language || "") ? {
+      widgets_default_language: "en"
+    } : {}),
+    translations: reset ? getTranslationsTpl() : {
+      ...saved,
+      ...mergeTranslations(getTranslationsTpl(), saved)
+    }
+  };
 };
 
 /***/ }),
@@ -4908,6 +4970,21 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./src/Components/Modals/ModalShell.module.scss":
+/*!******************************************************!*\
+  !*** ./src/Components/Modals/ModalShell.module.scss ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"overlay":"zaqd_YWTGq9h9BrDhnml","svFade":"lQqxKZGLcAKV1Jn8Vt2F","dialog":"XXcDzcz01ytVnY3hpKJj","svPop":"DdditGgnQd2jVs8QrqsH","sm":"HW1Ittu6VG1nOuS1qg32","md":"vJ0FZD6KHZ4i9D5apaFY","lg":"YHKB1jznvv4OseMsi_Az","xl":"Efc0HlnFAqkwM15HiCNa","header":"R3wk4fdBZ02XilBUvvKA","eyebrow":"WERcf127A0gFANECWp8h","title":"iXgumjbKr876OyoPtlx9","description":"MPu8eTML6zZvnQl6CbB4","close":"MV0wlpfgIbnXq6oksmES","body":"EySeA5xUa9n4fl1YJ9vW","footer":"uM3hTqX_1dotCASYgHwQ"});
+
+/***/ }),
+
 /***/ "./src/Components/Pages/PageWrapper.module.scss":
 /*!******************************************************!*\
   !*** ./src/Components/Pages/PageWrapper.module.scss ***!
@@ -4966,7 +5043,127 @@ __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"root":"NvXIBF17sKtsJ5DppGj6","blurred":"s8xU0aT_Upum9VaMUtFv","overlay":"rwBQn7Ep0HRpuD73wvEE"});
 
+/***/ }),
+
+/***/ "./translations/widget/de.json":
+/*!*************************************!*\
+  !*** ./translations/widget/de.json ***!
+  \*************************************/
+/***/ ((module) => {
+
+module.exports = /*#__PURE__*/JSON.parse('{"customFilters":{"filter_label_dates":"Datum","filter_label_locations":"Ort","filter_label_languages":"Sprache","filter_label_categories":"Kategorie","filter_label_members":"Mitglied","filter_label_teams":"Team","filter_all_dates":"Alle Termine","filter_all_locations":"Alle Orte","filter_all_languages":"Alle Sprachen","filter_all_categories":"Alle Kategorien","filter_all_members":"Alle Mitglieder","filter_all_teams":"Alle Teams","filterPropertyDetailsLabel":"Details","filterPropertyEmailLabel":"E-Mail","filterPropertyPhoneLabel":"Telefon","filterPropertyOperationalHoursLabel":"Öffnungszeiten"},"globalWidgetsTranslations":{"priceLabel":"Preis","filtersLabel":"Filter","calendarLabel":"Kalender","priceFreeLabel":"Kostenlos","dayLabelPlural":"T","dayLabelSingular":"T","hourLabelPlural":"Std.","hourLabelSingular":"Std.","minuteLabelPlural":"Min.","minuteLabelSingular":"Min.","loadingLabel":"Wird geladen","backLabel":"Zurück","closeLabel":"Schließen","nextLabel":"Weiter","previousLabel":"Zurück","languageLabel":"Sprache","timezoneLabel":"Zeitzone","eventTimeLabel":"Veranstaltungszeit","viewModeListLabel":"Liste","viewModeGridLabel":"Raster"},"mainWidget":{"openDialogButton":"Veranstaltung buchen","eventsListTitle":"Veranstaltungsliste","bundlesListTitle":"Paketliste","widgetEventsListSwitchLabel":"Veranstaltungen","widgetBundlesListSwitchLabel":"Pakete","bundleAddToCartButtonLabel":"In den Warenkorb","eventAddToCartButtonLabel":"In den Warenkorb","liveShoppingJoinButtonLabel":"Teilnehmen","liveShoppingStartCountdown":"in","bundleEventsListTitle":"Enthaltene Veranstaltungen","shareEventPanelTitle":"Diese Veranstaltung teilen","searchEventPlaceholder":"Suchen","itemsCounterLabel":"Einträge","singleEventItemsCounterLabel":"Eintrag","clearFiltersLabel":"löschen","bookButtonLabel":"Jetzt buchen","virtualAppointmentLabel":"Termin","virtualEventLabel":"Virtuell","inPersonEventLabel":"Veranstaltung","webinarLabel":"Webinar","liveShoppingLabel":"Live-Shopping","eventDetailsButtonLabel":"Details","eventDescriptionFieldLabel":"Beschreibung","todaySeparatorLabel":"Heute","tomorrowSeparatorLabel":"Morgen","filtersStepLabel":"Filter","resultStypeLabel":"Ergebnis","goToFiltersResultButton":"Weiter: Ergebnis","labelForMonthWithoutEvents":"Für diesen Monat sind keine Veranstaltungen geplant","nextMonthButton":"Weiter","availableQuantitySuffix":"verfügbar","widgetHeaderLabel":"Veranstaltungen","hostFilterLabel":"Gastgeber","allDatesLabel":"Alle","quickDateToday":"Heute","quickDateTomorrow":"Morgen","quickDateThisWeek":"Diese Woche","quickDateWeekend":"Wochenende","applyFiltersLabel":"Ergebnisse anzeigen","showMoreEventsLabel":"+ ### weitere","summaryAvailableLabel":"verfügbare Veranstaltungstermine","summaryWaitlistLabel":"Wartelistenmöglichkeiten","recurringEventLabel":"Wiederkehrend","relatedEventsLabel":"Ähnliche Veranstaltungen","addToCalendarLabel":"Zum Kalender hinzufügen","copyLinkLabel":"Link kopieren","copiedLabel":"Kopiert","loadingErrorLabel":"Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut."},"onProductWidget":{"selectTimeButton":"Datum und Uhrzeit auswählen","selectDateAndTimeButton":"Datum und Uhrzeit auswählen","addToCartButton":"In den Warenkorb","registerInWaitingList":"Auf die Warteliste setzen","eventSoldOut":"Ausgebucht","appointmentSoldOut":"Ausgebucht","remainingBookingsLabel":"Nur noch ### Plätze!","addToCartLabel":"Bestätigen","questionsFormTitle":"Frageformular","additionalMembersFormTitle":"Mehrfachbuchung","memberFormDescription":"E-Mail-Adressen für weitere Empfänger hinzufügen","freeCheckoutNewslettersAgreement":"Klicken Sie hier, um Werbe-E-Mails und Newsletter zu erhalten","termsOfUseAgreement":"Durch Aktivieren dieses Kontrollkästchens stimmen Sie unseren folgenden Richtlinien zu:","termsOfUseAnd":"und","freeCheckoutCloseRegistrationButton":"Schließen","freeCheckoutInvalidEmailMessage":"Bitte geben Sie eine gültige E-Mail-Adresse ein","freeCheckoutMandatoryRequiermentsMessageHeader":"Bitte füllen Sie das folgende Formular mit Ihrer E-Mail-Adresse und Ihrem Namen aus, um die Anmeldung abzuschließen","freeRegistrationFormTitle":"Anmeldung","freeRegistrationFormDescription":"Bitte füllen Sie das folgende Formular mit Ihrer E-Mail-Adresse und Ihrem Namen aus, um die Anmeldung abzuschließen","fastRegistration":"Zur Kasse","memberFormMember":"Angemeldete Person","memberFormEmail":"E-Mail","memberFormFirstName":"Vorname","memberFormLastName":"Nachname","eventQuestionsFormTitle":"Frageformular zur Veranstaltung","submitQuestionsForm":"Absenden","mandatoryRequiermentsMessageHeader":"Dieses Feld ist erforderlich","mandatoryRequiermentsMessage":"Bitte füllen Sie dieses Feld aus","invalidEmailMessage":"Bitte geben Sie eine gültige E-Mail-Adresse ein.","noAvailableSlots":"Derzeit sind keine Termine verfügbar","registrationCompletedMessageTitle":"Anmeldung abgeschlossen!","privacyPolicyLinkText":"Datenschutzerklärung","termsOfUseLinkText":"Nutzungsbedingungen","registrationCompletedMessageDescription":"Sie haben sich erfolgreich angemeldet. Eine Bestätigungs-E-Mail wurde an die angegebene Adresse gesendet. Bitte prüfen Sie Ihren Posteingang.","waitingListNameLabel":"Name","waitingListEmailLabel":"E-Mail","memberFormPrimaryBadge":"Hauptkontakt","captchaRequiredMessage":"Bitte bestätigen Sie das CAPTCHA, um fortzufahren","genericErrorMessage":"Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut."},"liveShoppingWidget":{"joinToCallButton":"Teilnehmen","enterAdmittedUser":"Eintreten","joinUserWithEmailButton":"Teilnehmen","usernameInputLabel":"Benutzername","emailInputLabel":"E-Mail","usernameInputPlaceholder":"john.doe","emailInputPlaceholder":"john.doe@acme.com","loginFormTitle":"Bitte geben Sie Ihren Benutzernamen und Ihre E-Mail-Adresse ein, um am Gespräch teilzunehmen","waitForConnectionMessage":"Bitte warten Sie, bis der Gastgeber Sie hereinlässt","reconnectionMessage":"Ein Fehler ist aufgetreten. Wir versuchen, Sie erneut zu verbinden","waitForAdmitMessage":"Bitte warten Sie, wir versuchen, Sie zu verbinden","connectionErrorMessage":"Bitte laden Sie die Seite neu","productAddedToCartMessage":"Das Produkt wurde dem Warenkorb hinzugefügt","emptyUsernameWarning":"Bitte geben Sie Ihren Benutzernamen ein","emptyEmailWarning":"Bitte geben Sie Ihre E-Mail-Adresse ein","wrongEmailFormatWarning":"Bitte geben Sie eine gültige E-Mail-Adresse ein","audioRequirmentsIssue":"Das System unterstützt keine VoIP-Verbindung, Sie können jedoch telefonisch teilnehmen","screenRequirmentsIssue":"Die Bildschirmfreigabe ist mit diesem Browser nicht kompatibel.","videoRequirmentsIssue":"Die Videoübertragung ist mit diesem Browser nicht kompatibel.","browserRequirmentsIssue":"Bitte aktualisieren Sie Ihren Browser"}}');
+
+/***/ }),
+
+/***/ "./translations/widget/en.json":
+/*!*************************************!*\
+  !*** ./translations/widget/en.json ***!
+  \*************************************/
+/***/ ((module) => {
+
+module.exports = /*#__PURE__*/JSON.parse('{"customFilters":{"filter_label_dates":"Dates","filter_label_locations":"Location","filter_label_languages":"Language","filter_label_categories":"Category","filter_label_members":"Member","filter_label_teams":"Team","filter_all_dates":"All dates","filter_all_locations":"All locations","filter_all_languages":"All languages","filter_all_categories":"All categories","filter_all_members":"All members","filter_all_teams":"All teams","filterPropertyDetailsLabel":"Details","filterPropertyEmailLabel":"Email","filterPropertyPhoneLabel":"Phone","filterPropertyOperationalHoursLabel":"Operational hours"},"globalWidgetsTranslations":{"priceLabel":"Price","filtersLabel":"Filters","calendarLabel":"Calendar","priceFreeLabel":"Free","dayLabelPlural":"d","dayLabelSingular":"d","hourLabelPlural":"h","hourLabelSingular":"h","minuteLabelPlural":"m","minuteLabelSingular":"m","loadingLabel":"Loading","backLabel":"Back","closeLabel":"Close","nextLabel":"Next","previousLabel":"Previous","languageLabel":"Language","timezoneLabel":"Timezone","eventTimeLabel":"Event time","viewModeListLabel":"List","viewModeGridLabel":"Grid"},"mainWidget":{"openDialogButton":"Book event","eventsListTitle":"Events list","bundlesListTitle":"Bundles list","widgetEventsListSwitchLabel":"Events","widgetBundlesListSwitchLabel":"Bundles","bundleAddToCartButtonLabel":"Add to Cart","eventAddToCartButtonLabel":"Add to Cart","liveShoppingJoinButtonLabel":"Join","liveShoppingStartCountdown":"in","bundleEventsListTitle":"Included events","shareEventPanelTitle":"Share this event","searchEventPlaceholder":"Search","itemsCounterLabel":"items","singleEventItemsCounterLabel":"item","clearFiltersLabel":"clear","bookButtonLabel":"Book now","virtualAppointmentLabel":"Appointment","virtualEventLabel":"Virtual","inPersonEventLabel":"Event","webinarLabel":"Webinar","liveShoppingLabel":"Live Shopping","eventDetailsButtonLabel":"Details","eventDescriptionFieldLabel":"Description","todaySeparatorLabel":"Today","tomorrowSeparatorLabel":"Tomorrow","filtersStepLabel":"Filters","resultStypeLabel":"Result","goToFiltersResultButton":"Next: Result","labelForMonthWithoutEvents":"There are no events scheduled for this month","nextMonthButton":"Next","availableQuantitySuffix":"left","widgetHeaderLabel":"Events","hostFilterLabel":"Host","allDatesLabel":"All","quickDateToday":"Today","quickDateTomorrow":"Tomorrow","quickDateThisWeek":"This Week","quickDateWeekend":"Weekend","applyFiltersLabel":"Show results","showMoreEventsLabel":"+ ### More","summaryAvailableLabel":"available event sessions","summaryWaitlistLabel":"waitlist opportunities","recurringEventLabel":"Recurring","relatedEventsLabel":"Related events","addToCalendarLabel":"Add to calendar","copyLinkLabel":"Copy link","copiedLabel":"Copied","loadingErrorLabel":"Something went wrong. Please try again later."},"onProductWidget":{"selectTimeButton":"Select the Date and Time","selectDateAndTimeButton":"Select the Date and Time","addToCartButton":"Add To Cart","registerInWaitingList":"Join the Waiting List","eventSoldOut":"Sold out","appointmentSoldOut":"Sold out","remainingBookingsLabel":"Only ### left!","addToCartLabel":"Confirm","questionsFormTitle":"Questions Form","additionalMembersFormTitle":"Multi Booking","memberFormDescription":"Add Email Addresses for Additional Recipients","freeCheckoutNewslettersAgreement":"Click here to receive marketing emails and newsletters","termsOfUseAgreement":"By selecting this checkbox, you agree to our","termsOfUseAnd":"and","freeCheckoutCloseRegistrationButton":"Close","freeCheckoutInvalidEmailMessage":"Please enter a valid email address","freeCheckoutMandatoryRequiermentsMessageHeader":"Please fill in the form below with your email and name to complete your registration","freeRegistrationFormTitle":"Registration","freeRegistrationFormDescription":"Please fill in the form below with your email and name to complete your registration","fastRegistration":"Checkout","memberFormMember":"Registrant","memberFormEmail":"Email","memberFormFirstName":"First Name","memberFormLastName":"Last Name","eventQuestionsFormTitle":"Event Questions Form","submitQuestionsForm":"Submit","mandatoryRequiermentsMessageHeader":"This field is mandatory","mandatoryRequiermentsMessage":"Please fill in this field","invalidEmailMessage":"Please enter a valid email address.","noAvailableSlots":"No appointment slots available at the moment","registrationCompletedMessageTitle":"Registration completed!","privacyPolicyLinkText":"Privacy Policy","termsOfUseLinkText":"Terms of Use","registrationCompletedMessageDescription":"You have successfully registered. A confirmation email has been sent to the provided email address. Please check your inbox.","waitingListNameLabel":"Name","waitingListEmailLabel":"Email","memberFormPrimaryBadge":"Primary contact","captchaRequiredMessage":"Please complete the captcha to continue","genericErrorMessage":"Something went wrong. Please try again."},"liveShoppingWidget":{"joinToCallButton":"Join","enterAdmittedUser":"Enter","joinUserWithEmailButton":"Join","usernameInputLabel":"Username","emailInputLabel":"Email","usernameInputPlaceholder":"john.doe","emailInputPlaceholder":"john.doe@acme.com","loginFormTitle":"Please enter your username and email to join the call","waitForConnectionMessage":"Please wait until the owner allows you in","reconnectionMessage":"Something has gone wrong, we are trying to reconnect you","waitForAdmitMessage":"Please wait, we are trying to connect you","connectionErrorMessage":"Please reload the page","productAddedToCartMessage":"The product has been added to the cart","emptyUsernameWarning":"Please enter your username","emptyEmailWarning":"Please enter your email","wrongEmailFormatWarning":"Please enter the correct email","audioRequirmentsIssue":"The system does not support VOIP, but you can join the audio by phone","screenRequirmentsIssue":"The screen is not compatible with the current web browser.","videoRequirmentsIssue":"The video is not compatible with the current web browser.","browserRequirmentsIssue":"Please update your browser"}}');
+
+/***/ }),
+
+/***/ "./translations/widget/es.json":
+/*!*************************************!*\
+  !*** ./translations/widget/es.json ***!
+  \*************************************/
+/***/ ((module) => {
+
+module.exports = /*#__PURE__*/JSON.parse('{"customFilters":{"filter_label_dates":"Fechas","filter_label_locations":"Ubicación","filter_label_languages":"Idioma","filter_label_categories":"Categoría","filter_label_members":"Miembro","filter_label_teams":"Equipo","filter_all_dates":"Todas las fechas","filter_all_locations":"Todas las ubicaciones","filter_all_languages":"Todos los idiomas","filter_all_categories":"Todas las categorías","filter_all_members":"Todos los miembros","filter_all_teams":"Todos los equipos","filterPropertyDetailsLabel":"Detalles","filterPropertyEmailLabel":"Correo electrónico","filterPropertyPhoneLabel":"Teléfono","filterPropertyOperationalHoursLabel":"Horario de atención"},"globalWidgetsTranslations":{"priceLabel":"Precio","filtersLabel":"Filtros","calendarLabel":"Calendario","priceFreeLabel":"Gratis","dayLabelPlural":"d","dayLabelSingular":"d","hourLabelPlural":"h","hourLabelSingular":"h","minuteLabelPlural":"min","minuteLabelSingular":"min","loadingLabel":"Cargando","backLabel":"Volver","closeLabel":"Cerrar","nextLabel":"Siguiente","previousLabel":"Anterior","languageLabel":"Idioma","timezoneLabel":"Zona horaria","eventTimeLabel":"Hora del evento","viewModeListLabel":"Lista","viewModeGridLabel":"Cuadrícula"},"mainWidget":{"openDialogButton":"Reservar evento","eventsListTitle":"Lista de eventos","bundlesListTitle":"Lista de paquetes","widgetEventsListSwitchLabel":"Eventos","widgetBundlesListSwitchLabel":"Paquetes","bundleAddToCartButtonLabel":"Añadir al carrito","eventAddToCartButtonLabel":"Añadir al carrito","liveShoppingJoinButtonLabel":"Unirse","liveShoppingStartCountdown":"en","bundleEventsListTitle":"Eventos incluidos","shareEventPanelTitle":"Compartir este evento","searchEventPlaceholder":"Buscar","itemsCounterLabel":"elementos","singleEventItemsCounterLabel":"elemento","clearFiltersLabel":"borrar","bookButtonLabel":"Reservar ahora","virtualAppointmentLabel":"Cita","virtualEventLabel":"Virtual","inPersonEventLabel":"Evento","webinarLabel":"Seminario web","liveShoppingLabel":"Compras en directo","eventDetailsButtonLabel":"Detalles","eventDescriptionFieldLabel":"Descripción","todaySeparatorLabel":"Hoy","tomorrowSeparatorLabel":"Mañana","filtersStepLabel":"Filtros","resultStypeLabel":"Resultado","goToFiltersResultButton":"Siguiente: Resultado","labelForMonthWithoutEvents":"No hay eventos programados para este mes","nextMonthButton":"Siguiente","availableQuantitySuffix":"disponibles","widgetHeaderLabel":"Eventos","hostFilterLabel":"Organizador","allDatesLabel":"Todas","quickDateToday":"Hoy","quickDateTomorrow":"Mañana","quickDateThisWeek":"Esta semana","quickDateWeekend":"Fin de semana","applyFiltersLabel":"Mostrar resultados","showMoreEventsLabel":"+ ### más","summaryAvailableLabel":"sesiones de eventos disponibles","summaryWaitlistLabel":"opciones de lista de espera","recurringEventLabel":"Recurrente","relatedEventsLabel":"Eventos relacionados","addToCalendarLabel":"Añadir al calendario","copyLinkLabel":"Copiar enlace","copiedLabel":"Copiado","loadingErrorLabel":"Se ha producido un error. Vuelve a intentarlo más tarde."},"onProductWidget":{"selectTimeButton":"Seleccionar fecha y hora","selectDateAndTimeButton":"Seleccionar fecha y hora","addToCartButton":"Añadir al carrito","registerInWaitingList":"Unirse a la lista de espera","eventSoldOut":"Agotado","appointmentSoldOut":"Agotado","remainingBookingsLabel":"¡Solo quedan ### plazas!","addToCartLabel":"Confirmar","questionsFormTitle":"Formulario de preguntas","additionalMembersFormTitle":"Reserva múltiple","memberFormDescription":"Añadir direcciones de correo de destinatarios adicionales","freeCheckoutNewslettersAgreement":"Haz clic aquí para recibir correos promocionales y boletines","termsOfUseAgreement":"Al marcar esta casilla, aceptas:","termsOfUseAnd":"y","freeCheckoutCloseRegistrationButton":"Cerrar","freeCheckoutInvalidEmailMessage":"Introduce una dirección de correo electrónico válida","freeCheckoutMandatoryRequiermentsMessageHeader":"Rellena el siguiente formulario con tu correo electrónico y tu nombre para completar el registro","freeRegistrationFormTitle":"Registro","freeRegistrationFormDescription":"Rellena el siguiente formulario con tu correo electrónico y tu nombre para completar el registro","fastRegistration":"Finalizar compra","memberFormMember":"Persona inscrita","memberFormEmail":"Correo electrónico","memberFormFirstName":"Nombre","memberFormLastName":"Apellidos","eventQuestionsFormTitle":"Formulario de preguntas del evento","submitQuestionsForm":"Enviar","mandatoryRequiermentsMessageHeader":"Este campo es obligatorio","mandatoryRequiermentsMessage":"Rellena este campo","invalidEmailMessage":"Introduce una dirección de correo electrónico válida.","noAvailableSlots":"No hay citas disponibles en este momento","registrationCompletedMessageTitle":"¡Registro completado!","privacyPolicyLinkText":"Política de privacidad","termsOfUseLinkText":"Condiciones de uso","registrationCompletedMessageDescription":"Te has registrado correctamente. Se ha enviado un correo de confirmación a la dirección indicada. Revisa tu bandeja de entrada.","waitingListNameLabel":"Nombre","waitingListEmailLabel":"Correo electrónico","memberFormPrimaryBadge":"Contacto principal","captchaRequiredMessage":"Completa el CAPTCHA para continuar","genericErrorMessage":"Se ha producido un error. Vuelve a intentarlo."},"liveShoppingWidget":{"joinToCallButton":"Unirse","enterAdmittedUser":"Entrar","joinUserWithEmailButton":"Unirse","usernameInputLabel":"Nombre de usuario","emailInputLabel":"Correo electrónico","usernameInputPlaceholder":"john.doe","emailInputPlaceholder":"john.doe@acme.com","loginFormTitle":"Introduce tu nombre de usuario y tu correo electrónico para unirte a la llamada","waitForConnectionMessage":"Espera a que el organizador te permita entrar","reconnectionMessage":"Se ha producido un error. Estamos intentando volver a conectarte","waitForAdmitMessage":"Espera, estamos intentando conectarte","connectionErrorMessage":"Vuelve a cargar la página","productAddedToCartMessage":"El producto se ha añadido al carrito","emptyUsernameWarning":"Introduce tu nombre de usuario","emptyEmailWarning":"Introduce tu correo electrónico","wrongEmailFormatWarning":"Introduce una dirección de correo electrónico válida","audioRequirmentsIssue":"El sistema no admite VoIP, pero puedes participar por teléfono","screenRequirmentsIssue":"La función de compartir pantalla no es compatible con este navegador.","videoRequirmentsIssue":"El vídeo no es compatible con este navegador.","browserRequirmentsIssue":"Actualiza tu navegador"}}');
+
+/***/ }),
+
+/***/ "./translations/widget/fr.json":
+/*!*************************************!*\
+  !*** ./translations/widget/fr.json ***!
+  \*************************************/
+/***/ ((module) => {
+
+module.exports = /*#__PURE__*/JSON.parse('{"customFilters":{"filter_label_dates":"Dates","filter_label_locations":"Lieu","filter_label_languages":"Langue","filter_label_categories":"Catégorie","filter_label_members":"Membre","filter_label_teams":"Équipe","filter_all_dates":"Toutes les dates","filter_all_locations":"Tous les lieux","filter_all_languages":"Toutes les langues","filter_all_categories":"Toutes les catégories","filter_all_members":"Tous les membres","filter_all_teams":"Toutes les équipes","filterPropertyDetailsLabel":"Détails","filterPropertyEmailLabel":"E-mail","filterPropertyPhoneLabel":"Téléphone","filterPropertyOperationalHoursLabel":"Horaires d’ouverture"},"globalWidgetsTranslations":{"priceLabel":"Prix","filtersLabel":"Filtres","calendarLabel":"Calendrier","priceFreeLabel":"Gratuit","dayLabelPlural":"j","dayLabelSingular":"j","hourLabelPlural":"h","hourLabelSingular":"h","minuteLabelPlural":"min","minuteLabelSingular":"min","loadingLabel":"Chargement","backLabel":"Retour","closeLabel":"Fermer","nextLabel":"Suivant","previousLabel":"Précédent","languageLabel":"Langue","timezoneLabel":"Fuseau horaire","eventTimeLabel":"Heure de l’événement","viewModeListLabel":"Liste","viewModeGridLabel":"Grille"},"mainWidget":{"openDialogButton":"Réserver un événement","eventsListTitle":"Liste des événements","bundlesListTitle":"Liste des offres groupées","widgetEventsListSwitchLabel":"Événements","widgetBundlesListSwitchLabel":"Offres groupées","bundleAddToCartButtonLabel":"Ajouter au panier","eventAddToCartButtonLabel":"Ajouter au panier","liveShoppingJoinButtonLabel":"Rejoindre","liveShoppingStartCountdown":"dans","bundleEventsListTitle":"Événements inclus","shareEventPanelTitle":"Partager cet événement","searchEventPlaceholder":"Rechercher","itemsCounterLabel":"éléments","singleEventItemsCounterLabel":"élément","clearFiltersLabel":"effacer","bookButtonLabel":"Réserver maintenant","virtualAppointmentLabel":"Rendez-vous","virtualEventLabel":"Virtuel","inPersonEventLabel":"Événement","webinarLabel":"Webinaire","liveShoppingLabel":"Shopping en direct","eventDetailsButtonLabel":"Détails","eventDescriptionFieldLabel":"Description","todaySeparatorLabel":"Aujourd’hui","tomorrowSeparatorLabel":"Demain","filtersStepLabel":"Filtres","resultStypeLabel":"Résultat","goToFiltersResultButton":"Suivant : Résultat","labelForMonthWithoutEvents":"Aucun événement n’est prévu ce mois-ci","nextMonthButton":"Suivant","availableQuantitySuffix":"restants","widgetHeaderLabel":"Événements","hostFilterLabel":"Organisateur","allDatesLabel":"Toutes","quickDateToday":"Aujourd’hui","quickDateTomorrow":"Demain","quickDateThisWeek":"Cette semaine","quickDateWeekend":"Week-end","applyFiltersLabel":"Afficher les résultats","showMoreEventsLabel":"+ ### de plus","summaryAvailableLabel":"sessions d’événements disponibles","summaryWaitlistLabel":"possibilités d’inscription sur liste d’attente","recurringEventLabel":"Récurrent","relatedEventsLabel":"Événements associés","addToCalendarLabel":"Ajouter au calendrier","copyLinkLabel":"Copier le lien","copiedLabel":"Copié","loadingErrorLabel":"Une erreur s’est produite. Veuillez réessayer plus tard."},"onProductWidget":{"selectTimeButton":"Choisir la date et l’heure","selectDateAndTimeButton":"Choisir la date et l’heure","addToCartButton":"Ajouter au panier","registerInWaitingList":"Rejoindre la liste d’attente","eventSoldOut":"Complet","appointmentSoldOut":"Complet","remainingBookingsLabel":"Plus que ### places !","addToCartLabel":"Confirmer","questionsFormTitle":"Formulaire de questions","additionalMembersFormTitle":"Réservation multiple","memberFormDescription":"Ajouter les adresses e-mail des destinataires supplémentaires","freeCheckoutNewslettersAgreement":"Cliquez ici pour recevoir des e-mails promotionnels et des newsletters","termsOfUseAgreement":"En cochant cette case, vous acceptez :","termsOfUseAnd":"et","freeCheckoutCloseRegistrationButton":"Fermer","freeCheckoutInvalidEmailMessage":"Veuillez saisir une adresse e-mail valide","freeCheckoutMandatoryRequiermentsMessageHeader":"Veuillez remplir le formulaire ci-dessous avec votre adresse e-mail et votre nom pour terminer votre inscription","freeRegistrationFormTitle":"Inscription","freeRegistrationFormDescription":"Veuillez remplir le formulaire ci-dessous avec votre adresse e-mail et votre nom pour terminer votre inscription","fastRegistration":"Paiement","memberFormMember":"Participant inscrit","memberFormEmail":"E-mail","memberFormFirstName":"Prénom","memberFormLastName":"Nom","eventQuestionsFormTitle":"Formulaire de questions sur l’événement","submitQuestionsForm":"Envoyer","mandatoryRequiermentsMessageHeader":"Ce champ est obligatoire","mandatoryRequiermentsMessage":"Veuillez remplir ce champ","invalidEmailMessage":"Veuillez saisir une adresse e-mail valide.","noAvailableSlots":"Aucun créneau de rendez-vous n’est disponible pour le moment","registrationCompletedMessageTitle":"Inscription terminée !","privacyPolicyLinkText":"Politique de confidentialité","termsOfUseLinkText":"Conditions d’utilisation","registrationCompletedMessageDescription":"Votre inscription a bien été enregistrée. Un e-mail de confirmation a été envoyé à l’adresse indiquée. Veuillez consulter votre boîte de réception.","waitingListNameLabel":"Nom","waitingListEmailLabel":"E-mail","memberFormPrimaryBadge":"Contact principal","captchaRequiredMessage":"Veuillez compléter le CAPTCHA pour continuer","genericErrorMessage":"Une erreur s’est produite. Veuillez réessayer."},"liveShoppingWidget":{"joinToCallButton":"Rejoindre","enterAdmittedUser":"Entrer","joinUserWithEmailButton":"Rejoindre","usernameInputLabel":"Nom d’utilisateur","emailInputLabel":"E-mail","usernameInputPlaceholder":"john.doe","emailInputPlaceholder":"john.doe@acme.com","loginFormTitle":"Veuillez saisir votre nom d’utilisateur et votre adresse e-mail pour rejoindre l’appel","waitForConnectionMessage":"Veuillez patienter jusqu’à ce que l’organisateur vous autorise à entrer","reconnectionMessage":"Une erreur s’est produite. Nous essayons de vous reconnecter","waitForAdmitMessage":"Veuillez patienter, nous essayons de vous connecter","connectionErrorMessage":"Veuillez recharger la page","productAddedToCartMessage":"Le produit a été ajouté au panier","emptyUsernameWarning":"Veuillez saisir votre nom d’utilisateur","emptyEmailWarning":"Veuillez saisir votre adresse e-mail","wrongEmailFormatWarning":"Veuillez saisir une adresse e-mail valide","audioRequirmentsIssue":"Le système ne prend pas en charge la VoIP, mais vous pouvez participer par téléphone","screenRequirmentsIssue":"Le partage d’écran n’est pas compatible avec ce navigateur.","videoRequirmentsIssue":"La vidéo n’est pas compatible avec ce navigateur.","browserRequirmentsIssue":"Veuillez mettre à jour votre navigateur"}}');
+
+/***/ }),
+
+/***/ "./translations/widget/hi.json":
+/*!*************************************!*\
+  !*** ./translations/widget/hi.json ***!
+  \*************************************/
+/***/ ((module) => {
+
+module.exports = /*#__PURE__*/JSON.parse('{"customFilters":{"filter_label_dates":"तारीखें","filter_label_locations":"स्थान","filter_label_languages":"भाषा","filter_label_categories":"श्रेणी","filter_label_members":"सदस्य","filter_label_teams":"टीम","filter_all_dates":"सभी तारीखें","filter_all_locations":"सभी स्थान","filter_all_languages":"सभी भाषाएँ","filter_all_categories":"सभी श्रेणियाँ","filter_all_members":"सभी सदस्य","filter_all_teams":"सभी टीमें","filterPropertyDetailsLabel":"विवरण","filterPropertyEmailLabel":"ईमेल","filterPropertyPhoneLabel":"फ़ोन","filterPropertyOperationalHoursLabel":"कामकाज का समय"},"globalWidgetsTranslations":{"priceLabel":"कीमत","filtersLabel":"फ़िल्टर","calendarLabel":"कैलेंडर","priceFreeLabel":"निःशुल्क","dayLabelPlural":"दिन","dayLabelSingular":"दिन","hourLabelPlural":"घं.","hourLabelSingular":"घं.","minuteLabelPlural":"मि.","minuteLabelSingular":"मि.","loadingLabel":"लोड हो रहा है","backLabel":"वापस","closeLabel":"बंद करें","nextLabel":"अगला","previousLabel":"पिछला","languageLabel":"भाषा","timezoneLabel":"समय क्षेत्र","eventTimeLabel":"कार्यक्रम का समय","viewModeListLabel":"सूची","viewModeGridLabel":"ग्रिड"},"mainWidget":{"openDialogButton":"कार्यक्रम बुक करें","eventsListTitle":"कार्यक्रमों की सूची","bundlesListTitle":"पैकेजों की सूची","widgetEventsListSwitchLabel":"कार्यक्रम","widgetBundlesListSwitchLabel":"पैकेज","bundleAddToCartButtonLabel":"कार्ट में जोड़ें","eventAddToCartButtonLabel":"कार्ट में जोड़ें","liveShoppingJoinButtonLabel":"शामिल हों","liveShoppingStartCountdown":"शुरू होने में","bundleEventsListTitle":"शामिल कार्यक्रम","shareEventPanelTitle":"यह कार्यक्रम साझा करें","searchEventPlaceholder":"खोजें","itemsCounterLabel":"आइटम","singleEventItemsCounterLabel":"आइटम","clearFiltersLabel":"साफ़ करें","bookButtonLabel":"अभी बुक करें","virtualAppointmentLabel":"अपॉइंटमेंट","virtualEventLabel":"वर्चुअल","inPersonEventLabel":"कार्यक्रम","webinarLabel":"वेबिनार","liveShoppingLabel":"लाइव शॉपिंग","eventDetailsButtonLabel":"विवरण","eventDescriptionFieldLabel":"ब्योरा","todaySeparatorLabel":"आज","tomorrowSeparatorLabel":"कल","filtersStepLabel":"फ़िल्टर","resultStypeLabel":"परिणाम","goToFiltersResultButton":"अगला: परिणाम","labelForMonthWithoutEvents":"इस महीने कोई कार्यक्रम निर्धारित नहीं है","nextMonthButton":"अगला","availableQuantitySuffix":"बाकी","widgetHeaderLabel":"कार्यक्रम","hostFilterLabel":"आयोजक","allDatesLabel":"सभी","quickDateToday":"आज","quickDateTomorrow":"कल","quickDateThisWeek":"इस सप्ताह","quickDateWeekend":"सप्ताहांत","applyFiltersLabel":"परिणाम दिखाएँ","showMoreEventsLabel":"+ ### और","summaryAvailableLabel":"उपलब्ध कार्यक्रम सत्र","summaryWaitlistLabel":"प्रतीक्षा सूची में नाम जोड़ने के अवसर","recurringEventLabel":"आवर्ती","relatedEventsLabel":"संबंधित कार्यक्रम","addToCalendarLabel":"कैलेंडर में जोड़ें","copyLinkLabel":"लिंक कॉपी करें","copiedLabel":"कॉपी हो गया","loadingErrorLabel":"कुछ गलत हो गया। कृपया बाद में फिर कोशिश करें।"},"onProductWidget":{"selectTimeButton":"तारीख और समय चुनें","selectDateAndTimeButton":"तारीख और समय चुनें","addToCartButton":"कार्ट में जोड़ें","registerInWaitingList":"प्रतीक्षा सूची में शामिल हों","eventSoldOut":"सभी स्थान भर गए हैं","appointmentSoldOut":"सभी स्थान भर गए हैं","remainingBookingsLabel":"केवल ### स्थान बाकी हैं!","addToCartLabel":"पुष्टि करें","questionsFormTitle":"प्रश्न फ़ॉर्म","additionalMembersFormTitle":"एक से अधिक लोगों की बुकिंग","memberFormDescription":"अतिरिक्त प्राप्तकर्ताओं के ईमेल पते जोड़ें","freeCheckoutNewslettersAgreement":"मार्केटिंग ईमेल और न्यूज़लेटर पाने के लिए यहाँ क्लिक करें","termsOfUseAgreement":"इस बॉक्स को चुनकर आप निम्नलिखित से सहमत होते हैं:","termsOfUseAnd":"और","freeCheckoutCloseRegistrationButton":"बंद करें","freeCheckoutInvalidEmailMessage":"कृपया एक मान्य ईमेल पता दर्ज करें","freeCheckoutMandatoryRequiermentsMessageHeader":"पंजीकरण पूरा करने के लिए नीचे दिए गए फ़ॉर्म में अपना ईमेल पता और नाम भरें","freeRegistrationFormTitle":"पंजीकरण","freeRegistrationFormDescription":"पंजीकरण पूरा करने के लिए नीचे दिए गए फ़ॉर्म में अपना ईमेल पता और नाम भरें","fastRegistration":"चेकआउट","memberFormMember":"पंजीकृत व्यक्ति","memberFormEmail":"ईमेल","memberFormFirstName":"पहला नाम","memberFormLastName":"उपनाम","eventQuestionsFormTitle":"कार्यक्रम से जुड़े प्रश्नों का फ़ॉर्म","submitQuestionsForm":"जमा करें","mandatoryRequiermentsMessageHeader":"यह फ़ील्ड अनिवार्य है","mandatoryRequiermentsMessage":"कृपया यह फ़ील्ड भरें","invalidEmailMessage":"कृपया एक मान्य ईमेल पता दर्ज करें।","noAvailableSlots":"फ़िलहाल अपॉइंटमेंट के लिए कोई समय उपलब्ध नहीं है","registrationCompletedMessageTitle":"पंजीकरण पूरा हो गया!","privacyPolicyLinkText":"गोपनीयता नीति","termsOfUseLinkText":"उपयोग की शर्तें","registrationCompletedMessageDescription":"आपका पंजीकरण सफल हो गया है। दिए गए ईमेल पते पर पुष्टि का संदेश भेज दिया गया है। कृपया अपना इनबॉक्स देखें।","waitingListNameLabel":"नाम","waitingListEmailLabel":"ईमेल","memberFormPrimaryBadge":"मुख्य संपर्क","captchaRequiredMessage":"आगे बढ़ने के लिए कृपया CAPTCHA सत्यापन पूरा करें","genericErrorMessage":"कुछ गलत हो गया। कृपया फिर कोशिश करें।"},"liveShoppingWidget":{"joinToCallButton":"शामिल हों","enterAdmittedUser":"प्रवेश करें","joinUserWithEmailButton":"शामिल हों","usernameInputLabel":"उपयोगकर्ता नाम","emailInputLabel":"ईमेल","usernameInputPlaceholder":"john.doe","emailInputPlaceholder":"john.doe@acme.com","loginFormTitle":"कॉल में शामिल होने के लिए अपना उपयोगकर्ता नाम और ईमेल पता दर्ज करें","waitForConnectionMessage":"कृपया आयोजक द्वारा प्रवेश की अनुमति दिए जाने तक प्रतीक्षा करें","reconnectionMessage":"कुछ गलत हो गया है। हम आपको दोबारा कनेक्ट करने की कोशिश कर रहे हैं","waitForAdmitMessage":"कृपया प्रतीक्षा करें, हम आपको कनेक्ट करने की कोशिश कर रहे हैं","connectionErrorMessage":"कृपया पेज दोबारा लोड करें","productAddedToCartMessage":"उत्पाद कार्ट में जोड़ दिया गया है","emptyUsernameWarning":"कृपया अपना उपयोगकर्ता नाम दर्ज करें","emptyEmailWarning":"कृपया अपना ईमेल पता दर्ज करें","wrongEmailFormatWarning":"कृपया एक मान्य ईमेल पता दर्ज करें","audioRequirmentsIssue":"सिस्टम VoIP का समर्थन नहीं करता, लेकिन आप फ़ोन से ऑडियो कॉल में शामिल हो सकते हैं","screenRequirmentsIssue":"स्क्रीन साझा करना इस ब्राउज़र के साथ संगत नहीं है।","videoRequirmentsIssue":"वीडियो इस ब्राउज़र के साथ संगत नहीं है।","browserRequirmentsIssue":"कृपया अपना ब्राउज़र अपडेट करें"}}');
+
+/***/ }),
+
+/***/ "./translations/widget/it.json":
+/*!*************************************!*\
+  !*** ./translations/widget/it.json ***!
+  \*************************************/
+/***/ ((module) => {
+
+module.exports = /*#__PURE__*/JSON.parse('{"customFilters":{"filter_label_dates":"Date","filter_label_locations":"Luogo","filter_label_languages":"Lingua","filter_label_categories":"Categoria","filter_label_members":"Membro","filter_label_teams":"Team","filter_all_dates":"Tutte le date","filter_all_locations":"Tutti i luoghi","filter_all_languages":"Tutte le lingue","filter_all_categories":"Tutte le categorie","filter_all_members":"Tutti i membri","filter_all_teams":"Tutti i team","filterPropertyDetailsLabel":"Dettagli","filterPropertyEmailLabel":"Email","filterPropertyPhoneLabel":"Telefono","filterPropertyOperationalHoursLabel":"Orari di apertura"},"globalWidgetsTranslations":{"priceLabel":"Prezzo","filtersLabel":"Filtri","calendarLabel":"Calendario","priceFreeLabel":"Gratuito","dayLabelPlural":"g","dayLabelSingular":"g","hourLabelPlural":"h","hourLabelSingular":"h","minuteLabelPlural":"min","minuteLabelSingular":"min","loadingLabel":"Caricamento","backLabel":"Indietro","closeLabel":"Chiudi","nextLabel":"Avanti","previousLabel":"Precedente","languageLabel":"Lingua","timezoneLabel":"Fuso orario","eventTimeLabel":"Ora dell’evento","viewModeListLabel":"Elenco","viewModeGridLabel":"Griglia"},"mainWidget":{"openDialogButton":"Prenota evento","eventsListTitle":"Elenco eventi","bundlesListTitle":"Elenco pacchetti","widgetEventsListSwitchLabel":"Eventi","widgetBundlesListSwitchLabel":"Pacchetti","bundleAddToCartButtonLabel":"Aggiungi al carrello","eventAddToCartButtonLabel":"Aggiungi al carrello","liveShoppingJoinButtonLabel":"Partecipa","liveShoppingStartCountdown":"tra","bundleEventsListTitle":"Eventi inclusi","shareEventPanelTitle":"Condividi questo evento","searchEventPlaceholder":"Cerca","itemsCounterLabel":"elementi","singleEventItemsCounterLabel":"elemento","clearFiltersLabel":"cancella","bookButtonLabel":"Prenota ora","virtualAppointmentLabel":"Appuntamento","virtualEventLabel":"Virtuale","inPersonEventLabel":"Evento","webinarLabel":"Webinar","liveShoppingLabel":"Shopping in diretta","eventDetailsButtonLabel":"Dettagli","eventDescriptionFieldLabel":"Descrizione","todaySeparatorLabel":"Oggi","tomorrowSeparatorLabel":"Domani","filtersStepLabel":"Filtri","resultStypeLabel":"Risultato","goToFiltersResultButton":"Avanti: Risultato","labelForMonthWithoutEvents":"Non ci sono eventi programmati per questo mese","nextMonthButton":"Avanti","availableQuantitySuffix":"disponibili","widgetHeaderLabel":"Eventi","hostFilterLabel":"Organizzatore","allDatesLabel":"Tutte","quickDateToday":"Oggi","quickDateTomorrow":"Domani","quickDateThisWeek":"Questa settimana","quickDateWeekend":"Fine settimana","applyFiltersLabel":"Mostra risultati","showMoreEventsLabel":"+ ### altri","summaryAvailableLabel":"sessioni di eventi disponibili","summaryWaitlistLabel":"possibilità di iscrizione alla lista d’attesa","recurringEventLabel":"Ricorrente","relatedEventsLabel":"Eventi correlati","addToCalendarLabel":"Aggiungi al calendario","copyLinkLabel":"Copia link","copiedLabel":"Copiato","loadingErrorLabel":"Si è verificato un errore. Riprova più tardi."},"onProductWidget":{"selectTimeButton":"Seleziona data e ora","selectDateAndTimeButton":"Seleziona data e ora","addToCartButton":"Aggiungi al carrello","registerInWaitingList":"Iscriviti alla lista d’attesa","eventSoldOut":"Esaurito","appointmentSoldOut":"Esaurito","remainingBookingsLabel":"Solo ### posti rimasti!","addToCartLabel":"Conferma","questionsFormTitle":"Modulo di domande","additionalMembersFormTitle":"Prenotazione multipla","memberFormDescription":"Aggiungi gli indirizzi email dei destinatari aggiuntivi","freeCheckoutNewslettersAgreement":"Fai clic qui per ricevere email promozionali e newsletter","termsOfUseAgreement":"Selezionando questa casella, accetti:","termsOfUseAnd":"e","freeCheckoutCloseRegistrationButton":"Chiudi","freeCheckoutInvalidEmailMessage":"Inserisci un indirizzo email valido","freeCheckoutMandatoryRequiermentsMessageHeader":"Compila il modulo qui sotto con il tuo indirizzo email e il tuo nome per completare l’iscrizione","freeRegistrationFormTitle":"Iscrizione","freeRegistrationFormDescription":"Compila il modulo qui sotto con il tuo indirizzo email e il tuo nome per completare l’iscrizione","fastRegistration":"Procedi al pagamento","memberFormMember":"Persona iscritta","memberFormEmail":"Email","memberFormFirstName":"Nome","memberFormLastName":"Cognome","eventQuestionsFormTitle":"Modulo di domande sull’evento","submitQuestionsForm":"Invia","mandatoryRequiermentsMessageHeader":"Questo campo è obbligatorio","mandatoryRequiermentsMessage":"Compila questo campo","invalidEmailMessage":"Inserisci un indirizzo email valido.","noAvailableSlots":"Al momento non ci sono appuntamenti disponibili","registrationCompletedMessageTitle":"Iscrizione completata!","privacyPolicyLinkText":"Informativa sulla privacy","termsOfUseLinkText":"Condizioni d’uso","registrationCompletedMessageDescription":"L’iscrizione è stata completata. Un’email di conferma è stata inviata all’indirizzo indicato. Controlla la tua casella di posta.","waitingListNameLabel":"Nome","waitingListEmailLabel":"Email","memberFormPrimaryBadge":"Contatto principale","captchaRequiredMessage":"Completa il CAPTCHA per continuare","genericErrorMessage":"Si è verificato un errore. Riprova."},"liveShoppingWidget":{"joinToCallButton":"Partecipa","enterAdmittedUser":"Entra","joinUserWithEmailButton":"Partecipa","usernameInputLabel":"Nome utente","emailInputLabel":"Email","usernameInputPlaceholder":"john.doe","emailInputPlaceholder":"john.doe@acme.com","loginFormTitle":"Inserisci il tuo nome utente e il tuo indirizzo email per partecipare alla chiamata","waitForConnectionMessage":"Attendi che l’organizzatore ti permetta di entrare","reconnectionMessage":"Si è verificato un errore. Stiamo cercando di riconnetterti","waitForAdmitMessage":"Attendi, stiamo cercando di connetterti","connectionErrorMessage":"Ricarica la pagina","productAddedToCartMessage":"Il prodotto è stato aggiunto al carrello","emptyUsernameWarning":"Inserisci il tuo nome utente","emptyEmailWarning":"Inserisci il tuo indirizzo email","wrongEmailFormatWarning":"Inserisci un indirizzo email valido","audioRequirmentsIssue":"Il sistema non supporta il VoIP, ma puoi partecipare per telefono","screenRequirmentsIssue":"La condivisione dello schermo non è compatibile con questo browser.","videoRequirmentsIssue":"Il video non è compatibile con questo browser.","browserRequirmentsIssue":"Aggiorna il browser"}}');
+
+/***/ }),
+
+/***/ "./translations/widget/ja.json":
+/*!*************************************!*\
+  !*** ./translations/widget/ja.json ***!
+  \*************************************/
+/***/ ((module) => {
+
+module.exports = /*#__PURE__*/JSON.parse('{"customFilters":{"filter_label_dates":"日付","filter_label_locations":"場所","filter_label_languages":"言語","filter_label_categories":"カテゴリー","filter_label_members":"メンバー","filter_label_teams":"チーム","filter_all_dates":"すべての日付","filter_all_locations":"すべての場所","filter_all_languages":"すべての言語","filter_all_categories":"すべてのカテゴリー","filter_all_members":"すべてのメンバー","filter_all_teams":"すべてのチーム","filterPropertyDetailsLabel":"詳細","filterPropertyEmailLabel":"メールアドレス","filterPropertyPhoneLabel":"電話番号","filterPropertyOperationalHoursLabel":"営業時間"},"globalWidgetsTranslations":{"priceLabel":"料金","filtersLabel":"絞り込み","calendarLabel":"カレンダー","priceFreeLabel":"無料","dayLabelPlural":"日","dayLabelSingular":"日","hourLabelPlural":"時間","hourLabelSingular":"時間","minuteLabelPlural":"分","minuteLabelSingular":"分","loadingLabel":"読み込み中","backLabel":"戻る","closeLabel":"閉じる","nextLabel":"次へ","previousLabel":"前へ","languageLabel":"言語","timezoneLabel":"タイムゾーン","eventTimeLabel":"イベントの時間","viewModeListLabel":"リスト","viewModeGridLabel":"グリッド"},"mainWidget":{"openDialogButton":"イベントを予約","eventsListTitle":"イベント一覧","bundlesListTitle":"セット一覧","widgetEventsListSwitchLabel":"イベント","widgetBundlesListSwitchLabel":"セット","bundleAddToCartButtonLabel":"カートに追加","eventAddToCartButtonLabel":"カートに追加","liveShoppingJoinButtonLabel":"参加","liveShoppingStartCountdown":"開始まで","bundleEventsListTitle":"含まれるイベント","shareEventPanelTitle":"このイベントを共有","searchEventPlaceholder":"検索","itemsCounterLabel":"件","singleEventItemsCounterLabel":"件","clearFiltersLabel":"クリア","bookButtonLabel":"今すぐ予約","virtualAppointmentLabel":"予約枠","virtualEventLabel":"オンライン","inPersonEventLabel":"イベント","webinarLabel":"ウェビナー","liveShoppingLabel":"ライブショッピング","eventDetailsButtonLabel":"詳細","eventDescriptionFieldLabel":"説明","todaySeparatorLabel":"今日","tomorrowSeparatorLabel":"明日","filtersStepLabel":"絞り込み","resultStypeLabel":"結果","goToFiltersResultButton":"次へ：結果","labelForMonthWithoutEvents":"今月はイベントの予定がありません","nextMonthButton":"次へ","availableQuantitySuffix":"残り","widgetHeaderLabel":"イベント","hostFilterLabel":"主催者","allDatesLabel":"すべて","quickDateToday":"今日","quickDateTomorrow":"明日","quickDateThisWeek":"今週","quickDateWeekend":"週末","applyFiltersLabel":"結果を表示","showMoreEventsLabel":"+ さらに ### 件","summaryAvailableLabel":"予約可能なイベント開催枠","summaryWaitlistLabel":"キャンセル待ちに登録可能な開催枠","recurringEventLabel":"定期開催","relatedEventsLabel":"関連イベント","addToCalendarLabel":"カレンダーに追加","copyLinkLabel":"リンクをコピー","copiedLabel":"コピーしました","loadingErrorLabel":"エラーが発生しました。しばらくしてから再度お試しください。"},"onProductWidget":{"selectTimeButton":"日時を選択","selectDateAndTimeButton":"日時を選択","addToCartButton":"カートに追加","registerInWaitingList":"キャンセル待ちに登録","eventSoldOut":"満席","appointmentSoldOut":"満席","remainingBookingsLabel":"残りわずか ### 名！","addToCartLabel":"確認","questionsFormTitle":"質問フォーム","additionalMembersFormTitle":"複数名の予約","memberFormDescription":"追加の受信者のメールアドレスを入力","freeCheckoutNewslettersAgreement":"マーケティングメールやニュースレターの受信を希望する場合は、ここをクリックしてください","termsOfUseAgreement":"このチェックボックスを選択すると、以下に同意したものとみなされます：","termsOfUseAnd":"および","freeCheckoutCloseRegistrationButton":"閉じる","freeCheckoutInvalidEmailMessage":"有効なメールアドレスを入力してください","freeCheckoutMandatoryRequiermentsMessageHeader":"登録を完了するには、下のフォームにメールアドレスとお名前を入力してください","freeRegistrationFormTitle":"登録","freeRegistrationFormDescription":"登録を完了するには、下のフォームにメールアドレスとお名前を入力してください","fastRegistration":"お会計","memberFormMember":"登録者","memberFormEmail":"メールアドレス","memberFormFirstName":"名","memberFormLastName":"姓","eventQuestionsFormTitle":"イベントの質問フォーム","submitQuestionsForm":"送信","mandatoryRequiermentsMessageHeader":"この項目は必須です","mandatoryRequiermentsMessage":"この項目を入力してください","invalidEmailMessage":"有効なメールアドレスを入力してください。","noAvailableSlots":"現在、予約可能な時間枠はありません","registrationCompletedMessageTitle":"登録が完了しました！","privacyPolicyLinkText":"プライバシーポリシー","termsOfUseLinkText":"利用規約","registrationCompletedMessageDescription":"登録が完了しました。入力されたメールアドレスに確認メールを送信しました。受信トレイをご確認ください。","waitingListNameLabel":"氏名","waitingListEmailLabel":"メールアドレス","memberFormPrimaryBadge":"代表連絡先","captchaRequiredMessage":"続行するには CAPTCHA 認証を完了してください","genericErrorMessage":"エラーが発生しました。もう一度お試しください。"},"liveShoppingWidget":{"joinToCallButton":"参加","enterAdmittedUser":"入室","joinUserWithEmailButton":"参加","usernameInputLabel":"ユーザー名","emailInputLabel":"メールアドレス","usernameInputPlaceholder":"john.doe","emailInputPlaceholder":"john.doe@acme.com","loginFormTitle":"通話に参加するには、ユーザー名とメールアドレスを入力してください","waitForConnectionMessage":"主催者が入室を許可するまでお待ちください","reconnectionMessage":"エラーが発生しました。再接続を試みています","waitForAdmitMessage":"接続を試みています。しばらくお待ちください","connectionErrorMessage":"ページを再読み込みしてください","productAddedToCartMessage":"商品をカートに追加しました","emptyUsernameWarning":"ユーザー名を入力してください","emptyEmailWarning":"メールアドレスを入力してください","wrongEmailFormatWarning":"有効なメールアドレスを入力してください","audioRequirmentsIssue":"このシステムは VoIP に対応していませんが、電話で音声に参加できます","screenRequirmentsIssue":"画面共有は現在のブラウザーに対応していません。","videoRequirmentsIssue":"ビデオは現在のブラウザーに対応していません。","browserRequirmentsIssue":"ブラウザーを更新してください"}}');
+
+/***/ }),
+
+/***/ "./translations/widget/ko.json":
+/*!*************************************!*\
+  !*** ./translations/widget/ko.json ***!
+  \*************************************/
+/***/ ((module) => {
+
+module.exports = /*#__PURE__*/JSON.parse('{"customFilters":{"filter_label_dates":"날짜","filter_label_locations":"장소","filter_label_languages":"언어","filter_label_categories":"카테고리","filter_label_members":"구성원","filter_label_teams":"팀","filter_all_dates":"모든 날짜","filter_all_locations":"모든 장소","filter_all_languages":"모든 언어","filter_all_categories":"모든 카테고리","filter_all_members":"모든 구성원","filter_all_teams":"모든 팀","filterPropertyDetailsLabel":"상세 정보","filterPropertyEmailLabel":"이메일","filterPropertyPhoneLabel":"전화번호","filterPropertyOperationalHoursLabel":"운영 시간"},"globalWidgetsTranslations":{"priceLabel":"가격","filtersLabel":"필터","calendarLabel":"캘린더","priceFreeLabel":"무료","dayLabelPlural":"일","dayLabelSingular":"일","hourLabelPlural":"시간","hourLabelSingular":"시간","minuteLabelPlural":"분","minuteLabelSingular":"분","loadingLabel":"로딩 중","backLabel":"뒤로","closeLabel":"닫기","nextLabel":"다음","previousLabel":"이전","languageLabel":"언어","timezoneLabel":"시간대","eventTimeLabel":"이벤트 시간","viewModeListLabel":"목록","viewModeGridLabel":"그리드"},"mainWidget":{"openDialogButton":"이벤트 예약","eventsListTitle":"이벤트 목록","bundlesListTitle":"패키지 목록","widgetEventsListSwitchLabel":"이벤트","widgetBundlesListSwitchLabel":"패키지","bundleAddToCartButtonLabel":"장바구니에 담기","eventAddToCartButtonLabel":"장바구니에 담기","liveShoppingJoinButtonLabel":"참여","liveShoppingStartCountdown":"시작까지","bundleEventsListTitle":"포함된 이벤트","shareEventPanelTitle":"이 이벤트 공유","searchEventPlaceholder":"검색","itemsCounterLabel":"개","singleEventItemsCounterLabel":"개","clearFiltersLabel":"초기화","bookButtonLabel":"지금 예약","virtualAppointmentLabel":"예약","virtualEventLabel":"온라인","inPersonEventLabel":"이벤트","webinarLabel":"웨비나","liveShoppingLabel":"라이브 쇼핑","eventDetailsButtonLabel":"상세 정보","eventDescriptionFieldLabel":"설명","todaySeparatorLabel":"오늘","tomorrowSeparatorLabel":"내일","filtersStepLabel":"필터","resultStypeLabel":"결과","goToFiltersResultButton":"다음: 결과","labelForMonthWithoutEvents":"이번 달에는 예정된 이벤트가 없습니다","nextMonthButton":"다음","availableQuantitySuffix":"남음","widgetHeaderLabel":"이벤트","hostFilterLabel":"주최자","allDatesLabel":"전체","quickDateToday":"오늘","quickDateTomorrow":"내일","quickDateThisWeek":"이번 주","quickDateWeekend":"주말","applyFiltersLabel":"결과 보기","showMoreEventsLabel":"+ ###개 더 보기","summaryAvailableLabel":"예약 가능한 이벤트 회차","summaryWaitlistLabel":"대기자 명단 등록이 가능한 회차","recurringEventLabel":"정기 개최","relatedEventsLabel":"관련 이벤트","addToCalendarLabel":"캘린더에 추가","copyLinkLabel":"링크 복사","copiedLabel":"복사됨","loadingErrorLabel":"오류가 발생했습니다. 나중에 다시 시도해 주세요."},"onProductWidget":{"selectTimeButton":"날짜와 시간 선택","selectDateAndTimeButton":"날짜와 시간 선택","addToCartButton":"장바구니에 담기","registerInWaitingList":"대기자 명단에 등록","eventSoldOut":"매진","appointmentSoldOut":"매진","remainingBookingsLabel":"###자리만 남았습니다!","addToCartLabel":"확인","questionsFormTitle":"질문 양식","additionalMembersFormTitle":"여러 명 예약","memberFormDescription":"추가 수신자의 이메일 주소 입력","freeCheckoutNewslettersAgreement":"마케팅 이메일과 뉴스레터를 받으려면 여기를 클릭하세요","termsOfUseAgreement":"이 확인란을 선택하면 다음 사항에 동의하게 됩니다:","termsOfUseAnd":"및","freeCheckoutCloseRegistrationButton":"닫기","freeCheckoutInvalidEmailMessage":"유효한 이메일 주소를 입력해 주세요","freeCheckoutMandatoryRequiermentsMessageHeader":"등록을 완료하려면 아래 양식에 이메일 주소와 이름을 입력해 주세요","freeRegistrationFormTitle":"등록","freeRegistrationFormDescription":"등록을 완료하려면 아래 양식에 이메일 주소와 이름을 입력해 주세요","fastRegistration":"결제","memberFormMember":"등록자","memberFormEmail":"이메일","memberFormFirstName":"이름","memberFormLastName":"성","eventQuestionsFormTitle":"이벤트 질문 양식","submitQuestionsForm":"제출","mandatoryRequiermentsMessageHeader":"필수 항목입니다","mandatoryRequiermentsMessage":"이 항목을 입력해 주세요","invalidEmailMessage":"유효한 이메일 주소를 입력해 주세요.","noAvailableSlots":"현재 예약 가능한 시간대가 없습니다","registrationCompletedMessageTitle":"등록이 완료되었습니다!","privacyPolicyLinkText":"개인정보 처리방침","termsOfUseLinkText":"이용약관","registrationCompletedMessageDescription":"등록이 완료되었습니다. 입력하신 이메일 주소로 확인 이메일을 보냈습니다. 받은편지함을 확인해 주세요.","waitingListNameLabel":"이름","waitingListEmailLabel":"이메일","memberFormPrimaryBadge":"대표 연락처","captchaRequiredMessage":"계속하려면 CAPTCHA 인증을 완료해 주세요","genericErrorMessage":"오류가 발생했습니다. 다시 시도해 주세요."},"liveShoppingWidget":{"joinToCallButton":"참여","enterAdmittedUser":"입장","joinUserWithEmailButton":"참여","usernameInputLabel":"사용자 이름","emailInputLabel":"이메일","usernameInputPlaceholder":"john.doe","emailInputPlaceholder":"john.doe@acme.com","loginFormTitle":"통화에 참여하려면 사용자 이름과 이메일 주소를 입력해 주세요","waitForConnectionMessage":"주최자가 입장을 허용할 때까지 기다려 주세요","reconnectionMessage":"오류가 발생했습니다. 다시 연결을 시도하고 있습니다","waitForAdmitMessage":"연결을 시도하고 있습니다. 잠시 기다려 주세요","connectionErrorMessage":"페이지를 새로고침해 주세요","productAddedToCartMessage":"상품이 장바구니에 추가되었습니다","emptyUsernameWarning":"사용자 이름을 입력해 주세요","emptyEmailWarning":"이메일 주소를 입력해 주세요","wrongEmailFormatWarning":"유효한 이메일 주소를 입력해 주세요","audioRequirmentsIssue":"시스템에서 VoIP를 지원하지 않지만 전화로 음성 통화에 참여할 수 있습니다","screenRequirmentsIssue":"화면 공유는 현재 브라우저와 호환되지 않습니다.","videoRequirmentsIssue":"영상은 현재 브라우저와 호환되지 않습니다.","browserRequirmentsIssue":"브라우저를 업데이트해 주세요"}}');
+
+/***/ }),
+
+/***/ "./translations/widget/nl.json":
+/*!*************************************!*\
+  !*** ./translations/widget/nl.json ***!
+  \*************************************/
+/***/ ((module) => {
+
+module.exports = /*#__PURE__*/JSON.parse('{"customFilters":{"filter_label_dates":"Datums","filter_label_locations":"Locatie","filter_label_languages":"Taal","filter_label_categories":"Categorie","filter_label_members":"Lid","filter_label_teams":"Team","filter_all_dates":"Alle datums","filter_all_locations":"Alle locaties","filter_all_languages":"Alle talen","filter_all_categories":"Alle categorieën","filter_all_members":"Alle leden","filter_all_teams":"Alle teams","filterPropertyDetailsLabel":"Details","filterPropertyEmailLabel":"E-mail","filterPropertyPhoneLabel":"Telefoon","filterPropertyOperationalHoursLabel":"Openingstijden"},"globalWidgetsTranslations":{"priceLabel":"Prijs","filtersLabel":"Filters","calendarLabel":"Kalender","priceFreeLabel":"Gratis","dayLabelPlural":"d","dayLabelSingular":"d","hourLabelPlural":"u","hourLabelSingular":"u","minuteLabelPlural":"min","minuteLabelSingular":"min","loadingLabel":"Laden","backLabel":"Terug","closeLabel":"Sluiten","nextLabel":"Volgende","previousLabel":"Vorige","languageLabel":"Taal","timezoneLabel":"Tijdzone","eventTimeLabel":"Tijd van het evenement","viewModeListLabel":"Lijst","viewModeGridLabel":"Raster"},"mainWidget":{"openDialogButton":"Evenement boeken","eventsListTitle":"Evenementenlijst","bundlesListTitle":"Bundellijst","widgetEventsListSwitchLabel":"Evenementen","widgetBundlesListSwitchLabel":"Bundels","bundleAddToCartButtonLabel":"In winkelwagen","eventAddToCartButtonLabel":"In winkelwagen","liveShoppingJoinButtonLabel":"Deelnemen","liveShoppingStartCountdown":"over","bundleEventsListTitle":"Inbegrepen evenementen","shareEventPanelTitle":"Dit evenement delen","searchEventPlaceholder":"Zoeken","itemsCounterLabel":"items","singleEventItemsCounterLabel":"item","clearFiltersLabel":"wissen","bookButtonLabel":"Nu boeken","virtualAppointmentLabel":"Afspraak","virtualEventLabel":"Virtueel","inPersonEventLabel":"Evenement","webinarLabel":"Webinar","liveShoppingLabel":"Live winkelen","eventDetailsButtonLabel":"Details","eventDescriptionFieldLabel":"Beschrijving","todaySeparatorLabel":"Vandaag","tomorrowSeparatorLabel":"Morgen","filtersStepLabel":"Filters","resultStypeLabel":"Resultaat","goToFiltersResultButton":"Volgende: Resultaat","labelForMonthWithoutEvents":"Er zijn deze maand geen evenementen gepland","nextMonthButton":"Volgende","availableQuantitySuffix":"beschikbaar","widgetHeaderLabel":"Evenementen","hostFilterLabel":"Organisator","allDatesLabel":"Alle","quickDateToday":"Vandaag","quickDateTomorrow":"Morgen","quickDateThisWeek":"Deze week","quickDateWeekend":"Weekend","applyFiltersLabel":"Resultaten tonen","showMoreEventsLabel":"+ ### meer","summaryAvailableLabel":"beschikbare evenementensessies","summaryWaitlistLabel":"mogelijkheden om op de wachtlijst te komen","recurringEventLabel":"Terugkerend","relatedEventsLabel":"Gerelateerde evenementen","addToCalendarLabel":"Toevoegen aan kalender","copyLinkLabel":"Link kopiëren","copiedLabel":"Gekopieerd","loadingErrorLabel":"Er is iets misgegaan. Probeer het later opnieuw."},"onProductWidget":{"selectTimeButton":"Datum en tijd selecteren","selectDateAndTimeButton":"Datum en tijd selecteren","addToCartButton":"In winkelwagen","registerInWaitingList":"Aanmelden voor de wachtlijst","eventSoldOut":"Volgeboekt","appointmentSoldOut":"Volgeboekt","remainingBookingsLabel":"Nog maar ### plaatsen!","addToCartLabel":"Bevestigen","questionsFormTitle":"Vragenformulier","additionalMembersFormTitle":"Meervoudige boeking","memberFormDescription":"E-mailadressen voor extra ontvangers toevoegen","freeCheckoutNewslettersAgreement":"Klik hier om marketingmails en nieuwsbrieven te ontvangen","termsOfUseAgreement":"Door dit vakje aan te vinken, ga je akkoord met:","termsOfUseAnd":"en","freeCheckoutCloseRegistrationButton":"Sluiten","freeCheckoutInvalidEmailMessage":"Voer een geldig e-mailadres in","freeCheckoutMandatoryRequiermentsMessageHeader":"Vul hieronder je e-mailadres en naam in om je inschrijving te voltooien","freeRegistrationFormTitle":"Inschrijving","freeRegistrationFormDescription":"Vul hieronder je e-mailadres en naam in om je inschrijving te voltooien","fastRegistration":"Afrekenen","memberFormMember":"Ingeschreven deelnemer","memberFormEmail":"E-mail","memberFormFirstName":"Voornaam","memberFormLastName":"Achternaam","eventQuestionsFormTitle":"Vragenformulier voor het evenement","submitQuestionsForm":"Verzenden","mandatoryRequiermentsMessageHeader":"Dit veld is verplicht","mandatoryRequiermentsMessage":"Vul dit veld in","invalidEmailMessage":"Voer een geldig e-mailadres in.","noAvailableSlots":"Er zijn momenteel geen afspraken beschikbaar","registrationCompletedMessageTitle":"Inschrijving voltooid!","privacyPolicyLinkText":"Privacybeleid","termsOfUseLinkText":"Gebruiksvoorwaarden","registrationCompletedMessageDescription":"Je bent succesvol ingeschreven. Er is een bevestigingsmail naar het opgegeven e-mailadres gestuurd. Controleer je inbox.","waitingListNameLabel":"Naam","waitingListEmailLabel":"E-mail","memberFormPrimaryBadge":"Hoofdcontactpersoon","captchaRequiredMessage":"Voltooi de CAPTCHA om door te gaan","genericErrorMessage":"Er is iets misgegaan. Probeer het opnieuw."},"liveShoppingWidget":{"joinToCallButton":"Deelnemen","enterAdmittedUser":"Binnengaan","joinUserWithEmailButton":"Deelnemen","usernameInputLabel":"Gebruikersnaam","emailInputLabel":"E-mail","usernameInputPlaceholder":"john.doe","emailInputPlaceholder":"john.doe@acme.com","loginFormTitle":"Voer je gebruikersnaam en e-mailadres in om aan het gesprek deel te nemen","waitForConnectionMessage":"Wacht totdat de organisator je binnenlaat","reconnectionMessage":"Er is iets misgegaan. We proberen je opnieuw te verbinden","waitForAdmitMessage":"Even geduld, we proberen je te verbinden","connectionErrorMessage":"Laad de pagina opnieuw","productAddedToCartMessage":"Het product is toegevoegd aan de winkelwagen","emptyUsernameWarning":"Voer je gebruikersnaam in","emptyEmailWarning":"Voer je e-mailadres in","wrongEmailFormatWarning":"Voer een geldig e-mailadres in","audioRequirmentsIssue":"Het systeem ondersteunt geen VoIP, maar je kunt telefonisch deelnemen","screenRequirmentsIssue":"Scherm delen is niet compatibel met deze browser.","videoRequirmentsIssue":"Video is niet compatibel met deze browser.","browserRequirmentsIssue":"Werk je browser bij"}}');
+
+/***/ }),
+
+/***/ "./translations/widget/no.json":
+/*!*************************************!*\
+  !*** ./translations/widget/no.json ***!
+  \*************************************/
+/***/ ((module) => {
+
+module.exports = /*#__PURE__*/JSON.parse('{"customFilters":{"filter_label_dates":"Datoer","filter_label_locations":"Sted","filter_label_languages":"Språk","filter_label_categories":"Kategori","filter_label_members":"Medlem","filter_label_teams":"Team","filter_all_dates":"Alle datoer","filter_all_locations":"Alle steder","filter_all_languages":"Alle språk","filter_all_categories":"Alle kategorier","filter_all_members":"Alle medlemmer","filter_all_teams":"Alle team","filterPropertyDetailsLabel":"Detaljer","filterPropertyEmailLabel":"E-post","filterPropertyPhoneLabel":"Telefon","filterPropertyOperationalHoursLabel":"Åpningstider"},"globalWidgetsTranslations":{"priceLabel":"Pris","filtersLabel":"Filtre","calendarLabel":"Kalender","priceFreeLabel":"Gratis","dayLabelPlural":"d","dayLabelSingular":"d","hourLabelPlural":"t","hourLabelSingular":"t","minuteLabelPlural":"min","minuteLabelSingular":"min","loadingLabel":"Laster","backLabel":"Tilbake","closeLabel":"Lukk","nextLabel":"Neste","previousLabel":"Forrige","languageLabel":"Språk","timezoneLabel":"Tidssone","eventTimeLabel":"Tidspunkt for arrangementet","viewModeListLabel":"Liste","viewModeGridLabel":"Rutenett"},"mainWidget":{"openDialogButton":"Bestill arrangement","eventsListTitle":"Arrangementsliste","bundlesListTitle":"Pakkeliste","widgetEventsListSwitchLabel":"Arrangementer","widgetBundlesListSwitchLabel":"Pakker","bundleAddToCartButtonLabel":"Legg i handlekurven","eventAddToCartButtonLabel":"Legg i handlekurven","liveShoppingJoinButtonLabel":"Bli med","liveShoppingStartCountdown":"om","bundleEventsListTitle":"Inkluderte arrangementer","shareEventPanelTitle":"Del dette arrangementet","searchEventPlaceholder":"Søk","itemsCounterLabel":"elementer","singleEventItemsCounterLabel":"element","clearFiltersLabel":"tøm","bookButtonLabel":"Bestill nå","virtualAppointmentLabel":"Avtale","virtualEventLabel":"Virtuelt","inPersonEventLabel":"Arrangement","webinarLabel":"Webinar","liveShoppingLabel":"Direktesendt shopping","eventDetailsButtonLabel":"Detaljer","eventDescriptionFieldLabel":"Beskrivelse","todaySeparatorLabel":"I dag","tomorrowSeparatorLabel":"I morgen","filtersStepLabel":"Filtre","resultStypeLabel":"Resultat","goToFiltersResultButton":"Neste: Resultat","labelForMonthWithoutEvents":"Det er ingen arrangementer planlagt denne måneden","nextMonthButton":"Neste","availableQuantitySuffix":"ledige","widgetHeaderLabel":"Arrangementer","hostFilterLabel":"Arrangør","allDatesLabel":"Alle","quickDateToday":"I dag","quickDateTomorrow":"I morgen","quickDateThisWeek":"Denne uken","quickDateWeekend":"Helg","applyFiltersLabel":"Vis resultater","showMoreEventsLabel":"+ ### flere","summaryAvailableLabel":"tilgjengelige arrangementstider","summaryWaitlistLabel":"muligheter for venteliste","recurringEventLabel":"Gjentakende","relatedEventsLabel":"Relaterte arrangementer","addToCalendarLabel":"Legg til i kalenderen","copyLinkLabel":"Kopier lenke","copiedLabel":"Kopiert","loadingErrorLabel":"Noe gikk galt. Prøv igjen senere."},"onProductWidget":{"selectTimeButton":"Velg dato og klokkeslett","selectDateAndTimeButton":"Velg dato og klokkeslett","addToCartButton":"Legg i handlekurven","registerInWaitingList":"Meld deg på ventelisten","eventSoldOut":"Utsolgt","appointmentSoldOut":"Utsolgt","remainingBookingsLabel":"Bare ### plasser igjen!","addToCartLabel":"Bekreft","questionsFormTitle":"Spørreskjema","additionalMembersFormTitle":"Bestilling for flere","memberFormDescription":"Legg til e-postadresser for flere mottakere","freeCheckoutNewslettersAgreement":"Klikk her for å motta markedsføringsmeldinger og nyhetsbrev","termsOfUseAgreement":"Ved å merke av i denne boksen godtar du:","termsOfUseAnd":"og","freeCheckoutCloseRegistrationButton":"Lukk","freeCheckoutInvalidEmailMessage":"Oppgi en gyldig e-postadresse","freeCheckoutMandatoryRequiermentsMessageHeader":"Fyll ut skjemaet nedenfor med e-postadressen og navnet ditt for å fullføre påmeldingen","freeRegistrationFormTitle":"Påmelding","freeRegistrationFormDescription":"Fyll ut skjemaet nedenfor med e-postadressen og navnet ditt for å fullføre påmeldingen","fastRegistration":"Gå til kassen","memberFormMember":"Påmeldt deltaker","memberFormEmail":"E-post","memberFormFirstName":"Fornavn","memberFormLastName":"Etternavn","eventQuestionsFormTitle":"Spørreskjema for arrangementet","submitQuestionsForm":"Send inn","mandatoryRequiermentsMessageHeader":"Dette feltet er obligatorisk","mandatoryRequiermentsMessage":"Fyll ut dette feltet","invalidEmailMessage":"Oppgi en gyldig e-postadresse.","noAvailableSlots":"Ingen avtaletider er tilgjengelige for øyeblikket","registrationCompletedMessageTitle":"Påmeldingen er fullført!","privacyPolicyLinkText":"Personvernerklæring","termsOfUseLinkText":"Bruksvilkår","registrationCompletedMessageDescription":"Du er påmeldt. En bekreftelse er sendt til den oppgitte e-postadressen. Sjekk innboksen din.","waitingListNameLabel":"Navn","waitingListEmailLabel":"E-post","memberFormPrimaryBadge":"Hovedkontakt","captchaRequiredMessage":"Fullfør CAPTCHA-en for å fortsette","genericErrorMessage":"Noe gikk galt. Prøv igjen."},"liveShoppingWidget":{"joinToCallButton":"Bli med","enterAdmittedUser":"Gå inn","joinUserWithEmailButton":"Bli med","usernameInputLabel":"Brukernavn","emailInputLabel":"E-post","usernameInputPlaceholder":"john.doe","emailInputPlaceholder":"john.doe@acme.com","loginFormTitle":"Oppgi brukernavn og e-postadresse for å bli med i samtalen","waitForConnectionMessage":"Vent til arrangøren slipper deg inn","reconnectionMessage":"Noe gikk galt. Vi prøver å koble deg til igjen","waitForAdmitMessage":"Vent litt, vi prøver å koble deg til","connectionErrorMessage":"Last inn siden på nytt","productAddedToCartMessage":"Produktet er lagt i handlekurven","emptyUsernameWarning":"Oppgi brukernavnet ditt","emptyEmailWarning":"Oppgi e-postadressen din","wrongEmailFormatWarning":"Oppgi en gyldig e-postadresse","audioRequirmentsIssue":"Systemet støtter ikke VoIP, men du kan delta via telefon","screenRequirmentsIssue":"Skjermdeling er ikke kompatibel med denne nettleseren.","videoRequirmentsIssue":"Video er ikke kompatibel med denne nettleseren.","browserRequirmentsIssue":"Oppdater nettleseren din"}}');
+
+/***/ }),
+
+/***/ "./translations/widget/sv.json":
+/*!*************************************!*\
+  !*** ./translations/widget/sv.json ***!
+  \*************************************/
+/***/ ((module) => {
+
+module.exports = /*#__PURE__*/JSON.parse('{"customFilters":{"filter_label_dates":"Datum","filter_label_locations":"Plats","filter_label_languages":"Språk","filter_label_categories":"Kategori","filter_label_members":"Medlem","filter_label_teams":"Team","filter_all_dates":"Alla datum","filter_all_locations":"Alla platser","filter_all_languages":"Alla språk","filter_all_categories":"Alla kategorier","filter_all_members":"Alla medlemmar","filter_all_teams":"Alla team","filterPropertyDetailsLabel":"Detaljer","filterPropertyEmailLabel":"E-post","filterPropertyPhoneLabel":"Telefon","filterPropertyOperationalHoursLabel":"Öppettider"},"globalWidgetsTranslations":{"priceLabel":"Pris","filtersLabel":"Filter","calendarLabel":"Kalender","priceFreeLabel":"Gratis","dayLabelPlural":"d","dayLabelSingular":"d","hourLabelPlural":"tim","hourLabelSingular":"tim","minuteLabelPlural":"min","minuteLabelSingular":"min","loadingLabel":"Laddar","backLabel":"Tillbaka","closeLabel":"Stäng","nextLabel":"Nästa","previousLabel":"Föregående","languageLabel":"Språk","timezoneLabel":"Tidszon","eventTimeLabel":"Evenemangstid","viewModeListLabel":"Lista","viewModeGridLabel":"Rutnät"},"mainWidget":{"openDialogButton":"Boka evenemang","eventsListTitle":"Evenemangslista","bundlesListTitle":"Paketlista","widgetEventsListSwitchLabel":"Evenemang","widgetBundlesListSwitchLabel":"Paket","bundleAddToCartButtonLabel":"Lägg i varukorgen","eventAddToCartButtonLabel":"Lägg i varukorgen","liveShoppingJoinButtonLabel":"Delta","liveShoppingStartCountdown":"om","bundleEventsListTitle":"Inkluderade evenemang","shareEventPanelTitle":"Dela det här evenemanget","searchEventPlaceholder":"Sök","itemsCounterLabel":"poster","singleEventItemsCounterLabel":"post","clearFiltersLabel":"rensa","bookButtonLabel":"Boka nu","virtualAppointmentLabel":"Tidsbokning","virtualEventLabel":"Virtuellt","inPersonEventLabel":"Evenemang","webinarLabel":"Webbinarium","liveShoppingLabel":"Liveshopping","eventDetailsButtonLabel":"Detaljer","eventDescriptionFieldLabel":"Beskrivning","todaySeparatorLabel":"I dag","tomorrowSeparatorLabel":"I morgon","filtersStepLabel":"Filter","resultStypeLabel":"Resultat","goToFiltersResultButton":"Nästa: Resultat","labelForMonthWithoutEvents":"Det finns inga evenemang inplanerade den här månaden","nextMonthButton":"Nästa","availableQuantitySuffix":"kvar","widgetHeaderLabel":"Evenemang","hostFilterLabel":"Arrangör","allDatesLabel":"Alla","quickDateToday":"I dag","quickDateTomorrow":"I morgon","quickDateThisWeek":"Den här veckan","quickDateWeekend":"Helg","applyFiltersLabel":"Visa resultat","showMoreEventsLabel":"+ ### till","summaryAvailableLabel":"tillgängliga evenemangstillfällen","summaryWaitlistLabel":"möjligheter till väntelista","recurringEventLabel":"Återkommande","relatedEventsLabel":"Relaterade evenemang","addToCalendarLabel":"Lägg till i kalendern","copyLinkLabel":"Kopiera länk","copiedLabel":"Kopierad","loadingErrorLabel":"Något gick fel. Försök igen senare."},"onProductWidget":{"selectTimeButton":"Välj datum och tid","selectDateAndTimeButton":"Välj datum och tid","addToCartButton":"Lägg i varukorgen","registerInWaitingList":"Anmäl dig till väntelistan","eventSoldOut":"Fullbokat","appointmentSoldOut":"Fullbokat","remainingBookingsLabel":"Bara ### platser kvar!","addToCartLabel":"Bekräfta","questionsFormTitle":"Frågeformulär","additionalMembersFormTitle":"Bokning för flera","memberFormDescription":"Lägg till e-postadresser för ytterligare mottagare","freeCheckoutNewslettersAgreement":"Klicka här för att få marknadsföringsmejl och nyhetsbrev","termsOfUseAgreement":"Genom att markera den här rutan godkänner du:","termsOfUseAnd":"och","freeCheckoutCloseRegistrationButton":"Stäng","freeCheckoutInvalidEmailMessage":"Ange en giltig e-postadress","freeCheckoutMandatoryRequiermentsMessageHeader":"Fyll i formuläret nedan med din e-postadress och ditt namn för att slutföra anmälan","freeRegistrationFormTitle":"Anmälan","freeRegistrationFormDescription":"Fyll i formuläret nedan med din e-postadress och ditt namn för att slutföra anmälan","fastRegistration":"Till kassan","memberFormMember":"Anmäld deltagare","memberFormEmail":"E-post","memberFormFirstName":"Förnamn","memberFormLastName":"Efternamn","eventQuestionsFormTitle":"Frågeformulär för evenemanget","submitQuestionsForm":"Skicka","mandatoryRequiermentsMessageHeader":"Det här fältet är obligatoriskt","mandatoryRequiermentsMessage":"Fyll i det här fältet","invalidEmailMessage":"Ange en giltig e-postadress.","noAvailableSlots":"Det finns inga bokningsbara tider för tillfället","registrationCompletedMessageTitle":"Anmälan är klar!","privacyPolicyLinkText":"Integritetspolicy","termsOfUseLinkText":"Användarvillkor","registrationCompletedMessageDescription":"Du har anmält dig. Ett bekräftelsemejl har skickats till den angivna e-postadressen. Kontrollera din inkorg.","waitingListNameLabel":"Namn","waitingListEmailLabel":"E-post","memberFormPrimaryBadge":"Huvudkontakt","captchaRequiredMessage":"Slutför CAPTCHA-verifieringen för att fortsätta","genericErrorMessage":"Något gick fel. Försök igen."},"liveShoppingWidget":{"joinToCallButton":"Delta","enterAdmittedUser":"Gå in","joinUserWithEmailButton":"Delta","usernameInputLabel":"Användarnamn","emailInputLabel":"E-post","usernameInputPlaceholder":"john.doe","emailInputPlaceholder":"john.doe@acme.com","loginFormTitle":"Ange ditt användarnamn och din e-postadress för att delta i samtalet","waitForConnectionMessage":"Vänta tills arrangören släpper in dig","reconnectionMessage":"Något gick fel. Vi försöker ansluta dig igen","waitForAdmitMessage":"Vänta, vi försöker ansluta dig","connectionErrorMessage":"Ladda om sidan","productAddedToCartMessage":"Produkten har lagts i varukorgen","emptyUsernameWarning":"Ange ditt användarnamn","emptyEmailWarning":"Ange din e-postadress","wrongEmailFormatWarning":"Ange en giltig e-postadress","audioRequirmentsIssue":"Systemet stöder inte VoIP, men du kan delta via telefon","screenRequirmentsIssue":"Skärmdelning är inte kompatibel med den här webbläsaren.","videoRequirmentsIssue":"Video är inte kompatibelt med den här webbläsaren.","browserRequirmentsIssue":"Uppdatera din webbläsare"}}');
+
+/***/ }),
+
+/***/ "./translations/widget/zh-cn.json":
+/*!****************************************!*\
+  !*** ./translations/widget/zh-cn.json ***!
+  \****************************************/
+/***/ ((module) => {
+
+module.exports = /*#__PURE__*/JSON.parse('{"customFilters":{"filter_label_dates":"日期","filter_label_locations":"地点","filter_label_languages":"语言","filter_label_categories":"类别","filter_label_members":"成员","filter_label_teams":"团队","filter_all_dates":"所有日期","filter_all_locations":"所有地点","filter_all_languages":"所有语言","filter_all_categories":"所有类别","filter_all_members":"所有成员","filter_all_teams":"所有团队","filterPropertyDetailsLabel":"详情","filterPropertyEmailLabel":"电子邮箱","filterPropertyPhoneLabel":"电话","filterPropertyOperationalHoursLabel":"营业时间"},"globalWidgetsTranslations":{"priceLabel":"价格","filtersLabel":"筛选","calendarLabel":"日历","priceFreeLabel":"免费","dayLabelPlural":"天","dayLabelSingular":"天","hourLabelPlural":"小时","hourLabelSingular":"小时","minuteLabelPlural":"分钟","minuteLabelSingular":"分钟","loadingLabel":"加载中","backLabel":"返回","closeLabel":"关闭","nextLabel":"下一步","previousLabel":"上一步","languageLabel":"语言","timezoneLabel":"时区","eventTimeLabel":"活动时间","viewModeListLabel":"列表","viewModeGridLabel":"网格"},"mainWidget":{"openDialogButton":"预订活动","eventsListTitle":"活动列表","bundlesListTitle":"套餐列表","widgetEventsListSwitchLabel":"活动","widgetBundlesListSwitchLabel":"套餐","bundleAddToCartButtonLabel":"加入购物车","eventAddToCartButtonLabel":"加入购物车","liveShoppingJoinButtonLabel":"加入","liveShoppingStartCountdown":"距离开始还有","bundleEventsListTitle":"包含的活动","shareEventPanelTitle":"分享此活动","searchEventPlaceholder":"搜索","itemsCounterLabel":"项","singleEventItemsCounterLabel":"项","clearFiltersLabel":"清除","bookButtonLabel":"立即预订","virtualAppointmentLabel":"预约","virtualEventLabel":"线上","inPersonEventLabel":"活动","webinarLabel":"网络研讨会","liveShoppingLabel":"直播购物","eventDetailsButtonLabel":"详情","eventDescriptionFieldLabel":"描述","todaySeparatorLabel":"今天","tomorrowSeparatorLabel":"明天","filtersStepLabel":"筛选","resultStypeLabel":"结果","goToFiltersResultButton":"下一步：结果","labelForMonthWithoutEvents":"本月暂无安排的活动","nextMonthButton":"下一步","availableQuantitySuffix":"剩余","widgetHeaderLabel":"活动","hostFilterLabel":"主办方","allDatesLabel":"全部","quickDateToday":"今天","quickDateTomorrow":"明天","quickDateThisWeek":"本周","quickDateWeekend":"周末","applyFiltersLabel":"显示结果","showMoreEventsLabel":"+ 还有 ### 项","summaryAvailableLabel":"可预订的活动场次","summaryWaitlistLabel":"可加入候补名单的场次","recurringEventLabel":"定期活动","relatedEventsLabel":"相关活动","addToCalendarLabel":"添加到日历","copyLinkLabel":"复制链接","copiedLabel":"已复制","loadingErrorLabel":"发生错误，请稍后重试。"},"onProductWidget":{"selectTimeButton":"选择日期和时间","selectDateAndTimeButton":"选择日期和时间","addToCartButton":"加入购物车","registerInWaitingList":"加入候补名单","eventSoldOut":"已满","appointmentSoldOut":"已满","remainingBookingsLabel":"仅剩 ### 个名额！","addToCartLabel":"确认","questionsFormTitle":"问题表单","additionalMembersFormTitle":"多人预订","memberFormDescription":"添加其他收件人的电子邮箱地址","freeCheckoutNewslettersAgreement":"点击此处接收营销邮件和新闻通讯","termsOfUseAgreement":"勾选此框即表示您同意以下条款：","termsOfUseAnd":"和","freeCheckoutCloseRegistrationButton":"关闭","freeCheckoutInvalidEmailMessage":"请输入有效的电子邮箱地址","freeCheckoutMandatoryRequiermentsMessageHeader":"请在下方表单中填写您的电子邮箱和姓名，以完成报名","freeRegistrationFormTitle":"报名","freeRegistrationFormDescription":"请在下方表单中填写您的电子邮箱和姓名，以完成报名","fastRegistration":"结账","memberFormMember":"报名者","memberFormEmail":"电子邮箱","memberFormFirstName":"名","memberFormLastName":"姓","eventQuestionsFormTitle":"活动问题表单","submitQuestionsForm":"提交","mandatoryRequiermentsMessageHeader":"此项为必填项","mandatoryRequiermentsMessage":"请填写此项","invalidEmailMessage":"请输入有效的电子邮箱地址。","noAvailableSlots":"目前没有可预约的时段","registrationCompletedMessageTitle":"报名完成！","privacyPolicyLinkText":"隐私政策","termsOfUseLinkText":"使用条款","registrationCompletedMessageDescription":"您已成功报名。确认邮件已发送至您提供的电子邮箱，请查收。","waitingListNameLabel":"姓名","waitingListEmailLabel":"电子邮箱","memberFormPrimaryBadge":"主要联系人","captchaRequiredMessage":"请完成验证码验证以继续","genericErrorMessage":"发生错误，请重试。"},"liveShoppingWidget":{"joinToCallButton":"加入","enterAdmittedUser":"进入","joinUserWithEmailButton":"加入","usernameInputLabel":"用户名","emailInputLabel":"电子邮箱","usernameInputPlaceholder":"john.doe","emailInputPlaceholder":"john.doe@acme.com","loginFormTitle":"请输入用户名和电子邮箱以加入通话","waitForConnectionMessage":"请等待主办方允许您进入","reconnectionMessage":"发生错误，我们正在尝试重新连接","waitForAdmitMessage":"请稍候，我们正在尝试为您建立连接","connectionErrorMessage":"请刷新页面","productAddedToCartMessage":"商品已加入购物车","emptyUsernameWarning":"请输入用户名","emptyEmailWarning":"请输入电子邮箱","wrongEmailFormatWarning":"请输入有效的电子邮箱地址","audioRequirmentsIssue":"系统不支持网络语音通话，但您可以通过电话接入音频","screenRequirmentsIssue":"屏幕共享与当前浏览器不兼容。","videoRequirmentsIssue":"视频与当前浏览器不兼容。","browserRequirmentsIssue":"请更新浏览器"}}');
+
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_SettingsPage_jsx.js.map?ver=ec278b6a61506bc5a9de
+//# sourceMappingURL=src_Components_Pages_SettingsPage_jsx.js.map?ver=40eb1498539295197b9f
