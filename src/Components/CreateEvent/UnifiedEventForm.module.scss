@@ -57,6 +57,95 @@
     gap: 10px;
     flex-wrap: wrap;
   }
+  // The occurrence list hangs off its button, so the actions row keeps its
+  // own height whether the menu is open or not.
+  .occurrences {
+    position: relative;
+  }
+  // The button primitive puts its icon first; a menu chevron belongs after the
+  // label.
+  .occurrencesToggle {
+    flex-direction: row-reverse;
+  }
+  .occurrenceMenu {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    z-index: 20;
+    min-width: 240px;
+    max-height: 320px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 6px;
+    background: #fff;
+    border: 1px solid #edf1f7;
+    border-radius: 12px;
+    box-shadow: 9px 9px 22px #dce2ec;
+    font-size: 13px;
+    color: #39415a;
+    > span {
+      padding: 8px 10px;
+      color: #6b7390;
+    }
+  }
+  .occurrenceItem {
+    appearance: none;
+    border: 0;
+    background: none;
+    font: inherit;
+    color: inherit;
+    text-align: left;
+    padding: 8px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    &:hover,
+    &:focus-visible {
+      background: #f2f5fb;
+    }
+  }
+  .currentOccurrence {
+    font-weight: 700;
+    color: #151b2b;
+    background: #eef2fb;
+    cursor: default;
+  }
+  .confirmOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: rgba(21, 27, 43, 0.45);
+  }
+  .confirmDialog {
+    width: min(420px, 100%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 9px 9px 22px #dce2ec;
+    strong {
+      font-size: 16px;
+      color: #151b2b;
+    }
+    p {
+      margin: 0;
+      font-size: 13px;
+      color: #39415a;
+    }
+  }
+  .confirmActions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
   .divider {
     height: 3px;
     flex-shrink: 0;
@@ -323,6 +412,11 @@
   .recurrence {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+  }
+  .recurrenceType {
+    display: flex;
+    flex-direction: column;
     gap: 10px;
   }
   .recurringControls {

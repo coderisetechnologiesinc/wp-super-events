@@ -10,6 +10,7 @@ import InputFieldControl from "./Components/Controls/InputFieldControl";
 import InlineStack from "./Components/Containers/InlineStack";
 import CheckboxControl from "./Components/Controls/CheckboxControl";
 import Spinner from "./Components/Menu/Spinner";
+import { toNumber } from "./utilities/numbers";
 import { PlusIcon, MinusIcon } from "@heroicons/react/16/solid";
 import SelectControl from "./Components/Controls/SelectControl";
 import { loadStripe } from "@stripe/stripe-js";
@@ -68,7 +69,7 @@ const PaymentForm = () => {
           if (
             isTicketsAvailable() &&
             registrant.ticket.is_donation &&
-            registrant.donation === 0
+            !(toNumber(registrant.donation) > 0)
           ) {
             flag = false;
           }
@@ -84,7 +85,7 @@ const PaymentForm = () => {
       if (
         isTicketsAvailable() &&
         additionalRegistrants[0].ticket.is_donation &&
-        additionalRegistrants[0].donation === 0
+        !(toNumber(additionalRegistrants[0].donation) > 0)
       ) {
         return false;
       }
@@ -145,15 +146,11 @@ const PaymentForm = () => {
 
             if (registrant.ticket && registrant.ticket.is_donation) {
               if (!sameForAll)
-                registrantData += `,${
-                  registrant.donation ? registrant.donation : 0
-                }`;
+                registrantData += `,${toNumber(registrant.donation)}`;
               else
-                registrantData += `,${
+                registrantData += `,${toNumber(
                   additionalRegistrants[0].donation
-                    ? additionalRegistrants[0].donation
-                    : 0
-                }`;
+                )}`;
             }
 
             return registrantData;
@@ -194,7 +191,7 @@ const PaymentForm = () => {
         params.append("last_name", firstRegistrant.lastName);
         params.append("ticket_id", firstRegistrant.ticket.id);
         if (firstRegistrant.ticket.is_donation) {
-          params.append("donation_amount", firstRegistrant.donation || 0);
+          params.append("donation_amount", toNumber(firstRegistrant.donation));
         }
       }
 
@@ -267,7 +264,7 @@ const PaymentForm = () => {
   const handleRegistrantDonation = (index, val) => {
     let registrants = [...additionalRegistrants];
 
-    registrants[index].donation = Number.parseFloat(val);
+    registrants[index].donation = val;
     setAdditionalRegistrants(registrants);
     // if (validateRegistrants()) {
     //   setErrorMessage(false);
@@ -1016,7 +1013,7 @@ const PaymentForm = () => {
               registrantData += `,${registrant.ticket.id}`;
             }
             if (registrant.ticket && registrant.ticket.is_donation) {
-              registrantData += `,${registrant.donation}`;
+              registrantData += `,${toNumber(registrant.donation)}`;
             }
             return registrantData;
           }
@@ -1041,7 +1038,7 @@ const PaymentForm = () => {
         params.append("last_name", firstRegistrant.lastName);
         params.append("ticket_id", firstRegistrant.ticket.id);
         if (firstRegistrant.donation) {
-          params.append("donation_amount", firstRegistrant.donation);
+          params.append("donation_amount", toNumber(firstRegistrant.donation));
         }
       }
 
@@ -1834,8 +1831,8 @@ const PaymentForm = () => {
         ticketsCount += 1;
         total += reg.ticket.price;
         if (reg.ticket.is_donation) {
-          if (!sameForAll) total += reg.donation || 0;
-          else total += additionalRegistrants[0].donation || 0;
+          if (!sameForAll) total += toNumber(reg.donation);
+          else total += toNumber(additionalRegistrants[0].donation);
         }
       }
     });

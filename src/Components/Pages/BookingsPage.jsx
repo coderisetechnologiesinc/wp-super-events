@@ -68,6 +68,14 @@ const CONFIRMABLE = {
 // COMPONENT
 // =====================================================================
 
+// An empty price bound means no bound: the fields hold what was typed, so this
+// is where the filter turns them into numbers.
+const priceBound = (value) => {
+  if (value === "" || value == null) return null;
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
+};
+
 const BookingsPage = () => {
   const { settings, stripeCurrency } = useServvStore();
   const [timeFormat, setTimeFormat] = useState("hh:mm a");
@@ -290,7 +298,7 @@ const BookingsPage = () => {
           dates: { startDate: fromDatetime, endDate: toDatetime },
           selectedInterval,
           searchString,
-          price,
+          price: { from: priceBound(price.from), to: priceBound(price.to) },
           selectedProvider,
         },
       });
@@ -338,13 +346,11 @@ const BookingsPage = () => {
 
   const handleChangeTimeInterval = (newVal) => setSelectedTimeInterval(newVal);
 
-  const handlePriceChange = (newVal, attribute) => {
-    const newPrice = { ...price };
-    const newPriceValue = newVal.replace(".", ",");
-    if (attribute === "from") newPrice.from = Number.parseFloat(newPriceValue);
-    else newPrice.to = Number.parseFloat(newPriceValue);
-    setPrice({ ...newPrice });
-  };
+  // The bounds hold what was typed — parsing on each keystroke turned a cleared
+  // field into NaN, which the input then rendered back as "NaN". priceBound
+  // converts at the point of use, where an empty bound simply means no bound.
+  const handlePriceChange = (newVal, attribute) =>
+    setPrice((prev) => ({ ...prev, [attribute]: newVal }));
 
   const handleSelectProvider = (provider) =>
     setSelectedProvider((prev) => ({ ...prev, [provider]: !prev[provider] }));
@@ -361,8 +367,8 @@ const BookingsPage = () => {
   // What the Filters drawer itself holds — the search and the period sit in
   // the toolbar, so they are not part of its badge.
   const drawerFilterCount =
-    (Number.isFinite(price.from) ? 1 : 0) +
-    (Number.isFinite(price.to) ? 1 : 0) +
+    (priceBound(price.from) == null ? 0 : 1) +
+    (priceBound(price.to) == null ? 0 : 1) +
     (selectedProvider.offline && selectedProvider.zoom ? 0 : 1);
 
   const isFiltersApplied =

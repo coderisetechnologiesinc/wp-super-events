@@ -1,4 +1,5 @@
 import moment from "moment-timezone";
+import { toInteger, toNumber } from "../../utilities/numbers";
 
 export const uses24HourClock = (settings) =>
   [true, 1, "1", "true"].includes(settings?.settings?.time_format_24_hours);
@@ -129,13 +130,13 @@ export const loadEvent = (data, location) => {
 
 export const ticketPayload = (ticket, timezone) => ({
   name: ticket.title,
-  quantity: Number(ticket.quantity),
+  quantity: toInteger(ticket.quantity),
   price:
     ticket.type === "free"
       ? 0
       : ticket.type === "donation"
       ? null
-      : Number(ticket.price),
+      : toNumber(ticket.price),
   is_donation: ticket.type === "donation",
   ...Object.fromEntries(
     ["start_datetime", "end_datetime"].map((key) => [
@@ -180,7 +181,9 @@ const recurrencePayload = (recurrence, isNew) => {
       payload.monthly_day = Number(recurrence.monthly_day) || 1;
     }
   }
-  if (recurrence.end_times) payload.end_times = Number(recurrence.end_times);
+  // A cleared occurrence count is not an end condition, so the date is used.
+  if (Number(recurrence.end_times) > 0)
+    payload.end_times = toInteger(recurrence.end_times);
   else if (recurrence.end_date_time)
     payload.end_date_time = recurrence.end_date_time;
   return payload;
@@ -224,10 +227,15 @@ export const eventPayload = (event, isNew, freePlan) => {
       google_calendar: Boolean(event.notifications?.google_calendar),
       disable_emails: Boolean(event.notifications?.disable_emails),
     },
+    // A cleared number input holds "" until it is saved, and the API only
+    // takes numbers here — an empty field means 0.
     product: {
       quantity:
-        event.product?.quantity == null ? null : Number(event.product.quantity),
-      price: event.product?.price == null ? null : Number(event.product.price),
+        event.product?.quantity == null
+          ? null
+          : toInteger(event.product.quantity),
+      price:
+        event.product?.price == null ? null : toNumber(event.product.price),
     },
   };
   if (event.image_content?.startsWith("data:image/"))
@@ -237,8 +245,8 @@ export const eventPayload = (event, isNew, freePlan) => {
       quantity:
         event.tickets
           .filter((t) => t.action !== "remove")
-          .reduce((sum, t) => sum + Number(t.quantity), 0) ||
-        Number(event.product.quantity) ||
+          .reduce((sum, t) => sum + toInteger(t.quantity), 0) ||
+        toInteger(event.product.quantity) ||
         1,
     };
   if (isNew && !freePlan)

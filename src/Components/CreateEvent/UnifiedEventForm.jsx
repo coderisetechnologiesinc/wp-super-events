@@ -21,12 +21,34 @@ import NewEndDateControl from "./NewEndDateControl";
 import RegistrantsStep from "./RegistrantsStep";
 import useUnifiedEventForm from "./useUnifiedEventForm";
 import { readDefaults, uses24HourClock } from "./eventFormData";
+import {
+  RECURRENCE_TYPES,
+  recurrenceForType,
+} from "../../utilities/recurrence";
 import { COVER_IMAGE_ACCEPT, readCoverImage } from "./coverImage";
 import CreateFilterModal from "../Pages/Filters/CreateFilterModal";
 import { useFilterLimits } from "../Pages/Filters/useFilterLimits";
 import styles from "./UnifiedEventForm.module.scss";
 import { recurringAllowed as canUseRecurring, multiTicketsAllowed } from "../../utilities/planLimits";
 
+// The same chevron the breadcrumbs draw, turned a quarter to point at the
+// menu it opens.
+const MenuChevron = ({ open }) => (
+  <svg
+    width="12"
+    height="12"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.4"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+    style={{ transform: `rotate(${open ? -90 : 90}deg)` }}
+  >
+    <path d="m9 6 6 6-6 6" />
+  </svg>
+);
 const Section = ({ step, title, children }) => (
   <section className={styles.card}>
     <header className={styles.cardHeader}>
@@ -100,6 +122,9 @@ export default function UnifiedEventForm() {
     occurrence,
     registrantsView,
     recoverDraft,
+    dirty,
+    occurrences,
+    loadOccurrences,
   } = useUnifiedEventForm();
   const filters = useServvStore((s) => s.filtersList);
   const stripe = useServvStore((s) => s.stripeConnected);
@@ -120,12 +145,25 @@ export default function UnifiedEventForm() {
   const [imageName, setImageName] = useState("");
   const [imageBusy, setImageBusy] = useState(false);
   const [creatingFilter, setCreatingFilter] = useState(null);
+  const [occurrencesOpen, setOccurrencesOpen] = useState(false);
+  // Holds the navigation the confirm dialog will run if the edits are
+  // abandoned, so one dialog serves every way out of the form.
+  const [pendingLeave, setPendingLeave] = useState(null);
+  const occurrencesRef = useRef(null);
   const imageInputId = useId();
+  const confirmId = useId();
   const meeting = event.meeting;
   // image_content holds a freshly picked data URL, sent to the API as base64;
   // featured_image_url is the cover already attached to the WordPress post.
   const cover = event.image_content || event.featured_image_url || "";
   const freePlan = Number(settings.current_plan?.id) === 1;
+  // A disabled option in a native select carries no explanation of its own, so
+  // the reason paid tickets are unavailable goes into the label.
+  const paidTicketNote = freePlan
+    ? " (plan upgrade required)"
+    : !stripe
+    ? " (connect Stripe)"
+    : "";
   const recurringAllowed = canUseRecurring(settings.current_plan, event.location);
   const defaults = readDefaults(settings);
   // A filter kind the plan does not expose, or a store that has used up its
@@ -137,6 +175,33 @@ export default function UnifiedEventForm() {
   const activeTickets = event.tickets.filter((t) => t.action !== "remove");
   const activeTicket = activeTickets.find((t) => t.id === editingTicket);
   const patchMeeting = (update) => patch({ meeting: update });
+  // The API numbers weekdays 1 Sunday through 7 Saturday, and a weekly
+  // recurrence has to start from a day: the event's own is the sensible one.
+  const startWeekday = () => {
+    const start = moment(meeting.startTime);
+    return start.isValid() ? start.day() + 1 : 1;
+  };
+  const provider = event.location === "zoom" ? "zoom" : "offline";
+  const recurring = Boolean(meeting.recurrence?.type);
+  const use24Hours = uses24HourClock(settings);
+  // Occurrence times arrive in UTC and are read in the event's own zone, the
+  // way every other time on this form is.
+  const occurrenceLabel = (start) =>
+    moment
+      .utc(start)
+      .tz(meeting.timezone || "UTC")
+      .format(use24Hours ? "MMM D, YYYY · HH:mm" : "MMM D, YYYY · h:mm A");
+  // Edits live only in this form until it is saved, so every way out of it
+  // asks first.
+  const leave = (go) => (dirty ? setPendingLeave(() => go) : go());
+  const openOccurrence = (occurrenceId) =>
+    leave(() =>
+      navigate(
+        `/events/${provider}/${id}?occurrence_id=${encodeURIComponent(
+          occurrenceId,
+        )}`,
+      ),
+    );
   const patchTicket = (id, update) =>
     patch({
       tickets: event.tickets.map((t) =>
@@ -145,6 +210,22 @@ export default function UnifiedEventForm() {
           : t,
       ),
     });
+  useEffect(() => {
+    if (!occurrencesOpen) return;
+    const close = (e) => {
+      if (e.type === "keydown" && e.key !== "Escape") return;
+      if (e.type === "mousedown" && occurrencesRef.current?.contains(e.target))
+        return;
+      setOccurrencesOpen(false);
+    };
+    document.addEventListener("mousedown", close);
+    document.addEventListener("keydown", close);
+    return () => {
+      document.removeEventListener("mousedown", close);
+      document.removeEventListener("keydown", close);
+    };
+  }, [occurrencesOpen]);
+
   const addTicket = () => {
     const ticket = {
       id: uuid(),
@@ -243,9 +324,64 @@ export default function UnifiedEventForm() {
               <PageActionButton
                 text="Cancel"
                 type="ghost"
-                onAction={() => navigate("/events")}
+                onAction={() => leave(() => navigate("/events"))}
                 disabled={saving}
               />
+              {!isNew && recurring && (
+                <div className={styles.occurrences} ref={occurrencesRef}>
+                  <PageActionButton
+                    text="Occurrences"
+                    icon={<MenuChevron open={occurrencesOpen} />}
+                    className={styles.occurrencesToggle}
+                    type="secondary"
+                    onAction={() => {
+                      if (!occurrencesOpen) loadOccurrences();
+                      setOccurrencesOpen((open) => !open);
+                    }}
+                    disabled={saving}
+                  />
+                  {occurrencesOpen && (
+                    <div className={styles.occurrenceMenu} role="menu">
+                      {occurrences === null && <span>Loading…</span>}
+                      {occurrences?.length === 0 && (
+                        <span>No occurrences yet.</span>
+                      )}
+                      {occurrences?.map((item) => (
+                        <button
+                          key={item.id}
+                          type="button"
+                          role="menuitem"
+                          className={`${styles.occurrenceItem} ${
+                            String(occurrence) === item.id
+                              ? styles.currentOccurrence
+                              : ""
+                          }`}
+                          onClick={() => {
+                            setOccurrencesOpen(false);
+                            if (String(occurrence) !== item.id)
+                              openOccurrence(item.id);
+                          }}
+                        >
+                          {occurrenceLabel(item.start)}
+                        </button>
+                      ))}
+                      {occurrence && (
+                        <button
+                          type="button"
+                          role="menuitem"
+                          className={styles.occurrenceItem}
+                          onClick={() => {
+                            setOccurrencesOpen(false);
+                            leave(() => navigate(`/events/${provider}/${id}`));
+                          }}
+                        >
+                          ← Back to the whole series
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
               {!registrantsView && isNew && (
                 <PageActionButton
                   text="Save draft"
@@ -700,40 +836,36 @@ export default function UnifiedEventForm() {
                           <div className={styles.recurrence}>
                             {[
                               ["one", "One-time", "Single occurrence"],
-                              ["weekly", "Weekly", "Repeats every week"],
-                              ["custom", "Custom", "Daily, weekly or monthly"],
+                              [
+                                "recurring",
+                                "Recurring",
+                                "Repeats daily, weekly or monthly",
+                              ],
                             ].map(([value, label, note]) => (
                               <Choice
                                 key={value}
                                 selected={
                                   value === "one"
                                     ? !meeting.recurrence
-                                    : value === "weekly"
-                                    ? meeting.recurrence?.type === 2
-                                    : Boolean(meeting.recurrence) &&
-                                      meeting.recurrence.type !== 2
+                                    : Boolean(meeting.recurrence)
                                 }
                                 label={label}
                                 note={note}
                                 disabled={value !== "one" && !recurringAllowed}
                                 onClick={() =>
                                   patchMeeting({
+                                    // Daily, every interval, one occurrence —
+                                    // the shape the API expects to start from.
+                                    // The pattern itself is chosen below, and
+                                    // an event that already recurs keeps it.
                                     recurrence:
                                       value === "one"
                                         ? null
-                                        : {
-                                            type: value === "weekly" ? 2 : 1,
+                                        : meeting.recurrence || {
+                                            type: 1,
                                             repeat_interval: 1,
                                             end_times: 1,
-                                            ...(value === "weekly"
-                                              ? {
-                                                  weekly_days: [
-                                                    moment(
-                                                      meeting.startTime,
-                                                    ).day() + 1,
-                                                  ],
-                                                }
-                                              : {}),
+                                            weekly_days: [startWeekday()],
                                           },
                                   })
                                 }
@@ -748,8 +880,39 @@ export default function UnifiedEventForm() {
                           )}
                           {meeting.recurrence && (
                             <div className={styles.recurringControls}>
+                              <div className={styles.recurrenceType}>
+                                <span className={styles.fieldTitle}>
+                                  Recurrence type
+                                </span>
+                                <div className={styles.recurrence}>
+                                  {RECURRENCE_TYPES.map(
+                                    ([type, label, note]) => (
+                                      <Choice
+                                        key={type}
+                                        selected={
+                                          Number(meeting.recurrence.type) ===
+                                          type
+                                        }
+                                        label={label}
+                                        note={note}
+                                        onClick={() =>
+                                          patchMeeting({
+                                            recurrence: recurrenceForType(
+                                              meeting.recurrence,
+                                              type,
+                                              startWeekday(),
+                                            ),
+                                          })
+                                        }
+                                      />
+                                    ),
+                                  )}
+                                </div>
+                              </div>
                               <NewRecurringControl
                                 recurrence={meeting.recurrence}
+                                defaultWeeklyDay={startWeekday()}
+                                showTypeSelector={false}
                                 onChange={(recurrence) =>
                                   patchMeeting({ recurrence })
                                 }
@@ -796,7 +959,12 @@ export default function UnifiedEventForm() {
                             }
                             onChange={(e) =>
                               patch({
-                                product: { quantity: Number(e.target.value) },
+                                product: {
+                                  quantity:
+                                    e.target.value === ""
+                                      ? ""
+                                      : Number(e.target.value),
+                                },
                               })
                             }
                           />
@@ -814,7 +982,12 @@ export default function UnifiedEventForm() {
                             value={event.product.price ?? 0}
                             onChange={(e) =>
                               patch({
-                                product: { price: Number(e.target.value) },
+                                product: {
+                                  price:
+                                    e.target.value === ""
+                                      ? ""
+                                      : Number(e.target.value),
+                                },
                               })
                             }
                           />
@@ -825,7 +998,7 @@ export default function UnifiedEventForm() {
                           <div>
                             <strong>{ticket.title}</strong>
                             <small>
-                              Capacity {ticket.quantity}
+                              Capacity {ticket.quantity || "—"}
                               {ticket.start_datetime || ticket.end_datetime
                                 ? " · Scheduled sales"
                                 : " · Open sales"}
@@ -884,13 +1057,13 @@ export default function UnifiedEventForm() {
                                   value="paid"
                                   disabled={freePlan || !stripe}
                                 >
-                                  Paid
+                                  {`Paid${paidTicketNote}`}
                                 </option>
                                 <option
                                   value="donation"
                                   disabled={freePlan || !stripe}
                                 >
-                                  Donation
+                                  {`Donation${paidTicketNote}`}
                                 </option>
                               </select>
                             </Field>
@@ -900,10 +1073,13 @@ export default function UnifiedEventForm() {
                                 min="1"
                                 step="1"
                                 required
-                                value={activeTicket.quantity}
+                                value={activeTicket.quantity ?? ""}
                                 onChange={(e) =>
                                   patchTicket(activeTicket.id, {
-                                    quantity: Number(e.target.value),
+                                    quantity:
+                                      e.target.value === ""
+                                        ? ""
+                                        : Number(e.target.value),
                                   })
                                 }
                               />
@@ -997,7 +1173,8 @@ export default function UnifiedEventForm() {
                           />
                         </div>
                       )}
-                      {(multiTicketsAllowed(settings.current_plan) || !activeTickets.length) && (
+                      {(multiTicketsAllowed(settings.current_plan) ||
+                        !activeTickets.length) && (
                         <button
                           className={styles.addTicket}
                           type="button"
@@ -1100,6 +1277,37 @@ export default function UnifiedEventForm() {
               if (key && created?.id) selectFilterValue(key, created.id);
             }}
           />
+        )}
+        {pendingLeave && (
+          <div
+            className={styles.confirmOverlay}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={confirmId}
+          >
+            <div className={styles.confirmDialog}>
+              <strong id={confirmId}>Leave without saving?</strong>
+              <p>
+                This event has changes that were never saved. Leaving now
+                discards them.
+              </p>
+              <div className={styles.confirmActions}>
+                <PageActionButton
+                  text="Stay on this page"
+                  type="secondary"
+                  onAction={() => setPendingLeave(null)}
+                />
+                <PageActionButton
+                  text="Discard changes"
+                  onAction={() => {
+                    const go = pendingLeave;
+                    setPendingLeave(null);
+                    go();
+                  }}
+                />
+              </div>
+            </div>
+          </div>
         )}
       </PageContent>
     </PageWrapper>

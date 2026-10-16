@@ -2033,6 +2033,13 @@ const CONFIRMABLE = {
 // COMPONENT
 // =====================================================================
 
+// An empty price bound means no bound: the fields hold what was typed, so this
+// is where the filter turns them into numbers.
+const priceBound = value => {
+  if (value === "" || value == null) return null;
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
+};
 const BookingsPage = () => {
   var _bookings$bookings, _price$from, _price$to, _bookings$page_number, _bookings$page_count, _bookings$total_recor;
   const {
@@ -2257,7 +2264,10 @@ const BookingsPage = () => {
           },
           selectedInterval,
           searchString,
-          price,
+          price: {
+            from: priceBound(price.from),
+            to: priceBound(price.to)
+          },
           selectedProvider
         }
       });
@@ -2302,16 +2312,14 @@ const BookingsPage = () => {
     fetchBookings();
   }, [searchString]);
   const handleChangeTimeInterval = newVal => setSelectedTimeInterval(newVal);
-  const handlePriceChange = (newVal, attribute) => {
-    const newPrice = {
-      ...price
-    };
-    const newPriceValue = newVal.replace(".", ",");
-    if (attribute === "from") newPrice.from = Number.parseFloat(newPriceValue);else newPrice.to = Number.parseFloat(newPriceValue);
-    setPrice({
-      ...newPrice
-    });
-  };
+
+  // The bounds hold what was typed — parsing on each keystroke turned a cleared
+  // field into NaN, which the input then rendered back as "NaN". priceBound
+  // converts at the point of use, where an empty bound simply means no bound.
+  const handlePriceChange = (newVal, attribute) => setPrice(prev => ({
+    ...prev,
+    [attribute]: newVal
+  }));
   const handleSelectProvider = provider => setSelectedProvider(prev => ({
     ...prev,
     [provider]: !prev[provider]
@@ -2336,7 +2344,7 @@ const BookingsPage = () => {
 
   // What the Filters drawer itself holds — the search and the period sit in
   // the toolbar, so they are not part of its badge.
-  const drawerFilterCount = (Number.isFinite(price.from) ? 1 : 0) + (Number.isFinite(price.to) ? 1 : 0) + (selectedProvider.offline && selectedProvider.zoom ? 0 : 1);
+  const drawerFilterCount = (priceBound(price.from) == null ? 0 : 1) + (priceBound(price.to) == null ? 0 : 1) + (selectedProvider.offline && selectedProvider.zoom ? 0 : 1);
   const isFiltersApplied = Boolean(searchString) || Boolean(dates.startDate) || drawerFilterCount > 0;
   const performBulkAction = async (actionType, ids = selectedOrder) => {
     if (!ids || ids.length === 0) return;
@@ -4092,4 +4100,4 @@ const ForwardRef = /*#__PURE__*/ react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(X
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_BookingsPage_jsx.js.map?ver=b0c701ad1364c7cf39fe
+//# sourceMappingURL=src_Components_Pages_BookingsPage_jsx.js.map?ver=10f523c90efeb248538d

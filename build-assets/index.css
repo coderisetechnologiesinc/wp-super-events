@@ -3870,6 +3870,10 @@ button.pagination-control:disabled {
   display: inline-block;
 }
 
+.inline {
+  display: inline;
+}
+
 .flex {
   display: flex;
 }

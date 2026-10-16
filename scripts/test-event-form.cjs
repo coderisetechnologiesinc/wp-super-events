@@ -135,6 +135,26 @@ test("ticket sales convert local time to UTC across daylight saving boundaries",
   );
 });
 
+test('cleared number fields are saved as 0, never as "" or NaN', () => {
+  // Number inputs keep the empty string while the field is being cleared, so
+  // the payload is where it has to become a number again.
+  const emptied = ticketPayload(
+    { title: "Standard", quantity: "", type: "paid", price: "" },
+    "Europe/Kyiv",
+  );
+  assert.equal(emptied.quantity, 0);
+  assert.equal(emptied.price, 0);
+  const event = initialEvent({});
+  event.product = { quantity: "", price: "" };
+  const payload = eventPayload(event, false, false);
+  assert.deepEqual(payload.product, { quantity: 0, price: 0 });
+  event.product = { quantity: null, price: null };
+  assert.deepEqual(eventPayload(event, false, false).product, {
+    quantity: null,
+    price: null,
+  });
+});
+
 test("create and edit payloads use the backend's respective meeting contracts", () => {
   const event = initialEvent({});
   event.meeting.topic = " Workshop ";
@@ -296,6 +316,39 @@ test("recurrence keeps one variant and one end condition", () => {
     monthly_day: 15,
     end_date_time: "2026-07-31T00:00:00Z",
   });
+  // "Last Friday" is monthly_week -1 and must reach the API unchanged.
+  event.meeting.recurrence = {
+    type: 3,
+    repeat_interval: 1,
+    monthly_week: -1,
+    monthly_week_day: 6,
+    end_times: 3,
+  };
+  assert.deepEqual(eventPayload(event, true, false).meeting.recurrence, {
+    type: 3,
+    repeat_interval: 1,
+    monthly_week: -1,
+    monthly_week_day: 6,
+    end_times: 3,
+  });
+  // The occurrence count is typed, so it can be empty mid-edit: that is not
+  // an end condition.
+  event.meeting.recurrence = {
+    type: 1,
+    repeat_interval: 1,
+    end_times: "",
+    end_date_time: "2026-07-31T00:00:00Z",
+  };
+  assert.deepEqual(eventPayload(event, true, false).meeting.recurrence, {
+    type: 1,
+    repeat_interval: 1,
+    end_date_time: "2026-07-31T00:00:00Z",
+  });
+  event.meeting.recurrence = { type: 1, repeat_interval: 1, end_times: "12" };
+  assert.equal(
+    eventPayload(event, true, false).meeting.recurrence.end_times,
+    12,
+  );
 });
 
 test("hosts are sent as ids, and omitted when the event has none", () => {
