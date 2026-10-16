@@ -38,8 +38,15 @@ export default function useUnifiedEventForm() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [recoverDraft, setRecoverDraft] = useState(false);
+  // null until the dropdown asks for them: a recurring event can have dozens,
+  // and the event endpoint answers with an empty list on an occurrence anyway.
+  const [occurrences, setOccurrences] = useState(null);
   const initialized = useRef(false);
   const saveLock = useRef(false);
+  // What the form held when it was last loaded or saved. Anything else means
+  // there are edits to lose.
+  const baseline = useRef(null);
+  const saved = useRef(false);
   const draftKey = `servv:event-draft:${window.servvData?.nonce}:${
     id || "new"
   }:${occurrence || ""}`;
@@ -93,6 +100,8 @@ export default function useUnifiedEventForm() {
         next.image_content = "";
         if (active) {
           setEvent(next);
+          baseline.current = JSON.stringify(next);
+          saved.current = false;
           initialized.current = true;
         }
       })
@@ -118,10 +127,56 @@ export default function useUnifiedEventForm() {
     } catch {
       /* storage unavailable */
     }
-    setEvent(draft || initialEvent(settings));
+    const next = draft || initialEvent(settings);
+    setEvent(next);
+    baseline.current = JSON.stringify(next);
+    saved.current = false;
     setRecoverDraft(Boolean(draft));
     initialized.current = true;
   }, [settings, id, draftKey]);
+
+  const dirty =
+    !saved.current &&
+    baseline.current !== null &&
+    JSON.stringify(event) !== baseline.current;
+
+  // Covers a reload or a closed tab; navigation inside the hash router is
+  // guarded by the form itself, which can ask in its own words.
+  useEffect(() => {
+    if (!dirty) return;
+    const warn = (e) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", warn);
+    return () => window.removeEventListener("beforeunload", warn);
+  }, [dirty]);
+
+  // The series page carries its occurrences inline, an occurrence page does
+  // not, so both read them from the endpoint that always answers.
+  const loadOccurrences = async () => {
+    if (!id || occurrences) return;
+    try {
+      const response = await axios.get(
+        `/wp-json/servv-plugin/v1/event/${id}/occurrences`,
+        {
+          params: { page_size: 50, page: 1 },
+          headers: { "X-WP-Nonce": window.servvData.nonce },
+        },
+      );
+      setOccurrences(
+        (response.data?.meetings || [])
+          .map((m) => ({
+            id: String(m.occurrence_id ?? ""),
+            start: m.start_time,
+          }))
+          .filter((o) => o.id && o.start),
+      );
+    } catch {
+      setOccurrences([]);
+      toast.error("Unable to load the occurrences of this event.");
+    }
+  };
 
   const saveDraft = () => {
     try {
@@ -151,6 +206,28 @@ export default function useUnifiedEventForm() {
     }
     if (hasRecurrence && !recurringAllowed(plan, event.location)) {
       toast.error("Your plan does not include recurring events of this type.");
+      return;
+    }
+    // A weekly pattern is defined by the days it falls on, and the API has
+    // nothing to schedule without them.
+    const recurrence = event.meeting.recurrence;
+    const weeklyDays = Array.isArray(recurrence?.weekly_days)
+      ? recurrence.weekly_days
+      : String(recurrence?.weekly_days ?? "")
+          .split(",")
+          .filter(Boolean);
+    if (Number(recurrence?.type) === 2 && !weeklyDays.length) {
+      toast.error("Select at least one day for a weekly recurrence.");
+      return;
+    }
+    // The series ends either after a number of occurrences or on a date, and
+    // the occurrence count can be cleared while it is being retyped.
+    if (
+      hasRecurrence &&
+      !(Number(recurrence.end_times) > 0) &&
+      !recurrence.end_date_time
+    ) {
+      toast.error("Set when the recurrence ends.");
       return;
     }
     const start = moment.tz(event.meeting.startTime, event.meeting.timezone);
@@ -296,6 +373,7 @@ export default function useUnifiedEventForm() {
         id ? "Event updated successfully." : "Event published successfully.",
       );
       if (imageError) toast.warning(`Cover image was not saved: ${imageError}`);
+      saved.current = true;
       navigate("/events");
     } catch (failure) {
       toast.error(
@@ -322,5 +400,8 @@ export default function useUnifiedEventForm() {
     occurrence,
     registrantsView,
     recoverDraft,
+    dirty,
+    occurrences,
+    loadOccurrences,
   };
 }

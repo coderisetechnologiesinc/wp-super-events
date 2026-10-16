@@ -5,9 +5,17 @@ import BlockStack from "../Containers/BlockStack";
 import CheckboxItem from "./CheckboxItem";
 import RadioGroup from "./RadioGroup";
 import NewButtonGroup from "../Controls/NewButtonGroup";
+import { recurrenceForType } from "../../utilities/recurrence";
 
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-const NewRecurringControl = ({ recurrence, onChange }) => {
+const NewRecurringControl = ({
+  recurrence,
+  onChange,
+  defaultWeeklyDay = 1,
+  // The unified form offers the type as cards of its own, so the control then
+  // renders only the options of the chosen pattern.
+  showTypeSelector = true,
+}) => {
   const {
     type,
     repeat_interval = 1,
@@ -27,37 +35,8 @@ const NewRecurringControl = ({ recurrence, onChange }) => {
      Recurrence type
   --------------------------- */
 
-  const handleRecurrenceTypeChange = (val) => {
-    const base = recurrence ?? {
-      type: val,
-      repeat_interval: 1,
-    };
-
-    const next = { ...base, type: val };
-
-    if (val === 1) {
-      delete next.weekly_days;
-      delete next.monthly_day;
-      delete next.monthly_week;
-      delete next.monthly_week_day;
-    }
-
-    if (val === 2) {
-      delete next.monthly_day;
-      delete next.monthly_week;
-      delete next.monthly_week_day;
-    }
-
-    if (val === 3) {
-      delete next.weekly_days;
-      if (!next.monthly_day && !next.monthly_week_day) {
-        next.monthly_week = Number(monthly_week) || 1;
-        next.monthly_week_day = Number(monthly_week_day) || 1;
-      }
-    }
-
-    onChange(next);
-  };
+  const handleRecurrenceTypeChange = (val) =>
+    onChange(recurrenceForType(recurrence, val, defaultWeeklyDay));
 
   const RECURRENCE_LABELS = {
     1: "Daily",
@@ -104,9 +83,15 @@ const NewRecurringControl = ({ recurrence, onChange }) => {
     label: `${i + 1}`,
   }));
 
-  const monthlyWeekOptions = ["First", "Second", "Third", "Fourth", "Last"].map(
-    (v, i) => ({ value: i + 1, label: v }),
-  );
+  // "Last" is -1, not a fifth week: the API reads 5 as the fifth occurrence and
+  // skips every month that has only four of that weekday.
+  const monthlyWeekOptions = [
+    { value: 1, label: "First" },
+    { value: 2, label: "Second" },
+    { value: 3, label: "Third" },
+    { value: 4, label: "Fourth" },
+    { value: -1, label: "Last" },
+  ];
 
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
     (d, i) => ({ value: i + 1, label: d }),
@@ -130,18 +115,20 @@ const NewRecurringControl = ({ recurrence, onChange }) => {
 
   return (
     <div className="mt-8 w-full flex flex-col gap-[24px]">
-      <div>
-        <div className="step__content_block">
-          <span className="step__content_title">Recurrence type</span>
-          <NewButtonGroup
-            buttons={["Daily", "Weekly", "Monthly"]}
-            active={RECURRENCE_LABELS[type] ?? null}
-            onChange={(label) => {
-              handleRecurrenceTypeChange(LABEL_TO_TYPE[label]);
-            }}
-          />
+      {showTypeSelector && (
+        <div>
+          <div className="step__content_block">
+            <span className="step__content_title">Recurrence type</span>
+            <NewButtonGroup
+              buttons={["Daily", "Weekly", "Monthly"]}
+              active={RECURRENCE_LABELS[type] ?? null}
+              onChange={(label) => {
+                handleRecurrenceTypeChange(LABEL_TO_TYPE[label]);
+              }}
+            />
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Daily */}
       {type === 1 && (

@@ -26,6 +26,7 @@ import {
   prepareWidgetTranslations,
 } from "../../utilities/translations";
 import { getLanguagesList } from "../../utilities/languages";
+import { coerceNumbers, toInteger, toNumber } from "../../utilities/numbers";
 import { useServvStore } from "../../store/useServvStore";
 import CheckboxItem from "../Controls/CheckboxItem";
 import NewInputFieldControl from "../Controls/NewInputFieldControl";
@@ -332,10 +333,24 @@ const SettingsPage = () => {
   const saveSettings = async (nextSettings = settings, message = "Settings saved successfully.") => {
     if (!nextSettings?.settings) return false;
     const savedSettings = {
-      ...nextSettings,
+      ...coerceNumbers(nextSettings, {
+        first_reminder_hours: toInteger,
+        second_reminder_hours: toInteger,
+        members_reminder_hours: toInteger,
+      }),
       settings: {
         ...nextSettings.settings,
-        widget_style_settings: prepareWidgetTranslations(nextSettings.settings.widget_style_settings),
+        admin_dashboard: coerceNumbers(nextSettings.settings.admin_dashboard, {
+          default_price: toNumber,
+          default_quantity: toInteger,
+        }),
+        widget_style_settings: prepareWidgetTranslations(
+          coerceNumbers(nextSettings.settings.widget_style_settings, {
+            ew_card_description_display_words_limit: toInteger,
+            ew_list_item_description_display_words_limit: toInteger,
+            ew_events_list_page_size_default: toInteger,
+          }),
+        ),
       },
     };
     setLoading(true);
@@ -543,7 +558,7 @@ const SettingsPage = () => {
 
   const handleDefaultQuantityChange = (newVal) => {
     let currentSettings = { ...settings };
-    if (newVal <= settings.free_registrants_limit)
+    if (newVal === "" || Number(newVal) <= settings.free_registrants_limit)
       currentSettings.settings.admin_dashboard.default_quantity = newVal;
     setSettings(currentSettings);
   };
@@ -610,13 +625,13 @@ const SettingsPage = () => {
 
   const handleFirstReminderHoursChange = (newVal) => {
     let currentSettings = { ...settings };
-    currentSettings.first_reminder_hours = Number.parseInt(newVal);
+    currentSettings.first_reminder_hours = newVal;
     setSettings(currentSettings);
   };
 
   const handleSecondReminderHoursChange = (newVal) => {
     let currentSettings = { ...settings };
-    currentSettings.second_reminder_hours = Number.parseInt(newVal);
+    currentSettings.second_reminder_hours = newVal;
     setSettings(currentSettings);
   };
 
@@ -726,10 +741,11 @@ const SettingsPage = () => {
         ].label
       : "12 items";
 
+  // Number inputs are left as typed — including the empty string while the
+  // field is being cleared — and coerced in saveSettings.
   const handleDescriptionLengthChange = (view, length) => {
     let currentSettings = { ...settings };
-    currentSettings.settings.widget_style_settings[view] =
-      Number.parseInt(length);
+    currentSettings.settings.widget_style_settings[view] = length;
     setSettings(currentSettings);
   };
 

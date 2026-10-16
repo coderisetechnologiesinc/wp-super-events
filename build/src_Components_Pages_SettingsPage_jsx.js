@@ -2355,7 +2355,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-4WY6JWTD.mjs");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-4WY6JWTD.mjs");
 /* harmony import */ var _utilities_adminApi__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utilities/adminApi */ "./src/utilities/adminApi.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! moment */ "moment");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_2__);
@@ -2364,11 +2364,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash_startcase__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash_startcase__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var lodash_capitalize__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash.capitalize */ "./node_modules/lodash.capitalize/index.js");
 /* harmony import */ var lodash_capitalize__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(lodash_capitalize__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/Cog6ToothIcon.js");
-/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/DocumentTextIcon.js");
-/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/BellIcon.js");
-/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/ShoppingCartIcon.js");
-/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/LanguageIcon.js");
+/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/Cog6ToothIcon.js");
+/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/DocumentTextIcon.js");
+/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/BellIcon.js");
+/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/ShoppingCartIcon.js");
+/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/LanguageIcon.js");
 /* harmony import */ var _Menu_BreadCrumbs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Menu/BreadCrumbs */ "./src/Components/Menu/BreadCrumbs.jsx");
 /* harmony import */ var _PageWrapper__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./PageWrapper */ "./src/Components/Pages/PageWrapper.jsx");
 /* harmony import */ var _Containers_PageContent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Containers/PageContent */ "./src/Components/Containers/PageContent.jsx");
@@ -2377,20 +2377,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utilities_timezones__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../utilities/timezones */ "./src/utilities/timezones.js");
 /* harmony import */ var _utilities_translations__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../utilities/translations */ "./src/utilities/translations.js");
 /* harmony import */ var _utilities_languages__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../utilities/languages */ "./src/utilities/languages.js");
-/* harmony import */ var _store_useServvStore__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../../store/useServvStore */ "./src/store/useServvStore.js");
-/* harmony import */ var _Controls_CheckboxItem__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../Controls/CheckboxItem */ "./src/Components/Controls/CheckboxItem.jsx");
-/* harmony import */ var _Controls_NewInputFieldControl__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../Controls/NewInputFieldControl */ "./src/Components/Controls/NewInputFieldControl.jsx");
-/* harmony import */ var _Containers_BlockStack__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../Containers/BlockStack */ "./src/Components/Containers/BlockStack.jsx");
-/* harmony import */ var _Settings_SettingsSection__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./Settings/SettingsSection */ "./src/Components/Pages/Settings/SettingsSection.jsx");
-/* harmony import */ var _Settings_GeneralSettings__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./Settings/GeneralSettings */ "./src/Components/Pages/Settings/GeneralSettings.jsx");
-/* harmony import */ var _Settings_RemindersSettings__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./Settings/RemindersSettings */ "./src/Components/Pages/Settings/RemindersSettings.jsx");
-/* harmony import */ var _Settings_CheckoutSettings__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./Settings/CheckoutSettings */ "./src/Components/Pages/Settings/CheckoutSettings.jsx");
-/* harmony import */ var _Settings_TranslationsSection__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./Settings/TranslationsSection */ "./src/Components/Pages/Settings/TranslationsSection.jsx");
-/* harmony import */ var _Settings_WorkflowSettings__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./Settings/WorkflowSettings */ "./src/Components/Pages/Settings/WorkflowSettings.jsx");
-/* harmony import */ var _SpinnerLoader__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./SpinnerLoader */ "./src/Components/Pages/SpinnerLoader.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__);
+/* harmony import */ var _utilities_numbers__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../../utilities/numbers */ "./src/utilities/numbers.js");
+/* harmony import */ var _store_useServvStore__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../../store/useServvStore */ "./src/store/useServvStore.js");
+/* harmony import */ var _Controls_CheckboxItem__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../Controls/CheckboxItem */ "./src/Components/Controls/CheckboxItem.jsx");
+/* harmony import */ var _Controls_NewInputFieldControl__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../Controls/NewInputFieldControl */ "./src/Components/Controls/NewInputFieldControl.jsx");
+/* harmony import */ var _Containers_BlockStack__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../Containers/BlockStack */ "./src/Components/Containers/BlockStack.jsx");
+/* harmony import */ var _Settings_SettingsSection__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./Settings/SettingsSection */ "./src/Components/Pages/Settings/SettingsSection.jsx");
+/* harmony import */ var _Settings_GeneralSettings__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./Settings/GeneralSettings */ "./src/Components/Pages/Settings/GeneralSettings.jsx");
+/* harmony import */ var _Settings_RemindersSettings__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./Settings/RemindersSettings */ "./src/Components/Pages/Settings/RemindersSettings.jsx");
+/* harmony import */ var _Settings_CheckoutSettings__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./Settings/CheckoutSettings */ "./src/Components/Pages/Settings/CheckoutSettings.jsx");
+/* harmony import */ var _Settings_TranslationsSection__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./Settings/TranslationsSection */ "./src/Components/Pages/Settings/TranslationsSection.jsx");
+/* harmony import */ var _Settings_WorkflowSettings__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./Settings/WorkflowSettings */ "./src/Components/Pages/Settings/WorkflowSettings.jsx");
+/* harmony import */ var _SpinnerLoader__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./SpinnerLoader */ "./src/Components/Pages/SpinnerLoader.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__);
 // SettingsPage.jsx - Refactored with card layout
+
 
 
 
@@ -2422,7 +2424,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const SettingsPage = () => {
-  const navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_26__.useNavigate)();
+  const navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_27__.useNavigate)();
   const [settings, setSettings] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   const [loading, setLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [zoomAccount, setZoomAccount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
@@ -2433,8 +2435,8 @@ const SettingsPage = () => {
   const [isN8NSettingsUpdated, setIsN8NSettingsUpdated] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [langForEdit, setLangForEdit] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("English");
   const [activeSection, setActiveSection] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
-  const stripeConnected = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_14__.useServvStore)(s => s.stripeConnected);
-  const fetchSettings = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_14__.useServvStore)(s => s.fetchSettings);
+  const stripeConnected = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_15__.useServvStore)(s => s.stripeConnected);
+  const fetchSettings = (0,_store_useServvStore__WEBPACK_IMPORTED_MODULE_15__.useServvStore)(s => s.fetchSettings);
   const timezones = Object.keys(_utilities_timezones__WEBPACK_IMPORTED_MODULE_11__.timezonesList).map(zone => ({
     id: zone,
     name: _utilities_timezones__WEBPACK_IMPORTED_MODULE_11__.timezonesList[zone]
@@ -2668,10 +2670,22 @@ const SettingsPage = () => {
   const saveSettings = async (nextSettings = settings, message = "Settings saved successfully.") => {
     if (!nextSettings?.settings) return false;
     const savedSettings = {
-      ...nextSettings,
+      ...(0,_utilities_numbers__WEBPACK_IMPORTED_MODULE_14__.coerceNumbers)(nextSettings, {
+        first_reminder_hours: _utilities_numbers__WEBPACK_IMPORTED_MODULE_14__.toInteger,
+        second_reminder_hours: _utilities_numbers__WEBPACK_IMPORTED_MODULE_14__.toInteger,
+        members_reminder_hours: _utilities_numbers__WEBPACK_IMPORTED_MODULE_14__.toInteger
+      }),
       settings: {
         ...nextSettings.settings,
-        widget_style_settings: (0,_utilities_translations__WEBPACK_IMPORTED_MODULE_12__.prepareWidgetTranslations)(nextSettings.settings.widget_style_settings)
+        admin_dashboard: (0,_utilities_numbers__WEBPACK_IMPORTED_MODULE_14__.coerceNumbers)(nextSettings.settings.admin_dashboard, {
+          default_price: _utilities_numbers__WEBPACK_IMPORTED_MODULE_14__.toNumber,
+          default_quantity: _utilities_numbers__WEBPACK_IMPORTED_MODULE_14__.toInteger
+        }),
+        widget_style_settings: (0,_utilities_translations__WEBPACK_IMPORTED_MODULE_12__.prepareWidgetTranslations)((0,_utilities_numbers__WEBPACK_IMPORTED_MODULE_14__.coerceNumbers)(nextSettings.settings.widget_style_settings, {
+          ew_card_description_display_words_limit: _utilities_numbers__WEBPACK_IMPORTED_MODULE_14__.toInteger,
+          ew_list_item_description_display_words_limit: _utilities_numbers__WEBPACK_IMPORTED_MODULE_14__.toInteger,
+          ew_events_list_page_size_default: _utilities_numbers__WEBPACK_IMPORTED_MODULE_14__.toInteger
+        }))
       }
     };
     setLoading(true);
@@ -2862,7 +2876,7 @@ const SettingsPage = () => {
     let currentSettings = {
       ...settings
     };
-    if (newVal <= settings.free_registrants_limit) currentSettings.settings.admin_dashboard.default_quantity = newVal;
+    if (newVal === "" || Number(newVal) <= settings.free_registrants_limit) currentSettings.settings.admin_dashboard.default_quantity = newVal;
     setSettings(currentSettings);
   };
   const formatDuration = duration => {
@@ -2922,14 +2936,14 @@ const SettingsPage = () => {
     let currentSettings = {
       ...settings
     };
-    currentSettings.first_reminder_hours = Number.parseInt(newVal);
+    currentSettings.first_reminder_hours = newVal;
     setSettings(currentSettings);
   };
   const handleSecondReminderHoursChange = newVal => {
     let currentSettings = {
       ...settings
     };
-    currentSettings.second_reminder_hours = Number.parseInt(newVal);
+    currentSettings.second_reminder_hours = newVal;
     setSettings(currentSettings);
   };
   const handleDefaultTypeChange = newVal => {
@@ -3005,11 +3019,14 @@ const SettingsPage = () => {
   };
   const selectedView = settings?.settings?.widget_style_settings?.ew_events_list_view ? viewModeOptions[viewModeOptions.map(opt => opt.value).indexOf(settings.settings.widget_style_settings.ew_events_list_view)].label : "List";
   const selectedPageSize = settings?.settings?.widget_style_settings?.ew_events_list_page_size_default && pageSizes.map(opt => opt.value).indexOf(settings.settings.widget_style_settings.ew_events_list_page_size_default) >= 0 ? pageSizes[pageSizes.map(opt => opt.value).indexOf(settings.settings.widget_style_settings.ew_events_list_page_size_default)].label : "12 items";
+
+  // Number inputs are left as typed — including the empty string while the
+  // field is being cleared — and coerced in saveSettings.
   const handleDescriptionLengthChange = (view, length) => {
     let currentSettings = {
       ...settings
     };
-    currentSettings.settings.widget_style_settings[view] = Number.parseInt(length);
+    currentSettings.settings.widget_style_settings[view] = length;
     setSettings(currentSettings);
   };
   const handlePageSizeChange = val => {
@@ -3037,7 +3054,7 @@ const SettingsPage = () => {
   const renderAvailableFilters = () => {
     const filterSettings = settings.settings.widget_style_settings.available_filters || "";
     const selectedFilters = filterSettings.split(",");
-    return filters.map((filter, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)(_Controls_CheckboxItem__WEBPACK_IMPORTED_MODULE_15__["default"], {
+    return filters.map((filter, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_Controls_CheckboxItem__WEBPACK_IMPORTED_MODULE_16__["default"], {
       label: filter,
       checked: selectedFilters.some(f => f.toLowerCase() === filter.toLowerCase()),
       onChange: () => handleSelectedFilterChange(filter.toLowerCase())
@@ -3098,21 +3115,21 @@ const SettingsPage = () => {
       }
       return lodash_capitalize__WEBPACK_IMPORTED_MODULE_5___default()(lodash_startcase__WEBPACK_IMPORTED_MODULE_4___default()(field).replace("Filter Property", ""));
     };
-    return Object.keys(translationSection).map((translation, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsxs)(_Containers_BlockStack__WEBPACK_IMPORTED_MODULE_17__["default"], {
+    return Object.keys(translationSection).map((translation, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsxs)(_Containers_BlockStack__WEBPACK_IMPORTED_MODULE_18__["default"], {
       gap: 1,
       className: responsiveBlockStack,
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)("span", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("span", {
         className: "font-semibold",
         children: getFieldLabel(translation)
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsxs)("div", {
         className: "flex items-center gap-2",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)(_Controls_NewInputFieldControl__WEBPACK_IMPORTED_MODULE_16__["default"], {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_Controls_NewInputFieldControl__WEBPACK_IMPORTED_MODULE_17__["default"], {
           width: "100%",
           value: translationSection[translation],
           type: "text",
           align: "left",
           onChange: newVal => handleTranslationChange(section, langCode, translation, newVal)
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)("span", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("span", {
           className: "text-sm text-gray-500",
           children: langCode
         })]
@@ -3121,32 +3138,32 @@ const SettingsPage = () => {
   };
   const isBillingPlanRestriction = settings?.current_plan && settings.current_plan.id === 1;
   // console.log(loading);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)(_PageWrapper__WEBPACK_IMPORTED_MODULE_7__["default"], {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_PageWrapper__WEBPACK_IMPORTED_MODULE_7__["default"], {
     loading: false,
     withBackground: true,
     flush: true,
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsxs)(_Containers_PageContent__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsxs)(_Containers_PageContent__WEBPACK_IMPORTED_MODULE_8__["default"], {
       className: _SettingsPage_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].page,
-      children: [!activeSection && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.Fragment, {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)(_Menu_BreadCrumbs__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      children: [!activeSection && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.Fragment, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_Menu_BreadCrumbs__WEBPACK_IMPORTED_MODULE_6__["default"], {
           breadcrumbs: [{
             label: t("Dashboard"),
             to: "/dashboard"
           }, {
             label: t("Settings")
           }]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)(_Containers_PageHeader__WEBPACK_IMPORTED_MODULE_9__["default"], {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_Containers_PageHeader__WEBPACK_IMPORTED_MODULE_9__["default"], {
           eyebrow: "WP Super Events by ServvAI",
           title: t("Settings"),
           description: "Set defaults once so every new event starts right",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)("div", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("div", {
             className: _SettingsPage_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].divider
           })
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsxs)("div", {
         className: activeSection ? _SettingsPage_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].single : _SettingsPage_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].grid,
-        children: [(!activeSection || activeSection === "general") && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)(_Settings_SettingsSection__WEBPACK_IMPORTED_MODULE_18__["default"], {
-          icon: _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_27__["default"],
+        children: [(!activeSection || activeSection === "general") && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_Settings_SettingsSection__WEBPACK_IMPORTED_MODULE_19__["default"], {
+          icon: _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_28__["default"],
           title: "General",
           description: "Time zone, format and event defaults",
           editDescription: "Time zone, formats, and the defaults every new event inherits.",
@@ -3157,9 +3174,9 @@ const SettingsPage = () => {
           sectionId: "general",
           activeSection: activeSection,
           setActiveSection: setActiveSection,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)(_SpinnerLoader__WEBPACK_IMPORTED_MODULE_24__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_SpinnerLoader__WEBPACK_IMPORTED_MODULE_25__["default"], {
             isLoading: loading,
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)(_Settings_GeneralSettings__WEBPACK_IMPORTED_MODULE_19__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_Settings_GeneralSettings__WEBPACK_IMPORTED_MODULE_20__["default"], {
               settings: settings,
               timezones: timezones,
               timeOptions: timeOptions,
@@ -3187,8 +3204,8 @@ const SettingsPage = () => {
               formatDuration: formatDuration
             })
           })
-        }), !activeSection && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)(_Settings_SettingsSection__WEBPACK_IMPORTED_MODULE_18__["default"], {
-          icon: _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_28__["default"],
+        }), !activeSection && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_Settings_SettingsSection__WEBPACK_IMPORTED_MODULE_19__["default"], {
+          icon: _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_29__["default"],
           title: "Email templates",
           description: "Customize booking confirmations, reminders, and event updates",
           statusText: "Manage notification email content",
@@ -3197,8 +3214,8 @@ const SettingsPage = () => {
           activeSection: activeSection,
           direct: true,
           onView: () => navigate("/templates")
-        }), (!activeSection || activeSection === "reminders") && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)(_Settings_SettingsSection__WEBPACK_IMPORTED_MODULE_18__["default"], {
-          icon: _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_29__["default"],
+        }), (!activeSection || activeSection === "reminders") && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_Settings_SettingsSection__WEBPACK_IMPORTED_MODULE_19__["default"], {
+          icon: _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_30__["default"],
           title: "Reminders",
           description: "Email notifications and reminder settings",
           statusText: settings?.settings?.disable_emails === false ? "Reminders enabled" : "Reminders disabled",
@@ -3208,9 +3225,9 @@ const SettingsPage = () => {
           sectionId: "reminders",
           activeSection: activeSection,
           setActiveSection: setActiveSection,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)(_SpinnerLoader__WEBPACK_IMPORTED_MODULE_24__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_SpinnerLoader__WEBPACK_IMPORTED_MODULE_25__["default"], {
             isLoading: loading,
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)(_Settings_RemindersSettings__WEBPACK_IMPORTED_MODULE_20__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_Settings_RemindersSettings__WEBPACK_IMPORTED_MODULE_21__["default"], {
               settings: settings,
               responsiveBlockStack: responsiveBlockStack,
               responsiveInput: responsiveInput,
@@ -3226,8 +3243,8 @@ const SettingsPage = () => {
               handleStaffMemberEmailChange: handleStaffMemberEmailChange
             })
           })
-        }), (!activeSection || activeSection === "checkout") && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)(_Settings_SettingsSection__WEBPACK_IMPORTED_MODULE_18__["default"], {
-          icon: _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_30__["default"],
+        }), (!activeSection || activeSection === "checkout") && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_Settings_SettingsSection__WEBPACK_IMPORTED_MODULE_19__["default"], {
+          icon: _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_31__["default"],
           title: "Checkout",
           description: "Fast checkout and marketing consent settings",
           statusText: settings?.settings?.free_events_skip_checkout ? "Fast checkout enabled" : "Standard checkout",
@@ -3237,17 +3254,17 @@ const SettingsPage = () => {
           sectionId: "checkout",
           activeSection: activeSection,
           setActiveSection: setActiveSection,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)(_SpinnerLoader__WEBPACK_IMPORTED_MODULE_24__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_SpinnerLoader__WEBPACK_IMPORTED_MODULE_25__["default"], {
             isLoading: loading,
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)(_Settings_CheckoutSettings__WEBPACK_IMPORTED_MODULE_21__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_Settings_CheckoutSettings__WEBPACK_IMPORTED_MODULE_22__["default"], {
               settings: settings,
               handleFreeCheckoutChange: handleFreeCheckoutChange,
               handleSkipCaptchaChange: handleSkipCaptchaChange,
               handleMarketingConsentChange: handleMarketingConsentChange
             })
           })
-        }), (!activeSection || activeSection === "translations") && settings && settings.is_wp_marketplace === false && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)(_Settings_SettingsSection__WEBPACK_IMPORTED_MODULE_18__["default"], {
-          icon: _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_31__["default"],
+        }), (!activeSection || activeSection === "translations") && settings && settings.is_wp_marketplace === false && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_Settings_SettingsSection__WEBPACK_IMPORTED_MODULE_19__["default"], {
+          icon: _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_32__["default"],
           title: "Translations",
           description: "Translate widget text to any language",
           statusText: `Default: ${getDefaultWidgetLanguageName()}`,
@@ -3257,9 +3274,9 @@ const SettingsPage = () => {
           sectionId: "translations",
           activeSection: activeSection,
           setActiveSection: setActiveSection,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)(_SpinnerLoader__WEBPACK_IMPORTED_MODULE_24__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_SpinnerLoader__WEBPACK_IMPORTED_MODULE_25__["default"], {
             isLoading: loading,
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)(_Settings_TranslationsSection__WEBPACK_IMPORTED_MODULE_22__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_Settings_TranslationsSection__WEBPACK_IMPORTED_MODULE_23__["default"], {
               responsiveBlockStack: responsiveBlockStack,
               responsiveInput: responsiveInput,
               getLangsSelectOptions: getLangsSelectOptions,
@@ -4084,6 +4101,44 @@ const getLanguageOption = (langCode, rawName = false) => {
     value: selectedLang.code,
     label: rawName ? selectedLang.name : `${selectedLang.name} - ${selectedLang.nativeName}`
   };
+};
+
+/***/ }),
+
+/***/ "./src/utilities/numbers.js":
+/*!**********************************!*\
+  !*** ./src/utilities/numbers.js ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   coerceNumbers: () => (/* binding */ coerceNumbers),
+/* harmony export */   toInteger: () => (/* binding */ toInteger),
+/* harmony export */   toNumber: () => (/* binding */ toNumber)
+/* harmony export */ });
+// Number inputs keep whatever the user typed, including the empty string left
+// behind when the last character is deleted — coercing on every keystroke would
+// snap the field back to 0 and make it impossible to clear. These helpers are
+// the save-time boundary instead: an empty or unparsable field becomes 0 (or an
+// explicit fallback), never "", NaN or null.
+const toNumber = (value, fallback = 0) => {
+  if (value === "" || value === null || value === undefined) return fallback;
+  const number = Number(value);
+  return Number.isFinite(number) ? number : fallback;
+};
+const toInteger = (value, fallback = 0) => Math.trunc(toNumber(value, fallback));
+// Replaces only the keys the object already carries, so a setting the shop has
+// never stored stays absent instead of being written as 0.
+const coerceNumbers = (source, coercions) => {
+  if (!source || typeof source !== "object") return source;
+  const next = {
+    ...source
+  };
+  Object.entries(coercions).forEach(([key, coerce]) => {
+    if (key in next) next[key] = coerce(next[key]);
+  });
+  return next;
 };
 
 /***/ }),
@@ -5166,4 +5221,4 @@ module.exports = /*#__PURE__*/JSON.parse('{"customFilters":{"filter_label_dates"
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_SettingsPage_jsx.js.map?ver=40eb1498539295197b9f
+//# sourceMappingURL=src_Components_Pages_SettingsPage_jsx.js.map?ver=a0236a97ce240c47a29c

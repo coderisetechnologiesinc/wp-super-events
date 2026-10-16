@@ -1,9 +1,9 @@
 import React, { Fragment, useState } from "react";
 import moment from "moment";
 import NewDatePickerControl from "../Controls/NewDatePickerControl";
-import NewSelectControl from "../Controls/NewSelectControl";
+import NewInputFieldControl from "../Controls/NewInputFieldControl";
 import NewButtonGroup from "../Controls/NewButtonGroup";
-import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import { toInteger } from "../../utilities/numbers";
 const NewEndDateControl = ({
   recurrence,
   onChange,
@@ -26,27 +26,21 @@ const NewEndDateControl = ({
     : moment().toDate();
 
   /* -----------------------------
-     Options
-  ----------------------------- */
-  const numberOptions = Array.from({ length: maxOccurrences }, (_, i) => ({
-    value: i + 1,
-    label: `${i + 1}`,
-  }));
-
-  /* -----------------------------
      Handlers
   ----------------------------- */
   const handleModeChange = (val) => {
     setMode(val);
   };
 
+  // The field stays clearable, so an empty box is kept as typed; anything else
+  // is a whole count within the range this event type allows.
   const handleEndTimesChange = (val) => {
-    let num = Number(val);
-    if (isZoom && num > 60) num = 60;
-
     onChange({
       ...recurrence,
-      end_times: num,
+      end_times:
+        val === ""
+          ? ""
+          : Math.min(Math.max(toInteger(val) || 1, 1), maxOccurrences),
       end_date_time: undefined,
     });
   };
@@ -95,24 +89,26 @@ const NewEndDateControl = ({
           </Fragment>
         )}
 
-        {/* Occurrences selector */}
+        {/* Occurrences */}
         <div className="step__content_block">
           {mode === "number" && (
             <Fragment>
-              <span className="step__content_title">Select end date</span>
-              <NewSelectControl
-                // label="Occurrences"
-                value={end_times || ""}
-                options={numberOptions}
-                helpText={
-                  isZoom
-                    ? "Max 60 occurrences for Zoom meetings"
-                    : "Up to 12 months for in-person events"
-                }
+              <span className="step__content_title">Number of occurrences</span>
+              <NewInputFieldControl
+                type="number"
+                width="100%"
+                value={end_times ?? ""}
+                minValue={1}
+                maxValue={maxOccurrences}
+                placeholder={`1 – ${maxOccurrences}`}
                 onChange={handleEndTimesChange}
-                iconRight={<ChevronDownIcon />}
-                style={{ width: "100%" }}
               />
+              {/* Zoom says the same in its standing note below. */}
+              {!isZoom && (
+                <div className="text-xs text-gray-600 mt-2">
+                  {`Up to ${maxOccurrences} occurrences, within ${maxMonths} months, for in-person events`}
+                </div>
+              )}
             </Fragment>
           )}
 

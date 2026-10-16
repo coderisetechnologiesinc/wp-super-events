@@ -184,7 +184,11 @@ const EventsListPage = ({
           view={view}
           datePlacement={datePlacement}
           events={activeList}
-          loading={isMerged ? mergedLoading : loading}
+          // The occurrences drill-down has a fetch of its own, and it reports
+          // through the plain flag; mergedLoading only ever tracks the combined
+          // offline + zoom list, so reading it here left the drill-down looking
+          // empty until the rows arrived.
+          loading={isOccurrences || !isMerged ? loading : mergedLoading}
           pagination={activePagination}
           firstFetchDone={firstFetchDone}
           onPage={goToPage}

@@ -3353,7 +3353,12 @@ const useEventsLogic = (settings, filtersList, zoomAccount) => {
     const dt = m.start_time ? moment_timezone__WEBPACK_IMPORTED_MODULE_4___default().tz(m.start_time, m.timezone) : null;
     return {
       id: m.id,
-      occurrence_id: m.occurrence_id,
+      // These lists are always fetched with without_occurrences, so a row is
+      // the series itself; the occurrence_id the API names alongside it is
+      // just its first one, and opening a row must land on the event, not on
+      // that occurrence. Picking an occurrence is what the occurrences view
+      // is for, and its rows carry their own id.
+      occurrence_id: null,
       title: m.topic || "(No title)",
       post_id: m.shop_post_object_id,
       date: dt ? dt.format("MMM DD, YYYY") : null,
@@ -3645,7 +3650,9 @@ const useEventsLogic = (settings, filtersList, zoomAccount) => {
           time: dt.format("hh:mm a"),
           location: m.location || "",
           type: eventType === "offline" ? "Event" : "Zoom",
-          recurrence: m.type === 2 && eventType === "offline" ? "One-time" : "Recurring",
+          // 2 is the recurring in-person type and 8 the recurring Zoom
+          // one, the same reading mapEventRows uses.
+          recurrence: m.type === 2 && eventType === "offline" || m.type === 8 && eventType === "zoom" ? "Recurring" : "One-time",
           status: isPast ? "Past" : m.is_hidden ? "Unlisted" : "On sale",
           tickets: "0/0"
         };
@@ -4178,8 +4185,13 @@ const EventsListPage = ({
         title: isOccurrences ? drilldownTitle || t("Occurrences") : t("All events"),
         view: view,
         datePlacement: datePlacement,
-        events: activeList,
-        loading: isMerged ? mergedLoading : loading,
+        events: activeList
+        // The occurrences drill-down has a fetch of its own, and it reports
+        // through the plain flag; mergedLoading only ever tracks the combined
+        // offline + zoom list, so reading it here left the drill-down looking
+        // empty until the rows arrived.
+        ,
+        loading: isOccurrences || !isMerged ? loading : mergedLoading,
         pagination: activePagination,
         firstFetchDone: firstFetchDone,
         onPage: goToPage,
@@ -5665,4 +5677,4 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_EventsListPage_jsx.js.map?ver=8789b81f513eb5854322
+//# sourceMappingURL=src_Components_Pages_EventsListPage_jsx.js.map?ver=bc332708375e941e90ab

@@ -2101,7 +2101,12 @@ const useEventsLogic = (settings, filtersList, zoomAccount) => {
     const dt = m.start_time ? moment_timezone__WEBPACK_IMPORTED_MODULE_4___default().tz(m.start_time, m.timezone) : null;
     return {
       id: m.id,
-      occurrence_id: m.occurrence_id,
+      // These lists are always fetched with without_occurrences, so a row is
+      // the series itself; the occurrence_id the API names alongside it is
+      // just its first one, and opening a row must land on the event, not on
+      // that occurrence. Picking an occurrence is what the occurrences view
+      // is for, and its rows carry their own id.
+      occurrence_id: null,
       title: m.topic || "(No title)",
       post_id: m.shop_post_object_id,
       date: dt ? dt.format("MMM DD, YYYY") : null,
@@ -2393,7 +2398,9 @@ const useEventsLogic = (settings, filtersList, zoomAccount) => {
           time: dt.format("hh:mm a"),
           location: m.location || "",
           type: eventType === "offline" ? "Event" : "Zoom",
-          recurrence: m.type === 2 && eventType === "offline" ? "One-time" : "Recurring",
+          // 2 is the recurring in-person type and 8 the recurring Zoom
+          // one, the same reading mapEventRows uses.
+          recurrence: m.type === 2 && eventType === "offline" || m.type === 8 && eventType === "zoom" ? "Recurring" : "One-time",
           status: isPast ? "Past" : m.is_hidden ? "Unlisted" : "On sale",
           tickets: "0/0"
         };
@@ -3813,4 +3820,4 @@ const ForwardRef = /*#__PURE__*/ react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(U
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_CalendarPage_jsx.js.map?ver=a29e69df939251876959
+//# sourceMappingURL=src_Components_Pages_CalendarPage_jsx.js.map?ver=cfb5f06bd623853ed227
