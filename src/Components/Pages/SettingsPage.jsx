@@ -40,6 +40,26 @@ import CheckoutSettings from "./Settings/CheckoutSettings";
 import TranslationsSection from "./Settings/TranslationsSection";
 import WorkflowSettings from "./Settings/WorkflowSettings";
 import SpinnerLoader from "./SpinnerLoader";
+import { readDefaults } from "../CreateEvent/eventFormData";
+
+// A stored JSON column reaches us as a string, but a page that already parsed
+// it writes the object back into the store — so both shapes have to be read.
+const parseJsonObject = (value) => {
+  if (value && typeof value === "object" && !Array.isArray(value)) return value;
+  if (typeof value !== "string" || value.trim() === "") return {};
+  try {
+    const parsed = JSON.parse(value);
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed)
+      ? parsed
+      : {};
+  } catch {
+    return {};
+  }
+};
+
+// Only an absent value is missing: 0 is a valid price, and `!value` handed a
+// saved 0 straight back to the hardcoded default.
+const isBlank = (value) => value === undefined || value === null || value === "";
 
 const SettingsPage = () => {
   const navigate = useNavigate();
@@ -154,45 +174,46 @@ const SettingsPage = () => {
 
   const validateSettings = async (newSettings) => {
     let validatedSettings = { ...newSettings };
-    validatedSettings.settings.widget_style_settings =
-      validatedSettings.settings.widget_style_settings.length > 0
-        ? JSON.parse(validatedSettings.settings.widget_style_settings)
-        : {};
-    validatedSettings.settings.admin_dashboard =
-      validatedSettings.settings.admin_dashboard.length > 0
-        ? JSON.parse(validatedSettings.settings.admin_dashboard)
-        : {};
+    validatedSettings.settings = { ...newSettings.settings };
+    validatedSettings.settings.widget_style_settings = parseJsonObject(
+      newSettings.settings?.widget_style_settings,
+    );
 
-    if (!newSettings?.settings?.admin_dashboard?.default_timezone) {
-      validatedSettings.settings.admin_dashboard.default_timezone =
-        "America/Los_Angeles";
+    // Fill the gaps on the PARSED defaults. The old checks read
+    // newSettings.settings.admin_dashboard, which is still the raw JSON
+    // string, so every `?.default_*` on it was undefined and each saved value
+    // was overwritten with the hardcoded one on every load.
+    const dash = readDefaults(newSettings);
+    if (isBlank(dash.default_timezone)) {
+      dash.default_timezone = "America/Los_Angeles";
     }
-    if (!newSettings?.settings?.admin_dashboard?.default_duration) {
-      validatedSettings.settings.admin_dashboard.default_duration = 1;
+    if (isBlank(dash.default_duration)) {
+      dash.default_duration = 1;
     }
-    if (!newSettings?.settings?.admin_dashboard?.default_start_time) {
-      validatedSettings.settings.admin_dashboard.default_start_time = moment(
-        "10:00 am",
-        "hh:mm a",
-      ).format("hh:mm a");
+    if (isBlank(dash.default_start_time)) {
+      dash.default_start_time = moment("10:00 am", "hh:mm a").format("hh:mm a");
     }
-    if (!newSettings?.settings?.admin_dashboard?.default_price) {
-      validatedSettings.settings.admin_dashboard.default_price = 10.0;
+    if (isBlank(dash.default_price)) {
+      dash.default_price = 10.0;
     }
-    if (!newSettings.settings) {
+    if (isBlank(dash.default_quantity)) {
+      dash.default_quantity = 1;
+    }
+    if (isBlank(dash.default_event_type)) {
+      dash.default_event_type = "offline";
+    }
+    validatedSettings.settings.admin_dashboard = dash;
+
+    if (isBlank(newSettings.settings?.time_format_24_hours)) {
       validatedSettings.settings.time_format_24_hours = false;
-    }
-    if (!newSettings?.settings?.admin_dashboard?.default_quantity) {
-      validatedSettings.settings.admin_dashboard.default_quantity = 1;
-    }
-    if (!newSettings?.settings?.admin_dashboard?.default_event_type) {
-      validatedSettings.settings.admin_dashboard.default_event_type = "offline";
     }
     if (!newSettings.currency || newSettings.currency.length === 0) {
       validatedSettings.currency = "sign";
     }
-    if (!newSettings.settings) {
-      validatedSettings.hide_time_zone = false;
+    // Read and written as settings.settings.hide_time_zone everywhere else;
+    // the default used to land on the top level, where nothing looks for it.
+    if (isBlank(newSettings.settings?.hide_time_zone)) {
+      validatedSettings.settings.hide_time_zone = false;
     }
     if (!newSettings.first_reminder_hours) {
       validatedSettings.first_reminder_hours = 24;

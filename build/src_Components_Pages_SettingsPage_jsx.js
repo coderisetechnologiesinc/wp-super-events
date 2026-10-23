@@ -1111,6 +1111,228 @@ const PageActionButton = ({
 
 /***/ }),
 
+/***/ "./src/Components/CreateEvent/eventFormData.js":
+/*!*****************************************************!*\
+  !*** ./src/Components/CreateEvent/eventFormData.js ***!
+  \*****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   displayEventTime: () => (/* binding */ displayEventTime),
+/* harmony export */   eventPayload: () => (/* binding */ eventPayload),
+/* harmony export */   initialEvent: () => (/* binding */ initialEvent),
+/* harmony export */   loadEvent: () => (/* binding */ loadEvent),
+/* harmony export */   parseEventTime: () => (/* binding */ parseEventTime),
+/* harmony export */   readDefaults: () => (/* binding */ readDefaults),
+/* harmony export */   registrantsPayload: () => (/* binding */ registrantsPayload),
+/* harmony export */   ticketPayload: () => (/* binding */ ticketPayload),
+/* harmony export */   uses24HourClock: () => (/* binding */ uses24HourClock)
+/* harmony export */ });
+/* harmony import */ var moment_timezone__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment-timezone */ "./node_modules/moment-timezone/index.js");
+/* harmony import */ var moment_timezone__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment_timezone__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utilities_numbers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utilities/numbers */ "./src/utilities/numbers.js");
+
+
+const uses24HourClock = settings => [true, 1, "1", "true"].includes(settings?.settings?.time_format_24_hours);
+const displayEventTime = (value, use24Hours) => {
+  const parsed = moment_timezone__WEBPACK_IMPORTED_MODULE_0___default()(value || "00:00", "HH:mm", true);
+  return {
+    time: parsed.isValid() ? parsed.format(use24Hours ? "HH:mm" : "hh:mm") : "",
+    period: parsed.isValid() ? parsed.format("A") : "AM"
+  };
+};
+const parseEventTime = (value, period, use24Hours) => {
+  if (!/^\d{1,2}:\d{2}$/.test(value.trim())) return null;
+  const [hours, minutes] = value.trim().split(":").map(Number);
+  if (minutes > 59 || hours > (use24Hours ? 23 : 12) || !use24Hours && hours < 1) return null;
+  const parsed = moment_timezone__WEBPACK_IMPORTED_MODULE_0___default()(use24Hours ? value.trim() : `${value.trim()} ${period}`, use24Hours ? ["HH:mm", "H:mm"] : ["hh:mm A", "h:mm A"], true);
+  return parsed.isValid() ? parsed.format("HH:mm") : null;
+};
+const readDefaults = settings => {
+  const raw = settings?.settings?.admin_dashboard;
+  try {
+    const parsed = typeof raw === "string" ? JSON.parse(raw) : raw;
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+  } catch {
+    return {};
+  }
+};
+const initialEvent = settings => {
+  const defaults = readDefaults(settings);
+  const timezone = moment_timezone__WEBPACK_IMPORTED_MODULE_0___default().tz.zone(defaults.default_timezone) ? defaults.default_timezone : moment_timezone__WEBPACK_IMPORTED_MODULE_0___default().tz.guess();
+  const start = moment_timezone__WEBPACK_IMPORTED_MODULE_0___default()().tz(timezone).add(1, "day").second(0);
+  const time = moment_timezone__WEBPACK_IMPORTED_MODULE_0___default()(defaults.default_start_time, ["h:mm a", "HH:mm"], true);
+  if (time.isValid()) start.hour(time.hour()).minute(time.minute());
+  return {
+    location: ["offline", "zoom", "custom", "hybrid"].includes(defaults.default_event_type) ? defaults.default_event_type : "offline",
+    meeting: {
+      topic: "",
+      agenda: "",
+      startTime: start.format("YYYY-MM-DDTHH:mm:ss"),
+      timezone,
+      duration: Number(defaults.default_duration || 1) * 60,
+      recurrence: null,
+      is_hidden: false
+    },
+    tickets: [],
+    product: {
+      price: 0,
+      quantity: Number(defaults.default_quantity) || 5
+    },
+    filters: {},
+    custom_fields: {},
+    notifications: {
+      google_calendar: false,
+      disable_emails: false
+    }
+  };
+};
+const loadEvent = (data, location) => {
+  var _ref, _data$product$current;
+  const meeting = data.meeting || {};
+  const timezone = meeting.timezone || "UTC";
+  const start = meeting.start_time || meeting.occurrences?.[0]?.start_time;
+  const customFields = data.custom_fields || {};
+  return {
+    ...data,
+    location: location === "zoom" ? "zoom" : customFields.custom_field_1_value ? data.types?.location_id ? "hybrid" : "custom" : "offline",
+    meeting: {
+      ...meeting,
+      startTime: start ? moment_timezone__WEBPACK_IMPORTED_MODULE_0___default().tz(start, timezone).format("YYYY-MM-DDTHH:mm:ss") : "",
+      recurrence: meeting.recurrence?.type ? {
+        ...meeting.recurrence,
+        weekly_days: typeof meeting.recurrence.weekly_days === "string" ? meeting.recurrence.weekly_days.split(",").map(Number) : meeting.recurrence.weekly_days
+      } : null
+    },
+    tickets: (data.tickets || []).map(ticket => ({
+      ...ticket,
+      persisted: true,
+      title: ticket.name,
+      type: ticket.is_donation ? "donation" : Number(ticket.price) === 0 ? "free" : "paid",
+      ...Object.fromEntries(["start_datetime", "end_datetime"].map(key => [key, ticket[key] ? moment_timezone__WEBPACK_IMPORTED_MODULE_0___default().utc(ticket[key]).tz(timezone).format("YYYY-MM-DDTHH:mm:ss") : null]))
+    })),
+    product: {
+      ...data.product,
+      quantity: (_ref = (_data$product$current = data.product?.current_quantity) !== null && _data$product$current !== void 0 ? _data$product$current : data.product?.quantity) !== null && _ref !== void 0 ? _ref : 5
+    },
+    filters: data.types || {},
+    custom_fields: customFields,
+    notifications: data.notifications || {}
+  };
+};
+const ticketPayload = (ticket, timezone) => ({
+  name: ticket.title,
+  quantity: (0,_utilities_numbers__WEBPACK_IMPORTED_MODULE_1__.toInteger)(ticket.quantity),
+  price: ticket.type === "free" ? 0 : ticket.type === "donation" ? null : (0,_utilities_numbers__WEBPACK_IMPORTED_MODULE_1__.toNumber)(ticket.price),
+  is_donation: ticket.type === "donation",
+  ...Object.fromEntries(["start_datetime", "end_datetime"].map(key => [key, ticket[key] ? moment_timezone__WEBPACK_IMPORTED_MODULE_0___default().tz(ticket[key], timezone).utc().format("YYYY-MM-DDTHH:mm:ss[Z]") : null]))
+});
+
+// The API takes one recurrence shape per type, and the end condition is either
+// a number of occurrences or an end date — never both. An event loaded for
+// editing can carry leftovers from another variant (its own API response, or a
+// type the user switched away from), so the body is rebuilt from scratch.
+const recurrencePayload = (recurrence, isNew) => {
+  const type = Number(recurrence.type);
+  if (!type) return null;
+  const payload = {
+    type,
+    repeat_interval: Number(recurrence.repeat_interval) || 1
+  };
+  if (type === 2) {
+    var _recurrence$weekly_da;
+    const days = Array.isArray(recurrence.weekly_days) ? recurrence.weekly_days : String((_recurrence$weekly_da = recurrence.weekly_days) !== null && _recurrence$weekly_da !== void 0 ? _recurrence$weekly_da : "").split(",").filter(Boolean);
+    // 1 Sunday through 7 Saturday. PHP joins the array for the create call;
+    // the update body reaches the API unchanged.
+    const numbers = days.map(Number).filter(Number.isFinite);
+    payload.weekly_days = isNew ? numbers : numbers.join(",");
+  }
+  if (type === 3) {
+    if (recurrence.monthly_week_day) {
+      payload.monthly_week = Number(recurrence.monthly_week) || 1;
+      payload.monthly_week_day = Number(recurrence.monthly_week_day);
+    } else {
+      payload.monthly_day = Number(recurrence.monthly_day) || 1;
+    }
+  }
+  // A cleared occurrence count is not an end condition, so the date is used.
+  if (Number(recurrence.end_times) > 0) payload.end_times = (0,_utilities_numbers__WEBPACK_IMPORTED_MODULE_1__.toInteger)(recurrence.end_times);else if (recurrence.end_date_time) payload.end_date_time = recurrence.end_date_time;
+  return payload;
+};
+const eventPayload = (event, isNew, freePlan) => {
+  const {
+    meeting,
+    filters
+  } = event;
+  const offline = event.location !== "zoom";
+  // Hosts are ids in the form, but the event endpoint may describe them as
+  // objects. An event that never had hosts sends no attribute at all.
+  const members = Array.isArray(filters.members) ? filters.members.map(m => {
+    var _m$id;
+    return Number((_m$id = m?.id) !== null && _m$id !== void 0 ? _m$id : m);
+  }).filter(Number.isFinite) : null;
+  const type = meeting.recurrence?.type ? offline ? 2 : 8 : offline ? 1 : 2;
+  const payload = {
+    meeting: {
+      topic: meeting.topic.trim(),
+      agenda: meeting.agenda || "",
+      timezone: meeting.timezone,
+      duration: Number(meeting.duration),
+      recurrence: meeting.recurrence ? recurrencePayload(meeting.recurrence, isNew) : null,
+      is_hidden: Boolean(meeting.is_hidden),
+      [isNew ? "startTime" : "start_time"]: meeting.startTime,
+      [isNew ? "eventType" : "type"]: type
+    },
+    // Only the documented attributes are forwarded: the event endpoint returns
+    // read-only extras next to them (the *_name labels, current_quantity) that
+    // the API must not receive back on update.
+    types: {
+      location_id: ["zoom", "custom"].includes(event.location) ? null : filters.location_id || null,
+      category_id: filters.category_id || null,
+      language_id: filters.language_id || null,
+      ...(members ? {
+        members
+      } : {})
+    },
+    custom_fields: event.custom_fields,
+    notifications: {
+      google_calendar: Boolean(event.notifications?.google_calendar),
+      disable_emails: Boolean(event.notifications?.disable_emails)
+    },
+    // A cleared number input holds "" until it is saved, and the API only
+    // takes numbers here — an empty field means 0.
+    product: {
+      quantity: event.product?.quantity == null ? null : (0,_utilities_numbers__WEBPACK_IMPORTED_MODULE_1__.toInteger)(event.product.quantity),
+      price: event.product?.price == null ? null : (0,_utilities_numbers__WEBPACK_IMPORTED_MODULE_1__.toNumber)(event.product.price)
+    }
+  };
+  if (event.image_content?.startsWith("data:image/")) payload.image_content = event.image_content.split(",")[1];
+  if (isNew && freePlan) payload.product = {
+    quantity: event.tickets.filter(t => t.action !== "remove").reduce((sum, t) => sum + (0,_utilities_numbers__WEBPACK_IMPORTED_MODULE_1__.toInteger)(t.quantity), 0) || (0,_utilities_numbers__WEBPACK_IMPORTED_MODULE_1__.toInteger)(event.product.quantity) || 1
+  };
+  if (isNew && !freePlan) payload.tickets = event.tickets.filter(t => t.action !== "remove").map(t => ticketPayload(t, meeting.timezone));
+  if (!isNew && event.registrants) payload.registrants = event.registrants.filter(r => r.status === "create").map(r => ({
+    first_name: r.firstName,
+    last_name: r.lastName,
+    email: r.email
+  }));
+  return payload;
+};
+
+// The event endpoint rejects an update that carries only registrants ("Invalid
+// meeting type"), so a manual registration resends the event as loaded with
+// the new registrants attached, the way the event form's registrants step does.
+const registrantsPayload = (data, location, freePlan, registrants) => eventPayload({
+  ...loadEvent(data, location),
+  registrants: registrants.map(registrant => ({
+    ...registrant,
+    status: "create"
+  }))
+}, false, freePlan);
+
+/***/ }),
+
 /***/ "./src/Components/Menu/BreadCrumbs.jsx":
 /*!*********************************************!*\
   !*** ./src/Components/Menu/BreadCrumbs.jsx ***!
@@ -2355,7 +2577,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-4WY6JWTD.mjs");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-4WY6JWTD.mjs");
 /* harmony import */ var _utilities_adminApi__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utilities/adminApi */ "./src/utilities/adminApi.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! moment */ "moment");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_2__);
@@ -2364,11 +2586,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash_startcase__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash_startcase__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var lodash_capitalize__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash.capitalize */ "./node_modules/lodash.capitalize/index.js");
 /* harmony import */ var lodash_capitalize__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(lodash_capitalize__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/Cog6ToothIcon.js");
-/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/DocumentTextIcon.js");
-/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/BellIcon.js");
-/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/ShoppingCartIcon.js");
-/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/LanguageIcon.js");
+/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/Cog6ToothIcon.js");
+/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/DocumentTextIcon.js");
+/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/BellIcon.js");
+/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/ShoppingCartIcon.js");
+/* harmony import */ var _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! @heroicons/react/24/outline */ "./node_modules/@heroicons/react/24/outline/esm/LanguageIcon.js");
 /* harmony import */ var _Menu_BreadCrumbs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Menu/BreadCrumbs */ "./src/Components/Menu/BreadCrumbs.jsx");
 /* harmony import */ var _PageWrapper__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./PageWrapper */ "./src/Components/Pages/PageWrapper.jsx");
 /* harmony import */ var _Containers_PageContent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Containers/PageContent */ "./src/Components/Containers/PageContent.jsx");
@@ -2389,8 +2611,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Settings_TranslationsSection__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./Settings/TranslationsSection */ "./src/Components/Pages/Settings/TranslationsSection.jsx");
 /* harmony import */ var _Settings_WorkflowSettings__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./Settings/WorkflowSettings */ "./src/Components/Pages/Settings/WorkflowSettings.jsx");
 /* harmony import */ var _SpinnerLoader__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./SpinnerLoader */ "./src/Components/Pages/SpinnerLoader.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__);
+/* harmony import */ var _CreateEvent_eventFormData__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ../CreateEvent/eventFormData */ "./src/Components/CreateEvent/eventFormData.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__);
 // SettingsPage.jsx - Refactored with card layout
 
 
@@ -2423,8 +2646,26 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+// A stored JSON column reaches us as a string, but a page that already parsed
+// it writes the object back into the store — so both shapes have to be read.
+
+const parseJsonObject = value => {
+  if (value && typeof value === "object" && !Array.isArray(value)) return value;
+  if (typeof value !== "string" || value.trim() === "") return {};
+  try {
+    const parsed = JSON.parse(value);
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+  } catch {
+    return {};
+  }
+};
+
+// Only an absent value is missing: 0 is a valid price, and `!value` handed a
+// saved 0 straight back to the hardcoded default.
+const isBlank = value => value === undefined || value === null || value === "";
 const SettingsPage = () => {
-  const navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_27__.useNavigate)();
+  const navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_28__.useNavigate)();
   const [settings, setSettings] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
   const [loading, setLoading] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   const [zoomAccount, setZoomAccount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
@@ -2527,34 +2768,45 @@ const SettingsPage = () => {
     let validatedSettings = {
       ...newSettings
     };
-    validatedSettings.settings.widget_style_settings = validatedSettings.settings.widget_style_settings.length > 0 ? JSON.parse(validatedSettings.settings.widget_style_settings) : {};
-    validatedSettings.settings.admin_dashboard = validatedSettings.settings.admin_dashboard.length > 0 ? JSON.parse(validatedSettings.settings.admin_dashboard) : {};
-    if (!newSettings?.settings?.admin_dashboard?.default_timezone) {
-      validatedSettings.settings.admin_dashboard.default_timezone = "America/Los_Angeles";
+    validatedSettings.settings = {
+      ...newSettings.settings
+    };
+    validatedSettings.settings.widget_style_settings = parseJsonObject(newSettings.settings?.widget_style_settings);
+
+    // Fill the gaps on the PARSED defaults. The old checks read
+    // newSettings.settings.admin_dashboard, which is still the raw JSON
+    // string, so every `?.default_*` on it was undefined and each saved value
+    // was overwritten with the hardcoded one on every load.
+    const dash = (0,_CreateEvent_eventFormData__WEBPACK_IMPORTED_MODULE_26__.readDefaults)(newSettings);
+    if (isBlank(dash.default_timezone)) {
+      dash.default_timezone = "America/Los_Angeles";
     }
-    if (!newSettings?.settings?.admin_dashboard?.default_duration) {
-      validatedSettings.settings.admin_dashboard.default_duration = 1;
+    if (isBlank(dash.default_duration)) {
+      dash.default_duration = 1;
     }
-    if (!newSettings?.settings?.admin_dashboard?.default_start_time) {
-      validatedSettings.settings.admin_dashboard.default_start_time = moment__WEBPACK_IMPORTED_MODULE_2___default()("10:00 am", "hh:mm a").format("hh:mm a");
+    if (isBlank(dash.default_start_time)) {
+      dash.default_start_time = moment__WEBPACK_IMPORTED_MODULE_2___default()("10:00 am", "hh:mm a").format("hh:mm a");
     }
-    if (!newSettings?.settings?.admin_dashboard?.default_price) {
-      validatedSettings.settings.admin_dashboard.default_price = 10.0;
+    if (isBlank(dash.default_price)) {
+      dash.default_price = 10.0;
     }
-    if (!newSettings.settings) {
+    if (isBlank(dash.default_quantity)) {
+      dash.default_quantity = 1;
+    }
+    if (isBlank(dash.default_event_type)) {
+      dash.default_event_type = "offline";
+    }
+    validatedSettings.settings.admin_dashboard = dash;
+    if (isBlank(newSettings.settings?.time_format_24_hours)) {
       validatedSettings.settings.time_format_24_hours = false;
-    }
-    if (!newSettings?.settings?.admin_dashboard?.default_quantity) {
-      validatedSettings.settings.admin_dashboard.default_quantity = 1;
-    }
-    if (!newSettings?.settings?.admin_dashboard?.default_event_type) {
-      validatedSettings.settings.admin_dashboard.default_event_type = "offline";
     }
     if (!newSettings.currency || newSettings.currency.length === 0) {
       validatedSettings.currency = "sign";
     }
-    if (!newSettings.settings) {
-      validatedSettings.hide_time_zone = false;
+    // Read and written as settings.settings.hide_time_zone everywhere else;
+    // the default used to land on the top level, where nothing looks for it.
+    if (isBlank(newSettings.settings?.hide_time_zone)) {
+      validatedSettings.settings.hide_time_zone = false;
     }
     if (!newSettings.first_reminder_hours) {
       validatedSettings.first_reminder_hours = 24;
@@ -3054,7 +3306,7 @@ const SettingsPage = () => {
   const renderAvailableFilters = () => {
     const filterSettings = settings.settings.widget_style_settings.available_filters || "";
     const selectedFilters = filterSettings.split(",");
-    return filters.map((filter, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_Controls_CheckboxItem__WEBPACK_IMPORTED_MODULE_16__["default"], {
+    return filters.map((filter, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_Controls_CheckboxItem__WEBPACK_IMPORTED_MODULE_16__["default"], {
       label: filter,
       checked: selectedFilters.some(f => f.toLowerCase() === filter.toLowerCase()),
       onChange: () => handleSelectedFilterChange(filter.toLowerCase())
@@ -3115,21 +3367,21 @@ const SettingsPage = () => {
       }
       return lodash_capitalize__WEBPACK_IMPORTED_MODULE_5___default()(lodash_startcase__WEBPACK_IMPORTED_MODULE_4___default()(field).replace("Filter Property", ""));
     };
-    return Object.keys(translationSection).map((translation, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsxs)(_Containers_BlockStack__WEBPACK_IMPORTED_MODULE_18__["default"], {
+    return Object.keys(translationSection).map((translation, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)(_Containers_BlockStack__WEBPACK_IMPORTED_MODULE_18__["default"], {
       gap: 1,
       className: responsiveBlockStack,
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("span", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("span", {
         className: "font-semibold",
         children: getFieldLabel(translation)
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("div", {
         className: "flex items-center gap-2",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_Controls_NewInputFieldControl__WEBPACK_IMPORTED_MODULE_17__["default"], {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_Controls_NewInputFieldControl__WEBPACK_IMPORTED_MODULE_17__["default"], {
           width: "100%",
           value: translationSection[translation],
           type: "text",
           align: "left",
           onChange: newVal => handleTranslationChange(section, langCode, translation, newVal)
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("span", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("span", {
           className: "text-sm text-gray-500",
           children: langCode
         })]
@@ -3138,32 +3390,32 @@ const SettingsPage = () => {
   };
   const isBillingPlanRestriction = settings?.current_plan && settings.current_plan.id === 1;
   // console.log(loading);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_PageWrapper__WEBPACK_IMPORTED_MODULE_7__["default"], {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_PageWrapper__WEBPACK_IMPORTED_MODULE_7__["default"], {
     loading: false,
     withBackground: true,
     flush: true,
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsxs)(_Containers_PageContent__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)(_Containers_PageContent__WEBPACK_IMPORTED_MODULE_8__["default"], {
       className: _SettingsPage_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].page,
-      children: [!activeSection && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.Fragment, {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_Menu_BreadCrumbs__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      children: [!activeSection && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.Fragment, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_Menu_BreadCrumbs__WEBPACK_IMPORTED_MODULE_6__["default"], {
           breadcrumbs: [{
             label: t("Dashboard"),
             to: "/dashboard"
           }, {
             label: t("Settings")
           }]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_Containers_PageHeader__WEBPACK_IMPORTED_MODULE_9__["default"], {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_Containers_PageHeader__WEBPACK_IMPORTED_MODULE_9__["default"], {
           eyebrow: "WP Super Events by ServvAI",
           title: t("Settings"),
           description: "Set defaults once so every new event starts right",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("div", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("div", {
             className: _SettingsPage_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].divider
           })
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("div", {
         className: activeSection ? _SettingsPage_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].single : _SettingsPage_module_scss__WEBPACK_IMPORTED_MODULE_10__["default"].grid,
-        children: [(!activeSection || activeSection === "general") && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_Settings_SettingsSection__WEBPACK_IMPORTED_MODULE_19__["default"], {
-          icon: _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_28__["default"],
+        children: [(!activeSection || activeSection === "general") && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_Settings_SettingsSection__WEBPACK_IMPORTED_MODULE_19__["default"], {
+          icon: _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_29__["default"],
           title: "General",
           description: "Time zone, format and event defaults",
           editDescription: "Time zone, formats, and the defaults every new event inherits.",
@@ -3174,9 +3426,9 @@ const SettingsPage = () => {
           sectionId: "general",
           activeSection: activeSection,
           setActiveSection: setActiveSection,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_SpinnerLoader__WEBPACK_IMPORTED_MODULE_25__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_SpinnerLoader__WEBPACK_IMPORTED_MODULE_25__["default"], {
             isLoading: loading,
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_Settings_GeneralSettings__WEBPACK_IMPORTED_MODULE_20__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_Settings_GeneralSettings__WEBPACK_IMPORTED_MODULE_20__["default"], {
               settings: settings,
               timezones: timezones,
               timeOptions: timeOptions,
@@ -3204,8 +3456,8 @@ const SettingsPage = () => {
               formatDuration: formatDuration
             })
           })
-        }), !activeSection && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_Settings_SettingsSection__WEBPACK_IMPORTED_MODULE_19__["default"], {
-          icon: _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_29__["default"],
+        }), !activeSection && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_Settings_SettingsSection__WEBPACK_IMPORTED_MODULE_19__["default"], {
+          icon: _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_30__["default"],
           title: "Email templates",
           description: "Customize booking confirmations, reminders, and event updates",
           statusText: "Manage notification email content",
@@ -3214,8 +3466,8 @@ const SettingsPage = () => {
           activeSection: activeSection,
           direct: true,
           onView: () => navigate("/templates")
-        }), (!activeSection || activeSection === "reminders") && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_Settings_SettingsSection__WEBPACK_IMPORTED_MODULE_19__["default"], {
-          icon: _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_30__["default"],
+        }), (!activeSection || activeSection === "reminders") && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_Settings_SettingsSection__WEBPACK_IMPORTED_MODULE_19__["default"], {
+          icon: _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_31__["default"],
           title: "Reminders",
           description: "Email notifications and reminder settings",
           statusText: settings?.settings?.disable_emails === false ? "Reminders enabled" : "Reminders disabled",
@@ -3225,9 +3477,9 @@ const SettingsPage = () => {
           sectionId: "reminders",
           activeSection: activeSection,
           setActiveSection: setActiveSection,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_SpinnerLoader__WEBPACK_IMPORTED_MODULE_25__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_SpinnerLoader__WEBPACK_IMPORTED_MODULE_25__["default"], {
             isLoading: loading,
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_Settings_RemindersSettings__WEBPACK_IMPORTED_MODULE_21__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_Settings_RemindersSettings__WEBPACK_IMPORTED_MODULE_21__["default"], {
               settings: settings,
               responsiveBlockStack: responsiveBlockStack,
               responsiveInput: responsiveInput,
@@ -3243,8 +3495,8 @@ const SettingsPage = () => {
               handleStaffMemberEmailChange: handleStaffMemberEmailChange
             })
           })
-        }), (!activeSection || activeSection === "checkout") && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_Settings_SettingsSection__WEBPACK_IMPORTED_MODULE_19__["default"], {
-          icon: _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_31__["default"],
+        }), (!activeSection || activeSection === "checkout") && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_Settings_SettingsSection__WEBPACK_IMPORTED_MODULE_19__["default"], {
+          icon: _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_32__["default"],
           title: "Checkout",
           description: "Fast checkout and marketing consent settings",
           statusText: settings?.settings?.free_events_skip_checkout ? "Fast checkout enabled" : "Standard checkout",
@@ -3254,17 +3506,17 @@ const SettingsPage = () => {
           sectionId: "checkout",
           activeSection: activeSection,
           setActiveSection: setActiveSection,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_SpinnerLoader__WEBPACK_IMPORTED_MODULE_25__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_SpinnerLoader__WEBPACK_IMPORTED_MODULE_25__["default"], {
             isLoading: loading,
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_Settings_CheckoutSettings__WEBPACK_IMPORTED_MODULE_22__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_Settings_CheckoutSettings__WEBPACK_IMPORTED_MODULE_22__["default"], {
               settings: settings,
               handleFreeCheckoutChange: handleFreeCheckoutChange,
               handleSkipCaptchaChange: handleSkipCaptchaChange,
               handleMarketingConsentChange: handleMarketingConsentChange
             })
           })
-        }), (!activeSection || activeSection === "translations") && settings && settings.is_wp_marketplace === false && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_Settings_SettingsSection__WEBPACK_IMPORTED_MODULE_19__["default"], {
-          icon: _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_32__["default"],
+        }), (!activeSection || activeSection === "translations") && settings && settings.is_wp_marketplace === false && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_Settings_SettingsSection__WEBPACK_IMPORTED_MODULE_19__["default"], {
+          icon: _heroicons_react_24_outline__WEBPACK_IMPORTED_MODULE_33__["default"],
           title: "Translations",
           description: "Translate widget text to any language",
           statusText: `Default: ${getDefaultWidgetLanguageName()}`,
@@ -3274,9 +3526,9 @@ const SettingsPage = () => {
           sectionId: "translations",
           activeSection: activeSection,
           setActiveSection: setActiveSection,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_SpinnerLoader__WEBPACK_IMPORTED_MODULE_25__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_SpinnerLoader__WEBPACK_IMPORTED_MODULE_25__["default"], {
             isLoading: loading,
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_Settings_TranslationsSection__WEBPACK_IMPORTED_MODULE_23__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_Settings_TranslationsSection__WEBPACK_IMPORTED_MODULE_23__["default"], {
               responsiveBlockStack: responsiveBlockStack,
               responsiveInput: responsiveInput,
               getLangsSelectOptions: getLangsSelectOptions,
@@ -5221,4 +5473,4 @@ module.exports = /*#__PURE__*/JSON.parse('{"customFilters":{"filter_label_dates"
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_SettingsPage_jsx.js.map?ver=a0236a97ce240c47a29c
+//# sourceMappingURL=src_Components_Pages_SettingsPage_jsx.js.map?ver=6bb4d37fa8f95187a8e5

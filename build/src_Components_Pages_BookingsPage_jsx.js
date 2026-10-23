@@ -4100,4 +4100,4 @@ const ForwardRef = /*#__PURE__*/ react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(X
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_BookingsPage_jsx.js.map?ver=10f523c90efeb248538d
+//# sourceMappingURL=src_Components_Pages_BookingsPage_jsx.js.map?ver=321a27d33f62436e91da

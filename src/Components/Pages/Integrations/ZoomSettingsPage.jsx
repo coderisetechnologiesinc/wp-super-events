@@ -9,6 +9,7 @@ import PageActionButton from "../../Controls/PageActionButton";
 import BreadCrumbs from "../../Menu/BreadCrumbs";
 import PageWrapper from "../PageWrapper";
 import axios from "../../../utilities/adminApi";
+import { readDefaults } from "../../CreateEvent/eventFormData";
 import { useNavigate } from "react-router-dom";
 const YES_NO_OPTIONS = [
   { value: "yes", label: "Yes" },
@@ -33,7 +34,9 @@ const ZoomSettingsPage = () => {
   const [isAccountFetched, setAccountFetched] = useState(false);
   const updateZoomSettings = async () => {
     const newSettings = { ...settings };
-    const adminDashboardSettings = { ...settings.admin_dashboard };
+    // The dashboard defaults live at settings.settings.admin_dashboard — reading
+    // them one level up produced {} and wiped every default_* value on save.
+    const adminDashboardSettings = { ...readDefaults(settings) };
     adminDashboardSettings.zoom_meeting_default_settings = zoomSettings;
     // newSettings.settings.admin_dashboard = ""
     newSettings.settings.admin_dashboard = JSON.stringify(
@@ -71,13 +74,9 @@ const ZoomSettingsPage = () => {
     });
     if (shopInfo && shopInfo.status === 200 && shopInfo.data.settings) {
       setSettings(shopInfo.data);
-      if (shopInfo.data.settings.admin_dashboard.length > 0) {
-        const adminSettings = JSON.parse(
-          shopInfo.data.settings.admin_dashboard,
-        );
-        if (adminSettings.zoom_meeting_default_settings)
-          setZoomSettings(adminSettings.zoom_meeting_default_settings);
-      }
+      const adminSettings = readDefaults(shopInfo.data);
+      if (adminSettings.zoom_meeting_default_settings)
+        setZoomSettings(adminSettings.zoom_meeting_default_settings);
     }
   };
   const getInfo = async () => {

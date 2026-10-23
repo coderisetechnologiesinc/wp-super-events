@@ -3546,6 +3546,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   loadEvent: () => (/* binding */ loadEvent),
 /* harmony export */   parseEventTime: () => (/* binding */ parseEventTime),
 /* harmony export */   readDefaults: () => (/* binding */ readDefaults),
+/* harmony export */   registrantsPayload: () => (/* binding */ registrantsPayload),
 /* harmony export */   ticketPayload: () => (/* binding */ ticketPayload),
 /* harmony export */   uses24HourClock: () => (/* binding */ uses24HourClock)
 /* harmony export */ });
@@ -3739,6 +3740,17 @@ const eventPayload = (event, isNew, freePlan) => {
   }));
   return payload;
 };
+
+// The event endpoint rejects an update that carries only registrants ("Invalid
+// meeting type"), so a manual registration resends the event as loaded with
+// the new registrants attached, the way the event form's registrants step does.
+const registrantsPayload = (data, location, freePlan, registrants) => eventPayload({
+  ...loadEvent(data, location),
+  registrants: registrants.map(registrant => ({
+    ...registrant,
+    status: "create"
+  }))
+}, false, freePlan);
 
 /***/ }),
 
@@ -4488,7 +4500,8 @@ function EventRegistrantsPage() {
     runAction(() => (0,_utilities_registrants__WEBPACK_IMPORTED_MODULE_4__.addRegistrant)({
       postID: id,
       occurrenceId,
-      ...contact
+      ...contact,
+      freePlan: Number(settings?.current_plan?.id) === 1
     }), "Registrant added.");
   };
   const performForSelected = async (action, ids) => {
@@ -5702,6 +5715,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _adminApi__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./adminApi */ "./src/utilities/adminApi.js");
 /* harmony import */ var _adminApiFetch__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./adminApiFetch */ "./src/utilities/adminApiFetch.js");
+/* harmony import */ var _events__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./events */ "./src/utilities/events.js");
+/* harmony import */ var _Components_CreateEvent_eventFormData__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Components/CreateEvent/eventFormData */ "./src/Components/CreateEvent/eventFormData.js");
+
+
 
 
 
@@ -5859,15 +5876,17 @@ const addRegistrant = async ({
   occurrenceId = null,
   firstName,
   lastName,
-  email
+  email,
+  freePlan = false
 }) => {
-  const response = await _adminApi__WEBPACK_IMPORTED_MODULE_0__["default"].patch(`/wp-json/servv-plugin/v1/event/${postID}`, {
-    registrants: [{
-      first_name: firstName.trim(),
-      last_name: lastName.trim(),
-      email: email.trim()
-    }]
-  }, {
+  const event = await (0,_events__WEBPACK_IMPORTED_MODULE_2__.getEvent)(postID, occurrenceId);
+  const location = event.meeting?.provider === "zoom" ? "zoom" : "offline";
+  const data = (0,_Components_CreateEvent_eventFormData__WEBPACK_IMPORTED_MODULE_3__.registrantsPayload)(event, location, freePlan, [{
+    firstName: firstName.trim(),
+    lastName: lastName.trim(),
+    email: email.trim()
+  }]);
+  const response = await _adminApi__WEBPACK_IMPORTED_MODULE_0__["default"].patch(`/wp-json/servv-plugin/v1/event/${postID}`, data, {
     headers: getNonceHeaders(),
     params: occurrenceId ? {
       occurrence_id: occurrenceId
@@ -6179,4 +6198,4 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_CreateEvent_EventEditorRoute_jsx.js.map?ver=ed37763e313d2c13cb69
+//# sourceMappingURL=src_Components_CreateEvent_EventEditorRoute_jsx.js.map?ver=aca898142c23e9316456

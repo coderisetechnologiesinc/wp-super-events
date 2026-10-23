@@ -475,6 +475,228 @@ const RadioGroup = ({
 
 /***/ }),
 
+/***/ "./src/Components/CreateEvent/eventFormData.js":
+/*!*****************************************************!*\
+  !*** ./src/Components/CreateEvent/eventFormData.js ***!
+  \*****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   displayEventTime: () => (/* binding */ displayEventTime),
+/* harmony export */   eventPayload: () => (/* binding */ eventPayload),
+/* harmony export */   initialEvent: () => (/* binding */ initialEvent),
+/* harmony export */   loadEvent: () => (/* binding */ loadEvent),
+/* harmony export */   parseEventTime: () => (/* binding */ parseEventTime),
+/* harmony export */   readDefaults: () => (/* binding */ readDefaults),
+/* harmony export */   registrantsPayload: () => (/* binding */ registrantsPayload),
+/* harmony export */   ticketPayload: () => (/* binding */ ticketPayload),
+/* harmony export */   uses24HourClock: () => (/* binding */ uses24HourClock)
+/* harmony export */ });
+/* harmony import */ var moment_timezone__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment-timezone */ "./node_modules/moment-timezone/index.js");
+/* harmony import */ var moment_timezone__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment_timezone__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utilities_numbers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utilities/numbers */ "./src/utilities/numbers.js");
+
+
+const uses24HourClock = settings => [true, 1, "1", "true"].includes(settings?.settings?.time_format_24_hours);
+const displayEventTime = (value, use24Hours) => {
+  const parsed = moment_timezone__WEBPACK_IMPORTED_MODULE_0___default()(value || "00:00", "HH:mm", true);
+  return {
+    time: parsed.isValid() ? parsed.format(use24Hours ? "HH:mm" : "hh:mm") : "",
+    period: parsed.isValid() ? parsed.format("A") : "AM"
+  };
+};
+const parseEventTime = (value, period, use24Hours) => {
+  if (!/^\d{1,2}:\d{2}$/.test(value.trim())) return null;
+  const [hours, minutes] = value.trim().split(":").map(Number);
+  if (minutes > 59 || hours > (use24Hours ? 23 : 12) || !use24Hours && hours < 1) return null;
+  const parsed = moment_timezone__WEBPACK_IMPORTED_MODULE_0___default()(use24Hours ? value.trim() : `${value.trim()} ${period}`, use24Hours ? ["HH:mm", "H:mm"] : ["hh:mm A", "h:mm A"], true);
+  return parsed.isValid() ? parsed.format("HH:mm") : null;
+};
+const readDefaults = settings => {
+  const raw = settings?.settings?.admin_dashboard;
+  try {
+    const parsed = typeof raw === "string" ? JSON.parse(raw) : raw;
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+  } catch {
+    return {};
+  }
+};
+const initialEvent = settings => {
+  const defaults = readDefaults(settings);
+  const timezone = moment_timezone__WEBPACK_IMPORTED_MODULE_0___default().tz.zone(defaults.default_timezone) ? defaults.default_timezone : moment_timezone__WEBPACK_IMPORTED_MODULE_0___default().tz.guess();
+  const start = moment_timezone__WEBPACK_IMPORTED_MODULE_0___default()().tz(timezone).add(1, "day").second(0);
+  const time = moment_timezone__WEBPACK_IMPORTED_MODULE_0___default()(defaults.default_start_time, ["h:mm a", "HH:mm"], true);
+  if (time.isValid()) start.hour(time.hour()).minute(time.minute());
+  return {
+    location: ["offline", "zoom", "custom", "hybrid"].includes(defaults.default_event_type) ? defaults.default_event_type : "offline",
+    meeting: {
+      topic: "",
+      agenda: "",
+      startTime: start.format("YYYY-MM-DDTHH:mm:ss"),
+      timezone,
+      duration: Number(defaults.default_duration || 1) * 60,
+      recurrence: null,
+      is_hidden: false
+    },
+    tickets: [],
+    product: {
+      price: 0,
+      quantity: Number(defaults.default_quantity) || 5
+    },
+    filters: {},
+    custom_fields: {},
+    notifications: {
+      google_calendar: false,
+      disable_emails: false
+    }
+  };
+};
+const loadEvent = (data, location) => {
+  var _ref, _data$product$current;
+  const meeting = data.meeting || {};
+  const timezone = meeting.timezone || "UTC";
+  const start = meeting.start_time || meeting.occurrences?.[0]?.start_time;
+  const customFields = data.custom_fields || {};
+  return {
+    ...data,
+    location: location === "zoom" ? "zoom" : customFields.custom_field_1_value ? data.types?.location_id ? "hybrid" : "custom" : "offline",
+    meeting: {
+      ...meeting,
+      startTime: start ? moment_timezone__WEBPACK_IMPORTED_MODULE_0___default().tz(start, timezone).format("YYYY-MM-DDTHH:mm:ss") : "",
+      recurrence: meeting.recurrence?.type ? {
+        ...meeting.recurrence,
+        weekly_days: typeof meeting.recurrence.weekly_days === "string" ? meeting.recurrence.weekly_days.split(",").map(Number) : meeting.recurrence.weekly_days
+      } : null
+    },
+    tickets: (data.tickets || []).map(ticket => ({
+      ...ticket,
+      persisted: true,
+      title: ticket.name,
+      type: ticket.is_donation ? "donation" : Number(ticket.price) === 0 ? "free" : "paid",
+      ...Object.fromEntries(["start_datetime", "end_datetime"].map(key => [key, ticket[key] ? moment_timezone__WEBPACK_IMPORTED_MODULE_0___default().utc(ticket[key]).tz(timezone).format("YYYY-MM-DDTHH:mm:ss") : null]))
+    })),
+    product: {
+      ...data.product,
+      quantity: (_ref = (_data$product$current = data.product?.current_quantity) !== null && _data$product$current !== void 0 ? _data$product$current : data.product?.quantity) !== null && _ref !== void 0 ? _ref : 5
+    },
+    filters: data.types || {},
+    custom_fields: customFields,
+    notifications: data.notifications || {}
+  };
+};
+const ticketPayload = (ticket, timezone) => ({
+  name: ticket.title,
+  quantity: (0,_utilities_numbers__WEBPACK_IMPORTED_MODULE_1__.toInteger)(ticket.quantity),
+  price: ticket.type === "free" ? 0 : ticket.type === "donation" ? null : (0,_utilities_numbers__WEBPACK_IMPORTED_MODULE_1__.toNumber)(ticket.price),
+  is_donation: ticket.type === "donation",
+  ...Object.fromEntries(["start_datetime", "end_datetime"].map(key => [key, ticket[key] ? moment_timezone__WEBPACK_IMPORTED_MODULE_0___default().tz(ticket[key], timezone).utc().format("YYYY-MM-DDTHH:mm:ss[Z]") : null]))
+});
+
+// The API takes one recurrence shape per type, and the end condition is either
+// a number of occurrences or an end date — never both. An event loaded for
+// editing can carry leftovers from another variant (its own API response, or a
+// type the user switched away from), so the body is rebuilt from scratch.
+const recurrencePayload = (recurrence, isNew) => {
+  const type = Number(recurrence.type);
+  if (!type) return null;
+  const payload = {
+    type,
+    repeat_interval: Number(recurrence.repeat_interval) || 1
+  };
+  if (type === 2) {
+    var _recurrence$weekly_da;
+    const days = Array.isArray(recurrence.weekly_days) ? recurrence.weekly_days : String((_recurrence$weekly_da = recurrence.weekly_days) !== null && _recurrence$weekly_da !== void 0 ? _recurrence$weekly_da : "").split(",").filter(Boolean);
+    // 1 Sunday through 7 Saturday. PHP joins the array for the create call;
+    // the update body reaches the API unchanged.
+    const numbers = days.map(Number).filter(Number.isFinite);
+    payload.weekly_days = isNew ? numbers : numbers.join(",");
+  }
+  if (type === 3) {
+    if (recurrence.monthly_week_day) {
+      payload.monthly_week = Number(recurrence.monthly_week) || 1;
+      payload.monthly_week_day = Number(recurrence.monthly_week_day);
+    } else {
+      payload.monthly_day = Number(recurrence.monthly_day) || 1;
+    }
+  }
+  // A cleared occurrence count is not an end condition, so the date is used.
+  if (Number(recurrence.end_times) > 0) payload.end_times = (0,_utilities_numbers__WEBPACK_IMPORTED_MODULE_1__.toInteger)(recurrence.end_times);else if (recurrence.end_date_time) payload.end_date_time = recurrence.end_date_time;
+  return payload;
+};
+const eventPayload = (event, isNew, freePlan) => {
+  const {
+    meeting,
+    filters
+  } = event;
+  const offline = event.location !== "zoom";
+  // Hosts are ids in the form, but the event endpoint may describe them as
+  // objects. An event that never had hosts sends no attribute at all.
+  const members = Array.isArray(filters.members) ? filters.members.map(m => {
+    var _m$id;
+    return Number((_m$id = m?.id) !== null && _m$id !== void 0 ? _m$id : m);
+  }).filter(Number.isFinite) : null;
+  const type = meeting.recurrence?.type ? offline ? 2 : 8 : offline ? 1 : 2;
+  const payload = {
+    meeting: {
+      topic: meeting.topic.trim(),
+      agenda: meeting.agenda || "",
+      timezone: meeting.timezone,
+      duration: Number(meeting.duration),
+      recurrence: meeting.recurrence ? recurrencePayload(meeting.recurrence, isNew) : null,
+      is_hidden: Boolean(meeting.is_hidden),
+      [isNew ? "startTime" : "start_time"]: meeting.startTime,
+      [isNew ? "eventType" : "type"]: type
+    },
+    // Only the documented attributes are forwarded: the event endpoint returns
+    // read-only extras next to them (the *_name labels, current_quantity) that
+    // the API must not receive back on update.
+    types: {
+      location_id: ["zoom", "custom"].includes(event.location) ? null : filters.location_id || null,
+      category_id: filters.category_id || null,
+      language_id: filters.language_id || null,
+      ...(members ? {
+        members
+      } : {})
+    },
+    custom_fields: event.custom_fields,
+    notifications: {
+      google_calendar: Boolean(event.notifications?.google_calendar),
+      disable_emails: Boolean(event.notifications?.disable_emails)
+    },
+    // A cleared number input holds "" until it is saved, and the API only
+    // takes numbers here — an empty field means 0.
+    product: {
+      quantity: event.product?.quantity == null ? null : (0,_utilities_numbers__WEBPACK_IMPORTED_MODULE_1__.toInteger)(event.product.quantity),
+      price: event.product?.price == null ? null : (0,_utilities_numbers__WEBPACK_IMPORTED_MODULE_1__.toNumber)(event.product.price)
+    }
+  };
+  if (event.image_content?.startsWith("data:image/")) payload.image_content = event.image_content.split(",")[1];
+  if (isNew && freePlan) payload.product = {
+    quantity: event.tickets.filter(t => t.action !== "remove").reduce((sum, t) => sum + (0,_utilities_numbers__WEBPACK_IMPORTED_MODULE_1__.toInteger)(t.quantity), 0) || (0,_utilities_numbers__WEBPACK_IMPORTED_MODULE_1__.toInteger)(event.product.quantity) || 1
+  };
+  if (isNew && !freePlan) payload.tickets = event.tickets.filter(t => t.action !== "remove").map(t => ticketPayload(t, meeting.timezone));
+  if (!isNew && event.registrants) payload.registrants = event.registrants.filter(r => r.status === "create").map(r => ({
+    first_name: r.firstName,
+    last_name: r.lastName,
+    email: r.email
+  }));
+  return payload;
+};
+
+// The event endpoint rejects an update that carries only registrants ("Invalid
+// meeting type"), so a manual registration resends the event as loaded with
+// the new registrants attached, the way the event form's registrants step does.
+const registrantsPayload = (data, location, freePlan, registrants) => eventPayload({
+  ...loadEvent(data, location),
+  registrants: registrants.map(registrant => ({
+    ...registrant,
+    status: "create"
+  }))
+}, false, freePlan);
+
+/***/ }),
+
 /***/ "./src/Components/Menu/BreadCrumbs.jsx":
 /*!*********************************************!*\
   !*** ./src/Components/Menu/BreadCrumbs.jsx ***!
@@ -640,9 +862,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Menu_BreadCrumbs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../Menu/BreadCrumbs */ "./src/Components/Menu/BreadCrumbs.jsx");
 /* harmony import */ var _PageWrapper__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../PageWrapper */ "./src/Components/Pages/PageWrapper.jsx");
 /* harmony import */ var _utilities_adminApi__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../utilities/adminApi */ "./src/utilities/adminApi.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-4WY6JWTD.mjs");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var _CreateEvent_eventFormData__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../CreateEvent/eventFormData */ "./src/Components/CreateEvent/eventFormData.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/development/chunk-4WY6JWTD.mjs");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__);
+
 
 
 
@@ -664,7 +888,7 @@ const YES_NO_OPTIONS = [{
   label: "No"
 }];
 const ZoomSettingsPage = () => {
-  const navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_12__.useNavigate)();
+  const navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_13__.useNavigate)();
   const [zoomSettings, setZoomSettings] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
     use_pmi: false,
     waiting_room: true,
@@ -683,8 +907,10 @@ const ZoomSettingsPage = () => {
     const newSettings = {
       ...settings
     };
+    // The dashboard defaults live at settings.settings.admin_dashboard — reading
+    // them one level up produced {} and wiped every default_* value on save.
     const adminDashboardSettings = {
-      ...settings.admin_dashboard
+      ...(0,_CreateEvent_eventFormData__WEBPACK_IMPORTED_MODULE_11__.readDefaults)(settings)
     };
     adminDashboardSettings.zoom_meeting_default_settings = zoomSettings;
     // newSettings.settings.admin_dashboard = ""
@@ -723,10 +949,8 @@ const ZoomSettingsPage = () => {
     });
     if (shopInfo && shopInfo.status === 200 && shopInfo.data.settings) {
       setSettings(shopInfo.data);
-      if (shopInfo.data.settings.admin_dashboard.length > 0) {
-        const adminSettings = JSON.parse(shopInfo.data.settings.admin_dashboard);
-        if (adminSettings.zoom_meeting_default_settings) setZoomSettings(adminSettings.zoom_meeting_default_settings);
-      }
+      const adminSettings = (0,_CreateEvent_eventFormData__WEBPACK_IMPORTED_MODULE_11__.readDefaults)(shopInfo.data);
+      if (adminSettings.zoom_meeting_default_settings) setZoomSettings(adminSettings.zoom_meeting_default_settings);
     }
   };
   const getInfo = async () => {
@@ -737,21 +961,21 @@ const ZoomSettingsPage = () => {
     getInfo();
   }, []);
   const responsiveBlockStack = "w-full min-w-0";
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_PageWrapper__WEBPACK_IMPORTED_MODULE_9__["default"], {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_PageWrapper__WEBPACK_IMPORTED_MODULE_9__["default"], {
     loading: loading,
     withBackground: true,
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
       className: "dashboard-card",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
         className: "servv-dashboard-header",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
           className: "dashboard-heading",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("h1", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("h1", {
             className: "dashboard-title mt-6",
             children: t("Zoom Settings")
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
             className: "dashboard-description",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Menu_BreadCrumbs__WEBPACK_IMPORTED_MODULE_8__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Menu_BreadCrumbs__WEBPACK_IMPORTED_MODULE_8__["default"], {
               breadcrumbs: [{
                 label: "Integrations",
                 action: () => navigate("../../integrations")
@@ -764,34 +988,34 @@ const ZoomSettingsPage = () => {
               }]
             })
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
           className: "dashboard-actions",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_7__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Controls_PageActionButton__WEBPACK_IMPORTED_MODULE_7__["default"], {
             text: t("Save"),
             type: "primary",
             onAction: updateZoomSettings
           })
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Containers_PageContent__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(_Containers_BlockStack__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Containers_PageContent__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(_Containers_BlockStack__WEBPACK_IMPORTED_MODULE_1__["default"], {
           gap: 8,
           cardsLayout: true,
           className: responsiveBlockStack,
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("h1", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("h1", {
             className: "text-lg font-semibold border-b pb-4",
             children: t("Account")
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Containers_AnnotatedSection__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Containers_AnnotatedSection__WEBPACK_IMPORTED_MODULE_3__["default"], {
             title: "Account details",
             description: "Account email & name.",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Containers_BlockStack__WEBPACK_IMPORTED_MODULE_1__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Containers_BlockStack__WEBPACK_IMPORTED_MODULE_1__["default"], {
               gap: 4,
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
                 className: "flex items-center gap-3",
-                children: [isAccountFetched && account.photo && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("img", {
+                children: [isAccountFetched && account.photo && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("img", {
                   src: account.photo,
                   alt: "",
                   className: "w-8 h-8 rounded-full object-cover shrink-0"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Controls_NewInputFieldControl__WEBPACK_IMPORTED_MODULE_5__["default"], {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Controls_NewInputFieldControl__WEBPACK_IMPORTED_MODULE_5__["default"], {
                   width: "100%",
                   value: isAccountFetched ? account.email : "",
                   type: "text",
@@ -801,12 +1025,12 @@ const ZoomSettingsPage = () => {
                 })]
               })
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Containers_AnnotatedSection__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Containers_AnnotatedSection__WEBPACK_IMPORTED_MODULE_3__["default"], {
             title: "Account name",
             description: "Set a default time zone.",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Containers_BlockStack__WEBPACK_IMPORTED_MODULE_1__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Containers_BlockStack__WEBPACK_IMPORTED_MODULE_1__["default"], {
               gap: 4,
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Controls_NewInputFieldControl__WEBPACK_IMPORTED_MODULE_5__["default"], {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Controls_NewInputFieldControl__WEBPACK_IMPORTED_MODULE_5__["default"], {
                 width: "100%",
                 value: isAccountFetched ? account.full_name : "",
                 type: "text",
@@ -815,13 +1039,13 @@ const ZoomSettingsPage = () => {
                 maxLength: 30
               })
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("h1", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("h1", {
             className: "text-lg font-semibold border-b pb-4",
             children: t("Zoom settings")
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Containers_AnnotatedSection__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Containers_AnnotatedSection__WEBPACK_IMPORTED_MODULE_3__["default"], {
             title: "Meeting ID",
             description: "Set a meeting ID",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Controls_RadioGroup__WEBPACK_IMPORTED_MODULE_4__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Controls_RadioGroup__WEBPACK_IMPORTED_MODULE_4__["default"], {
               name: "meeting_id",
               value: zoomSettings.use_pmi ? "pmi" : "auto",
               options: [{
@@ -833,27 +1057,27 @@ const ZoomSettingsPage = () => {
               }],
               onChange: val => handleSettingsChange("use_pmi", val === "pmi")
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Containers_AnnotatedSection__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Containers_AnnotatedSection__WEBPACK_IMPORTED_MODULE_3__["default"], {
             title: "Video",
             description: "Show/hide host and guest video",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(_Containers_BlockStack__WEBPACK_IMPORTED_MODULE_1__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(_Containers_BlockStack__WEBPACK_IMPORTED_MODULE_1__["default"], {
               gap: 4,
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Controls_CheckboxItem__WEBPACK_IMPORTED_MODULE_6__["default"], {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Controls_CheckboxItem__WEBPACK_IMPORTED_MODULE_6__["default"], {
                 label: "Host video",
                 name: "host_video",
                 checked: zoomSettings.host_video,
                 onChange: () => handleSettingsChange("host_video", !zoomSettings.host_video)
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Controls_CheckboxItem__WEBPACK_IMPORTED_MODULE_6__["default"], {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Controls_CheckboxItem__WEBPACK_IMPORTED_MODULE_6__["default"], {
                 label: "Guest video",
                 name: "guest_video",
                 checked: zoomSettings.participant_video,
                 onChange: () => handleSettingsChange("participant_video", !zoomSettings.participant_video)
               })]
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Containers_AnnotatedSection__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Containers_AnnotatedSection__WEBPACK_IMPORTED_MODULE_3__["default"], {
             title: "Audio",
             description: "Set default audio settings",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Controls_RadioGroup__WEBPACK_IMPORTED_MODULE_4__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Controls_RadioGroup__WEBPACK_IMPORTED_MODULE_4__["default"], {
               name: "audio",
               value: zoomSettings.audio,
               options: [{
@@ -868,28 +1092,28 @@ const ZoomSettingsPage = () => {
               }],
               onChange: val => handleSettingsChange("audio", val)
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Containers_AnnotatedSection__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Containers_AnnotatedSection__WEBPACK_IMPORTED_MODULE_3__["default"], {
             title: "Enable Join Before Host",
             description: "Enable or disabled join before host",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Controls_RadioGroup__WEBPACK_IMPORTED_MODULE_4__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Controls_RadioGroup__WEBPACK_IMPORTED_MODULE_4__["default"], {
               name: "join_before_host",
               value: zoomSettings.join_before_host ? "yes" : "no",
               options: YES_NO_OPTIONS,
               onChange: val => handleSettingsChange("join_before_host", val === "yes")
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Containers_AnnotatedSection__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Containers_AnnotatedSection__WEBPACK_IMPORTED_MODULE_3__["default"], {
             title: "Enable Waiting Room",
             description: "Enable or disabled waiting room",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Controls_RadioGroup__WEBPACK_IMPORTED_MODULE_4__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Controls_RadioGroup__WEBPACK_IMPORTED_MODULE_4__["default"], {
               name: "waiting_room",
               value: zoomSettings.waiting_room ? "yes" : "no",
               options: YES_NO_OPTIONS,
               onChange: val => handleSettingsChange("waiting_room", val === "yes")
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Containers_AnnotatedSection__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Containers_AnnotatedSection__WEBPACK_IMPORTED_MODULE_3__["default"], {
             title: "Automatically record meeting",
             description: "Record meeting on local computer",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Controls_RadioGroup__WEBPACK_IMPORTED_MODULE_4__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Controls_RadioGroup__WEBPACK_IMPORTED_MODULE_4__["default"], {
               name: "auto_recording",
               value: zoomSettings.auto_recording,
               options: [{
@@ -967,6 +1191,44 @@ const PageWrapper = props => {
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PageWrapper);
+
+/***/ }),
+
+/***/ "./src/utilities/numbers.js":
+/*!**********************************!*\
+  !*** ./src/utilities/numbers.js ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   coerceNumbers: () => (/* binding */ coerceNumbers),
+/* harmony export */   toInteger: () => (/* binding */ toInteger),
+/* harmony export */   toNumber: () => (/* binding */ toNumber)
+/* harmony export */ });
+// Number inputs keep whatever the user typed, including the empty string left
+// behind when the last character is deleted — coercing on every keystroke would
+// snap the field back to 0 and make it impossible to clear. These helpers are
+// the save-time boundary instead: an empty or unparsable field becomes 0 (or an
+// explicit fallback), never "", NaN or null.
+const toNumber = (value, fallback = 0) => {
+  if (value === "" || value === null || value === undefined) return fallback;
+  const number = Number(value);
+  return Number.isFinite(number) ? number : fallback;
+};
+const toInteger = (value, fallback = 0) => Math.trunc(toNumber(value, fallback));
+// Replaces only the keys the object already carries, so a setting the shop has
+// never stored stays absent instead of being written as 0.
+const coerceNumbers = (source, coercions) => {
+  if (!source || typeof source !== "object") return source;
+  const next = {
+    ...source
+  };
+  Object.entries(coercions).forEach(([key, coerce]) => {
+    if (key in next) next[key] = coerce(next[key]);
+  });
+  return next;
+};
 
 /***/ }),
 
@@ -1091,4 +1353,4 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_Integrations_ZoomSettingsPage_jsx.js.map?ver=6e96dabf11440a1863fb
+//# sourceMappingURL=src_Components_Pages_Integrations_ZoomSettingsPage_jsx.js.map?ver=4d6ce2b8bf02b3c80c93
