@@ -1,5 +1,7 @@
 import axios from "./adminApi";
 import apiFetch from "./adminApiFetch";
+import { getEvent } from "./events";
+import { registrantsPayload } from "../Components/CreateEvent/eventFormData";
 
 /* ------------------ helpers ------------------ */
 
@@ -164,9 +166,15 @@ export const resendAllNotifications = async ({
   });
 };
 
-export const addRegistrant = async ({ postID, occurrenceId = null, firstName, lastName, email }) => {
-  const response = await axios.patch(`/wp-json/servv-plugin/v1/event/${postID}`, {
-    registrants: [{ first_name: firstName.trim(), last_name: lastName.trim(), email: email.trim() }],
-  }, { headers: getNonceHeaders(), params: occurrenceId ? { occurrence_id: occurrenceId } : {} });
+export const addRegistrant = async ({ postID, occurrenceId = null, firstName, lastName, email, freePlan = false }) => {
+  const event = await getEvent(postID, occurrenceId);
+  const location = event.meeting?.provider === "zoom" ? "zoom" : "offline";
+  const data = registrantsPayload(event, location, freePlan, [
+    { firstName: firstName.trim(), lastName: lastName.trim(), email: email.trim() },
+  ]);
+  const response = await axios.patch(`/wp-json/servv-plugin/v1/event/${postID}`, data, {
+    headers: getNonceHeaders(),
+    params: occurrenceId ? { occurrence_id: occurrenceId } : {},
+  });
   return response.data;
 };

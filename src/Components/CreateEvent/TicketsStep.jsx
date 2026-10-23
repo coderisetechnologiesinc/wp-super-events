@@ -1,5 +1,6 @@
 import { TicketIcon, PlusIcon, MinusIcon } from "../../assets/icons";
 import StepActions from "./StepActions";
+import { readDefaults } from "./eventFormData";
 import { useState, useEffect, Fragment } from "react";
 import { v4 as uuidv4 } from "uuid";
 import InteractiveCard from "../Containers/InteractiveCard";
@@ -105,7 +106,7 @@ const TicketsStep = ({
 
   useEffect(() => {
     if (settings?.settings?.admin_dashboard) {
-      let adminSettings = JSON.parse(settings.settings.admin_dashboard);
+      const adminSettings = readDefaults(settings);
       let defaultQtyFromSettings =
         Number.parseInt(adminSettings.default_quantity) || 1;
       setDefaultQty(defaultQtyFromSettings);

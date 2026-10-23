@@ -102,7 +102,7 @@ export default function EventRegistrantsPage() {
     if (!contact.firstName.trim() || !contact.lastName.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact.email.trim())) {
       setContactError("Enter a first name, last name and valid email address."); return;
     }
-    runAction(() => addRegistrant({ postID: id, occurrenceId, ...contact }), "Registrant added.");
+    runAction(() => addRegistrant({ postID: id, occurrenceId, ...contact, freePlan: Number(settings?.current_plan?.id) === 1 }), "Registrant added.");
   };
   const performForSelected = async (action, ids) => {
     const results = await Promise.allSettled(ids.map((registrantID) => action({ postID: id, occurrenceId, registrantID })));

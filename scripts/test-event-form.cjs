@@ -6,9 +6,10 @@ const file = path.resolve(
   __dirname,
   "../src/Components/CreateEvent/eventFormData.js",
 );
+const source = path.resolve(__dirname, "../src");
 const loader = require.extensions[".js"];
 require.extensions[".js"] = (mod, filename) => {
-  if (filename !== file) return loader(mod, filename);
+  if (!filename.startsWith(source)) return loader(mod, filename);
   mod._compile(
     babel.transformFileSync(filename, {
       babelrc: false,
@@ -26,6 +27,7 @@ const {
   uses24HourClock,
   displayEventTime,
   parseEventTime,
+  registrantsPayload,
 } = require(file);
 
 test("time preferences handle 12/24-hour clocks, midnight and noon", () => {
@@ -359,3 +361,37 @@ test("hosts are sent as ids, and omitted when the event has none", () => {
   event.filters = {};
   assert.equal("members" in eventPayload(event, true, false).types, false);
 });
+
+test("manual registrants are sent with the loaded event", () => {
+  const data = {
+    meeting: {
+      id: 3084,
+      topic: "Test",
+      agenda: "",
+      start_time: "2026-10-21T17:45:00Z",
+      timezone: "Europe/Lisbon",
+      duration: 60,
+      providers_type: 1,
+      recurrence: null,
+      is_hidden: false,
+    },
+    product: { price: 0, quantity: 10, current_quantity: 9 },
+    types: { location_id: 96, category_id: null, language_id: null, members: [] },
+    notifications: { google_calendar: false, disable_emails: false },
+    custom_fields: {},
+    tickets: [],
+  };
+  const payload = registrantsPayload(data, "offline", false, [
+    { firstName: "Olena", lastName: "Koval", email: "olena@example.com" },
+  ]);
+  assert.equal(payload.meeting.type, 1);
+  assert.equal(payload.meeting.topic, "Test");
+  assert.equal(payload.meeting.start_time, "2026-10-21T18:45:00");
+  assert.equal(payload.product.quantity, 9);
+  assert.equal(payload.types.location_id, 96);
+  assert.deepEqual(payload.registrants, [
+    { first_name: "Olena", last_name: "Koval", email: "olena@example.com" },
+  ]);
+  assert.equal(payload.tickets, undefined);
+});
+

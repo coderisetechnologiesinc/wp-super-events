@@ -263,3 +263,19 @@ export const eventPayload = (event, isNew, freePlan) => {
       }));
   return payload;
 };
+
+// The event endpoint rejects an update that carries only registrants ("Invalid
+// meeting type"), so a manual registration resends the event as loaded with
+// the new registrants attached, the way the event form's registrants step does.
+export const registrantsPayload = (data, location, freePlan, registrants) =>
+  eventPayload(
+    {
+      ...loadEvent(data, location),
+      registrants: registrants.map((registrant) => ({
+        ...registrant,
+        status: "create",
+      })),
+    },
+    false,
+    freePlan,
+  );

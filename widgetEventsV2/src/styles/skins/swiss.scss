@@ -936,7 +936,15 @@
     }
 
     .svv-events--list .svv-card {
+      // Wider media column than the shared mobile sheet hands out.
+      grid-template-columns: 128px minmax(0, 1fr);
       padding: 16px 0;
+    }
+
+    .svv-events--list .svv-card__media {
+      // The column is wide enough to carry the merchant's chosen ratio, so
+      // don't inherit the square thumbnail the shared sheet forces.
+      aspect-ratio: var(--svv-image-ratio);
     }
 
     .svv-events--list .svv-card__title {
@@ -968,6 +976,14 @@
   }
 
   @include phone {
+    .svv-events--list .svv-card {
+      grid-template-columns: 128px minmax(0, 1fr);
+    }
+
+    .svv-events--list .svv-card__media {
+      aspect-ratio: var(--svv-image-ratio);
+    }
+
     .svv-card__actions {
       display: grid;
       grid-template-columns: 40px minmax(0, 1fr);

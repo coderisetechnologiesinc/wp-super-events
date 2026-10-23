@@ -2,6 +2,7 @@ import axios from "../../../utilities/adminApi";
 import apiFetch from "../../../utilities/adminApiFetch";
 import { useServvStore } from "../../../store/useServvStore";
 import moment from "moment-timezone";
+import { readDefaults } from "../../CreateEvent/eventFormData";
 const getNonceHeaders = () => {
   if (typeof servvData !== "undefined" && servvData.nonce) {
     return { "X-WP-Nonce": servvData.nonce };
@@ -40,9 +41,7 @@ export const useServvData = () => {
         ...data,
         settings: {
           ...data.settings,
-          admin_dashboard: data?.settings?.admin_dashboard
-            ? JSON.parse(data.settings.admin_dashboard)
-            : {},
+          admin_dashboard: readDefaults(data),
         },
       };
     }

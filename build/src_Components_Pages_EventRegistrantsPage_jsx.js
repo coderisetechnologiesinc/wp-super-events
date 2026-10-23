@@ -404,6 +404,228 @@ const PageActionButton = ({
 
 /***/ }),
 
+/***/ "./src/Components/CreateEvent/eventFormData.js":
+/*!*****************************************************!*\
+  !*** ./src/Components/CreateEvent/eventFormData.js ***!
+  \*****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   displayEventTime: () => (/* binding */ displayEventTime),
+/* harmony export */   eventPayload: () => (/* binding */ eventPayload),
+/* harmony export */   initialEvent: () => (/* binding */ initialEvent),
+/* harmony export */   loadEvent: () => (/* binding */ loadEvent),
+/* harmony export */   parseEventTime: () => (/* binding */ parseEventTime),
+/* harmony export */   readDefaults: () => (/* binding */ readDefaults),
+/* harmony export */   registrantsPayload: () => (/* binding */ registrantsPayload),
+/* harmony export */   ticketPayload: () => (/* binding */ ticketPayload),
+/* harmony export */   uses24HourClock: () => (/* binding */ uses24HourClock)
+/* harmony export */ });
+/* harmony import */ var moment_timezone__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment-timezone */ "./node_modules/moment-timezone/index.js");
+/* harmony import */ var moment_timezone__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment_timezone__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utilities_numbers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utilities/numbers */ "./src/utilities/numbers.js");
+
+
+const uses24HourClock = settings => [true, 1, "1", "true"].includes(settings?.settings?.time_format_24_hours);
+const displayEventTime = (value, use24Hours) => {
+  const parsed = moment_timezone__WEBPACK_IMPORTED_MODULE_0___default()(value || "00:00", "HH:mm", true);
+  return {
+    time: parsed.isValid() ? parsed.format(use24Hours ? "HH:mm" : "hh:mm") : "",
+    period: parsed.isValid() ? parsed.format("A") : "AM"
+  };
+};
+const parseEventTime = (value, period, use24Hours) => {
+  if (!/^\d{1,2}:\d{2}$/.test(value.trim())) return null;
+  const [hours, minutes] = value.trim().split(":").map(Number);
+  if (minutes > 59 || hours > (use24Hours ? 23 : 12) || !use24Hours && hours < 1) return null;
+  const parsed = moment_timezone__WEBPACK_IMPORTED_MODULE_0___default()(use24Hours ? value.trim() : `${value.trim()} ${period}`, use24Hours ? ["HH:mm", "H:mm"] : ["hh:mm A", "h:mm A"], true);
+  return parsed.isValid() ? parsed.format("HH:mm") : null;
+};
+const readDefaults = settings => {
+  const raw = settings?.settings?.admin_dashboard;
+  try {
+    const parsed = typeof raw === "string" ? JSON.parse(raw) : raw;
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+  } catch {
+    return {};
+  }
+};
+const initialEvent = settings => {
+  const defaults = readDefaults(settings);
+  const timezone = moment_timezone__WEBPACK_IMPORTED_MODULE_0___default().tz.zone(defaults.default_timezone) ? defaults.default_timezone : moment_timezone__WEBPACK_IMPORTED_MODULE_0___default().tz.guess();
+  const start = moment_timezone__WEBPACK_IMPORTED_MODULE_0___default()().tz(timezone).add(1, "day").second(0);
+  const time = moment_timezone__WEBPACK_IMPORTED_MODULE_0___default()(defaults.default_start_time, ["h:mm a", "HH:mm"], true);
+  if (time.isValid()) start.hour(time.hour()).minute(time.minute());
+  return {
+    location: ["offline", "zoom", "custom", "hybrid"].includes(defaults.default_event_type) ? defaults.default_event_type : "offline",
+    meeting: {
+      topic: "",
+      agenda: "",
+      startTime: start.format("YYYY-MM-DDTHH:mm:ss"),
+      timezone,
+      duration: Number(defaults.default_duration || 1) * 60,
+      recurrence: null,
+      is_hidden: false
+    },
+    tickets: [],
+    product: {
+      price: 0,
+      quantity: Number(defaults.default_quantity) || 5
+    },
+    filters: {},
+    custom_fields: {},
+    notifications: {
+      google_calendar: false,
+      disable_emails: false
+    }
+  };
+};
+const loadEvent = (data, location) => {
+  var _ref, _data$product$current;
+  const meeting = data.meeting || {};
+  const timezone = meeting.timezone || "UTC";
+  const start = meeting.start_time || meeting.occurrences?.[0]?.start_time;
+  const customFields = data.custom_fields || {};
+  return {
+    ...data,
+    location: location === "zoom" ? "zoom" : customFields.custom_field_1_value ? data.types?.location_id ? "hybrid" : "custom" : "offline",
+    meeting: {
+      ...meeting,
+      startTime: start ? moment_timezone__WEBPACK_IMPORTED_MODULE_0___default().tz(start, timezone).format("YYYY-MM-DDTHH:mm:ss") : "",
+      recurrence: meeting.recurrence?.type ? {
+        ...meeting.recurrence,
+        weekly_days: typeof meeting.recurrence.weekly_days === "string" ? meeting.recurrence.weekly_days.split(",").map(Number) : meeting.recurrence.weekly_days
+      } : null
+    },
+    tickets: (data.tickets || []).map(ticket => ({
+      ...ticket,
+      persisted: true,
+      title: ticket.name,
+      type: ticket.is_donation ? "donation" : Number(ticket.price) === 0 ? "free" : "paid",
+      ...Object.fromEntries(["start_datetime", "end_datetime"].map(key => [key, ticket[key] ? moment_timezone__WEBPACK_IMPORTED_MODULE_0___default().utc(ticket[key]).tz(timezone).format("YYYY-MM-DDTHH:mm:ss") : null]))
+    })),
+    product: {
+      ...data.product,
+      quantity: (_ref = (_data$product$current = data.product?.current_quantity) !== null && _data$product$current !== void 0 ? _data$product$current : data.product?.quantity) !== null && _ref !== void 0 ? _ref : 5
+    },
+    filters: data.types || {},
+    custom_fields: customFields,
+    notifications: data.notifications || {}
+  };
+};
+const ticketPayload = (ticket, timezone) => ({
+  name: ticket.title,
+  quantity: (0,_utilities_numbers__WEBPACK_IMPORTED_MODULE_1__.toInteger)(ticket.quantity),
+  price: ticket.type === "free" ? 0 : ticket.type === "donation" ? null : (0,_utilities_numbers__WEBPACK_IMPORTED_MODULE_1__.toNumber)(ticket.price),
+  is_donation: ticket.type === "donation",
+  ...Object.fromEntries(["start_datetime", "end_datetime"].map(key => [key, ticket[key] ? moment_timezone__WEBPACK_IMPORTED_MODULE_0___default().tz(ticket[key], timezone).utc().format("YYYY-MM-DDTHH:mm:ss[Z]") : null]))
+});
+
+// The API takes one recurrence shape per type, and the end condition is either
+// a number of occurrences or an end date — never both. An event loaded for
+// editing can carry leftovers from another variant (its own API response, or a
+// type the user switched away from), so the body is rebuilt from scratch.
+const recurrencePayload = (recurrence, isNew) => {
+  const type = Number(recurrence.type);
+  if (!type) return null;
+  const payload = {
+    type,
+    repeat_interval: Number(recurrence.repeat_interval) || 1
+  };
+  if (type === 2) {
+    var _recurrence$weekly_da;
+    const days = Array.isArray(recurrence.weekly_days) ? recurrence.weekly_days : String((_recurrence$weekly_da = recurrence.weekly_days) !== null && _recurrence$weekly_da !== void 0 ? _recurrence$weekly_da : "").split(",").filter(Boolean);
+    // 1 Sunday through 7 Saturday. PHP joins the array for the create call;
+    // the update body reaches the API unchanged.
+    const numbers = days.map(Number).filter(Number.isFinite);
+    payload.weekly_days = isNew ? numbers : numbers.join(",");
+  }
+  if (type === 3) {
+    if (recurrence.monthly_week_day) {
+      payload.monthly_week = Number(recurrence.monthly_week) || 1;
+      payload.monthly_week_day = Number(recurrence.monthly_week_day);
+    } else {
+      payload.monthly_day = Number(recurrence.monthly_day) || 1;
+    }
+  }
+  // A cleared occurrence count is not an end condition, so the date is used.
+  if (Number(recurrence.end_times) > 0) payload.end_times = (0,_utilities_numbers__WEBPACK_IMPORTED_MODULE_1__.toInteger)(recurrence.end_times);else if (recurrence.end_date_time) payload.end_date_time = recurrence.end_date_time;
+  return payload;
+};
+const eventPayload = (event, isNew, freePlan) => {
+  const {
+    meeting,
+    filters
+  } = event;
+  const offline = event.location !== "zoom";
+  // Hosts are ids in the form, but the event endpoint may describe them as
+  // objects. An event that never had hosts sends no attribute at all.
+  const members = Array.isArray(filters.members) ? filters.members.map(m => {
+    var _m$id;
+    return Number((_m$id = m?.id) !== null && _m$id !== void 0 ? _m$id : m);
+  }).filter(Number.isFinite) : null;
+  const type = meeting.recurrence?.type ? offline ? 2 : 8 : offline ? 1 : 2;
+  const payload = {
+    meeting: {
+      topic: meeting.topic.trim(),
+      agenda: meeting.agenda || "",
+      timezone: meeting.timezone,
+      duration: Number(meeting.duration),
+      recurrence: meeting.recurrence ? recurrencePayload(meeting.recurrence, isNew) : null,
+      is_hidden: Boolean(meeting.is_hidden),
+      [isNew ? "startTime" : "start_time"]: meeting.startTime,
+      [isNew ? "eventType" : "type"]: type
+    },
+    // Only the documented attributes are forwarded: the event endpoint returns
+    // read-only extras next to them (the *_name labels, current_quantity) that
+    // the API must not receive back on update.
+    types: {
+      location_id: ["zoom", "custom"].includes(event.location) ? null : filters.location_id || null,
+      category_id: filters.category_id || null,
+      language_id: filters.language_id || null,
+      ...(members ? {
+        members
+      } : {})
+    },
+    custom_fields: event.custom_fields,
+    notifications: {
+      google_calendar: Boolean(event.notifications?.google_calendar),
+      disable_emails: Boolean(event.notifications?.disable_emails)
+    },
+    // A cleared number input holds "" until it is saved, and the API only
+    // takes numbers here — an empty field means 0.
+    product: {
+      quantity: event.product?.quantity == null ? null : (0,_utilities_numbers__WEBPACK_IMPORTED_MODULE_1__.toInteger)(event.product.quantity),
+      price: event.product?.price == null ? null : (0,_utilities_numbers__WEBPACK_IMPORTED_MODULE_1__.toNumber)(event.product.price)
+    }
+  };
+  if (event.image_content?.startsWith("data:image/")) payload.image_content = event.image_content.split(",")[1];
+  if (isNew && freePlan) payload.product = {
+    quantity: event.tickets.filter(t => t.action !== "remove").reduce((sum, t) => sum + (0,_utilities_numbers__WEBPACK_IMPORTED_MODULE_1__.toInteger)(t.quantity), 0) || (0,_utilities_numbers__WEBPACK_IMPORTED_MODULE_1__.toInteger)(event.product.quantity) || 1
+  };
+  if (isNew && !freePlan) payload.tickets = event.tickets.filter(t => t.action !== "remove").map(t => ticketPayload(t, meeting.timezone));
+  if (!isNew && event.registrants) payload.registrants = event.registrants.filter(r => r.status === "create").map(r => ({
+    first_name: r.firstName,
+    last_name: r.lastName,
+    email: r.email
+  }));
+  return payload;
+};
+
+// The event endpoint rejects an update that carries only registrants ("Invalid
+// meeting type"), so a manual registration resends the event as loaded with
+// the new registrants attached, the way the event form's registrants step does.
+const registrantsPayload = (data, location, freePlan, registrants) => eventPayload({
+  ...loadEvent(data, location),
+  registrants: registrants.map(registrant => ({
+    ...registrant,
+    status: "create"
+  }))
+}, false, freePlan);
+
+/***/ }),
+
 /***/ "./src/Components/Menu/BreadCrumbs.jsx":
 /*!*********************************************!*\
   !*** ./src/Components/Menu/BreadCrumbs.jsx ***!
@@ -818,7 +1040,8 @@ function EventRegistrantsPage() {
     runAction(() => (0,_utilities_registrants__WEBPACK_IMPORTED_MODULE_4__.addRegistrant)({
       postID: id,
       occurrenceId,
-      ...contact
+      ...contact,
+      freePlan: Number(settings?.current_plan?.id) === 1
     }), "Registrant added.");
   };
   const performForSelected = async (action, ids) => {
@@ -1368,6 +1591,44 @@ const eventAdminPath = (selected, fallbackProvider = "offline") => {
 
 /***/ }),
 
+/***/ "./src/utilities/numbers.js":
+/*!**********************************!*\
+  !*** ./src/utilities/numbers.js ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   coerceNumbers: () => (/* binding */ coerceNumbers),
+/* harmony export */   toInteger: () => (/* binding */ toInteger),
+/* harmony export */   toNumber: () => (/* binding */ toNumber)
+/* harmony export */ });
+// Number inputs keep whatever the user typed, including the empty string left
+// behind when the last character is deleted — coercing on every keystroke would
+// snap the field back to 0 and make it impossible to clear. These helpers are
+// the save-time boundary instead: an empty or unparsable field becomes 0 (or an
+// explicit fallback), never "", NaN or null.
+const toNumber = (value, fallback = 0) => {
+  if (value === "" || value === null || value === undefined) return fallback;
+  const number = Number(value);
+  return Number.isFinite(number) ? number : fallback;
+};
+const toInteger = (value, fallback = 0) => Math.trunc(toNumber(value, fallback));
+// Replaces only the keys the object already carries, so a setting the shop has
+// never stored stays absent instead of being written as 0.
+const coerceNumbers = (source, coercions) => {
+  if (!source || typeof source !== "object") return source;
+  const next = {
+    ...source
+  };
+  Object.entries(coercions).forEach(([key, coerce]) => {
+    if (key in next) next[key] = coerce(next[key]);
+  });
+  return next;
+};
+
+/***/ }),
+
 /***/ "./src/utilities/registrants.js":
 /*!**************************************!*\
   !*** ./src/utilities/registrants.js ***!
@@ -1385,6 +1646,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _adminApi__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./adminApi */ "./src/utilities/adminApi.js");
 /* harmony import */ var _adminApiFetch__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./adminApiFetch */ "./src/utilities/adminApiFetch.js");
+/* harmony import */ var _events__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./events */ "./src/utilities/events.js");
+/* harmony import */ var _Components_CreateEvent_eventFormData__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Components/CreateEvent/eventFormData */ "./src/Components/CreateEvent/eventFormData.js");
+
+
 
 
 
@@ -1542,15 +1807,17 @@ const addRegistrant = async ({
   occurrenceId = null,
   firstName,
   lastName,
-  email
+  email,
+  freePlan = false
 }) => {
-  const response = await _adminApi__WEBPACK_IMPORTED_MODULE_0__["default"].patch(`/wp-json/servv-plugin/v1/event/${postID}`, {
-    registrants: [{
-      first_name: firstName.trim(),
-      last_name: lastName.trim(),
-      email: email.trim()
-    }]
-  }, {
+  const event = await (0,_events__WEBPACK_IMPORTED_MODULE_2__.getEvent)(postID, occurrenceId);
+  const location = event.meeting?.provider === "zoom" ? "zoom" : "offline";
+  const data = (0,_Components_CreateEvent_eventFormData__WEBPACK_IMPORTED_MODULE_3__.registrantsPayload)(event, location, freePlan, [{
+    firstName: firstName.trim(),
+    lastName: lastName.trim(),
+    email: email.trim()
+  }]);
+  const response = await _adminApi__WEBPACK_IMPORTED_MODULE_0__["default"].patch(`/wp-json/servv-plugin/v1/event/${postID}`, data, {
     headers: getNonceHeaders(),
     params: occurrenceId ? {
       occurrence_id: occurrenceId
@@ -1872,4 +2139,4 @@ const ForwardRef = /*#__PURE__*/ react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(T
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_EventRegistrantsPage_jsx.js.map?ver=c338cef1d09efe6285c3
+//# sourceMappingURL=src_Components_Pages_EventRegistrantsPage_jsx.js.map?ver=575c70d254b616582e63

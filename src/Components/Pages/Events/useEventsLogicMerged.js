@@ -9,6 +9,7 @@ import timezonesWithOffset from "../../../utilities/timezones";
 import { useNavigate } from "react-router-dom";
 import { useServvStore } from "../../../store/useServvStore";
 import { eventAdminPath } from "../../../utilities/events";
+import { readDefaults } from "../../CreateEvent/eventFormData";
 
 export const useEventsLogic = (settings, filtersList, zoomAccount) => {
   const PAGE_SIZE = 10;
@@ -828,10 +829,7 @@ export const useEventsLogic = (settings, filtersList, zoomAccount) => {
     else setTimeFormat("hh:mm a");
 
     let tzGuess = moment.tz.guess();
-    if (settings.settings?.admin_dashboard) {
-      const dash = JSON.parse(settings.settings.admin_dashboard);
-      tzGuess = dash.default_timezone || tzGuess;
-    }
+    tzGuess = readDefaults(settings).default_timezone || tzGuess;
     const found = timezones.find((z) => z.id === tzGuess);
     if (found) setTimezone(found);
   }, [settings]); // eslint-disable-line react-hooks/exhaustive-deps

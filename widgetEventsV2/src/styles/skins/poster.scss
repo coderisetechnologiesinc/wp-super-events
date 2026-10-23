@@ -789,6 +789,9 @@
     }
 
     .svv-events--list .svv-card {
+      // Poster is built around the full-bleed image, so the media column keeps
+      // more width here than the shared mobile sheet hands out.
+      grid-template-columns: 128px minmax(0, 1fr);
       padding: 18px 0 18px 10px;
 
       &:hover {
@@ -866,6 +869,10 @@
   }
 
   @include phone {
+    .svv-events--list .svv-card {
+      grid-template-columns: 128px minmax(0, 1fr);
+    }
+
     .svv-events--list .svv-card__media {
       aspect-ratio: 3 / 2;
       margin-bottom: 12px;
