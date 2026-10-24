@@ -127,6 +127,9 @@
     "waitingListNameLabel": "이름",
     "waitingListEmailLabel": "이메일",
     "memberFormPrimaryBadge": "대표 연락처",
+    "memberFormSameForAll": "모든 티켓에 동일한 연락처 정보 사용",
+    "memberFormSameContactNote": "대표 연락처 정보를 사용합니다.",
+    "memberFormAdditionalRegistrants": "추가 등록자",
     "captchaRequiredMessage": "계속하려면 CAPTCHA 인증을 완료해 주세요",
     "genericErrorMessage": "오류가 발생했습니다. 다시 시도해 주세요."
   },

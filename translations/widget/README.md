@@ -1,6 +1,6 @@
 # Standard widget translations
 
-Each JSON file contains all 143 widget messages for one supported language:
+Each JSON file contains all 146 widget messages for one supported language:
 Simplified Chinese (`zh-cn`), Dutch (`nl`), English (`en`), French (`fr`),
 German (`de`), Hindi (`hi`), Italian (`it`), Japanese (`ja`), Korean (`ko`),
 Norwegian Bokmål (`no`), Spanish (`es`), and Swedish (`sv`).

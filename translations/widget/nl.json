@@ -127,6 +127,9 @@
     "waitingListNameLabel": "Naam",
     "waitingListEmailLabel": "E-mail",
     "memberFormPrimaryBadge": "Hoofdcontactpersoon",
+    "memberFormSameForAll": "Dezelfde contactgegevens voor alle tickets gebruiken",
+    "memberFormSameContactNote": "Gebruikt de gegevens van de hoofdcontactpersoon.",
+    "memberFormAdditionalRegistrants": "Extra ingeschreven deelnemers",
     "captchaRequiredMessage": "Voltooi de CAPTCHA om door te gaan",
     "genericErrorMessage": "Er is iets misgegaan. Probeer het opnieuw."
   },

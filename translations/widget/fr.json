@@ -127,6 +127,9 @@
     "waitingListNameLabel": "Nom",
     "waitingListEmailLabel": "E-mail",
     "memberFormPrimaryBadge": "Contact principal",
+    "memberFormSameForAll": "Utiliser les mêmes coordonnées pour tous les billets",
+    "memberFormSameContactNote": "Utilise les coordonnées du contact principal.",
+    "memberFormAdditionalRegistrants": "Participants inscrits supplémentaires",
     "captchaRequiredMessage": "Veuillez compléter le CAPTCHA pour continuer",
     "genericErrorMessage": "Une erreur s’est produite. Veuillez réessayer."
   },

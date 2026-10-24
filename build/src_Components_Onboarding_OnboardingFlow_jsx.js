@@ -964,11 +964,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   createEvent: () => (/* binding */ createEvent),
 /* harmony export */   eventAdminPath: () => (/* binding */ eventAdminPath),
+/* harmony export */   eventFormatLabel: () => (/* binding */ eventFormatLabel),
 /* harmony export */   eventKey: () => (/* binding */ eventKey),
 /* harmony export */   eventRoutePayload: () => (/* binding */ eventRoutePayload),
 /* harmony export */   generateEventData: () => (/* binding */ generateEventData),
 /* harmony export */   getEvent: () => (/* binding */ getEvent),
 /* harmony export */   getFeaturedImage: () => (/* binding */ getFeaturedImage),
+/* harmony export */   isOnlineEvent: () => (/* binding */ isOnlineEvent),
 /* harmony export */   openEventPost: () => (/* binding */ openEventPost),
 /* harmony export */   updateEvent: () => (/* binding */ updateEvent)
 /* harmony export */ });
@@ -992,8 +994,14 @@ const createEvent = async (location, data) => {
   });
   return response.data;
 };
-const generateEventData = async data => {
-  const response = await _adminApi__WEBPACK_IMPORTED_MODULE_0__["default"].post(`/wp-json/servv-plugin/v1/event/data/generate`, data, {
+
+// Asks the API for a description and tags, and for a cover image when
+// withImage is set. A non-empty existing_description switches the API to
+// rewrite mode, so callers leave it out when they want a fresh description.
+const generateEventData = async (data, {
+  withImage = false
+} = {}) => {
+  const response = await _adminApi__WEBPACK_IMPORTED_MODULE_0__["default"].post(`/wp-json/servv-plugin/v1/event/data/generate${withImage ? "?with_image=1" : ""}`, data, {
     headers: headers()
   });
   return response.data;
@@ -1050,6 +1058,11 @@ const eventAdminPath = (selected, fallbackProvider = "offline") => {
   if (selected.occurrence_id != null && selected.occurrence_id !== "") query.set("occurrence_id", selected.occurrence_id);
   return `/events/${pathType}/${selected.id}${selected.registrants_view ? "/registrants" : ""}${query.size ? `?${query}` : ""}`;
 };
+
+// An event the shop hosts on its own link is created through the offline
+// route, so its row type says "Event" while the event is in fact online.
+const isOnlineEvent = event => event.type === "Zoom" || Boolean(event.hasOwnMeetingLink);
+const eventFormatLabel = event => event.isHybrid ? "Hybrid" : isOnlineEvent(event) ? "Online" : "In-person";
 
 /***/ }),
 
@@ -1406,4 +1419,4 @@ const ForwardRef = /*#__PURE__*/ react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(R
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Onboarding_OnboardingFlow_jsx.js.map?ver=16af28af2f63785001b9
+//# sourceMappingURL=src_Components_Onboarding_OnboardingFlow_jsx.js.map?ver=ef4906587ba0e12ddc06

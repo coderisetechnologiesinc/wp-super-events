@@ -263,6 +263,9 @@ export default {
       return this.widgetSettings.currency;
     },
     eventProviderLabel(event) {
+      const fields = event.custom_fields || event;
+      if (fields.custom_field_1_name === "Link" &&
+          String(fields.custom_field_1_value || "").trim()) return "Hybrid";
       switch (event.provider) {
         case "zoom":
           if (event.type === "webinar") {

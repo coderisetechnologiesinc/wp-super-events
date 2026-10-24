@@ -19,9 +19,14 @@ export const createEvent = async (location, data) => {
   return response.data;
 };
 
-export const generateEventData = async (data) => {
+// Asks the API for a description and tags, and for a cover image when
+// withImage is set. A non-empty existing_description switches the API to
+// rewrite mode, so callers leave it out when they want a fresh description.
+export const generateEventData = async (data, { withImage = false } = {}) => {
   const response = await axios.post(
-    `/wp-json/servv-plugin/v1/event/data/generate`,
+    `/wp-json/servv-plugin/v1/event/data/generate${
+      withImage ? "?with_image=1" : ""
+    }`,
     data,
     { headers: headers() },
   );
@@ -80,3 +85,11 @@ export const eventAdminPath = (selected, fallbackProvider = "offline") => {
   if (selected.occurrence_id != null && selected.occurrence_id !== "") query.set("occurrence_id", selected.occurrence_id);
   return `/events/${pathType}/${selected.id}${selected.registrants_view ? "/registrants" : ""}${query.size ? `?${query}` : ""}`;
 };
+
+// An event the shop hosts on its own link is created through the offline
+// route, so its row type says "Event" while the event is in fact online.
+export const isOnlineEvent = (event) =>
+  event.type === "Zoom" || Boolean(event.hasOwnMeetingLink);
+
+export const eventFormatLabel = (event) =>
+  event.isHybrid ? "Hybrid" : isOnlineEvent(event) ? "Online" : "In-person";

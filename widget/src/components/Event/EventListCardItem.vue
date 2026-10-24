@@ -200,6 +200,9 @@ export default {
       return this.eventDateTime.timeSimple24;
     },
     eventProviderLabel() {
+      const fields = this.event.custom_fields || this.event;
+      if (fields.custom_field_1_name === "Link" &&
+          String(fields.custom_field_1_value || "").trim()) return "Hybrid";
       switch (this.event.provider) {
         case "zoom":
           if (this.event.type === "webinar") {

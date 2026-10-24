@@ -103,3 +103,27 @@ export const readCoverImage = async (file) => {
     );
   return compressed;
 };
+
+// Base64 from the generator arrives without a media type; the leading bytes
+// name the format.
+const BASE64_SIGNATURES = [
+  ["/9j/", "image/jpeg"],
+  ["iVBORw0KGgo", "image/png"],
+  ["R0lGOD", "image/gif"],
+  ["UklGR", "image/webp"],
+];
+
+export const asImageDataUrl = (value) => {
+  const raw = String(value || "").trim();
+  if (!raw) return "";
+  if (raw.startsWith("data:")) return raw;
+  const [, type] = BASE64_SIGNATURES.find(([prefix]) => raw.startsWith(prefix)) || [];
+  return type ? `data:${type};base64,${raw}` : "";
+};
+
+// A generated cover travels in the same event payload as an uploaded one, so
+// it answers to the same payload budget.
+export const prepareCoverDataUrl = async (dataUrl) => {
+  if (!dataUrl || base64Bytes(dataUrl) <= MAX_PAYLOAD_BYTES) return dataUrl;
+  return compress(await loadImage(dataUrl));
+};

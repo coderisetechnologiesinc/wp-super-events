@@ -1,3 +1,4 @@
+import { eventFormatLabel, isOnlineEvent } from "../../../utilities/events";
 import React from "react";
 import {
   ArrowPathRoundedSquareIcon,
@@ -44,7 +45,7 @@ const EventRows = ({
     </div>
 
     {events.map((event) => {
-      const online = event.type === "Zoom";
+      const online = isOnlineEvent(event);
       const live = event.status === "On sale";
       const picked = selectedKeys.has(eventKey(event));
       const statusBadge = (
@@ -136,7 +137,7 @@ const EventRows = ({
 
           <div className={styles.format}>
             <span className={styles.cellLabel}>{t("Format")}</span>
-            {online ? t("Online") : t("In-person")}
+            {t(eventFormatLabel(event))}
             <span className={styles.compactRecurrence}> / {t(event.recurrence)}</span>
           </div>
 

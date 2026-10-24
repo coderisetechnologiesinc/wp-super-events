@@ -35,6 +35,39 @@ const apiEvent = {
 };
 
 describe("normalizeEvent", () => {
+  it("labels Hybrid only when Link has a nonempty value, preserving provider", () => {
+    for (const fields of [
+      { custom_field_1_name: "Link", custom_field_1_value: "https://example.com" },
+      { custom_fields: { custom_field_1_name: "Link", custom_field_1_value: "https://example.com" } },
+    ]) {
+      expect(normalizeEvent({ ...apiEvent, ...fields })).toMatchObject({
+        formatLabel: "Hybrid", provider: "zoom", type: "meeting",
+      });
+    }
+    for (const [name, value] of [["Link", ""], ["Link", "  "], ["Meeting link", "https://example.com"]]) {
+      expect(normalizeEvent({ ...apiEvent, custom_field_1_name: name, custom_field_1_value: value }).formatLabel).toBe("Virtual");
+    }
+  });
+
+  it("calls an event on the shop's own meeting link Virtual, not in-person", () => {
+    const offline = { ...apiEvent, provider: "offline" };
+
+    expect(normalizeEvent(offline).formatLabel).toBe("In-person");
+    expect(normalizeEvent({ ...offline, custom_field_1_name: "Meeting link", custom_field_1_value: "https://meet.test/abc" }).formatLabel).toBe("Virtual");
+    // The venue is read from the nested shape too, the one the event endpoint sends.
+    expect(normalizeEvent({ ...offline, custom_fields: { custom_field_1_name: "Meeting link", custom_field_1_value: "" } }).formatLabel).toBe("Virtual");
+  });
+
+  it("reads the description the events API sends as a string agenda", () => {
+    const { description: _unused, agenda: _list, ...withoutText } = apiEvent;
+
+    expect(normalizeEvent({ ...withoutText, agenda: "Written in the admin form." }))
+      .toMatchObject({ description: "Written in the admin form.", agenda: [] });
+    expect(normalizeEvent({ ...withoutText, product: { ...apiEvent.product, description: "From the product." } }).description)
+      .toBe("From the product.");
+    expect(normalizeEvent(apiEvent).description).toBe(apiEvent.description);
+  });
+
   it("maps the api field names the widget reads", () => {
     const event = normalizeEvent(apiEvent);
 

@@ -29,6 +29,7 @@ export const useBookingStore = defineStore('booking', () => {
   const event = ref(null);
   const step = ref(null);
   const quantity = ref(1);
+  const sameForAll = ref(false);
   const registrants = ref([]);
   const submitting = ref(false);
   const error = ref('');
@@ -49,7 +50,7 @@ export const useBookingStore = defineStore('booking', () => {
   let attempt = 0;
   function reset() {
     attempt++;
-    event.value = null; step.value = null; quantity.value = 1; registrants.value = [];
+    event.value = null; step.value = null; quantity.value = 1; registrants.value = []; sameForAll.value = false;
     submitting.value = false; error.value = ''; primaryEmail.value = ''; payment.value = null; completed.value = false;
     questions.reset();
   }
@@ -67,6 +68,7 @@ export const useBookingStore = defineStore('booking', () => {
     }
     quantity.value = seatCappedQuantity(nextEvent, details.attendees || 1);
     registrants.value = details.registrants || [];
+    sameForAll.value = !!details.sameForAll;
     primaryEmail.value = registrants.value[0]?.email || '';
     const current = attempt;
     submitting.value = true;
@@ -84,7 +86,7 @@ export const useBookingStore = defineStore('booking', () => {
     const [primary, ...additional] = registrants.value;
     if (!primary?.email) throw new Error('Please enter the primary contact email.');
     if (registrants.value.length !== quantity.value) throw new Error('Please provide details for every attendee.');
-    return { ...primary, additional_registrants: serializeRegistrants(additional), same_for_all: false };
+    return { ...primary, additional_registrants: serializeRegistrants(additional), same_for_all: sameForAll.value };
   }
   async function submit() {
     if (!event.value || submitting.value) return;
@@ -133,7 +135,7 @@ export const useBookingStore = defineStore('booking', () => {
     catch (e) { error.value = e.message || GENERIC_ERROR; }
     finally { submitting.value = false; }
   }
-  return { event, step, quantity, registrants, submitting, error, primaryEmail, payment, completed, isFreeFlow,
+  return { event, step, quantity, registrants, sameForAll, submitting, error, primaryEmail, payment, completed, isFreeFlow,
     isSelfRegistration, captchaRequired, start, submit, submitBeforeForm, submitAfterForm, submitWaitingList,
     paymentComplete, finish, close, reset };
 });

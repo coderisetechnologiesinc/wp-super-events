@@ -24,6 +24,7 @@ const GROUPS = {
   card: {
     imageAspectRatio: "image_aspect_ratio",
     eventImages: "show_event_images",
+    description: "show_description",
     descriptionWords: "card_description_words",
     seatsRemaining: "show_seats_remaining",
     price: "show_price",

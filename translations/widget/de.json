@@ -127,6 +127,9 @@
     "waitingListNameLabel": "Name",
     "waitingListEmailLabel": "E-Mail",
     "memberFormPrimaryBadge": "Hauptkontakt",
+    "memberFormSameForAll": "Für alle Tickets dieselben Kontaktdaten verwenden",
+    "memberFormSameContactNote": "Verwendet die Daten des Hauptkontakts.",
+    "memberFormAdditionalRegistrants": "Weitere angemeldete Personen",
     "captchaRequiredMessage": "Bitte bestätigen Sie das CAPTCHA, um fortzufahren",
     "genericErrorMessage": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
   },

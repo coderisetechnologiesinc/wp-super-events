@@ -1602,7 +1602,8 @@
   min-width: 0;
   overflow-wrap: anywhere;
 }
-:is(#servv-wrap, .servv-ui) .zxjBUQl7CbWMln37CMpn {
+:is(#servv-wrap, .servv-ui) .zxjBUQl7CbWMln37CMpn,
+:is(#servv-wrap, .servv-ui) .IX6FyUNQn8tTtDHL8RyO {
   color: #b42318;
   font-weight: 600;
 }
@@ -1921,6 +1922,262 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/@wordpress/scripts/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/Components/CreateEvent/GenerateDescription.module.scss ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************************************/
+@keyframes PhvyfKtKvmBRioAM2Ztn {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+@keyframes Y8p5JwrrT3XsaoWPHmoU {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(-250%);
+  }
+}
+:is(#servv-wrap, .servv-ui) .UTuimQWZaqSYgu_ho8If {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: -6px;
+}
+:is(#servv-wrap, .servv-ui) .b_w_lEFgWxDn5eWJUPeT {
+  box-sizing: border-box;
+  min-height: 0;
+  margin: 0;
+  background: none;
+  box-shadow: none;
+  text-decoration: none;
+  text-shadow: none;
+  vertical-align: baseline;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+}
+:is(#servv-wrap, .servv-ui) .b_w_lEFgWxDn5eWJUPeT:focus {
+  outline: 0;
+}
+:is(#servv-wrap, .servv-ui) .b_w_lEFgWxDn5eWJUPeT {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 10px;
+  border: 1px solid #e8edf5;
+  background: #fff;
+  color: #6436c9;
+  cursor: pointer;
+  font: 700 13px/20px "Plus Jakarta Sans", sans-serif;
+  box-shadow: -4px 4px 11px #dce2ec, 2px -2px 7px #fbfcfe;
+}
+:is(#servv-wrap, .servv-ui) .b_w_lEFgWxDn5eWJUPeT:hover {
+  color: #51299f;
+}
+:is(#servv-wrap, .servv-ui) .b_w_lEFgWxDn5eWJUPeT[aria-expanded=true] {
+  box-shadow: inset -4px 4px 9px #dce2ec, inset 2px -2px 6px #fbfcfe;
+}
+:is(#servv-wrap, .servv-ui) .b_w_lEFgWxDn5eWJUPeT:focus-visible {
+  outline: 2px solid #6436c9;
+  outline-offset: 2px;
+}
+:is(#servv-wrap, .servv-ui) .nHZD04XSf1d5WD_qvD9Q {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+}
+:is(#servv-wrap, .servv-ui) .wP8j29ZY5CAMYK7CAW0H {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid #e4dcf8;
+  background: #faf8ff;
+}
+:is(#servv-wrap, .servv-ui) .CYMeEMTEFrADwnKagsgR {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #39415a;
+}
+:is(#servv-wrap, .servv-ui) .CYMeEMTEFrADwnKagsgR textarea {
+  box-sizing: border-box;
+  min-height: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: inherit;
+  font-family: inherit;
+  line-height: normal;
+  outline: 0;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+}
+:is(#servv-wrap, .servv-ui) .CYMeEMTEFrADwnKagsgR textarea:focus, :is(#servv-wrap, .servv-ui) .CYMeEMTEFrADwnKagsgR textarea:focus-visible {
+  border-color: transparent;
+  box-shadow: none;
+  outline: 0;
+}
+:is(#servv-wrap, .servv-ui) .CYMeEMTEFrADwnKagsgR textarea {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid #e8edf5;
+  background: #fff;
+  color: #151b2b;
+  resize: vertical;
+  box-shadow: inset -4px 4px 9px #dce2ec, inset 2px -2px 6px #fbfcfe;
+  font: 500 14px/21px "Plus Jakarta Sans", sans-serif;
+}
+:is(#servv-wrap, .servv-ui) .CYMeEMTEFrADwnKagsgR textarea:focus {
+  outline: 2px solid #6436c9;
+  outline-offset: 2px;
+}
+:is(#servv-wrap, .servv-ui) .OMPhp898WYSBvMLG2jvr {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+}
+:is(#servv-wrap, .servv-ui) .F4hvCmKfSuJlINCP8zle {
+  color: #5b6680;
+}
+:is(#servv-wrap, .servv-ui) .YBr_wlEwL4GmGU5dwg7U {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+:is(#servv-wrap, .servv-ui) .M0rQ2r07gSyTxvV0iKmz,
+:is(#servv-wrap, .servv-ui) .vlghDHh3OlTaL4nbMoEG {
+  box-sizing: border-box;
+  min-height: 0;
+  margin: 0;
+  background: none;
+  box-shadow: none;
+  text-decoration: none;
+  text-shadow: none;
+  vertical-align: baseline;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+}
+:is(#servv-wrap, .servv-ui) .M0rQ2r07gSyTxvV0iKmz:focus,
+:is(#servv-wrap, .servv-ui) .vlghDHh3OlTaL4nbMoEG:focus {
+  outline: 0;
+}
+:is(#servv-wrap, .servv-ui) .M0rQ2r07gSyTxvV0iKmz,
+:is(#servv-wrap, .servv-ui) .vlghDHh3OlTaL4nbMoEG {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  font: 700 13px/20px "Plus Jakarta Sans", sans-serif;
+}
+:is(#servv-wrap, .servv-ui) .M0rQ2r07gSyTxvV0iKmz:disabled,
+:is(#servv-wrap, .servv-ui) .vlghDHh3OlTaL4nbMoEG:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+:is(#servv-wrap, .servv-ui) .M0rQ2r07gSyTxvV0iKmz:focus-visible,
+:is(#servv-wrap, .servv-ui) .vlghDHh3OlTaL4nbMoEG:focus-visible {
+  outline: 2px solid #6436c9;
+  outline-offset: 2px;
+}
+:is(#servv-wrap, .servv-ui) .M0rQ2r07gSyTxvV0iKmz {
+  background: #6436c9;
+  color: #fff;
+  box-shadow: -6px 6px 14px #dce2ec, 3px -3px 9px #fbfcfe;
+}
+:is(#servv-wrap, .servv-ui) .M0rQ2r07gSyTxvV0iKmz:hover:not(:disabled) {
+  background: #51299f;
+}
+:is(#servv-wrap, .servv-ui) .vlghDHh3OlTaL4nbMoEG {
+  background: #fff;
+  border-color: #e8edf5;
+  color: #39415a;
+}
+:is(#servv-wrap, .servv-ui) .G0Yv6P1uj2gVT4Yf_yNg {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  border-top-color: #fff;
+  animation: PhvyfKtKvmBRioAM2Ztn 0.7s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  :is(#servv-wrap, .servv-ui) .G0Yv6P1uj2gVT4Yf_yNg {
+    animation: none;
+  }
+}
+:is(#servv-wrap, .servv-ui) .LvwsS8aF4bI4FL87NJVC {
+  overflow: hidden;
+  height: 4px;
+  border-radius: 999px;
+  background: #ece4fb;
+}
+:is(#servv-wrap, .servv-ui) .LvwsS8aF4bI4FL87NJVC span {
+  display: block;
+  width: 40%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(-90deg, #a07ced, #6436c9);
+  animation: Y8p5JwrrT3XsaoWPHmoU 1.1s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  :is(#servv-wrap, .servv-ui) .LvwsS8aF4bI4FL87NJVC span {
+    width: 100%;
+    animation: none;
+  }
+}
+:is(#servv-wrap, .servv-ui) .jybT8D5pIJXOF7z9iJfV {
+  color: #b42318;
+  font-weight: 600;
+}
+:is(#servv-wrap, .servv-ui) .sc0wwxoVAyNaK9te0jNK {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+:is(#servv-wrap, .servv-ui) .sc0wwxoVAyNaK9te0jNK strong {
+  font-size: 13px;
+  font-weight: 600;
+  color: #39415a;
+}
+:is(#servv-wrap, .servv-ui) .e9pZiy6NConky_rdKU8A {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+:is(#servv-wrap, .servv-ui) .rRkZo37J778Mwk8oeKap {
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid #e4dcf8;
+  background: #fff;
+  color: #51299f;
+  font-size: 12px;
+  font-weight: 600;
 }
 /*!*****************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/@wordpress/scripts/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/Components/Modals/ModalShell.module.scss ***!

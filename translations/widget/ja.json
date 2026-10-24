@@ -127,6 +127,9 @@
     "waitingListNameLabel": "氏名",
     "waitingListEmailLabel": "メールアドレス",
     "memberFormPrimaryBadge": "代表連絡先",
+    "memberFormSameForAll": "すべてのチケットに同じ連絡先を使用する",
+    "memberFormSameContactNote": "代表連絡先の情報を使用します。",
+    "memberFormAdditionalRegistrants": "追加の登録者",
     "captchaRequiredMessage": "続行するには CAPTCHA 認証を完了してください",
     "genericErrorMessage": "エラーが発生しました。もう一度お試しください。"
   },

@@ -127,6 +127,9 @@
     "waitingListNameLabel": "Navn",
     "waitingListEmailLabel": "E-post",
     "memberFormPrimaryBadge": "Hovedkontakt",
+    "memberFormSameForAll": "Bruk de samme kontaktopplysningene for alle billetter",
+    "memberFormSameContactNote": "Bruker opplysningene til hovedkontakten.",
+    "memberFormAdditionalRegistrants": "Flere påmeldte deltakere",
     "captchaRequiredMessage": "Fullfør CAPTCHA-en for å fortsette",
     "genericErrorMessage": "Noe gikk galt. Prøv igjen."
   },

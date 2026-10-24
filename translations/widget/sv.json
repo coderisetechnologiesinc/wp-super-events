@@ -127,6 +127,9 @@
     "waitingListNameLabel": "Namn",
     "waitingListEmailLabel": "E-post",
     "memberFormPrimaryBadge": "Huvudkontakt",
+    "memberFormSameForAll": "Använd samma kontaktuppgifter för alla biljetter",
+    "memberFormSameContactNote": "Använder huvudkontaktens uppgifter.",
+    "memberFormAdditionalRegistrants": "Ytterligare anmälda deltagare",
     "captchaRequiredMessage": "Slutför CAPTCHA-verifieringen för att fortsätta",
     "genericErrorMessage": "Något gick fel. Försök igen."
   },

@@ -23,6 +23,11 @@ add_action('rest_api_init', function () {
         'methods'  => 'POST',
         'callback' => 'servv_generate_event_data',
         'permission_callback' => 'servv_validate_ajax_permissions',
+        'args' => [
+            'with_image' => [
+                'required' => false,
+            ],
+        ],
     ]);
     register_rest_route(servv_plugin_get_config('plugin_api_namespace'), '/event/(?P<post_id>\d+)', [
         'methods'  => 'DELETE',
