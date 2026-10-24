@@ -1,3 +1,4 @@
+import { eventFormatLabel, isOnlineEvent } from "../../../utilities/events";
 import React, { useMemo } from "react";
 import moment from "moment";
 import {
@@ -70,7 +71,7 @@ const EventRail = ({
           </div>
 
           {group.items.map(({ event, day, weekday }) => {
-            const online = event.type === "Zoom";
+            const online = isOnlineEvent(event);
             const live = event.status === "On sale";
             const picked = selectedKeys.has(eventKey(event));
 
@@ -169,7 +170,7 @@ const EventRail = ({
                       >
                         <path d={online ? MARK.online : MARK.offline} />
                       </svg>
-                      {online ? t("Online") : t("In-person")}
+                      {t(eventFormatLabel(event))}
                     </span>
 
                     {event.location && <span>{event.location}</span>}

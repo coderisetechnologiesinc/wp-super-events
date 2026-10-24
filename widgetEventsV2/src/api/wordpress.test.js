@@ -59,6 +59,13 @@ it('registers primary and additional attendees with occurrence, without cart cal
   expect(order.get('email')).toBe(person.email); expect(order.get('post_id')).toBe('120'); expect(order.get('occurrence_id')).toBe('occ-2');
   expect(order.get('additional_registrants')).toBe('b@example.test,Anna,Smith'); expect(booking.step).toBe('confirmation');
 });
+it('flags same_for_all when one contact covers every attendee', async () => {
+  const booking = bookingSetup((action) => action === 'servv_process_free_order' ? { success: true, data: {} } : { questions: [] });
+  await booking.start(event, { attendees: 2, sameForAll: true, registrants: [person, person] });
+  const order = requests.find(({ params }) => params.get('action') === 'servv_process_free_order').params;
+  expect(order.get('same_for_all')).toBe('true');
+  expect(order.get('additional_registrants')).toBe(`${person.email},Anna,Smith`);
+});
 it('creates Stripe session for a paid ticket on a free base event', async () => {
   const booking = bookingSetup((action) => action === 'servv_create_checkout_session' ? { success: true, data: { client_secret: 'secret', public_key: 'pk_test' } } : { questions: [] });
   await booking.start({ ...event, tickets: [{ id: 44, price: 25 }] }, { attendees: 1, registrants: [{ ...person, ticket_id: 44 }] });

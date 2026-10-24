@@ -64,6 +64,9 @@ export const useShopStore = defineStore("shop", () => {
   const showSeats = computed(
     () => isNotDisabled(card.value.seatsRemaining),
   );
+  const showDescription = computed(
+    () => isNotDisabled(card.value.description),
+  );
   const descriptionWordLimit = computed(
     () => Number(card.value.descriptionWords) || 0,
   );
@@ -162,6 +165,7 @@ export const useShopStore = defineStore("shop", () => {
     isCalendarView,
     redirectToProductPage,
     openEventPage,
+    showDescription,
     descriptionWordLimit,
     shareDomainSuffix,
     viewMode,

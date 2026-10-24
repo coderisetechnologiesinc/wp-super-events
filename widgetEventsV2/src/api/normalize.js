@@ -32,6 +32,22 @@ export function normalizeEvent(raw) {
   const seatsRemaining =
     typeof product.current_quantity === "number" ? product.current_quantity : null;
   const isRecording = raw.type === "recording";
+  // The venue lives in the first custom field: "Link" is a hybrid event (a
+  // place plus an online link), "Meeting link" an online one the shop hosts
+  // itself. Both are created through the offline route, so `provider` alone
+  // would call them in-person.
+  const customFields = raw.custom_fields || raw;
+  const isHybrid =
+    customFields.custom_field_1_name === "Link" &&
+    !!String(customFields.custom_field_1_value || "").trim();
+  const hasOwnMeetingLink = customFields.custom_field_1_name === "Meeting link";
+  // The meeting's description lives in `agenda` on the events API — that is
+  // what the admin form writes and what the v1 widget reads. Newer payloads
+  // may also carry a `description`, and the product keeps its own copy.
+  const description =
+    [raw.description, raw.agenda, product.description].find(
+      (value) => typeof value === "string" && value.trim(),
+    ) || "";
   const price = typeof product.price === "number" ? product.price : Number(product.price) || 0;
 
   return {
@@ -40,11 +56,15 @@ export function normalizeEvent(raw) {
     occurrenceId: raw.occurrence_id ?? null,
     isRecurring: !!raw.occurrence_id,
     title: raw.topic || "",
-    description: raw.description || "",
+    description,
     agenda: Array.isArray(raw.agenda) ? raw.agenda : [],
     type: raw.type || "",
     provider: raw.provider || "",
-    formatLabel: PROVIDER_LABELS[raw.provider] || "",
+    formatLabel: isHybrid
+      ? "Hybrid"
+      : hasOwnMeetingLink
+      ? PROVIDER_LABELS.zoom
+      : PROVIDER_LABELS[raw.provider] || "",
     isLiveShopping: !!raw.is_live_shopping,
     isRecording,
 

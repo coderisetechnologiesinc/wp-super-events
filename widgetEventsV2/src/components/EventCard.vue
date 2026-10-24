@@ -148,7 +148,7 @@ const isSoldOut = computed(() => props.event.availability === "sold-out");
         </li>
       </ul>
 
-      <p v-if="description" class="svv-card__description">{{ description }}</p>
+      <p v-if="description && shop.showDescription" class="svv-card__description">{{ description }}</p>
 
       <ul v-if="facets.length" class="svv-card__meta">
         <li v-for="facet in facets" :key="facet">{{ facet }}</li>

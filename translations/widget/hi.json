@@ -127,6 +127,9 @@
     "waitingListNameLabel": "नाम",
     "waitingListEmailLabel": "ईमेल",
     "memberFormPrimaryBadge": "मुख्य संपर्क",
+    "memberFormSameForAll": "सभी टिकटों के लिए एक ही संपर्क विवरण का उपयोग करें",
+    "memberFormSameContactNote": "मुख्य संपर्क का विवरण उपयोग किया जाता है।",
+    "memberFormAdditionalRegistrants": "अतिरिक्त पंजीकृत व्यक्ति",
     "captchaRequiredMessage": "आगे बढ़ने के लिए कृपया CAPTCHA सत्यापन पूरा करें",
     "genericErrorMessage": "कुछ गलत हो गया। कृपया फिर कोशिश करें।"
   },

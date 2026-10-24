@@ -41,10 +41,14 @@ const consent = ref(false);
 const ticketTotal = ref(null);
 const pageUrl = typeof window === "undefined" ? "" : window.location.href;
 
+// Seats left govern the stepper; the fallback only applies when the event does
+// not report a quantity at all.
+const UNLIMITED_SEATS_STEP_LIMIT = 10;
+
 const maxAttendees = computed(() => {
   const left = props.event?.seatsRemaining;
 
-  return typeof left === "number" && left > 0 ? Math.min(left, 10) : 10;
+  return typeof left === "number" && left > 0 ? left : UNLIMITED_SEATS_STEP_LIMIT;
 });
 
 const timeOptions = computed(() => ({

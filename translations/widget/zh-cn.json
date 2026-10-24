@@ -127,6 +127,9 @@
     "waitingListNameLabel": "姓名",
     "waitingListEmailLabel": "电子邮箱",
     "memberFormPrimaryBadge": "主要联系人",
+    "memberFormSameForAll": "所有门票使用相同的联系信息",
+    "memberFormSameContactNote": "使用主要联系人的信息。",
+    "memberFormAdditionalRegistrants": "其他报名者",
     "captchaRequiredMessage": "请完成验证码验证以继续",
     "genericErrorMessage": "发生错误，请重试。"
   },

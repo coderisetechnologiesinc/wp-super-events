@@ -14,9 +14,16 @@ const colorSwatch = (value) => {
   return raw.length === 4 || raw.length === 5 ? '#' + raw.slice(1, 4).split('').map((char) => char + char).join('') : raw.slice(0, 7);
 };
 const cleanText = (value) => String(value).replace(/[;{}<>\[\]"]/g, '').slice(0, 300);
+// A number field being retyped is empty for a keystroke or two; the shortcode
+// and the saved config fall back to the default rather than printing nothing.
+const fieldValue = (config, field) => {
+  const value = config[field.id];
+  if (value === undefined || value === null) return defaults[field.id];
+  return field.type === 'range' && value === '' ? defaults[field.id] : value;
+};
 export function widgetShortcode(config) {
   return `[wp_super_events ${fields.map((field) => {
-    const value = config[field.id] ?? defaults[field.id];
+    const value = fieldValue(config, field);
     return `${field.id}="${field.type === 'checkbox' ? (value ? 'true' : 'false') : (field.type === 'text' ? cleanText(value) : String(value).replace(/["\[\]]/g, (char) => encodeURIComponent(char)))}"`;
   }).join(' ')}]`;
 }
@@ -48,6 +55,8 @@ export default function WidgetPage() {
   const [previewLoading, setPreviewLoading] = useState(false);
   const [previewConfig, setPreviewConfig] = useState(null);
   const form = useRef(null);
+  // What each number field held before it was cleared, so blur can put it back.
+  const lastNumber = useRef({});
   const shortcode = useMemo(() => widgetShortcode(config), [config]);
   const dirty = JSON.stringify(config) !== JSON.stringify(saved);
 
@@ -70,8 +79,27 @@ export default function WidgetPage() {
   }, [previewConfig]);
 
   function change(field, value) {
-    setConfig((current) => ({ ...current, [field.id]: field.type === 'range' ? Number(value) : value }));
+    // Number("") is 0, which snapped a number field to zero the moment its
+    // last character was deleted. An emptied field stays empty while it is
+    // being retyped, and blur puts the last number back.
+    if (field.type === 'range' && value === '' && config[field.id] !== '') {
+      lastNumber.current[field.id] = config[field.id];
+    }
+    setConfig((current) => ({
+      ...current,
+      [field.id]: field.type === 'range' ? (value === '' ? '' : Number(value)) : value,
+    }));
     setNotice('');
+  }
+  // A number field left empty goes back to what it held before it was cleared
+  // — the edit in progress, not only the last saved value.
+  function restore(field) {
+    setConfig((current) => current[field.id] === ''
+      ? {
+          ...current,
+          [field.id]: lastNumber.current[field.id] ?? saved[field.id] ?? defaults[field.id],
+        }
+      : current);
   }
   async function save(event) {
     event.preventDefault(); setSaving(true); setError(''); setNotice('');
@@ -116,6 +144,7 @@ export default function WidgetPage() {
         type={field.type === 'range' ? 'number' : field.type === 'color' ? 'color' : field.type === 'url' ? 'url' : 'text'}
         value={config[field.id] ?? ''} min={field.min} max={field.max} step={field.step}
         required={field.type === 'range'} onChange={(event) => change(field, event.target.value)}
+        onBlur={field.type === 'range' ? () => restore(field) : undefined}
       />}
       {field.id === 'background_image' && <PageActionButton type="secondary" size="sm" text="Choose from media library" onAction={() => chooseImage(field)} />}
       {field.info && <small>{field.info}</small>}

@@ -2,6 +2,7 @@
 import { computed, reactive, ref, watch } from "vue";
 
 import CaptchaBox from "@/components/ui/CaptchaBox.vue";
+import CheckboxField from "@/components/ui/CheckboxField.vue";
 import ErrorMessage from "@/components/ui/ErrorMessage.vue";
 import TextInput from "@/components/ui/TextInput.vue";
 import { useI18nStore } from "@/stores/i18n";
@@ -25,6 +26,16 @@ const blankRegistrant = () => ({ email: "", first_name: "", last_name: "", ticke
 const registrants = reactive([]);
 const captchaToken = ref("");
 const showErrors = ref(false);
+const sameForAll = ref(true);
+
+// Only the primary contact is filled in when one set of details covers every
+// ticket, which is how the on-product widget has always worked.
+const needsContact = (index) => index === 0 || !sameForAll.value;
+const sharedContact = computed(() => sameForAll.value && registrants.length > 1);
+// One shared note replaces the repeated rows, unless tickets are in play and
+// every attendee still needs their own ticket choice.
+const collapseAdditional = computed(() => sharedContact.value && !props.tickets.length);
+const additionalCount = computed(() => registrants.length - 1);
 
 watch(
   () => props.rows,
@@ -48,11 +59,15 @@ const emailMessage = computed(() =>
 );
 
 const rowErrors = computed(() =>
-  registrants.map((registrant) => ({
-    email: isValidEmail(registrant.email) ? "" : emailMessage.value,
-    first_name: registrant.first_name.trim() ? "" : mandatoryMessage.value,
-    last_name: registrant.last_name.trim() ? "" : mandatoryMessage.value,
-  }))
+  registrants.map((registrant, index) =>
+    needsContact(index)
+      ? {
+          email: isValidEmail(registrant.email) ? "" : emailMessage.value,
+          first_name: registrant.first_name.trim() ? "" : mandatoryMessage.value,
+          last_name: registrant.last_name.trim() ? "" : mandatoryMessage.value,
+        }
+      : { email: "", first_name: "", last_name: "" }
+  )
 );
 
 const isValid = computed(() =>
@@ -82,20 +97,24 @@ const validate = () => {
   showErrors.value = true;
 
   if (!isValid.value || captchaMissing.value) return null;
-  if (registrants.some((row) => /[,;]/.test(row.email + row.first_name + row.last_name))) return null;
+  if (registrants.some((row, index) => needsContact(index) && /[,;]/.test(row.email + row.first_name + row.last_name))) return null;
   if (props.tickets.length && registrants.some((row) => {
     const ticket = ticketOf(row);
     return !ticket || !ticketAvailable(ticket) || (ticket.is_donation && !(Number(row.donation_amount) > 0));
   })) return null;
 
   return {
-    registrants: registrants.map((registrant) => ({
-      email: registrant.email.trim(),
-      first_name: registrant.first_name.trim(),
-      last_name: registrant.last_name.trim(),
-      ticket_id: registrant.ticket_id,
-      donation_amount: registrant.donation_amount,
-    })),
+    sameForAll: sharedContact.value,
+    registrants: registrants.map((registrant, index) => {
+      const contact = needsContact(index) ? registrant : registrants[0];
+      return {
+        email: contact.email.trim(),
+        first_name: contact.first_name.trim(),
+        last_name: contact.last_name.trim(),
+        ticket_id: registrant.ticket_id,
+        donation_amount: registrant.donation_amount,
+      };
+    }),
     captchaToken: captchaToken.value,
   };
 };
@@ -119,78 +138,113 @@ defineExpose({ validate });
   <div class="svv-form">
     <p class="svv-form__text">{{ description }}</p>
 
-    <fieldset
-      v-for="(registrant, index) in registrants"
-      :key="index"
-      class="svv-members__row"
-    >
-      <legend class="svv-members__legend">
-        {{
-          i18n.t("onProductWidget.memberFormMember", { fallback: "Registrant" })
-        }}
-        <span
-          v-if="index === 0 && isSelfRegistration"
-          class="svv-badge svv-badge--success"
-        >
+    <template v-for="(registrant, index) in registrants" :key="index">
+      <fieldset v-if="!collapseAdditional || index === 0" class="svv-members__row">
+        <legend class="svv-members__legend">
           {{
-            i18n.t("onProductWidget.memberFormPrimaryBadge", {
-              fallback: "Primary contact",
+            i18n.t("onProductWidget.memberFormMember", { fallback: "Registrant" })
+          }}
+          <span
+            v-if="index === 0 && isSelfRegistration"
+            class="svv-badge svv-badge--success"
+          >
+            {{
+              i18n.t("onProductWidget.memberFormPrimaryBadge", {
+                fallback: "Primary contact",
+              })
+            }}
+          </span>
+        </legend>
+
+        <label v-if="tickets.length" class="svv-field">
+          <span class="svv-field__label">
+            Ticket<span class="svv-field__required">*</span>
+          </span>
+          <span class="svv-field__control">
+            <select v-model="registrant.ticket_id" class="svv-field__input svv-field__select" required>
+              <option value="">Select a ticket</option>
+              <option v-for="ticket in tickets" :key="ticket.id" :value="ticket.id" :disabled="!ticketAvailable(ticket)">
+                {{ ticket.name }} · {{ ticket.is_donation ? 'Donation' : formatPrice(Number(ticket.price || 0), { currency: shop.currency }) }}
+              </option>
+            </select>
+          </span>
+        </label>
+        <TextInput v-if="ticketOf(registrant)?.is_donation" v-model="registrant.donation_amount" type="number" min="0.01" step="0.01" label="Donation amount" required />
+        <ErrorMessage v-if="showErrors && tickets.length && (!ticketOf(registrant) || !ticketAvailable(ticketOf(registrant)) || (ticketOf(registrant)?.is_donation && !(Number(registrant.donation_amount) > 0)))">Select an available ticket and enter a donation amount if required.</ErrorMessage>
+        <template v-if="needsContact(index)">
+          <ErrorMessage v-if="showErrors && /[,;]/.test(registrant.email + registrant.first_name + registrant.last_name)">Contact details cannot contain commas or semicolons.</ErrorMessage>
+          <TextInput
+            v-model="registrant.email"
+            type="email"
+            maxlength="40"
+            required
+            :label="
+              i18n.t('onProductWidget.memberFormEmail', { fallback: 'Email' })
+            "
+            :error="showErrors ? rowErrors[index].email : ''"
+          />
+
+          <div class="svv-members__names">
+            <TextInput
+              v-model="registrant.first_name"
+              maxlength="30"
+              required
+              :label="
+                i18n.t('onProductWidget.memberFormFirstName', {
+                  fallback: 'First Name',
+                })
+              "
+              :error="showErrors ? rowErrors[index].first_name : ''"
+            />
+            <TextInput
+              v-model="registrant.last_name"
+              maxlength="30"
+              required
+              :label="
+                i18n.t('onProductWidget.memberFormLastName', {
+                  fallback: 'Last Name',
+                })
+              "
+              :error="showErrors ? rowErrors[index].last_name : ''"
+            />
+          </div>
+        </template>
+
+        <p v-else class="svv-form__text">
+          {{
+            i18n.t("onProductWidget.memberFormSameContactNote", {
+              fallback: "Uses the main contact details.",
             })
           }}
-        </span>
+        </p>
+
+        <CheckboxField v-if="index === 0 && registrants.length > 1" v-model="sameForAll">
+          {{
+            i18n.t("onProductWidget.memberFormSameForAll", {
+              fallback: "Use the same contact details for all tickets",
+            })
+          }}
+        </CheckboxField>
+      </fieldset>
+    </template>
+
+    <fieldset v-if="sharedContact" class="svv-members__row">
+      <legend class="svv-members__legend">
+        {{
+          i18n.t("onProductWidget.memberFormAdditionalRegistrants", {
+            fallback: "Additional registrants",
+          })
+        }}
+        <span class="svv-badge">×{{ additionalCount }}</span>
       </legend>
 
-      <label v-if="tickets.length" class="svv-field">
-        <span class="svv-field__label">
-          Ticket<span class="svv-field__required">*</span>
-        </span>
-        <span class="svv-field__control">
-          <select v-model="registrant.ticket_id" class="svv-field__input svv-field__select" required>
-            <option value="">Select a ticket</option>
-            <option v-for="ticket in tickets" :key="ticket.id" :value="ticket.id" :disabled="!ticketAvailable(ticket)">
-              {{ ticket.name }} · {{ ticket.is_donation ? 'Donation' : formatPrice(Number(ticket.price || 0), { currency: shop.currency }) }}
-            </option>
-          </select>
-        </span>
-      </label>
-      <TextInput v-if="ticketOf(registrant)?.is_donation" v-model="registrant.donation_amount" type="number" min="0.01" step="0.01" label="Donation amount" required />
-      <ErrorMessage v-if="showErrors && tickets.length && (!ticketOf(registrant) || !ticketAvailable(ticketOf(registrant)) || (ticketOf(registrant)?.is_donation && !(Number(registrant.donation_amount) > 0)))">Select an available ticket and enter a donation amount if required.</ErrorMessage>
-      <ErrorMessage v-if="showErrors && /[,;]/.test(registrant.email + registrant.first_name + registrant.last_name)">Contact details cannot contain commas or semicolons.</ErrorMessage>
-      <TextInput
-        v-model="registrant.email"
-        type="email"
-        maxlength="40"
-        required
-        :label="
-          i18n.t('onProductWidget.memberFormEmail', { fallback: 'Email' })
-        "
-        :error="showErrors ? rowErrors[index].email : ''"
-      />
-
-      <div class="svv-members__names">
-        <TextInput
-          v-model="registrant.first_name"
-          maxlength="30"
-          required
-          :label="
-            i18n.t('onProductWidget.memberFormFirstName', {
-              fallback: 'First Name',
-            })
-          "
-          :error="showErrors ? rowErrors[index].first_name : ''"
-        />
-        <TextInput
-          v-model="registrant.last_name"
-          maxlength="30"
-          required
-          :label="
-            i18n.t('onProductWidget.memberFormLastName', {
-              fallback: 'Last Name',
-            })
-          "
-          :error="showErrors ? rowErrors[index].last_name : ''"
-        />
-      </div>
+      <p class="svv-form__text">
+        {{
+          i18n.t("onProductWidget.memberFormSameContactNote", {
+            fallback: "Uses the main contact details.",
+          })
+        }}
+      </p>
     </fieldset>
 
     <CaptchaBox

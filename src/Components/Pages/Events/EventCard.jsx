@@ -1,3 +1,4 @@
+import { eventFormatLabel } from "../../../utilities/events";
 import { useEffect, useState } from "react";
 import {
   ClockIcon,
@@ -144,6 +145,9 @@ const EventCard = ({ meeting, handleOpenEvent }) => {
         </div>
 
         <div className={styles.badges}>
+          <span className={`${styles.status} ${styles.brand}`}>
+            {t(eventFormatLabel(meeting))}
+          </span>
           {!meeting.is_hidden ? (
             <span className={`${styles.status} ${styles.success}`}>
               <span className={styles.dot} />

@@ -307,6 +307,12 @@
     "default": true
   },
   {
+    "type": "checkbox",
+    "id": "show_description",
+    "label": "Description",
+    "default": true
+  },
+  {
     "type": "range",
     "id": "card_description_words",
     "label": "Description word limit",

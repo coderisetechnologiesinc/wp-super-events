@@ -659,7 +659,8 @@
     min-width: 0;
     overflow-wrap: anywhere;
   }
-  .uploadError {
+  .uploadError,
+  .fieldError {
     color: #b42318;
     font-weight: 600;
   }

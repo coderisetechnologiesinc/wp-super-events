@@ -26,6 +26,9 @@ import {
   recurrenceForType,
 } from "../../utilities/recurrence";
 import { COVER_IMAGE_ACCEPT, readCoverImage } from "./coverImage";
+import GenerateDescription, {
+  generationFilters,
+} from "./GenerateDescription";
 import CreateFilterModal from "../Pages/Filters/CreateFilterModal";
 import { useFilterLimits } from "../Pages/Filters/useFilterLimits";
 import styles from "./UnifiedEventForm.module.scss";
@@ -58,16 +61,23 @@ const Section = ({ step, title, children }) => (
     <div className={styles.body}>{children}</div>
   </section>
 );
-const Field = ({ label, hint, children }) => {
+const Field = ({ label, hint, error, children }) => {
   const id = useId();
   return (
     <label className={styles.field}>
       <span id={id}>{label}</span>
       {React.cloneElement(children, {
         "aria-labelledby": id,
-        ...(hint ? { "aria-describedby": `${id}-hint` } : {}),
+        ...(error ? { "aria-invalid": true } : {}),
+        ...(hint || error ? { "aria-describedby": `${id}-hint` } : {}),
       })}
-      {hint && <small id={`${id}-hint`}>{hint}</small>}
+      {error ? (
+        <small id={`${id}-hint`} className={styles.fieldError} role="alert">
+          {error}
+        </small>
+      ) : (
+        hint && <small id={`${id}-hint`}>{hint}</small>
+      )}
     </label>
   );
 };
@@ -144,12 +154,15 @@ export default function UnifiedEventForm() {
   const [imageError, setImageError] = useState("");
   const [imageName, setImageName] = useState("");
   const [imageBusy, setImageBusy] = useState(false);
+  const [generating, setGenerating] = useState(false);
+  const [meetingLinkTouched, setMeetingLinkTouched] = useState(false);
   const [creatingFilter, setCreatingFilter] = useState(null);
   const [occurrencesOpen, setOccurrencesOpen] = useState(false);
   // Holds the navigation the confirm dialog will run if the edits are
   // abandoned, so one dialog serves every way out of the form.
   const [pendingLeave, setPendingLeave] = useState(null);
   const occurrencesRef = useRef(null);
+  const meetingLinkRef = useRef(null);
   const imageInputId = useId();
   const confirmId = useId();
   const meeting = event.meeting;
@@ -182,6 +195,12 @@ export default function UnifiedEventForm() {
     return start.isValid() ? start.day() + 1 : 1;
   };
   const provider = event.location === "zoom" ? "zoom" : "offline";
+  // Online and hybrid events are the two that carry a link of their own; an
+  // event saved without one reaches the widget as in-person, and attendees
+  // get a confirmation with nowhere to join.
+  const needsMeetingLink = ["custom", "hybrid"].includes(event.location);
+  const meetingLink = (event.custom_fields.custom_field_1_value || "").trim();
+  const meetingLinkMissing = needsMeetingLink && !meetingLink;
   const recurring = Boolean(meeting.recurrence?.type);
   const use24Hours = uses24HourClock(settings);
   // Occurrence times arrive in UTC and are read in the event's own zone, the
@@ -210,6 +229,19 @@ export default function UnifiedEventForm() {
           : t,
       ),
     });
+  // Picking Online or Hybrid puts the cursor in the link field. The ref starts
+  // out matching the loaded event, so opening a saved one steals no focus.
+  const meetingLinkFocused = useRef(needsMeetingLink);
+  useEffect(() => {
+    if (!needsMeetingLink) {
+      meetingLinkFocused.current = false;
+      return;
+    }
+    if (meetingLinkFocused.current) return;
+    meetingLinkFocused.current = true;
+    meetingLinkRef.current?.focus();
+  }, [needsMeetingLink]);
+
   useEffect(() => {
     if (!occurrencesOpen) return;
     const close = (e) => {
@@ -240,6 +272,15 @@ export default function UnifiedEventForm() {
   const publish = () => {
     if (imageBusy) {
       toast.warning("Wait for the cover image to finish processing.");
+      return;
+    }
+    if (generating) {
+      toast.warning("Wait for the description to finish generating.");
+      return;
+    }
+    if (meetingLinkMissing) {
+      setMeetingLinkTouched(true);
+      meetingLinkRef.current?.focus();
       return;
     }
     if (formRef.current?.reportValidity()) save();
@@ -387,7 +428,14 @@ export default function UnifiedEventForm() {
                   text="Save draft"
                   type="secondary"
                   onAction={saveDraft}
-                  disabled={loading || saving || imageBusy || Boolean(error)}
+                  disabled={
+                    loading ||
+                    saving ||
+                    imageBusy ||
+                    generating ||
+                    meetingLinkMissing ||
+                    Boolean(error)
+                  }
                 />
               )}
               <PageActionButton
@@ -395,7 +443,14 @@ export default function UnifiedEventForm() {
                   saving ? "Saving…" : isNew ? "Publish event" : "Save changes"
                 }
                 onAction={publish}
-                disabled={loading || saving || imageBusy || Boolean(error)}
+                disabled={
+                  loading ||
+                  saving ||
+                  imageBusy ||
+                  generating ||
+                  meetingLinkMissing ||
+                  Boolean(error)
+                }
               />
             </div>
           </div>
@@ -410,6 +465,14 @@ export default function UnifiedEventForm() {
             ref={formRef}
             onSubmit={(e) => {
               e.preventDefault();
+              // Enter inside a field submits even while the header buttons are
+              // disabled, so the busy states are checked here too.
+              if (imageBusy || generating) return;
+              if (meetingLinkMissing) {
+                setMeetingLinkTouched(true);
+                meetingLinkRef.current?.focus();
+                return;
+              }
               save();
             }}
           >
@@ -466,6 +529,20 @@ export default function UnifiedEventForm() {
                           }
                         />
                       </Field>
+                      <GenerateDescription
+                        title={meeting.topic || ""}
+                        startDatetime={meeting.startTime || ""}
+                        timezone={meeting.timezone || ""}
+                        filters={generationFilters(event.filters, filters)}
+                        description={meeting.agenda || ""}
+                        onDescription={(agenda) => patchMeeting({ agenda })}
+                        onBusyChange={setGenerating}
+                        onCover={(image_content) => {
+                          patch({ image_content });
+                          setImageError("");
+                          setImageName("Generated cover image");
+                        }}
+                      />
                       <details className={styles.details}>
                         <summary>Cover image and additional notes</summary>
                         <div className={styles.detailsBody}>
@@ -647,14 +724,23 @@ export default function UnifiedEventForm() {
                             </select>
                           </Field>
                           {event.location !== "zoom" && (
-                            <Field label="Meeting link">
+                            <Field
+                              label="Meeting link"
+                              error={
+                                meetingLinkTouched && meetingLinkMissing
+                                  ? "Add the link attendees will join, or choose In-person."
+                                  : ""
+                              }
+                            >
                               <input
+                                ref={meetingLinkRef}
                                 type="url"
                                 required
                                 value={
                                   event.custom_fields.custom_field_1_value || ""
                                 }
                                 placeholder="https://…"
+                                onBlur={() => setMeetingLinkTouched(true)}
                                 onChange={(e) =>
                                   patch({
                                     custom_fields: {

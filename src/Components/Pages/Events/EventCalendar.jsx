@@ -1,3 +1,4 @@
+import { eventFormatLabel, isOnlineEvent } from "../../../utilities/events";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import moment from "moment";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
@@ -128,7 +129,7 @@ const EventCalendar = ({
         detailed ? styles.eventCard : "",
         event.status === "Past"
           ? styles.chipPast
-          : event.type === "Zoom"
+          : isOnlineEvent(event)
           ? styles.chipOnline
           : styles.chipOffline,
       ].join(" ")}
@@ -141,7 +142,7 @@ const EventCalendar = ({
         {event.time}
         {detailed &&
           `${event.time ? " · " : ""}${t(
-            event.type === "Zoom" ? "Online" : "In person",
+            eventFormatLabel(event),
           )}`}
       </span>
     </button>

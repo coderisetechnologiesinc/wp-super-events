@@ -309,6 +309,10 @@ export const useEventsLogic = (settings, filtersList, zoomAccount) => {
         timezone: m.timezone,
         location: m.location || "",
         type: type === "offline" ? "Event" : "Zoom",
+        isHybrid: (m.custom_fields || m).custom_field_1_name === "Link" &&
+          !!String((m.custom_fields || m).custom_field_1_value || "").trim(),
+        hasOwnMeetingLink:
+          (m.custom_fields || m).custom_field_1_name === "Meeting link",
         recurrence:
           (m.type === 2 && type === "offline") ||
           (m.type === 8 && type === "zoom")
@@ -628,6 +632,10 @@ export const useEventsLogic = (settings, filtersList, zoomAccount) => {
             time: dt.format("hh:mm a"),
             location: m.location || "",
             type: eventType === "offline" ? "Event" : "Zoom",
+            isHybrid: (m.custom_fields || m).custom_field_1_name === "Link" &&
+              !!String((m.custom_fields || m).custom_field_1_value || "").trim(),
+            hasOwnMeetingLink:
+              (m.custom_fields || m).custom_field_1_name === "Meeting link",
             // 2 is the recurring in-person type and 8 the recurring Zoom
             // one, the same reading mapEventRows uses.
             recurrence:

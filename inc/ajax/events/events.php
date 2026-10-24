@@ -7,6 +7,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once __DIR__ . '/qa/qa.php';
 require_once __DIR__ . '/bookings/bookings.php';
 require_once __DIR__ . '/tickets/tickets.php';
+
+// Limits the generation endpoint enforces on its own, so an oversized prompt
+// is refused here instead of travelling to the API to be rejected there.
+const SERVV_GENERATE_PROMPT_LIMIT = 2000;
+const SERVV_GENERATE_DESCRIPTION_LIMIT = 10000;
+
 function servv_get_event_data($request)
 {
     $postId = $request['post_id'];
@@ -384,8 +390,33 @@ function servv_delete_event_registrant($request)
 
 function servv_generate_event_data($request)
 {
-    $apiRoute = '/wordpress/data/generate';
     $requestBody = $request->get_json_params();
+    if(!is_array($requestBody)) {
+        return new WP_Error(400, 'Invalid request body.', ['status' => 400]);
+    }
+    $prompt = trim((string)($requestBody['prompt'] ?? ''));
+    $existingDescription = trim((string)($requestBody['existing_description'] ?? ''));
+    if(empty($prompt)) {
+        return new WP_Error(400, 'A prompt is required.', ['status' => 400]);
+    }
+    if(mb_strlen($prompt) > SERVV_GENERATE_PROMPT_LIMIT) {
+        return new WP_Error(400, 'The prompt accepts at most '.SERVV_GENERATE_PROMPT_LIMIT.' characters.', ['status' => 400]);
+    }
+    if(mb_strlen($existingDescription) > SERVV_GENERATE_DESCRIPTION_LIMIT) {
+        return new WP_Error(400, 'The existing description accepts at most '.SERVV_GENERATE_DESCRIPTION_LIMIT.' characters.', ['status' => 400]);
+    }
+    $requestBody['prompt'] = $prompt;
+    // An empty existing_description would still select rewrite mode, so it is
+    // dropped: no description to rewrite means generation.
+    if(empty($existingDescription)) {
+        unset($requestBody['existing_description']);
+    } else {
+        $requestBody['existing_description'] = $existingDescription;
+    }
+    $apiRoute = '/wordpress/data/generate';
+    if(filter_var($request->get_param('with_image'), FILTER_VALIDATE_BOOLEAN)) {
+        $apiRoute .= '?with_image=1';
+    }
     try {
         $responseBody = servvSendApiRequest($apiRoute, $requestBody, 'POST');
     } catch(\Exception $e) {
