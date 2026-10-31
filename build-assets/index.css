@@ -4015,10 +4015,6 @@ button.pagination-control:disabled {
   height: 1px;
 }
 
-.h-screen {
-  height: 100vh;
-}
-
 .max-h-60 {
   max-height: 15rem;
 }
@@ -4117,10 +4113,6 @@ button.pagination-control:disabled {
 
 .w-\[200px\] {
   width: 200px;
-}
-
-.w-\[20px\] {
-  width: 20px;
 }
 
 .w-\[419px\] {
@@ -4625,11 +4617,6 @@ button.pagination-control:disabled {
   border-color: rgb(214 187 251 / var(--tw-border-opacity, 1));
 }
 
-.border-brand-800 {
-  --tw-border-opacity: 1;
-  border-color: rgb(107 56 158 / var(--tw-border-opacity, 1));
-}
-
 .border-current {
   border-color: currentColor;
 }
@@ -4671,11 +4658,6 @@ button.pagination-control:disabled {
 .border-utility-warning-200 {
   --tw-border-opacity: 1;
   border-color: rgb(254 223 137 / var(--tw-border-opacity, 1));
-}
-
-.border-white {
-  --tw-border-opacity: 1;
-  border-color: rgb(255 255 255 / var(--tw-border-opacity, 1));
 }
 
 .border-t-transparent {
@@ -4752,11 +4734,6 @@ button.pagination-control:disabled {
 .bg-brand-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(157 73 236 / var(--tw-bg-opacity, 1));
-}
-
-.bg-brand-600 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(130 23 229 / var(--tw-bg-opacity, 1));
 }
 
 .bg-gray-100 {
@@ -4850,16 +4827,8 @@ button.pagination-control:disabled {
   fill: #00A63E;
 }
 
-.fill-gray-700 {
-  fill: #344054;
-}
-
 .fill-gray-900 {
   fill: #101828;
-}
-
-.fill-white {
-  fill: #FFFFFF;
 }
 
 .object-cover {
@@ -4957,19 +4926,9 @@ button.pagination-control:disabled {
   padding-right: 1.0625rem;
 }
 
-.px-\[10\%\] {
-  padding-left: 10%;
-  padding-right: 10%;
-}
-
 .px-\[12px\] {
   padding-left: 12px;
   padding-right: 12px;
-}
-
-.px-\[14px\] {
-  padding-left: 14px;
-  padding-right: 14px;
 }
 
 .px-\[1rem\] {
@@ -5027,16 +4986,6 @@ button.pagination-control:disabled {
   padding-bottom: 0.8125rem;
 }
 
-.py-\[10px\] {
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-
-.py-\[2\%\] {
-  padding-top: 2%;
-  padding-bottom: 2%;
-}
-
 .py-\[8px\] {
   padding-top: 8px;
   padding-bottom: 8px;
@@ -5064,10 +5013,6 @@ button.pagination-control:disabled {
 
 .pb-\[13px\] {
   padding-bottom: 13px;
-}
-
-.pb-\[2\%\] {
-  padding-bottom: 2%;
 }
 
 .pb-\[24px\] {
@@ -5407,11 +5352,6 @@ button.pagination-control:disabled {
 .text-blue-700 {
   --tw-text-opacity: 1;
   color: rgb(29 78 216 / var(--tw-text-opacity, 1));
-}
-
-.text-brand-500 {
-  --tw-text-opacity: 1;
-  color: rgb(157 73 236 / var(--tw-text-opacity, 1));
 }
 
 .text-brand-700 {
@@ -5791,11 +5731,6 @@ button.pagination-control:disabled {
 .hover\:bg-warning-100:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(254 240 199 / var(--tw-bg-opacity, 1));
-}
-
-.hover\:text-brand-400:hover {
-  --tw-text-opacity: 1;
-  color: rgb(182 146 246 / var(--tw-text-opacity, 1));
 }
 
 .hover\:text-gray-600:hover {

@@ -3,7 +3,7 @@
  * Plugin Name: WP Super Events – Event Booking & Tickets
  * Plugin URI: https://wpsuperevents.com
  * Description: Create event calendars, registrations, recurring events, tickets, and online or in-person events directly in WordPress.
- * Version: 2.8.0
+ * Version: 2.7.0
  * Author: ServvAI
  * Author URI: https://wpsuperevents.com
  * License: GPL2
@@ -1124,6 +1124,9 @@ function servv_admin_enqueue_scripts() {
         'servv_plugin_mode' => servv_plugin_get_config('servv_plugin_mode'),
         'postUrl'           => admin_url('post.php'),
         'adminUrl'          => admin_url('admin.php'),
+        // Where the validation screen sends an admin whose activation failed:
+        // deactivating and activating again re-runs servv_plugin_activate().
+        'pluginsUrl'        => admin_url('plugins.php'),
         'install_status'    => get_option('servv_install_status', ''),
         // Scopes the admin's session data cache. Several WordPress installs
         // can share a browser (and a multisite network shares an origin), so

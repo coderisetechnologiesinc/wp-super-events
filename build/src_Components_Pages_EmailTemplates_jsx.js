@@ -116,78 +116,6 @@ const PageHeader = ({
 
 /***/ }),
 
-/***/ "./src/Components/Controls/PageActionButton.jsx":
-/*!******************************************************!*\
-  !*** ./src/Components/Controls/PageActionButton.jsx ***!
-  \******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PageActionButton.module.scss */ "./src/Components/Controls/PageActionButton.module.scss");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
-
-
-
-// The one button primitive for the admin shell. Styling lives in the SCSS
-// module next door; `className` stays a pass-through for layout-only tweaks
-// from the call site (width, flex, alignment).
-
-const VARIANTS = {
-  primary: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].primary,
-  secondary: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].secondary,
-  danger: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].danger,
-  "danger-secondary": _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].dangerSecondary,
-  ghost: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].ghost,
-  "danger-ghost": _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].dangerGhost
-};
-const SIZES = {
-  md: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].md,
-  sm: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].sm,
-  xs: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].xs
-};
-const PageActionButton = ({
-  text,
-  icon,
-  type = "primary",
-  // primary | secondary | danger | danger-secondary | ghost | danger-ghost
-  size = "md",
-  // md | sm | xs
-  onAction,
-  disabled = false,
-  fullWidth = false,
-  iconOnly = false,
-  ariaLabel,
-  className = "",
-  style = {},
-  hidden
-}) => {
-  const classes = [_PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].button, VARIANTS[type] || VARIANTS.primary, SIZES[size] || SIZES.md, fullWidth ? _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].fullWidth : "", iconOnly ? _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].iconOnly : "", className].filter(Boolean).join(" ");
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("button", {
-    type: "button",
-    onClick: onAction,
-    disabled: disabled,
-    "aria-label": ariaLabel,
-    className: classes,
-    style: style,
-    children: [icon && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
-      className: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].icon,
-      children: icon
-    }), !iconOnly && text && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
-      className: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].label,
-      children: text
-    })]
-  });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PageActionButton);
-
-/***/ }),
-
 /***/ "./src/Components/Menu/BreadCrumbs.jsx":
 /*!*********************************************!*\
   !*** ./src/Components/Menu/BreadCrumbs.jsx ***!
@@ -809,21 +737,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/Components/Controls/PageActionButton.module.scss":
-/*!**************************************************************!*\
-  !*** ./src/Components/Controls/PageActionButton.module.scss ***!
-  \**************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-// extracted by mini-css-extract-plugin
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"button":"KdySr5oFULfrhKhic35V","primary":"NU3RVqc5Fk7DJ5c4GHf_","secondary":"B48RwPm9xmg1M2dE2g6Q","danger":"q2iOAa3m1ACyQeXOmJaO","dangerSecondary":"YQXykqk_8YtO85727teT","ghost":"fxXHJtT4abc9Wa4LMvVL","dangerGhost":"pY19HOSltbDU49q6SaED","md":"t0fnm1wSsZTfyQQHuzNt","sm":"_Da3u_DsP7V7Jd4Z4lzg","xs":"pEHFbNwftcp4Oei9RRxp","fullWidth":"UyW29jrRG901Y4cS7AHm","iconOnly":"DmgZjtNgpAg3vfeKCEZw","icon":"M_1pjyLi4tiOcq2_oiwe","label":"lcGbrWicMbKyunggF77J"});
-
-/***/ }),
-
 /***/ "./src/Components/Pages/EmailTemplates.module.scss":
 /*!*********************************************************!*\
   !*** ./src/Components/Pages/EmailTemplates.module.scss ***!
@@ -907,4 +820,4 @@ function groupEmailTemplates(templates) {
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_EmailTemplates_jsx.js.map?ver=f0c6265e500e42419317
+//# sourceMappingURL=src_Components_Pages_EmailTemplates_jsx.js.map?ver=eb2770ee45f904d325d6

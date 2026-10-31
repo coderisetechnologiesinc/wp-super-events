@@ -591,8 +591,20 @@ export const useEventsLogic = (settings, filtersList, zoomAccount) => {
         console.error(e);
         toast("Error fetching merged events");
       } finally {
-        awaitingZoomRef.current = zoomPassMayFollow;
-        if (!zoomPassMayFollow) setMergedLoading(false);
+        // `zoomPassMayFollow` was decided BEFORE the request went out, and the
+        // account sync may well have answered while it was in flight. The
+        // release effect below only fires when accountsSynced CHANGES, so an
+        // answer that landed inside this window would never release the list.
+        // Read the store rather than stateRef: this runs in a promise
+        // callback, which does not wait for a re-render.
+        const answered = useServvStore.getState();
+        awaitingZoomRef.current = zoomPassMayFollow && !answered.accountsSynced;
+        // A zoom connection that turned up mid-flight triggers the refetch in
+        // effect 3, which inherits this loading state instead of restarting it.
+        const zoomPassFollows =
+          zoomPassMayFollow && answered.accountsSynced && answered.zoomConnected;
+        if (!awaitingZoomRef.current && !zoomPassFollows)
+          setMergedLoading(false);
       }
 
       if (!syncedAfterEventsRef.current) {

@@ -116,78 +116,6 @@ const PageHeader = ({
 
 /***/ }),
 
-/***/ "./src/Components/Controls/PageActionButton.jsx":
-/*!******************************************************!*\
-  !*** ./src/Components/Controls/PageActionButton.jsx ***!
-  \******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PageActionButton.module.scss */ "./src/Components/Controls/PageActionButton.module.scss");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
-
-
-
-// The one button primitive for the admin shell. Styling lives in the SCSS
-// module next door; `className` stays a pass-through for layout-only tweaks
-// from the call site (width, flex, alignment).
-
-const VARIANTS = {
-  primary: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].primary,
-  secondary: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].secondary,
-  danger: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].danger,
-  "danger-secondary": _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].dangerSecondary,
-  ghost: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].ghost,
-  "danger-ghost": _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].dangerGhost
-};
-const SIZES = {
-  md: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].md,
-  sm: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].sm,
-  xs: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].xs
-};
-const PageActionButton = ({
-  text,
-  icon,
-  type = "primary",
-  // primary | secondary | danger | danger-secondary | ghost | danger-ghost
-  size = "md",
-  // md | sm | xs
-  onAction,
-  disabled = false,
-  fullWidth = false,
-  iconOnly = false,
-  ariaLabel,
-  className = "",
-  style = {},
-  hidden
-}) => {
-  const classes = [_PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].button, VARIANTS[type] || VARIANTS.primary, SIZES[size] || SIZES.md, fullWidth ? _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].fullWidth : "", iconOnly ? _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].iconOnly : "", className].filter(Boolean).join(" ");
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("button", {
-    type: "button",
-    onClick: onAction,
-    disabled: disabled,
-    "aria-label": ariaLabel,
-    className: classes,
-    style: style,
-    children: [icon && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
-      className: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].icon,
-      children: icon
-    }), !iconOnly && text && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
-      className: _PageActionButton_module_scss__WEBPACK_IMPORTED_MODULE_1__["default"].label,
-      children: text
-    })]
-  });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PageActionButton);
-
-/***/ }),
-
 /***/ "./src/Components/Menu/Spinner.jsx":
 /*!*****************************************!*\
   !*** ./src/Components/Menu/Spinner.jsx ***!
@@ -510,21 +438,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/Components/Controls/PageActionButton.module.scss":
-/*!**************************************************************!*\
-  !*** ./src/Components/Controls/PageActionButton.module.scss ***!
-  \**************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-// extracted by mini-css-extract-plugin
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"button":"KdySr5oFULfrhKhic35V","primary":"NU3RVqc5Fk7DJ5c4GHf_","secondary":"B48RwPm9xmg1M2dE2g6Q","danger":"q2iOAa3m1ACyQeXOmJaO","dangerSecondary":"YQXykqk_8YtO85727teT","ghost":"fxXHJtT4abc9Wa4LMvVL","dangerGhost":"pY19HOSltbDU49q6SaED","md":"t0fnm1wSsZTfyQQHuzNt","sm":"_Da3u_DsP7V7Jd4Z4lzg","xs":"pEHFbNwftcp4Oei9RRxp","fullWidth":"UyW29jrRG901Y4cS7AHm","iconOnly":"DmgZjtNgpAg3vfeKCEZw","icon":"M_1pjyLi4tiOcq2_oiwe","label":"lcGbrWicMbKyunggF77J"});
-
-/***/ }),
-
 /***/ "./src/Components/Pages/PageWrapper.module.scss":
 /*!******************************************************!*\
   !*** ./src/Components/Pages/PageWrapper.module.scss ***!
@@ -552,46 +465,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 // extracted by mini-css-extract-plugin
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"planCard":"fRgEbj5M3orqyhSYTZud","planHeading":"WQg8OdSbPcxlMORAs8zx","card":"gJ7kPiHbnFYuU96l5rxz","planLabel":"Q_72bu2MtVtONMSl0sDe","price":"Kre0K6uhjfMjYXoxsSqf","planActions":"nnuYZ_4i7qJ79C6q8Xfv","premium":"tWD3DsmYO3BkPZ5l4W_B","features":"HCuLbevyv514DTXmRM0w","fee":"PYZPK7JTi6tbxoErzFkd","unavailable":"n9BeBmvo1k1h6JUHlXRG","badge":"WDixQzYfQx7hxn_w0l8h","plansHeader":"ObOBPWL_GoIP31wv__Nx","divider":"icuLBkLGRuaWU4WUNfeZ","current":"WG4XQh_DpA080t3wL0E1","eyebrow":"Cg0qlOGDVrds06DNmTTk","planName":"CNgPHa7fYkj3Vjkgf5Lf","button":"xiViJ1qzfs15yE3nCuBg","planGrid":"nMHNXiRjKe5_6aquXh7h","featured":"JdUt4WqFGUuPwz0a_1GG","cardTitle":"BXlEOJr4qX3SBbTSa2qO","notice":"r4hwSKVuAiY9Aaem_cGD","supportLayout":"gwxe6rTqrwgLPthHeqNV","stack":"HJBWq5Ie3FFAK2aBKhg_","linkGrid":"OUHACuy2d5v18Wp5YOLe","resource":"OBo7FuOABt5lEKKiaWye","resourceIcon":"DW2ixlOakelIkqafkRDV","external":"JwAt5e_wn28nqAm3JHMQ","system":"u9rwpt3rhlKl3Be5T63t","facts":"Z9aqcj9l084v2CYoPmJW","report":"QYmj3g76RgXdpl_noU51","reportActions":"MlNwNs6VmHmz9J_5dtV8"});
-
-/***/ }),
-
-/***/ "./node_modules/@heroicons/react/24/outline/esm/ArrowPathIcon.js":
-/*!***********************************************************************!*\
-  !*** ./node_modules/@heroicons/react/24/outline/esm/ArrowPathIcon.js ***!
-  \***********************************************************************/
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-
-function ArrowPathIcon({
-  title,
-  titleId,
-  ...props
-}, svgRef) {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("svg", Object.assign({
-    xmlns: "http://www.w3.org/2000/svg",
-    fill: "none",
-    viewBox: "0 0 24 24",
-    strokeWidth: 1.5,
-    stroke: "currentColor",
-    "aria-hidden": "true",
-    "data-slot": "icon",
-    ref: svgRef,
-    "aria-labelledby": titleId
-  }, props), title ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("title", {
-    id: titleId
-  }, title) : null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("path", {
-    strokeLinecap: "round",
-    strokeLinejoin: "round",
-    d: "M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
-  }));
-}
-const ForwardRef = /*#__PURE__*/ react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(ArrowPathIcon);
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ForwardRef);
 
 /***/ }),
 
@@ -671,46 +544,6 @@ function BookOpenIcon({
   }));
 }
 const ForwardRef = /*#__PURE__*/ react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(BookOpenIcon);
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ForwardRef);
-
-/***/ }),
-
-/***/ "./node_modules/@heroicons/react/24/outline/esm/ChatBubbleLeftRightIcon.js":
-/*!*********************************************************************************!*\
-  !*** ./node_modules/@heroicons/react/24/outline/esm/ChatBubbleLeftRightIcon.js ***!
-  \*********************************************************************************/
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-
-function ChatBubbleLeftRightIcon({
-  title,
-  titleId,
-  ...props
-}, svgRef) {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("svg", Object.assign({
-    xmlns: "http://www.w3.org/2000/svg",
-    fill: "none",
-    viewBox: "0 0 24 24",
-    strokeWidth: 1.5,
-    stroke: "currentColor",
-    "aria-hidden": "true",
-    "data-slot": "icon",
-    ref: svgRef,
-    "aria-labelledby": titleId
-  }, props), title ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("title", {
-    id: titleId
-  }, title) : null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("path", {
-    strokeLinecap: "round",
-    strokeLinejoin: "round",
-    d: "M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 0 1-.825-.242m9.345-8.334a2.126 2.126 0 0 0-.476-.095 48.64 48.64 0 0 0-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0 0 11.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155"
-  }));
-}
-const ForwardRef = /*#__PURE__*/ react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(ChatBubbleLeftRightIcon);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ForwardRef);
 
 /***/ }),
@@ -796,4 +629,4 @@ const ForwardRef = /*#__PURE__*/ react__WEBPACK_IMPORTED_MODULE_0__.forwardRef(D
 /***/ })
 
 }]);
-//# sourceMappingURL=src_Components_Pages_SupportPage_jsx.js.map?ver=1444eb23078dd27b2cdd
+//# sourceMappingURL=src_Components_Pages_SupportPage_jsx.js.map?ver=4cdbbf9519b4de214330
