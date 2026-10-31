@@ -1,0 +1,294 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+@use "../../styles/motion" as mo;
+
+// The install / validation gate: one centred card on the admin canvas, built
+// from the same primitives as the pages behind it (card surface, 56px tinted
+// tile, carved groove, raised buttons) so the first screen a new install shows
+// already looks like the product.
+//
+// Keyframes live at the top level: a module hashes its own @keyframes names,
+// and an animation-name pointing at keyframes declared elsewhere would not be
+// rewritten with them.
+@include mo.rise;
+
+// The indeterminate progress bar. A 40%-wide bar leaving the track entirely on
+// both sides, so it reads as "still working" rather than as a percentage.
+@keyframes svSweep {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(250%);
+  }
+}
+
+@keyframes svPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+@include m.scoped {
+  .screen {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 480px;
+    padding: t.$space-16 t.$space-12 t.$space-16 * 2;
+  }
+
+  .card {
+    @include m.card-surface;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: t.$space-10;
+    width: 100%;
+    max-width: 560px;
+    padding: t.$space-16;
+    // `backwards`, never `both`: a forwards-filled transform keeps resolving as
+    // a matrix, which would make this card the containing block for anything
+    // fixed inside it.
+    animation: svRise t.$duration-slow t.$ease backwards;
+  }
+
+  .head {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: t.$space-6;
+    text-align: center;
+  }
+
+  .tile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 56px;
+    height: 56px;
+    border: 1px solid t.$primary-border;
+    border-radius: t.$radius-xl;
+    background: t.$primary-surface;
+    color: t.$primary;
+
+    svg {
+      width: 26px;
+      height: 26px;
+    }
+  }
+
+  .tileWarning {
+    border-color: t.$warning-border;
+    background: t.$warning-surface;
+    color: t.$warning-strong;
+  }
+
+  .tileError {
+    border-color: t.$danger-border;
+    background: t.$danger-surface;
+    color: t.$danger-strong;
+  }
+
+  // The tile breathes while a check is outstanding — the only motion besides
+  // the bar, so the screen never looks frozen.
+  .tileBusy svg {
+    animation: svPulse 1.8s t.$ease infinite;
+  }
+
+  .eyebrow {
+    margin: 0;
+    @include m.eyebrow;
+    color: t.$text-placeholder;
+  }
+
+  .title {
+    margin: 0;
+    @include m.text(24, t.$weight-bold);
+    color: t.$text;
+  }
+
+  .message {
+    margin: 0;
+    max-width: 44ch;
+    @include m.text(15, t.$weight-medium);
+    color: t.$text-secondary;
+  }
+
+  .track {
+    overflow: hidden;
+    align-self: center;
+    width: 100%;
+    max-width: 320px;
+    height: 6px;
+    border-radius: t.$radius-pill;
+    background: t.$surface;
+    box-shadow: t.$shadow-track;
+  }
+
+  .bar {
+    width: 40%;
+    height: 100%;
+    border-radius: t.$radius-pill;
+    background: linear-gradient(
+      90deg,
+      t.$primary-grad-from,
+      t.$primary-grad-to
+    );
+    animation: svSweep 1.6s t.$ease infinite;
+  }
+
+  // --- Troubleshooting -------------------------------------------------------
+
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: t.$space-5;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: sv-step;
+  }
+
+  .step {
+    display: flex;
+    align-items: center;
+    gap: t.$space-5;
+    padding: t.$space-5 t.$space-6;
+    border: 1px solid t.$border;
+    border-radius: t.$radius-lg;
+    box-shadow: t.$shadow-field;
+    counter-increment: sv-step;
+    @include m.text(13, t.$weight-medium);
+    color: t.$text-secondary;
+
+    &::before {
+      content: counter(sv-step);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 24px;
+      height: 24px;
+      border-radius: t.$radius-pill;
+      background: t.$primary-surface;
+      color: t.$primary-strong;
+      @include m.text(11, t.$weight-bold);
+    }
+  }
+
+  .link {
+    border-radius: t.$radius-sm;
+    color: t.$primary;
+    font-weight: t.$weight-semibold;
+    text-decoration: none;
+
+    &:hover,
+    &:focus-visible {
+      color: t.$primary-strong;
+      text-decoration: underline;
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px t.$primary-ring;
+    }
+  }
+
+  // A row of actions, centred; it wraps rather than squeezing the buttons.
+  .actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: t.$space-5;
+    flex-wrap: wrap;
+  }
+
+  // --- Support footer --------------------------------------------------------
+
+  .groove {
+    height: 2px;
+    border-radius: t.$radius-pill;
+    background: t.$surface;
+    box-shadow: inset 1px 1px 3px t.$shade, inset -1px -1px 3px t.$light-alt;
+  }
+
+  .support {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: t.$space-6;
+    flex-wrap: wrap;
+  }
+
+  .supportLabel {
+    @include m.text(14, t.$weight-bold);
+    color: t.$text-strong;
+  }
+
+  .supportActions {
+    display: flex;
+    align-items: center;
+    gap: t.$space-4;
+    flex-wrap: wrap;
+  }
+
+  // The mailto link, dressed as the secondary button it sits beside.
+  .mail {
+    @include m.wp-reset-button;
+    @include m.control-base(t.$control-lg, 0 t.$space-7);
+    @include m.raised;
+    text-decoration: none;
+
+    &:hover,
+    &:focus-visible {
+      text-decoration: none;
+      color: t.$text-strong;
+    }
+
+    &:focus-visible {
+      @include m.focus-ring-raised;
+    }
+
+    svg {
+      width: 16px;
+      height: 16px;
+      flex: 0 0 16px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .screen {
+      padding: t.$space-12 t.$space-8 t.$space-16;
+    }
+
+    .card {
+      padding: t.$space-12;
+      gap: t.$space-9;
+    }
+
+    .title {
+      @include m.text(20, t.$weight-bold);
+    }
+
+    .support {
+      justify-content: center;
+      text-align: center;
+    }
+  }
+
+  @include m.reduced-motion {
+    .card,
+    .bar,
+    .tileBusy svg {
+      animation: none;
+    }
+  }
+}

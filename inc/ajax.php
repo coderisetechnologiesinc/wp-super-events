@@ -12,3 +12,5 @@ require_once __DIR__ . '/ajax/stripe/stripe.php';
 require_once __DIR__ . '/ajax/shop/shop.php';
 require_once __DIR__ . '/ajax/filters/filters.php';
 require_once __DIR__ . '/ajax/analytics/analytics.php';
+require_once __DIR__ . '/ajax/mobile/mobile.php';
+require_once __DIR__ . '/ajax/mobile/checkins.php';

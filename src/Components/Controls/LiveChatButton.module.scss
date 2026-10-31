@@ -1,0 +1,24 @@
+@use "../../styles/tokens" as t;
+@use "../../styles/mixins" as m;
+
+@include m.scoped {
+  // Matches PageActionButton's primary variant — this button cannot BE one,
+  // because Intercom hooks the launcher by id and that component takes none.
+  .button {
+    @include m.button-reset;
+    @include m.wp-reset-button;
+    @include m.control-base(t.$control-lg, 0 t.$space-7);
+    @include m.brand-fill;
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: t.$shadow-brand, 0 0 0 3px t.$primary-ring;
+    }
+
+    svg {
+      width: 16px;
+      height: 16px;
+      flex: 0 0 16px;
+    }
+  }
+}

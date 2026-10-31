@@ -2,12 +2,13 @@
 import './bootstrap-i18n.js';
 import domReady from '@wordpress/dom-ready';
 import { createRoot } from '@wordpress/element';
-import React, { useRef, useEffect, Suspense, useState } from 'react';
+import React, { useRef, useEffect, Suspense } from 'react';
 import { HashRouter, Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom';
 import LogRocket from 'logrocket';
 import Layout from './Components/Layout/Layout.jsx';
 import WordPressNavigation from './Components/Layout/WordPressNavigation.jsx';
 import useCacheRefresh from './hooks/useCacheRefresh';
+import useInstallStatus from './hooks/useInstallStatus';
 // Global base for the admin app (tokens, typography, resets).
 // Compiled into build/admin.css, which servv.php enqueues.
 import './styles/base.scss';
@@ -102,9 +103,9 @@ const LayoutWrapper = () => (
 );
 
 const AppRouter = ( { restAPIAvailable } ) => {
-	const { fetchSettings } = useServvStore();
-	const [ statusChecked, setStatusChecked ] = useState( false );
-	const intervalRef = useRef( null );
+	const fetchSettings = useServvStore( ( state ) => state.fetchSettings );
+	const settings = useServvStore( ( state ) => state.settings );
+	const bootstrapped = useRef( false );
 	const defaultRoute = servvData.defaultRoute || 'dashboard';
 	const { pathname } = useLocation();
 	const informationalPage = ['plans', 'support'].includes(pathname === '/' ? defaultRoute : pathname.slice(1));
@@ -117,56 +118,91 @@ const AppRouter = ( { restAPIAvailable } ) => {
 	} );
 
 
+	// The install watcher owns the only /shop/info read on load: it chains its
+	// checks off each response instead of firing on a timer, so a slow backend
+	// can never leave several of them pending at once.
+	const { status: installStatus, retry } = useInstallStatus( fetchSettings );
+
+	// The rest of the bootstrap data only makes sense once the shop has
+	// answered, and only needs fetching once per load. The store holds
+	// `settings` only for a clean response, so its presence is the signal.
 	useEffect( () => {
-		const initializeData = async () => {
-			const settings = await fetchSettings();
-			if ( settings && ! settings.error && ! settings.errorCode ) {
-				const store = useServvStore.getState();
-				await Promise.all( [store.syncFiltersFromServer(), store.syncAccountsAfterEvents()] );
-			}
-		};
-		initializeData();
+		if ( ! settings || bootstrapped.current ) return;
+		bootstrapped.current = true;
+		const store = useServvStore.getState();
+		Promise.all( [
+			store.syncFiltersFromServer(),
+			store.syncAccountsAfterEvents(),
+		] ).catch( ( error ) =>
+			console.error( 'Unable to load WP Super Events data', error )
+		);
+	}, [ settings ] );
 
-		intervalRef.current = setInterval( async () => {
-			if ( servvData.install_status !== 'ok' ) {
-				const settings = await fetchSettings();
-
-				if ( servvData.install_status === 'ok' || settings?.id ) {
-					setStatusChecked( true );
-					clearInterval( intervalRef.current );
-					intervalRef.current = null;
-				}
-
-				if ( servvData.install_status === 'failed' ) {
-					clearInterval( intervalRef.current );
-					intervalRef.current = null;
-				}
-			}
-		}, 5000 );
-
-		return () => {
-			if ( intervalRef.current ) {
-				clearInterval( intervalRef.current );
-			}
-		};
-	}, [ fetchSettings ] );
+	const openPlugins = () =>
+		window.location.assign( servvData.pluginsUrl || 'plugins.php' );
 
 	if ( ! restAPIAvailable && ! informationalPage ) {
-		return <ValidationScreen message="REST API not accessible." />;
-	}
-
-	if ( servvData.install_status === 'failed' && ! informationalPage ) {
 		return (
-			<ValidationScreen message="⚠️ Activation failed." troubleshoot />
+			<ValidationScreen
+				variant="error"
+				title="REST API not accessible"
+				message="WordPress is not serving its REST API, so the plugin cannot reach your events. Restore access to /wp-json/ — permalinks, a security plugin or a server rule are the usual causes — then reload this page."
+				actions={ [
+					{
+						text: 'Reload',
+						type: 'primary',
+						onAction: () => window.location.reload(),
+					},
+				] }
+				troubleshoot
+			/>
 		);
 	}
 
-	if (
-		servvData.install_status !== 'ok' &&
-		servvData.install_status !== 'failed' &&
-		! statusChecked && ! informationalPage
-	) {
-		return <ValidationScreen message="Installation in progress..." />;
+	if ( installStatus === 'failed' && ! informationalPage ) {
+		return (
+			<ValidationScreen
+				variant="error"
+				title="Activation failed"
+				message="We could not finish connecting this site to WP Super Events. Turning the plugin off and on again runs the setup a second time, which clears most failures."
+				actions={ [
+					{
+						text: 'Go to Plugins',
+						type: 'primary',
+						onAction: openPlugins,
+					},
+					{ text: 'Check again', onAction: retry },
+				] }
+				reactivate
+				troubleshoot
+			/>
+		);
+	}
+
+	if ( installStatus === 'timeout' && ! informationalPage ) {
+		return (
+			<ValidationScreen
+				variant="warning"
+				title="Setup is taking longer than usual"
+				message="Installation runs in the background through WP-Cron and has not reported back yet. It may still finish on its own — a site with WP-Cron disabled will not."
+				actions={ [
+					{ text: 'Check again', type: 'primary', onAction: retry },
+					{ text: 'Go to Plugins', onAction: openPlugins },
+				] }
+				reactivate
+				troubleshoot
+			/>
+		);
+	}
+
+	if ( installStatus === 'checking' && ! informationalPage ) {
+		return (
+			<ValidationScreen
+				variant="progress"
+				title="Installation in progress"
+				message="We are connecting this site to WP Super Events. This usually takes less than a minute."
+			/>
+		);
 	}
 
 	return (

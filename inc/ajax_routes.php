@@ -11,6 +11,7 @@ require_once __DIR__ . '/ajax/stripe/routes.php';
 require_once __DIR__ . '/ajax/shop/routes.php';
 require_once __DIR__ . '/ajax/filters/routes.php';
 require_once __DIR__ . '/ajax/analytics/routes.php';
+require_once __DIR__ . '/ajax/mobile/routes.php';
 
 
 function servv_validate_ajax_permissions($request) {

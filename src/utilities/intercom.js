@@ -11,6 +11,11 @@ export const injectIntercom = () => {
     api_base: "https://api-iam.intercom.io",
     app_id: INTERCOM_APP_ID,
     custom_launcher_selector: "#servv_live_chat",
+    // The admin opens the chat from our own "Live Chat" button, so Intercom's
+    // floating bubble is redundant — and on the install screen it was the one
+    // piece of third-party chrome over an otherwise blocked UI. Both callers
+    // (ValidationScreen, SupportPage) drive the widget themselves.
+    hide_default_launcher: true,
   };
 
   const script = document.createElement("script");
